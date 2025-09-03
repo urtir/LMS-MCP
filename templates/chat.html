@@ -112,7 +112,6 @@
 
         .tool-execution {
             margin-top: 0.5rem;
-            padding: 0.8rem;
             background: #e7f3ff;
             border-left: 4px solid #007bff;
             border-radius: 4px;
@@ -120,10 +119,45 @@
             font-size: 0.9rem;
         }
 
+        .tool-header {
+            padding: 0.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #e7f3ff;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .tool-header:hover {
+            background: #d1ecf1;
+        }
+
+        .tool-toggle {
+            font-size: 0.8rem;
+            color: #6c757d;
+            transition: transform 0.2s;
+        }
+
+        .tool-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
         .tool-name {
             font-weight: bold;
             color: #0056b3;
-            margin-bottom: 0.3rem;
+            flex: 1;
+        }
+
+        .tool-content {
+            padding: 0 0.8rem 0.8rem 0.8rem;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .tool-content.collapsed {
+            display: none;
         }
 
         .tool-result {
@@ -133,6 +167,76 @@
             margin-top: 0.3rem;
             max-height: 200px;
             overflow-y: auto;
+            border: 1px solid #dee2e6;
+        }
+
+        .tool-result pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .tool-result code {
+            background: #e9ecef;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.85rem;
+        }
+
+        /* Markdown formatting styles */
+        .message-content .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+
+        .message-content .code-block pre {
+            margin: 0;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message-content .inline-code {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .message-content h1,
+        .message-content h2,
+        .message-content h3 {
+            margin: 1rem 0 0.5rem 0;
+            font-weight: bold;
+        }
+
+        .message-content h1 { font-size: 1.3em; }
+        .message-content h2 { font-size: 1.2em; }
+        .message-content h3 { font-size: 1.1em; }
+
+        .message-content hr {
+            border: none;
+            border-top: 1px solid #dee2e6;
+            margin: 1rem 0;
+        }
+
+        .message-content ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .message-content li {
+            margin: 0.2rem 0;
+            list-style-type: disc;
         }
 
         .input-container {
@@ -202,6 +306,57 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .thinking-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .thinking-header {
+            background: #e9ecef;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #6c757d;
+            border-bottom: 1px solid #dee2e6;
+            transition: background-color 0.2s;
+        }
+
+        .thinking-header:hover {
+            background: #dee2e6;
+        }
+
+        .thinking-header .toggle-icon {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+        }
+
+        .thinking-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .thinking-content {
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #495057;
+            background: #f8f9fa;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .thinking-content.collapsed {
+            display: none;
         }
 
         .error-message {
@@ -287,12 +442,6 @@
                     <li>"Run security scan on agent 001"</li>
                     <li>"Check for alerts in the last 24 hours"</li>
                 </ul>
-                <div class="tools-info">
-                    <strong>🔧 Available Tools:</strong>
-                    <div class="tools-list" id="tools-list">
-                        Loading tools...
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -454,15 +603,23 @@
 
                 // Add tool execution info if available
                 if (toolCalls && toolCalls.length > 0) {
-                    toolCalls.forEach(toolCall => {
+                    toolCalls.forEach((toolCall, index) => {
                         const toolDiv = document.createElement('div');
                         toolDiv.className = 'tool-execution';
                         
+                        const toolId = `tool-${Date.now()}-${index}`;
+                        
                         toolDiv.innerHTML = `
-                            <div class="tool-name">🔧 Executed: ${toolCall.tool_name}</div>
-                            <div>Arguments: ${JSON.stringify(toolCall.arguments, null, 2)}</div>
-                            <div class="tool-result">
-                                Result: ${JSON.stringify(toolCall.result, null, 2)}
+                            <div class="tool-header" onclick="toggleTool('${toolId}')">
+                                <span class="tool-toggle" id="${toolId}-toggle">▼</span>
+                                <div class="tool-name">🔧 Executed: ${toolCall.tool_name}</div>
+                            </div>
+                            <div class="tool-content" id="${toolId}-content">
+                                <div><strong>Arguments:</strong> <code>${JSON.stringify(toolCall.arguments, null, 2)}</code></div>
+                                <div class="tool-result">
+                                    <strong>Result:</strong>
+                                    <pre>${JSON.stringify(toolCall.result, null, 2)}</pre>
+                                </div>
                             </div>
                         `;
                         
@@ -475,12 +632,58 @@
             }
 
             formatMessage(text) {
-                // Basic formatting
-                return text
+                // Extract thinking sections
+                const thinkRegex = /<think>([\s\S]*?)<\/think>/g;
+                let processedText = text;
+                const thinkingSections = [];
+                
+                let match;
+                while ((match = thinkRegex.exec(text)) !== null) {
+                    thinkingSections.push(match[1].trim());
+                    processedText = processedText.replace(match[0], `__THINKING_PLACEHOLDER_${thinkingSections.length - 1}__`);
+                }
+                
+                // Enhanced markdown formatting
+                processedText = processedText
+                    // Code blocks (```lang and ```)
+                    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<div class="code-block"><pre><code>$2</code></pre></div>')
+                    .replace(/```([\s\S]*?)```/g, '<div class="code-block"><pre><code>$1</code></pre></div>')
+                    // Headers
+                    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                    // Horizontal rules
+                    .replace(/^---+$/gm, '<hr>')
+                    // Bold and italic
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                    .replace(/`(.*?)`/g, '<code>$1</code>')
+                    // Inline code with backticks
+                    .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
+                    // Lists - handle line by line
+                    .replace(/^- (.*$)/gm, '<li>$1</li>')
+                    // Line breaks
                     .replace(/\n/g, '<br>');
+                
+                // Wrap consecutive <li> elements in <ul>
+                processedText = processedText.replace(/(<li>.*?<\/li>)(<br><li>.*?<\/li>)*/g, function(match) {
+                    return '<ul>' + match.replace(/<br>/g, '') + '</ul>';
+                });
+                
+                // Replace thinking placeholders with collapsible sections
+                thinkingSections.forEach((thinking, index) => {
+                    const thinkingHtml = `
+                        <div class="thinking-section">
+                            <div class="thinking-header" onclick="this.parentNode.querySelector('.thinking-content').classList.toggle('collapsed'); this.classList.toggle('collapsed')">
+                                <span>🤔 Thinking...</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="thinking-content collapsed">${thinking}</div>
+                        </div>
+                    `;
+                    processedText = processedText.replace(`__THINKING_PLACEHOLDER_${index}__`, thinkingHtml);
+                });
+                
+                return processedText;
             }
 
             showTyping(show) {
@@ -494,6 +697,22 @@
                 setTimeout(() => {
                     this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
                 }, 100);
+            }
+        }
+
+        // Toggle tool execution section
+        function toggleTool(toolId) {
+            const content = document.getElementById(toolId + '-content');
+            const toggle = document.getElementById(toolId + '-toggle');
+            
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                toggle.textContent = '▼';
+                toggle.classList.remove('collapsed');
+            } else {
+                content.classList.add('collapsed');
+                toggle.textContent = '▶';
+                toggle.classList.add('collapsed');
             }
         }
 
