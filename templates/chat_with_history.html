@@ -801,21 +801,34 @@ ${thinking}
 
         function toggleThinking(thinkingId) {
             const content = document.getElementById(thinkingId);
-            const trigger = content.parentElement.querySelector('.collapsible-trigger');
             const icon = document.getElementById(thinkingId + '-icon');
             
-            const isOpen = content.getAttribute('data-state') === 'open';
-            
-            if (isOpen) {
-                content.setAttribute('data-state', 'closed');
-                content.style.height = '0';
-                trigger.setAttribute('data-state', 'closed');
-                icon.style.transform = 'rotate(0deg)';
+            // Check if this is the new format (from formatMessage) or old format (from createThinkingSection)
+            if (content.classList.contains('thinking-content')) {
+                // New format - toggle collapsed class
+                if (content.classList.contains('collapsed')) {
+                    content.classList.remove('collapsed');
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('collapsed');
+                    icon.style.transform = 'rotate(0deg)';
+                }
             } else {
-                content.setAttribute('data-state', 'open');
-                content.style.height = 'auto';
-                trigger.setAttribute('data-state', 'open');
-                icon.style.transform = 'rotate(180deg)';
+                // Old format - toggle data-state and height
+                const trigger = content.parentElement.querySelector('.collapsible-trigger');
+                const isOpen = content.getAttribute('data-state') === 'open';
+                
+                if (isOpen) {
+                    content.setAttribute('data-state', 'closed');
+                    content.style.height = '0';
+                    if (trigger) trigger.setAttribute('data-state', 'closed');
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    content.setAttribute('data-state', 'open');
+                    content.style.height = 'auto';
+                    if (trigger) trigger.setAttribute('data-state', 'open');
+                    icon.style.transform = 'rotate(180deg)';
+                }
             }
         }
 
