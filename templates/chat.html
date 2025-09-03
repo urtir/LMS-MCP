@@ -4,722 +4,587 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔐 Wazuh Security Chatbot - LM Studio + FastMCP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(214.3 31.8% 91.4%)",
+                        input: "hsl(214.3 31.8% 91.4%)",
+                        ring: "hsl(222.2 84% 4.9%)",
+                        background: "hsl(0 0% 100%)",
+                        foreground: "hsl(222.2 84% 4.9%)",
+                        primary: {
+                            DEFAULT: "hsl(222.2 47.4% 11.2%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(0 84.2% 60.2%)",
+                            foreground: "hsl(210 40% 98%)",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(215.4 16.3% 46.9%)",
+                        },
+                        accent: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        popover: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                        card: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(222.2 84% 4.9%)",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "0.5rem",
+                        md: "calc(0.5rem - 2px)",
+                        sm: "calc(0.5rem - 4px)",
+                    },
+                }
+            }
+        }
+    </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-
-        .header {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1rem;
-            color: white;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        ::-webkit-scrollbar-track {
+            background: hsl(210 40% 96%);
         }
-
-        .header h1 {
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            font-size: 0.9rem;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #dc3545;
-        }
-
-        .status-indicator.connected {
-            background: #28a745;
-        }
-
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-            background: white;
-            border-radius: 10px 10px 0 0;
-            overflow: hidden;
-            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .messages {
-            flex: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            background: #f8f9fa;
-            scroll-behavior: smooth;
-        }
-
-        .message {
-            margin-bottom: 1rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .message.user {
-            align-items: flex-end;
-        }
-
-        .message.assistant {
-            align-items: flex-start;
-        }
-
-        .message-content {
-            max-width: 80%;
-            padding: 0.8rem 1rem;
-            border-radius: 18px;
-            word-wrap: break-word;
-            line-height: 1.4;
-        }
-
-        .message.user .message-content {
-            background: #007bff;
-            color: white;
-        }
-
-        .message.assistant .message-content {
-            background: white;
-            border: 1px solid #e9ecef;
-            color: #333;
-        }
-
-        .tool-execution {
-            margin-top: 0.5rem;
-            background: #e7f3ff;
-            border-left: 4px solid #007bff;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        .tool-header {
-            padding: 0.8rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #e7f3ff;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-
-        .tool-header:hover {
-            background: #d1ecf1;
-        }
-
-        .tool-toggle {
-            font-size: 0.8rem;
-            color: #6c757d;
-            transition: transform 0.2s;
-        }
-
-        .tool-toggle.collapsed {
-            transform: rotate(-90deg);
-        }
-
-        .tool-name {
-            font-weight: bold;
-            color: #0056b3;
-            flex: 1;
-        }
-
-        .tool-content {
-            padding: 0 0.8rem 0.8rem 0.8rem;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .tool-content.collapsed {
-            display: none;
-        }
-
-        .tool-result {
-            background: #f8f9fa;
-            padding: 0.5rem;
-            border-radius: 4px;
-            margin-top: 0.3rem;
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #dee2e6;
-        }
-
-        .tool-result pre {
-            margin: 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .tool-result code {
-            background: #e9ecef;
-            padding: 0.2rem 0.4rem;
+        ::-webkit-scrollbar-thumb {
+            background: hsl(215.4 16.3% 46.9%);
             border-radius: 3px;
-            font-size: 0.85rem;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: hsl(215.4 16.3% 36.9%);
         }
 
-        /* Markdown formatting styles */
-        .message-content .code-block {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
-            margin: 0.5rem 0;
-            overflow-x: auto;
+        /* Animation classes */
+        .animate-in {
+            animation: slideInFromBottom 0.4s ease-out;
+        }
+        
+        @keyframes slideInFromBottom {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
 
-        .message-content .code-block pre {
-            margin: 0;
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            line-height: 1.4;
+        /* Message animations */
+        .message-enter {
+            animation: messageEnter 0.3s ease-out;
+        }
+        
+        @keyframes messageEnter {
+            from { 
+                opacity: 0; 
+                transform: translateY(10px) scale(0.95);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1);
+            }
         }
 
-        .message-content .inline-code {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            padding: 0.1rem 0.3rem;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
+        /* Typing indicator animation */
+        .typing-dots::after {
+            content: '';
+            animation: typingDots 1.4s infinite;
         }
 
-        .message-content h1,
-        .message-content h2,
-        .message-content h3 {
-            margin: 1rem 0 0.5rem 0;
-            font-weight: bold;
+        @keyframes typingDots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
         }
 
-        .message-content h1 { font-size: 1.3em; }
-        .message-content h2 { font-size: 1.2em; }
-        .message-content h3 { font-size: 1.1em; }
-
-        .message-content hr {
-            border: none;
-            border-top: 1px solid #dee2e6;
-            margin: 1rem 0;
+        /* Loading spinner */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-
-        .message-content ul {
-            margin: 0.5rem 0;
-            padding-left: 1.5rem;
-        }
-
-        .message-content li {
-            margin: 0.2rem 0;
-            list-style-type: disc;
-        }
-
-        .input-container {
-            padding: 1rem;
-            background: white;
-            border-top: 1px solid #e9ecef;
-            display: flex;
-            gap: 0.5rem;
-            align-items: flex-end;
-        }
-
-        .message-input {
-            flex: 1;
-            padding: 0.8rem;
-            border: 2px solid #e9ecef;
-            border-radius: 20px;
-            outline: none;
-            font-size: 1rem;
-            resize: none;
-            max-height: 100px;
-            min-height: 40px;
-            font-family: inherit;
-        }
-
-        .message-input:focus {
-            border-color: #007bff;
-        }
-
-        .send-button {
-            padding: 0.8rem 1.5rem;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background 0.3s;
-        }
-
-        .send-button:hover:not(:disabled) {
-            background: #0056b3;
-        }
-
-        .send-button:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
-
-        .typing-indicator {
-            display: none;
-            padding: 1rem;
-            color: #6c757d;
-            font-style: italic;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #007bff;
-            border-radius: 50%;
+        
+        .animate-spin {
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Status pulse */
+        .status-pulse {
+            animation: pulse 2s infinite;
         }
 
-        .thinking-section {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            margin: 0.5rem 0;
-            overflow: hidden;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
-        .thinking-header {
-            background: #e9ecef;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #6c757d;
-            border-bottom: 1px solid #dee2e6;
-            transition: background-color 0.2s;
+        /* Code highlighting */
+        .code-block {
+            position: relative;
         }
 
-        .thinking-header:hover {
-            background: #dee2e6;
+        .code-lang {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            font-size: 0.75rem;
+            color: hsl(215.4 16.3% 56.9%);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .thinking-header .toggle-icon {
-            font-size: 0.8rem;
-            transition: transform 0.2s;
+        /* Prose content styling */
+        .prose {
+            max-width: none;
         }
 
-        .thinking-header.collapsed .toggle-icon {
-            transform: rotate(-90deg);
+        .prose h1, .prose h2, .prose h3 {
+            margin-top: 0.5em;
+            margin-bottom: 0.25em;
+            font-weight: 600;
+            line-height: 1.2;
         }
 
-        .thinking-content {
-            padding: 1rem;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: #495057;
-            background: #f8f9fa;
-            white-space: pre-wrap;
-            max-height: 300px;
-            overflow-y: auto;
-            display: block;
-            transition: all 0.3s ease;
+        .prose h1 { font-size: 1.25em; }
+        .prose h2 { font-size: 1.125em; }
+        .prose h3 { font-size: 1.0625em; }
+
+        .prose ul, .prose ol {
+            margin: 0.25em 0;
+            padding-left: 1.5em;
+        }
+
+        .prose li {
+            margin: 0.125em 0;
+        }
+
+        .prose blockquote {
+            border-left: 4px solid hsl(214.3 31.8% 91.4%);
+            margin: 0.25em 0;
+            padding-left: 1em;
+            color: hsl(215.4 16.3% 46.9%);
+        }
+
+        .prose hr {
+            margin: 0.5em 0;
+            border: none;
+            border-top: 1px solid hsl(214.3 31.8% 91.4%);
+        }
+
+        /* Tool execution styling */
+        /* Collapsible content styles */
+        .tool-content.collapsed {
+            display: none;
         }
 
         .thinking-content.collapsed {
             display: none;
         }
-
-        .error-message {
-            background: #f8d7da !important;
-            color: #721c24 !important;
-            border-color: #f5c6cb !important;
-        }
-
-        .welcome-message {
-            text-align: center;
-            padding: 2rem;
-            color: #6c757d;
-            font-style: italic;
-        }
-
-        .tools-info {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #e8f4fd;
-            border-radius: 8px;
-            border: 1px solid #bee5eb;
-        }
-
-        .tools-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .tool-item {
-            background: white;
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            border: 1px solid #b8daff;
-        }
-
-        @media (max-width: 768px) {
-            .status-bar {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .message-content {
-                max-width: 90%;
-            }
-
-            .chat-container {
-                margin: 0;
-                border-radius: 0;
-            }
-        }
     </style>
 </head>
-<body>
-    <div class="header">
-        <h1>🔐 Wazuh Security Chatbot</h1>
-        <div class="status-bar">
-            <div class="status-item">
-                <div class="status-indicator" id="lm-studio-status"></div>
-                <span>LM Studio</span>
-            </div>
-            <div class="status-item">
-                <div class="status-indicator" id="fastmcp-status"></div>
-                <span>FastMCP Server</span>
-            </div>
-            <div class="status-item">
-                <span id="model-info">Loading...</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="chat-container">
-        <div class="messages" id="messages">
-            <div class="welcome-message">
-                <h3>🤖 Welcome to Wazuh Security Assistant</h3>
-                <p>I can help you with Wazuh SIEM operations using advanced security tools.</p>
-                <p><strong>Try asking:</strong></p>
-                <ul style="text-align: left; display: inline-block; margin-top: 1rem;">
-                    <li>"Show me all active agents"</li>
-                    <li>"Get manager status"</li>
-                    <li>"Run security scan on agent 001"</li>
-                    <li>"Check for alerts in the last 24 hours"</li>
-                </ul>
+<body class="bg-background text-foreground h-screen flex flex-col overflow-hidden">
+    <!-- Header with shadcn/ui styling -->
+    <header class="border-b bg-card">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center justify-center w-10 h-10 bg-primary text-primary-foreground rounded-lg">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-semibold">Wazuh Security Chatbot</h1>
+                        <p class="text-sm text-muted-foreground">LM Studio + FastMCP Integration</p>
+                    </div>
+                </div>
+                
+                <!-- Status indicators -->
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div id="fastmcp-status" class="w-2 h-2 rounded-full bg-destructive status-pulse"></div>
+                        <span class="text-sm text-muted-foreground">FastMCP</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div id="lm-status" class="w-2 h-2 rounded-full bg-destructive status-pulse"></div>
+                        <span class="text-sm text-muted-foreground">LM Studio</span>
+                    </div>
+                </div>
             </div>
         </div>
+    </header>
 
-        <div class="typing-indicator" id="typing-indicator">
-            <div class="spinner"></div>
-            Processing your request...
+    <!-- Chat container -->
+    <div class="flex-1 container mx-auto max-w-4xl flex flex-col h-0 min-h-0">
+        <!-- Messages area -->
+        <div id="messages" class="flex-1 overflow-y-auto p-4 space-y-2">
+            <!-- Welcome message -->
+            <div class="flex justify-center py-8">
+                <div class="text-center max-w-md">
+                    <div class="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+                        <i data-lucide="message-circle" class="w-8 h-8 text-muted-foreground"></i>
+                    </div>
+                    <h2 class="text-lg font-semibold mb-2">Welcome to Wazuh Security Chat</h2>
+                    <p class="text-muted-foreground text-sm">
+                        Start a conversation to interact with Wazuh security tools through the FastMCP server. 
+                        Ask about agents, rules, decoders, or any security-related queries.
+                    </p>
+                </div>
+            </div>
         </div>
 
-        <div class="input-container">
-            <textarea 
-                class="message-input" 
-                id="message-input" 
-                placeholder="Ask me about Wazuh security operations..."
-                rows="1"
-            ></textarea>
-            <button class="send-button" id="send-button">Send</button>
+        <!-- Input area -->
+        <div class="border-t bg-card/50 backdrop-blur-sm">
+            <div class="p-4">
+                <div class="flex gap-2">
+                    <div class="flex-1 relative">
+                        <textarea
+                            id="message-input"
+                            placeholder="Ask about Wazuh agents, rules, or security insights..."
+                            class="w-full min-h-[44px] max-h-32 px-3 py-2 text-sm bg-background border border-input rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent placeholder:text-muted-foreground"
+                            rows="1"
+                        ></textarea>
+                    </div>
+                    <button
+                        id="send-button"
+                        class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                
+                <!-- Typing indicator -->
+                <div id="typing-indicator" class="flex items-center gap-2 mt-2 text-sm text-muted-foreground" style="display: none;">
+                    <div class="animate-spin w-4 h-4 border-2 border-muted-foreground border-t-transparent rounded-full"></div>
+                    <span class="typing-dots">Assistant is thinking</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        class WazuhChatbot {
-            constructor() {
-                this.sessionId = 'session_' + Date.now();
-                this.messagesContainer = document.getElementById('messages');
-                this.messageInput = document.getElementById('message-input');
-                this.sendButton = document.getElementById('send-button');
-                this.typingIndicator = document.getElementById('typing-indicator');
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Global state
+        let isLoading = false;
+
+        // DOM elements
+        const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const fastmcpStatus = document.getElementById('fastmcp-status');
+        const lmStatus = document.getElementById('lm-status');
+
+        // Auto-resize textarea
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 128) + 'px';
+        });
+
+        // Send message on Enter (but allow Shift+Enter for new lines)
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Send button click
+        sendButton.addEventListener('click', sendMessage);
+
+        // Check status on load
+        window.addEventListener('load', checkStatus);
+
+        async function checkStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
                 
-                this.setupEventListeners();
-                this.checkStatus();
-                this.loadTools();
-            }
-
-            setupEventListeners() {
-                // Send button
-                this.sendButton.addEventListener('click', () => this.sendMessage());
-                
-                // Enter key
-                this.messageInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        this.sendMessage();
-                    }
-                });
-
-                // Auto-resize textarea
-                this.messageInput.addEventListener('input', () => {
-                    this.messageInput.style.height = 'auto';
-                    this.messageInput.style.height = this.messageInput.scrollHeight + 'px';
-                });
-
-                // Status check interval
-                setInterval(() => this.checkStatus(), 30000); // Every 30 seconds
-            }
-
-            async checkStatus() {
-                try {
-                    const response = await fetch('/api/status');
-                    const data = await response.json();
-                    
-                    // Update status indicators
-                    document.getElementById('lm-studio-status').className = 
-                        'status-indicator' + (data.lm_studio === 'connected' ? ' connected' : '');
-                    document.getElementById('fastmcp-status').className = 
-                        'status-indicator' + (data.fastmcp === 'connected' ? ' connected' : '');
-                    document.getElementById('model-info').textContent = 
-                        `Model: ${data.model}`;
-                        
-                } catch (error) {
-                    console.error('Status check failed:', error);
-                }
-            }
-
-            async loadTools() {
-                try {
-                    const response = await fetch('/api/tools');
-                    const data = await response.json();
-                    
-                    const toolsList = document.getElementById('tools-list');
-                    if (data.tools && data.tools.length > 0) {
-                        toolsList.innerHTML = data.tools.map(tool => 
-                            `<div class="tool-item" title="${tool.description}">
-                                🔧 ${tool.name}
-                            </div>`
-                        ).join('');
-                    } else {
-                        toolsList.innerHTML = '<div class="tool-item">No tools available</div>';
-                    }
-                } catch (error) {
-                    console.error('Failed to load tools:', error);
-                    document.getElementById('tools-list').innerHTML = '<div class="tool-item">Error loading tools</div>';
-                }
-            }
-
-            async sendMessage() {
-                const message = this.messageInput.value.trim();
-                if (!message) return;
-
-                // Clear input and disable send
-                this.messageInput.value = '';
-                this.messageInput.style.height = 'auto';
-                this.sendButton.disabled = true;
-
-                // Add user message
-                this.addMessage('user', message);
-                
-                // Show typing indicator
-                this.showTyping(true);
-
-                try {
-                    const response = await fetch('/api/chat', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            message: message,
-                            session_id: this.sessionId
-                        })
-                    });
-
-                    const data = await response.json();
-                    
-                    if (data.error) {
-                        this.addMessage('assistant', `Error: ${data.error}`, true);
-                    } else {
-                        this.addMessage('assistant', data.response, false, data.tool_calls);
-                    }
-
-                } catch (error) {
-                    console.error('Chat error:', error);
-                    this.addMessage('assistant', 'Sorry, I encountered an error. Please try again.', true);
-                } finally {
-                    this.showTyping(false);
-                    this.sendButton.disabled = false;
-                    this.messageInput.focus();
-                }
-            }
-
-            addMessage(role, content, isError = false, toolCalls = []) {
-                // Remove welcome message if it exists
-                const welcomeMsg = this.messagesContainer.querySelector('.welcome-message');
-                if (welcomeMsg && role === 'user') {
-                    welcomeMsg.remove();
-                }
-
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message ${role}`;
-
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'message-content';
-                if (isError) {
-                    contentDiv.className += ' error-message';
+                // Update FastMCP status
+                if (data.fastmcp === 'connected') {
+                    fastmcpStatus.className = 'w-2 h-2 rounded-full bg-green-500';
+                } else {
+                    fastmcpStatus.className = 'w-2 h-2 rounded-full bg-destructive status-pulse';
                 }
                 
-                // Format content with basic markdown-like formatting
-                contentDiv.innerHTML = this.formatMessage(content);
-                messageDiv.appendChild(contentDiv);
-
-                // Add tool execution info if available
-                if (toolCalls && toolCalls.length > 0) {
-                    toolCalls.forEach((toolCall, index) => {
-                        const toolDiv = document.createElement('div');
-                        toolDiv.className = 'tool-execution';
-                        
-                        const toolId = `tool-${Date.now()}-${index}`;
-                        
-                        toolDiv.innerHTML = `
-                            <div class="tool-header" onclick="toggleTool('${toolId}')">
-                                <span class="tool-toggle" id="${toolId}-toggle">▼</span>
-                                <div class="tool-name">🔧 Executed: ${toolCall.tool_name}</div>
-                            </div>
-                            <div class="tool-content" id="${toolId}-content">
-                                <div><strong>Arguments:</strong> <code>${JSON.stringify(toolCall.arguments, null, 2)}</code></div>
-                                <div class="tool-result">
-                                    <strong>Result:</strong>
-                                    <pre>${JSON.stringify(toolCall.result, null, 2)}</pre>
-                                </div>
-                            </div>
-                        `;
-                        
-                        messageDiv.appendChild(toolDiv);
-                    });
+                // Update LM Studio status
+                if (data.lm_studio === 'connected') {
+                    lmStatus.className = 'w-2 h-2 rounded-full bg-green-500';
+                } else {
+                    lmStatus.className = 'w-2 h-2 rounded-full bg-destructive status-pulse';
                 }
-
-                this.messagesContainer.appendChild(messageDiv);
-                this.scrollToBottom();
-            }
-
-            formatMessage(text) {
-                // Extract thinking sections
-                const thinkRegex = /<think>([\s\S]*?)<\/think>/g;
-                let processedText = text;
-                const thinkingSections = [];
-                
-                let match;
-                while ((match = thinkRegex.exec(text)) !== null) {
-                    thinkingSections.push(match[1].trim());
-                    processedText = processedText.replace(match[0], `__THINKING_PLACEHOLDER_${thinkingSections.length - 1}__`);
-                }
-                
-                // Enhanced markdown formatting
-                processedText = processedText
-                    // Code blocks (```lang and ```)
-                    .replace(/```(\w+)?\n([\s\S]*?)```/g, '<div class="code-block"><pre><code>$2</code></pre></div>')
-                    .replace(/```([\s\S]*?)```/g, '<div class="code-block"><pre><code>$1</code></pre></div>')
-                    // Headers
-                    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-                    .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-                    .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                    // Horizontal rules
-                    .replace(/^---+$/gm, '<hr>')
-                    // Bold and italic
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                    // Inline code with backticks
-                    .replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>')
-                    // Lists - handle line by line
-                    .replace(/^- (.*$)/gm, '<li>$1</li>')
-                    // Line breaks
-                    .replace(/\n/g, '<br>');
-                
-                // Wrap consecutive <li> elements in <ul>
-                processedText = processedText.replace(/(<li>.*?<\/li>)(<br><li>.*?<\/li>)*/g, function(match) {
-                    return '<ul>' + match.replace(/<br>/g, '') + '</ul>';
-                });
-                
-                // Replace thinking placeholders with collapsible sections
-                thinkingSections.forEach((thinking, index) => {
-                    const thinkingHtml = `
-                        <div class="thinking-section">
-                            <div class="thinking-header" onclick="this.parentNode.querySelector('.thinking-content').classList.toggle('collapsed'); this.classList.toggle('collapsed')">
-                                <span>🤔 Thinking...</span>
-                                <span class="toggle-icon">▼</span>
-                            </div>
-                            <div class="thinking-content collapsed">${thinking}</div>
-                        </div>
-                    `;
-                    processedText = processedText.replace(`__THINKING_PLACEHOLDER_${index}__`, thinkingHtml);
-                });
-                
-                return processedText;
-            }
-
-            showTyping(show) {
-                this.typingIndicator.style.display = show ? 'block' : 'none';
-                if (show) {
-                    this.scrollToBottom();
-                }
-            }
-
-            scrollToBottom() {
-                setTimeout(() => {
-                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-                }, 100);
+            } catch (error) {
+                console.error('Status check failed:', error);
             }
         }
 
-        // Toggle tool execution section
-        function toggleTool(toolId) {
-            const content = document.getElementById(toolId + '-content');
-            const toggle = document.getElementById(toolId + '-toggle');
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message || isLoading) return;
+
+            // Clear input and disable UI
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            isLoading = true;
+            sendButton.disabled = true;
+            
+            // Add user message
+            addMessage('user', message);
+            
+            // Show typing indicator
+            typingIndicator.style.display = 'flex';
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message: message,
+                        session_id: 'session_' + Date.now()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    addMessage('assistant', `❌ Error: ${data.error}`, 'error');
+                } else {
+                    addMessage('assistant', data.response, 'success', data.thinking, data.tool_calls);
+                }
+            } catch (error) {
+                console.error('Chat error:', error);
+                addMessage('assistant', `❌ Connection error: ${error.message}`, 'error');
+            } finally {
+                // Hide typing indicator and re-enable UI
+                typingIndicator.style.display = 'none';
+                isLoading = false;
+                sendButton.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        function addMessage(sender, content, type = 'normal', thinking = null, toolCalls = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex gap-3 animate-in message-enter ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+            
+            let avatarClass, contentClass;
+            
+            if (sender === 'user') {
+                avatarClass = 'bg-primary text-primary-foreground';
+                contentClass = 'bg-primary text-primary-foreground';
+            } else {
+                avatarClass = 'bg-muted text-muted-foreground';
+                contentClass = type === 'error' ? 'bg-destructive/10 border-destructive/20 text-destructive' : 'bg-card border';
+            }
+
+            messageDiv.innerHTML = `
+                ${sender === 'assistant' ? `
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${avatarClass}">
+                        <i data-lucide="${sender === 'user' ? 'user' : 'bot'}" class="w-4 h-4"></i>
+                    </div>
+                ` : ''}
+                <div class="max-w-[80%] ${sender === 'user' ? 'order-first' : ''}">
+                    ${thinking ? createThinkingSection(thinking) : ''}
+                    ${toolCalls ? createToolCallsSection(toolCalls) : ''}
+                    <div class="rounded-lg px-4 py-3 ${contentClass}">
+                        <div class="prose prose-sm text-sm">${formatMessage(content)}</div>
+                    </div>
+                </div>
+                ${sender === 'user' ? `
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${avatarClass}">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                    </div>
+                ` : ''}
+            `;
+
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Re-initialize Lucide icons for new elements
+            lucide.createIcons();
+        }
+
+        function createThinkingSection(thinking) {
+            const thinkingId = 'thinking-' + Date.now();
+            return `
+                <div class="border border-border rounded-lg overflow-hidden mb-3 transition-all hover:border-primary hover:shadow-sm">
+                    <div class="bg-muted text-muted-foreground px-4 py-3 cursor-pointer flex items-center gap-2 hover:bg-muted/80 transition-colors" onclick="toggleThinking('${thinkingId}')">
+                        <i data-lucide="brain" class="w-4 h-4 flex-shrink-0"></i>
+                        <span class="font-medium flex-1 text-sm">🤔 Thinking Process</span>
+                        <i id="${thinkingId}-icon" data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+                    </div>
+                    <div id="${thinkingId}" class="thinking-content collapsed bg-card border-t border-border p-4">
+                        <div class="prose prose-sm max-w-none text-foreground">
+${thinking}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createToolCallsSection(toolCalls) {
+            let toolHtml = '';
+            
+            toolCalls.forEach((tool, index) => {
+                const toolId = 'tool-' + Date.now() + '-' + index;
+                toolHtml += `
+                    <div class="border border-border rounded-lg overflow-hidden mb-2 transition-all hover:border-primary hover:shadow-sm">
+                        <div class="bg-primary text-primary-foreground px-4 py-3 cursor-pointer flex items-center gap-2 hover:bg-primary/90 transition-colors" onclick="toggleTool('${toolId}')">
+                            <i data-lucide="wrench" class="w-4 h-4 flex-shrink-0"></i>
+                            <span class="font-medium flex-1 text-sm">🔧 Executed: ${tool.name}</span>
+                            <i id="${toolId}-icon" data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+                        </div>
+                        <div id="${toolId}" class="tool-content collapsed bg-card border-t border-border p-4">
+                            <div class="space-y-3">
+                                <div>
+                                    <h4 class="text-sm font-medium mb-2 text-foreground">Parameters:</h4>
+                                    <div class="bg-muted rounded-md p-3">
+                                        <pre class="text-xs text-muted-foreground">${JSON.stringify(tool.arguments, null, 2)}</pre>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium mb-2 text-foreground">Result:</h4>
+                                    <div class="bg-muted rounded-md p-3 max-h-48 overflow-y-auto">
+                                        <pre class="text-xs whitespace-pre-wrap text-muted-foreground">${JSON.stringify(tool.result, null, 2)}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return toolHtml;
+        }
+
+        function toggleThinking(thinkingId) {
+            const content = document.getElementById(thinkingId);
+            const icon = document.getElementById(thinkingId + '-icon');
             
             if (content.classList.contains('collapsed')) {
                 content.classList.remove('collapsed');
-                toggle.textContent = '▼';
-                toggle.classList.remove('collapsed');
+                icon.style.transform = 'rotate(180deg)';
             } else {
                 content.classList.add('collapsed');
-                toggle.textContent = '▶';
-                toggle.classList.add('collapsed');
+                icon.style.transform = 'rotate(0deg)';
             }
         }
 
-        // Initialize chatbot when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new WazuhChatbot();
-        });
+        function toggleTool(toolId) {
+            const content = document.getElementById(toolId);
+            const icon = document.getElementById(toolId + '-icon');
+            
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('collapsed');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function formatMessage(content) {
+            // Extract thinking sections first
+            const thinkRegex = /<think>([\s\S]*?)<\/think>/g;
+            let processedText = content;
+            const thinkingSections = [];
+            
+            let match;
+            while ((match = thinkRegex.exec(content)) !== null) {
+                thinkingSections.push(match[1].trim());
+                processedText = processedText.replace(match[0], `__THINKING_PLACEHOLDER_${thinkingSections.length - 1}__`);
+            }
+            
+            // Enhanced markdown formatting
+            processedText = processedText
+                // Code blocks with language detection
+                .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                    const language = lang ? `<span class="code-lang">${lang}</span>` : '';
+                    return `<div class="code-block bg-muted border rounded-md p-2 my-1 relative overflow-x-auto">${language}<pre class="text-sm"><code>${escapeHtml(code.trim())}</code></pre></div>`;
+                })
+                // Regular code blocks
+                .replace(/```([\s\S]*?)```/g, '<div class="code-block bg-muted border rounded-md p-2 my-1 relative overflow-x-auto"><pre class="text-sm"><code>$1</code></pre></div>')
+                // Inline code
+                .replace(/`([^`]+)`/g, '<code class="bg-muted text-muted-foreground px-2 py-1 rounded text-xs font-mono">$1</code>')
+                // Headers
+                .replace(/^### (.*$)/gm, '<h3 class="text-base font-semibold mt-2 mb-1">$1</h3>')
+                .replace(/^## (.*$)/gm, '<h2 class="text-lg font-semibold mt-2 mb-1">$1</h2>')
+                .replace(/^# (.*$)/gm, '<h1 class="text-xl font-bold mt-2 mb-1">$1</h1>')
+                // Horizontal rules
+                .replace(/^---+$/gm, '<hr class="my-1 border-border">')
+                // Bold and italic
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
+                // Lists - handle line by line
+                .replace(/^- (.*$)/gm, '<li class="ml-4 list-disc">$1</li>')
+                // Line breaks
+                .replace(/\n/g, '<br>');
+            
+            // Wrap consecutive <li> elements in <ul>
+            processedText = processedText.replace(/(<li[^>]*>.*?<\/li>)(<br><li[^>]*>.*?<\/li>)*/g, function(match) {
+                return '<ul class="my-0 space-y-0">' + match.replace(/<br>/g, '') + '</ul>';
+            });
+            
+            // Replace thinking placeholders with collapsible sections
+            thinkingSections.forEach((thinking, index) => {
+                const thinkingId = 'thinking-placeholder-' + Date.now() + '-' + index;
+                const thinkingHtml = `
+                    <div class="border border-border rounded-lg overflow-hidden mb-2 transition-all hover:border-primary hover:shadow-sm">
+                        <div class="bg-muted text-muted-foreground px-4 py-3 cursor-pointer flex items-center gap-2 hover:bg-muted/80 transition-colors" onclick="toggleThinking('${thinkingId}')">
+                            <i data-lucide="brain" class="w-4 h-4 flex-shrink-0"></i>
+                            <span class="font-medium flex-1 text-sm">🤔 Thinking Process</span>
+                            <i id="${thinkingId}-icon" data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
+                        </div>
+                        <div id="${thinkingId}" class="thinking-content collapsed bg-card border-t border-border p-4">
+                            <div class="prose prose-sm max-w-none text-foreground">
+${thinking}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                processedText = processedText.replace(`__THINKING_PLACEHOLDER_${index}__`, thinkingHtml);
+            });
+            
+            return processedText;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Periodic status check
+        setInterval(checkStatus, 30000); // Check every 30 seconds
     </script>
 </body>
 </html>

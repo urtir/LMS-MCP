@@ -197,7 +197,7 @@ def process_chat_message(session: ChatSession) -> Dict[str, Any]:
                     # Execute MCP tool
                     result = asyncio.run(mcp_bridge.execute_tool(tool_name, arguments))
                     tool_results.append({
-                        "tool_name": tool_name,
+                        "name": tool_name,  # Changed from tool_name to name
                         "arguments": arguments,
                         "result": result
                     })
@@ -217,7 +217,7 @@ def process_chat_message(session: ChatSession) -> Dict[str, Any]:
                         "tool_name": tool_call.function.name
                     }
                     tool_results.append({
-                        "tool_name": tool_call.function.name,
+                        "name": tool_call.function.name,  # Changed from tool_name to name
                         "arguments": {},
                         "result": error_result
                     })
@@ -240,6 +240,7 @@ def process_chat_message(session: ChatSession) -> Dict[str, Any]:
             return {
                 "response": final_message,
                 "tool_calls": tool_results,
+                "thinking": None,  # Add thinking support
                 "session_id": session.session_id
             }
         
@@ -251,6 +252,7 @@ def process_chat_message(session: ChatSession) -> Dict[str, Any]:
             return {
                 "response": response_text,
                 "tool_calls": [],
+                "thinking": None,  # Add thinking support
                 "session_id": session.session_id
             }
     
