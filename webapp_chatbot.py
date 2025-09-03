@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-LM Studio + FastMCP Webapp Chatbot
+LM Studio + FastMCP Webapp Chatbot with Session History
 Integrates LM Studio with Wazuh FastMCP Server via web interface
 
 Based on tool-use-example.py pattern but with FastMCP integration
@@ -17,6 +17,9 @@ from flask import Flask, render_template, request, jsonify, Response
 import itertools
 import sys
 
+# Database and chat history
+from database import ChatDatabase
+
 # LM Studio client
 from openai import OpenAI
 
@@ -29,6 +32,10 @@ logger = logging.getLogger(__name__)
 
 # Initialize Flask app
 app = Flask(__name__)
+app.secret_key = 'your-secret-key-change-this'
+
+# Initialize database
+db = ChatDatabase()
 
 # Initialize LM Studio client (same as tool-use-example.py)
 client = OpenAI(base_url="http://192.168.56.1:1234/v1", api_key="lm-studio")
@@ -120,8 +127,8 @@ class Spinner:
 # Flask routes
 @app.route('/')
 def index():
-    """Serve chat interface"""
-    return render_template('chat.html')
+    """Serve chat interface with session history"""
+    return render_template('chat_with_history.html')
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
@@ -129,24 +136,39 @@ def chat():
     try:
         data = request.json
         user_message = data.get('message', '')
-        session_id = data.get('session_id', 'default')
+        session_id = data.get('session_id')
         
         if not user_message:
             return jsonify({"error": "No message provided"}), 400
         
-        # Get or create chat session
+        # Create new session if none provided
+        if not session_id:
+            session_id = db.create_session()
+        
+        # Check if session exists in database
+        if not db.get_session(session_id):
+            return jsonify({"error": "Session not found"}), 404
+        
+        # Get or create chat session object
         if session_id not in chat_sessions:
             chat_sessions[session_id] = ChatSession(session_id)
             # Initialize tools asynchronously
             asyncio.run(chat_sessions[session_id].initialize_tools())
+            
+            # Load existing messages from database
+            existing_messages = db.get_messages(session_id)
+            for msg in existing_messages:
+                if msg['role'] != 'system':  # Skip system message as it's already added
+                    chat_sessions[session_id].add_message(msg['role'], msg['content'])
         
         session = chat_sessions[session_id]
         
-        # Add user message
+        # Add user message to session and database
         session.add_message("user", user_message)
+        db.add_message(session_id, "user", user_message)
         
         # Process message with LM Studio
-        response_data = process_chat_message(session)
+        response_data = process_chat_message(session, session_id)
         
         return jsonify(response_data)
         
@@ -154,7 +176,7 @@ def chat():
         logger.error(f"Chat error: {e}")
         return jsonify({"error": str(e)}), 500
 
-def process_chat_message(session: ChatSession) -> Dict[str, Any]:
+def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any]:
     """Process chat message with LM Studio and MCP tools (similar to tool-use-example.py)"""
     try:
         logger.info(f"Processing message for session {session.session_id}")
@@ -237,6 +259,9 @@ def process_chat_message(session: ChatSession) -> Dict[str, Any]:
             final_message = final_response.choices[0].message.content
             session.add_message("assistant", final_message)
             
+            # Save assistant message to database with tool usage
+            db.add_message(session_id, "assistant", final_message, tool_results)
+            
             return {
                 "response": final_message,
                 "tool_calls": tool_results,
@@ -248,6 +273,9 @@ def process_chat_message(session: ChatSession) -> Dict[str, Any]:
             # No tool calls, regular response
             response_text = assistant_message.content
             session.add_message("assistant", response_text)
+            
+            # Save assistant message to database
+            db.add_message(session_id, "assistant", response_text)
             
             return {
                 "response": response_text,
@@ -318,6 +346,95 @@ def get_status():
         
     except Exception as e:
         logger.error(f"Error getting status: {e}")
+        return jsonify({"error": str(e)}), 500
+
+# Session management endpoints
+@app.route('/api/sessions', methods=['GET'])
+def get_sessions():
+    """Get all chat sessions"""
+    try:
+        sessions = db.get_sessions()
+        return jsonify({"sessions": sessions})
+    except Exception as e:
+        logger.error(f"Error getting sessions: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessions', methods=['POST'])
+def create_session():
+    """Create a new chat session"""
+    try:
+        data = request.json or {}
+        title = data.get('title')
+        session_id = db.create_session(title)
+        return jsonify({"session_id": session_id, "message": "Session created successfully"})
+    except Exception as e:
+        logger.error(f"Error creating session: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessions/<session_id>', methods=['GET'])
+def get_session_messages(session_id):
+    """Get messages for a specific session"""
+    try:
+        session = db.get_session(session_id)
+        if not session:
+            return jsonify({"error": "Session not found"}), 404
+        
+        messages = db.get_messages(session_id)
+        return jsonify({
+            "session": session,
+            "messages": messages
+        })
+    except Exception as e:
+        logger.error(f"Error getting session messages: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessions/<session_id>', methods=['PUT'])
+def update_session(session_id):
+    """Update session title"""
+    try:
+        data = request.json
+        title = data.get('title')
+        if not title:
+            return jsonify({"error": "Title is required"}), 400
+        
+        db.update_session_title(session_id, title)
+        return jsonify({"message": "Session updated successfully"})
+    except Exception as e:
+        logger.error(f"Error updating session: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessions/<session_id>', methods=['DELETE'])
+def delete_session(session_id):
+    """Delete a chat session"""
+    try:
+        db.delete_session(session_id)
+        return jsonify({"message": "Session deleted successfully"})
+    except Exception as e:
+        logger.error(f"Error deleting session: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/sessions/search', methods=['GET'])
+def search_sessions():
+    """Search sessions by query"""
+    try:
+        query = request.args.get('q', '')
+        if not query:
+            return jsonify({"sessions": []})
+        
+        sessions = db.search_sessions(query)
+        return jsonify({"sessions": sessions})
+    except Exception as e:
+        logger.error(f"Error searching sessions: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/stats', methods=['GET'])
+def get_stats():
+    """Get database statistics"""
+    try:
+        stats = db.get_stats()
+        return jsonify(stats)
+    except Exception as e:
+        logger.error(f"Error getting stats: {e}")
         return jsonify({"error": str(e)}), 500
 
 # Initialize on startup
