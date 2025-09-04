@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full w-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LMS MCP - Security Operations Intelligence Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --background: 0 0% 100%;
+            --foreground: 222.2 84% 4.9%;
+            --card: 0 0% 100%;
+            --card-foreground: 222.2 84% 4.9%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 222.2 84% 4.9%;
+            --primary: 222.2 84% 4.9%;
+            --primary-foreground: 210 40% 98%;
+            --secondary: 210 40% 96%;
+            --secondary-foreground: 222.2 84% 4.9%;
+            --muted: 210 40% 96%;
+            --muted-foreground: 215.4 16.3% 46.9%;
+            --accent: 210 40% 96%;
+            --accent-foreground: 222.2 84% 4.9%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 214.3 31.8% 91.4%;
+            --input: 214.3 31.8% 91.4%;
+            --ring: 222.2 84% 4.9%;
+            --radius: 0.5rem;
+        }
+        
+        .dark {
+            --background: 222.2 84% 4.9%;
+            --foreground: 210 40% 98%;
+            --card: 222.2 84% 4.9%;
+            --card-foreground: 210 40% 98%;
+            --popover: 222.2 84% 4.9%;
+            --popover-foreground: 210 40% 98%;
+            --primary: 217.2 91.2% 59.8%;
+            --primary-foreground: 222.2 84% 4.9%;
+            --secondary: 217.2 32.6% 17.5%;
+            --secondary-foreground: 210 40% 98%;
+            --muted: 217.2 32.6% 17.5%;
+            --muted-foreground: 215 20.2% 65.1%;
+            --accent: 217.2 32.6% 17.5%;
+            --accent-foreground: 210 40% 98%;
+            --destructive: 0 62.8% 30.6%;
+            --destructive-foreground: 210 40% 98%;
+            --border: 217.2 32.6% 17.5%;
+            --input: 217.2 32.6% 17.5%;
+            --ring: 224.3 76.3% 94.1%;
+        }
+        
+        * {
+            border-color: hsl(var(--border));
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+        }
+        
+        .gradient-hero {
+            background: linear-gradient(135deg, 
+                hsl(var(--primary)) 0%, 
+                hsl(217.2 91.2% 59.8%) 50%, 
+                hsl(var(--primary)) 100%);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            transition: all 0.3s ease;
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-foreground min-h-screen">
+    <!-- Navigation Header -->
+    <nav class="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center justify-center w-10 h-10 bg-primary text-primary-foreground rounded-lg">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">LMS MCP</h1>
+                        <p class="text-xs text-muted-foreground">Security Intelligence</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center gap-6">
+                    <a href="#features" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Features</a>
+                    <a href="#integration" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Integration</a>
+                    <a href="#security" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Security</a>
+                    <a href="#contact" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Contact</a>
+                </div>
+                
+                <!-- CTA Buttons -->
+                <div class="flex items-center gap-3">
+                    <div id="statusIndicator" class="hidden md:flex items-center gap-2 text-sm">
+                        <div class="w-2 h-2 rounded-full bg-muted animate-pulse" id="statusDot"></div>
+                        <span class="text-muted-foreground" id="statusText">Checking...</span>
+                    </div>
+                    <button onclick="window.location.href='/chat'" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
+                        Launch Chat
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-hero text-white py-24 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-grid-pattern opacity-10"></div>
+        
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto">
+                <!-- Main Headline -->
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+                    <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse-slow"></div>
+                    <span class="text-sm font-medium">AI-Powered Security Operations</span>
+                </div>
+                
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                    Intelligent Security
+                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-cyan-200">
+                        Operations Platform
+                    </span>
+                </h1>
+                
+                <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    Harness the power of AI to monitor, analyze, and respond to security threats in real-time. 
+                    Integrated with Wazuh SIEM and powered by advanced LLM technology.
+                </p>
+                
+                <!-- Hero CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                    <button onclick="window.location.href='/chat'" class="inline-flex items-center justify-center rounded-lg text-lg font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-slate-900 hover:bg-slate-100 hover:scale-105 hover:shadow-xl h-16 px-10 py-4 shadow-2xl border-2 border-white/20">
+                        <i data-lucide="message-circle" class="w-6 h-6 mr-3"></i>
+                        Start Security Chat
+                    </button>
+                    <button onclick="showDemo()" class="inline-flex items-center justify-center rounded-lg text-lg font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-white/50 text-white hover:bg-white/10 hover:border-white hover:scale-105 backdrop-blur-sm h-16 px-10 py-4">
+                        <i data-lucide="play-circle" class="w-6 h-6 mr-3"></i>
+                        Watch Demo
+                    </button>
+                </div>
+                
+                <!-- Hero Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-2xl mx-auto">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white" id="totalSessions">0</div>
+                        <div class="text-blue-200 text-sm">Active Sessions</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white" id="totalMessages">0</div>
+                        <div class="text-blue-200 text-sm">Messages Processed</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white">24/7</div>
+                        <div class="text-blue-200 text-sm">Monitoring</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-white">99.9%</div>
+                        <div class="text-blue-200 text-sm">Uptime</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 animate-float">
+            <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <i data-lucide="shield" class="w-8 h-8 text-white"></i>
+            </div>
+        </div>
+        <div class="absolute top-32 right-16 animate-float" style="animation-delay: 2s;">
+            <div class="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <i data-lucide="eye" class="w-6 h-6 text-white"></i>
+            </div>
+        </div>
+        <div class="absolute bottom-20 left-20 animate-float" style="animation-delay: 4s;">
+            <div class="w-14 h-14 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center">
+                <i data-lucide="zap" class="w-7 h-7 text-white"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-muted/30">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Powerful Security Features</h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    Advanced AI capabilities meet enterprise-grade security monitoring
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1: AI-Powered Analysis -->
+                <div class="feature-card bg-card border rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary text-primary-foreground rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="brain" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">AI-Powered Analysis</h3>
+                    <p class="text-muted-foreground mb-4">
+                        Leverage advanced LLM technology to analyze security events, identify patterns, and provide intelligent insights in natural language.
+                    </p>
+                    <div class="flex items-center text-primary text-sm font-medium">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Feature 2: Wazuh Integration -->
+                <div class="feature-card bg-card border rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary text-primary-foreground rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Wazuh SIEM Integration</h3>
+                    <p class="text-muted-foreground mb-4">
+                        Seamlessly integrated with Wazuh for comprehensive security information and event management with real-time monitoring.
+                    </p>
+                    <div class="flex items-center text-primary text-sm font-medium">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Feature 3: Real-time Monitoring -->
+                <div class="feature-card bg-card border rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary text-primary-foreground rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="activity" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Real-time Monitoring</h3>
+                    <p class="text-muted-foreground mb-4">
+                        Monitor security events as they happen with real-time alerting and automated threat detection capabilities.
+                    </p>
+                    <div class="flex items-center text-primary text-sm font-medium">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Feature 4: Natural Language Interface -->
+                <div class="feature-card bg-card border rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary text-primary-foreground rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="message-square" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Natural Language Interface</h3>
+                    <p class="text-muted-foreground mb-4">
+                        Interact with your security systems using natural language. Ask questions, get insights, and execute commands through chat.
+                    </p>
+                    <div class="flex items-center text-primary text-sm font-medium">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Feature 5: Session Management -->
+                <div class="feature-card bg-card border rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary text-primary-foreground rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="history" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Session Management</h3>
+                    <p class="text-muted-foreground mb-4">
+                        Maintain conversation history across sessions with searchable chat logs and persistent context for ongoing investigations.
+                    </p>
+                    <div class="flex items-center text-primary text-sm font-medium">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+                
+                <!-- Feature 6: Tool Integration -->
+                <div class="feature-card bg-card border rounded-lg p-6 shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div class="w-12 h-12 bg-primary text-primary-foreground rounded-lg flex items-center justify-center mb-4">
+                        <i data-lucide="wrench" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Extensible Tool System</h3>
+                    <p class="text-muted-foreground mb-4">
+                        Powered by FastMCP architecture allowing easy integration of custom tools and third-party security services.
+                    </p>
+                    <div class="flex items-center text-primary text-sm font-medium">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Section -->
+    <section id="integration" class="py-20">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold mb-6">Seamless Integration</h2>
+                    <p class="text-xl text-muted-foreground mb-8">
+                        Built on modern architecture with LM Studio and FastMCP for scalable, reliable security operations.
+                    </p>
+                    
+                    <!-- Integration Points -->
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">LM Studio Integration</h4>
+                                <p class="text-sm text-muted-foreground">Local LLM processing for secure, private AI operations</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">FastMCP Protocol</h4>
+                                <p class="text-sm text-muted-foreground">Model Context Protocol for tool integration</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Wazuh API</h4>
+                                <p class="text-sm text-muted-foreground">Direct integration with Wazuh SIEM platform</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center">
+                                <i data-lucide="check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">RESTful APIs</h4>
+                                <p class="text-sm text-muted-foreground">Standard APIs for external system integration</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Architecture Diagram -->
+                <div class="bg-muted/30 rounded-lg p-8 relative">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold mb-6">System Architecture</h3>
+                        
+                        <!-- Simple Architecture Visualization -->
+                        <div class="space-y-6">
+                            <!-- User Layer -->
+                            <div class="flex justify-center">
+                                <div class="bg-primary text-primary-foreground rounded-lg px-4 py-2 text-sm font-medium">
+                                    Web Interface
+                                </div>
+                            </div>
+                            
+                            <!-- Arrow Down -->
+                            <div class="flex justify-center">
+                                <i data-lucide="arrow-down" class="w-6 h-6 text-muted-foreground"></i>
+                            </div>
+                            
+                            <!-- Application Layer -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-card border rounded-lg p-3 text-center">
+                                    <i data-lucide="cpu" class="w-6 h-6 mx-auto mb-2 text-blue-600"></i>
+                                    <div class="text-sm font-medium">LM Studio</div>
+                                    <div class="text-xs text-muted-foreground">AI Processing</div>
+                                </div>
+                                <div class="bg-card border rounded-lg p-3 text-center">
+                                    <i data-lucide="workflow" class="w-6 h-6 mx-auto mb-2 text-green-600"></i>
+                                    <div class="text-sm font-medium">FastMCP</div>
+                                    <div class="text-xs text-muted-foreground">Tool Bridge</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Arrow Down -->
+                            <div class="flex justify-center">
+                                <i data-lucide="arrow-down" class="w-6 h-6 text-muted-foreground"></i>
+                            </div>
+                            
+                            <!-- Data Layer -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-card border rounded-lg p-3 text-center">
+                                    <i data-lucide="shield-check" class="w-6 h-6 mx-auto mb-2 text-purple-600"></i>
+                                    <div class="text-sm font-medium">Wazuh SIEM</div>
+                                    <div class="text-xs text-muted-foreground">Security Data</div>
+                                </div>
+                                <div class="bg-card border rounded-lg p-3 text-center">
+                                    <i data-lucide="database" class="w-6 h-6 mx-auto mb-2 text-orange-600"></i>
+                                    <div class="text-sm font-medium">SQLite DB</div>
+                                    <div class="text-xs text-muted-foreground">Chat History</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section id="security" class="py-20 bg-muted/30">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Enterprise Security</h2>
+                <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
+                    Built with security-first principles and enterprise-grade reliability
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="lock" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Local Processing</h3>
+                    <p class="text-sm text-muted-foreground">All AI processing happens locally for maximum data privacy</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="shield-check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Encrypted Communications</h3>
+                    <p class="text-sm text-muted-foreground">All communications are encrypted in transit and at rest</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="key" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Access Controls</h3>
+                    <p class="text-sm text-muted-foreground">Role-based access controls and session management</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="monitor" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Audit Logging</h3>
+                    <p class="text-sm text-muted-foreground">Comprehensive audit logs for compliance and forensics</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- System Status Section -->
+    <section class="py-16 border-t">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">System Status</h2>
+                <p class="text-muted-foreground">Real-time system health and performance metrics</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- LM Studio Status -->
+                    <div class="bg-card border rounded-lg p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div id="lm-studio-status" class="w-3 h-3 rounded-full bg-muted animate-pulse"></div>
+                            <h3 class="text-lg font-semibold">LM Studio</h3>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">Model:</span>
+                                <span>qwen/qwen3-1.7b</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">Status:</span>
+                                <span id="lm-studio-text">Checking...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">Endpoint:</span>
+                                <span class="text-xs">http://192.168.56.1:1234</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- FastMCP Status -->
+                    <div class="bg-card border rounded-lg p-6">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div id="fastmcp-status" class="w-3 h-3 rounded-full bg-muted animate-pulse"></div>
+                            <h3 class="text-lg font-semibold">FastMCP Server</h3>
+                        </div>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">Protocol:</span>
+                                <span>Model Context Protocol</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">Status:</span>
+                                <span id="fastmcp-text">Checking...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">Tools:</span>
+                                <span id="tools-count">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Overall System Status Banner -->
+                <div class="mt-8 bg-card border rounded-lg p-4">
+                    <div class="flex items-center justify-center gap-3">
+                        <div id="overall-status" class="w-3 h-3 rounded-full bg-muted animate-pulse"></div>
+                        <span class="font-medium" id="overall-text">Checking system status...</span>
+                        <button onclick="checkAllSystems()" class="ml-4 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+                            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="border-t bg-muted/50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Brand -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 bg-primary text-primary-foreground rounded-lg flex items-center justify-center">
+                            <i data-lucide="shield-check" class="w-4 h-4"></i>
+                        </div>
+                        <span class="text-lg font-bold">LMS MCP</span>
+                    </div>
+                    <p class="text-muted-foreground mb-4 max-w-md">
+                        Advanced AI-powered security operations platform integrating LM Studio, FastMCP, and Wazuh SIEM for intelligent threat detection and response.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center hover:bg-accent transition-colors">
+                            <i data-lucide="github" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center hover:bg-accent transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center hover:bg-accent transition-colors">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="font-semibold mb-4">Platform</h3>
+                    <div class="space-y-2">
+                        <a href="/chat" class="block text-muted-foreground hover:text-foreground transition-colors">Security Chat</a>
+                        <a href="#features" class="block text-muted-foreground hover:text-foreground transition-colors">Features</a>
+                        <a href="#integration" class="block text-muted-foreground hover:text-foreground transition-colors">Integration</a>
+                        <a href="#security" class="block text-muted-foreground hover:text-foreground transition-colors">Security</a>
+                    </div>
+                </div>
+                
+                <!-- Resources -->
+                <div>
+                    <h3 class="font-semibold mb-4">Resources</h3>
+                    <div class="space-y-2">
+                        <a href="#" class="block text-muted-foreground hover:text-foreground transition-colors">Documentation</a>
+                        <a href="#" class="block text-muted-foreground hover:text-foreground transition-colors">API Reference</a>
+                        <a href="#" class="block text-muted-foreground hover:text-foreground transition-colors">Support</a>
+                        <a href="#" class="block text-muted-foreground hover:text-foreground transition-colors">Status Page</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-muted-foreground text-sm">
+                    © 2024 LMS MCP. Advanced Security Operations Platform.
+                </p>
+                <div class="flex items-center gap-4 text-sm text-muted-foreground">
+                    <a href="#" class="hover:text-foreground transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-foreground transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-foreground transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            checkAllSystems();
+            loadStats();
+            
+            // Check status periodically
+            setInterval(checkAllSystems, 30000);
+            setInterval(loadStats, 10000);
+        });
+
+        // System status checking
+        async function checkAllSystems() {
+            try {
+                const response = await fetch('/api/status');
+                const data = await response.json();
+                
+                updateSystemStatus('lm-studio', data.lm_studio);
+                updateSystemStatus('fastmcp', data.fastmcp);
+                updateOverallStatus(data);
+                
+                // Also load available tools count
+                loadToolsCount();
+                
+            } catch (error) {
+                console.error('Status check failed:', error);
+                updateSystemStatus('lm-studio', 'error');
+                updateSystemStatus('fastmcp', 'error');
+                updateOverallStatus({lm_studio: 'error', fastmcp: 'error'});
+            }
+        }
+
+        function updateSystemStatus(system, status) {
+            const statusDot = document.getElementById(system + '-status');
+            const statusText = document.getElementById(system + '-text');
+            
+            statusDot.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-muted', 'animate-pulse');
+            
+            switch(status) {
+                case 'connected':
+                    statusDot.classList.add('bg-green-500');
+                    statusText.textContent = 'Connected';
+                    statusText.className = 'text-green-600';
+                    break;
+                case 'partial':
+                    statusDot.classList.add('bg-yellow-500');
+                    statusText.textContent = 'Partial';
+                    statusText.className = 'text-yellow-600';
+                    break;
+                case 'error':
+                default:
+                    statusDot.classList.add('bg-red-500');
+                    statusText.textContent = 'Disconnected';
+                    statusText.className = 'text-red-600';
+                    break;
+            }
+        }
+
+        function updateOverallStatus(data) {
+            const overallDot = document.getElementById('overall-status');
+            const overallText = document.getElementById('overall-text');
+            const headerStatusDot = document.getElementById('statusDot');
+            const headerStatusText = document.getElementById('statusText');
+            
+            overallDot.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-muted', 'animate-pulse');
+            
+            const lmStudioOk = data.lm_studio === 'connected';
+            const fastmcpOk = data.fastmcp === 'connected';
+            
+            let statusMessage, statusClass, headerClass;
+            
+            if (lmStudioOk && fastmcpOk) {
+                overallDot.classList.add('bg-green-500');
+                statusMessage = 'All systems operational';
+                statusClass = 'text-green-600';
+                headerClass = 'text-green-600';
+                headerStatusDot.className = 'w-2 h-2 rounded-full bg-green-500';
+            } else if (lmStudioOk || fastmcpOk) {
+                overallDot.classList.add('bg-yellow-500');
+                statusMessage = 'Partial system availability';
+                statusClass = 'text-yellow-600';
+                headerClass = 'text-yellow-600';
+                headerStatusDot.className = 'w-2 h-2 rounded-full bg-yellow-500';
+            } else {
+                overallDot.classList.add('bg-red-500');
+                statusMessage = 'System maintenance required';
+                statusClass = 'text-red-600';
+                headerClass = 'text-red-600';
+                headerStatusDot.className = 'w-2 h-2 rounded-full bg-red-500';
+            }
+            
+            overallText.textContent = statusMessage;
+            overallText.className = statusClass;
+            headerStatusText.textContent = lmStudioOk && fastmcpOk ? 'Systems Online' : 
+                                            lmStudioOk || fastmcpOk ? 'Partial Service' : 'Maintenance Mode';
+            headerStatusText.className = headerClass;
+        }
+
+        async function loadToolsCount() {
+            try {
+                const response = await fetch('/api/tools');
+                const data = await response.json();
+                const toolsCount = data.tools ? data.tools.length : 0;
+                document.getElementById('tools-count').textContent = `${toolsCount} available`;
+            } catch (error) {
+                document.getElementById('tools-count').textContent = 'Error loading';
+            }
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                // Update hero stats
+                const totalSessions = document.getElementById('totalSessions');
+                const totalMessages = document.getElementById('totalMessages');
+                
+                if (totalSessions) {
+                    animateNumber(totalSessions, data.total_sessions || 0);
+                }
+                if (totalMessages) {
+                    animateNumber(totalMessages, data.total_messages || 0);
+                }
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        function animateNumber(element, targetNumber) {
+            const currentNumber = parseInt(element.textContent) || 0;
+            if (currentNumber === targetNumber) return;
+            
+            const increment = targetNumber > currentNumber ? 1 : -1;
+            let current = currentNumber;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                element.textContent = current;
+                
+                if (current === targetNumber) {
+                    clearInterval(timer);
+                }
+            }, 50);
+        }
+
+        function showDemo() {
+            alert('Demo feature coming soon! For now, try the live chat interface.');
+            window.location.href = '/chat';
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

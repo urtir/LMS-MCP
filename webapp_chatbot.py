@@ -127,6 +127,11 @@ class Spinner:
 # Flask routes
 @app.route('/')
 def index():
+    """Serve landing page"""
+    return render_template('landing.html')
+
+@app.route('/chat')
+def chat_interface():
     """Serve chat interface with session history"""
     return render_template('chat_with_history.html')
 
