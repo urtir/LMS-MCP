@@ -6,6 +6,8 @@
     <title>🔐 Wazuh Security Chatbot - LM Studio + FastMCP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -55,7 +57,7 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
         
         * {
             font-family: 'Inter', sans-serif;
@@ -75,6 +77,106 @@
         ::-webkit-scrollbar-thumb:hover {
             background: hsl(215.4 16.3% 36.9%);
         }
+
+        /* Enhanced Markdown Styling */
+        .code-block {
+            font-family: 'JetBrains Mono', 'Courier New', monospace !important;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .code-block pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .code-lang {
+            background: #4f46e5;
+            color: white;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 0 0 0 4px;
+            text-transform: uppercase;
+        }
+        
+        /* Table styling */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 1px solid #e5e7eb;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        /* List styling improvements */
+        ul, ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        li {
+            margin: 0.25rem 0;
+            line-height: 1.5;
+        }
+        
+        /* Blockquote enhanced styling */
+        blockquote {
+            position: relative;
+            font-style: italic;
+            margin: 1rem 0;
+        }
+        
+        blockquote:before {
+            content: '"';
+            font-size: 2rem;
+            color: #fbbf24;
+            position: absolute;
+            left: -0.5rem;
+            top: -0.5rem;
+        }
+        
+        /* Checkbox styling for task lists */
+        input[type="checkbox"] {
+            accent-color: #3b82f6;
+        }
+        
+        /* Link hover effects */
+        a:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+        
+        /* Header anchor links */
+        h1, h2, h3, h4, h5, h6 {
+            position: relative;
+            scroll-margin-top: 2rem;
+        }
+        
+        /* Enhanced syntax highlighting for common languages */
+        .code-block[data-lang="javascript"] { border-left: 4px solid #f7df1e; }
+        .code-block[data-lang="python"] { border-left: 4px solid #3776ab; }
+        .code-block[data-lang="bash"] { border-left: 4px solid #4eaa25; }
+        .code-block[data-lang="json"] { border-left: 4px solid #ff6b6b; }
+        .code-block[data-lang="sql"] { border-left: 4px solid #336791; }
 
         /* Animation classes */
         .animate-in {
@@ -512,6 +614,37 @@ ${thinking}
             }
         }
 
+        // Post-process markdown for better structure
+        function postProcessMarkdown(html) {
+            // Wrap consecutive list items in proper ul/ol containers
+            html = html.replace(/(<li[^>]*class="[^"]*list-disc[^"]*"[^>]*>.*?<\/li>)(<br>)*(<li[^>]*class="[^"]*list-disc[^"]*"[^>]*>.*?<\/li>(<br>)*)+/g, function(match) {
+                const cleanMatch = match.replace(/<br>/g, '');
+                return '<ul class="my-2 space-y-1">' + cleanMatch + '</ul>';
+            });
+            
+            html = html.replace(/(<li[^>]*class="[^"]*list-decimal[^"]*"[^>]*>.*?<\/li>)(<br>)*(<li[^>]*class="[^"]*list-decimal[^"]*"[^>]*>.*?<\/li>(<br>)*)+/g, function(match) {
+                const cleanMatch = match.replace(/<br>/g, '');
+                return '<ol class="my-2 space-y-1">' + cleanMatch + '</ol>';
+            });
+            
+            // Wrap table rows in proper table structure
+            html = html.replace(/(<tr[^>]*>.*?<\/tr>)(<br>)*(<tr[^>]*>.*?<\/tr>(<br>)*)+/g, function(match) {
+                const cleanMatch = match.replace(/<br>/g, '');
+                return '<table class="w-full my-3 border-collapse border border-gray-300">' + cleanMatch + '</table>';
+            });
+            
+            // Fix nested structures and remove excessive line breaks
+            html = html.replace(/<br><br>/g, '<br>');
+            html = html.replace(/(<\/h[1-6]>)<br>/g, '$1');
+            html = html.replace(/(<\/blockquote>)<br>/g, '$1');
+            html = html.replace(/(<\/div>)<br>/g, '$1');
+            html = html.replace(/(<\/ul>)<br>/g, '$1');
+            html = html.replace(/(<\/ol>)<br>/g, '$1');
+            html = html.replace(/(<\/table>)<br>/g, '$1');
+            
+            return html;
+        }
+
         function formatMessage(content) {
             // Extract thinking sections first
             const thinkRegex = /<think>([\s\S]*?)<\/think>/g;
@@ -524,35 +657,52 @@ ${thinking}
                 processedText = processedText.replace(match[0], `__THINKING_PLACEHOLDER_${thinkingSections.length - 1}__`);
             }
             
-            // Enhanced markdown formatting
+            // Enhanced markdown formatting with comprehensive support
             processedText = processedText
-                // Code blocks with language detection
+                // Code blocks with language detection and syntax highlighting
                 .replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-                    const language = lang ? `<span class="code-lang">${lang}</span>` : '';
-                    return `<div class="code-block bg-muted border rounded-md p-2 my-1 relative overflow-x-auto">${language}<pre class="text-sm"><code>${escapeHtml(code.trim())}</code></pre></div>`;
+                    const language = lang ? `<span class="code-lang text-xs bg-gray-100 px-2 py-1 rounded-tl absolute top-0 right-0">${lang}</span>` : '';
+                    return `<div class="code-block bg-gray-50 border border-gray-200 rounded-lg p-4 my-3 relative overflow-x-auto shadow-sm">${language}<pre class="text-sm text-gray-800 font-mono"><code>${escapeHtml(code.trim())}</code></pre></div>`;
                 })
-                // Regular code blocks
-                .replace(/```([\s\S]*?)```/g, '<div class="code-block bg-muted border rounded-md p-2 my-1 relative overflow-x-auto"><pre class="text-sm"><code>$1</code></pre></div>')
-                // Inline code
-                .replace(/`([^`]+)`/g, '<code class="bg-muted text-muted-foreground px-2 py-1 rounded text-xs font-mono">$1</code>')
-                // Headers
-                .replace(/^### (.*$)/gm, '<h3 class="text-base font-semibold mt-2 mb-1">$1</h3>')
-                .replace(/^## (.*$)/gm, '<h2 class="text-lg font-semibold mt-2 mb-1">$1</h2>')
-                .replace(/^# (.*$)/gm, '<h1 class="text-xl font-bold mt-2 mb-1">$1</h1>')
-                // Horizontal rules
-                .replace(/^---+$/gm, '<hr class="my-1 border-border">')
-                // Bold and italic
-                .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
-                // Lists - handle line by line
-                .replace(/^- (.*$)/gm, '<li class="ml-4 list-disc">$1</li>')
+                // Regular code blocks (fallback)
+                .replace(/```([\s\S]*?)```/g, '<div class="code-block bg-gray-50 border border-gray-200 rounded-lg p-4 my-3 relative overflow-x-auto shadow-sm"><pre class="text-sm text-gray-800 font-mono"><code>$1</code></pre></div>')
+                // Inline code with better styling
+                .replace(/`([^`\n]+)`/g, '<code class="bg-gray-100 text-red-600 px-2 py-1 rounded text-sm font-mono border">$1</code>')
+                // Headers with proper hierarchy and styling
+                .replace(/^##### (.*$)/gm, '<h5 class="text-sm font-semibold text-gray-700 mt-3 mb-2 border-l-4 border-blue-300 pl-3">🔹 $1</h5>')
+                .replace(/^#### (.*$)/gm, '<h4 class="text-base font-semibold text-gray-800 mt-4 mb-2 border-l-4 border-blue-400 pl-3">🔸 $1</h4>')
+                .replace(/^### (.*$)/gm, '<h3 class="text-lg font-semibold text-gray-900 mt-4 mb-2 border-l-4 border-blue-500 pl-3">🔷 $1</h3>')
+                .replace(/^## (.*$)/gm, '<h2 class="text-xl font-bold text-blue-900 mt-5 mb-3 border-l-4 border-blue-600 pl-3">🔲 $1</h2>')
+                .replace(/^# (.*$)/gm, '<h1 class="text-2xl font-bold text-blue-900 mt-6 mb-4 border-l-4 border-blue-700 pl-3">📋 $1</h1>')
+                // Blockquotes
+                .replace(/^> (.*$)/gm, '<blockquote class="border-l-4 border-yellow-400 pl-4 py-2 my-2 bg-yellow-50 text-gray-700 italic">$1</blockquote>')
+                // Horizontal rules with better styling
+                .replace(/^---+$/gm, '<hr class="my-4 border-t-2 border-gray-300">')
+                // Tables (simple support)
+                .replace(/\|(.+)\|/g, (match, content) => {
+                    const cells = content.split('|').map(cell => `<td class="border px-2 py-1 text-sm">${cell.trim()}</td>`).join('');
+                    return `<tr class="border-b">${cells}</tr>`;
+                })
+                // Bold and italic with better contrast
+                .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-gray-900">$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em class="italic text-gray-700">$1</em>')
+                // Strikethrough
+                .replace(/~~(.*?)~~/g, '<s class="line-through text-gray-500">$1</s>')
+                // Ordered lists
+                .replace(/^(\d+)\. (.*$)/gm, '<li class="ml-6 my-1 list-decimal"><span class="text-gray-800">$2</span></li>')
+                // Unordered lists with better bullets
+                .replace(/^- (.*$)/gm, '<li class="ml-6 my-1 list-disc"><span class="text-gray-800">$1</span></li>')
+                .replace(/^\* (.*$)/gm, '<li class="ml-6 my-1 list-disc"><span class="text-gray-800">$1</span></li>')
+                // Task lists (checkboxes)
+                .replace(/^- \[x\] (.*$)/gm, '<li class="ml-6 my-1 flex items-center"><input type="checkbox" checked disabled class="mr-2"> <span class="text-gray-800 line-through">$1</span></li>')
+                .replace(/^- \[ \] (.*$)/gm, '<li class="ml-6 my-1 flex items-center"><input type="checkbox" disabled class="mr-2"> <span class="text-gray-800">$1</span></li>')
+                // Links (basic support)
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-600 underline hover:text-blue-800" target="_blank">$1 🔗</a>')
                 // Line breaks
                 .replace(/\n/g, '<br>');
             
-            // Wrap consecutive <li> elements in <ul>
-            processedText = processedText.replace(/(<li[^>]*>.*?<\/li>)(<br><li[^>]*>.*?<\/li>)*/g, function(match) {
-                return '<ul class="my-0 space-y-0">' + match.replace(/<br>/g, '') + '</ul>';
-            });
+            // Post-process markdown elements for better structure
+            processedText = postProcessMarkdown(processedText);
             
             // Replace thinking placeholders with collapsible sections
             thinkingSections.forEach((thinking, index) => {
