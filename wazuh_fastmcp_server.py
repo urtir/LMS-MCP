@@ -428,25 +428,47 @@ Base your analysis solely on the vectorized security logs provided."""
     
     def enhance_query_for_threat_hunting(self, query: str) -> str:
         """Enhance user query with threat hunting context as per Wazuh methodology."""
-        # Add security context to improve search relevance
-        enhanced_query = f"SECURITY THREAT ANALYSIS: {query}"
-        
-        # Add common threat hunting keywords based on query context
         query_lower = query.lower()
         
-        if any(term in query_lower for term in ['brute', 'force', 'login', 'failed']):
-            enhanced_query += " AUTHENTICATION_EVENT BRUTE_FORCE_ATTACK failed login attempts"
+        # XSS Detection (English and Indonesian) - Use consistent terms
+        if any(term in query_lower for term in ['xss', 'cross-site', 'cross site', 'script injection', 'serangan xss', 'cross-site scripting']):
+            return "XSS cross-site scripting libinjection modsecurity apache security2 error"
             
-        if any(term in query_lower for term in ['exfiltration', 'data', 'transfer', 'download']):
-            enhanced_query += " POTENTIAL_DATA_EXFILTRATION powershell invoke-webrequest file transfer"
+        # Authentication/Brute Force
+        elif any(term in query_lower for term in ['brute', 'force', 'login', 'failed', 'authentication', 'ssh', 'autentikasi', 'gagal login']):
+            return "authentication failed login brute force ssh"
             
-        if any(term in query_lower for term in ['malware', 'virus', 'suspicious']):
-            enhanced_query += " MALWARE_DETECTION suspicious activity security threat"
+        # Data Exfiltration  
+        elif any(term in query_lower for term in ['exfiltration', 'data', 'transfer', 'download', 'eksfiltrasi', 'bocor data']):
+            return "data exfiltration powershell invoke-webrequest file transfer"
             
-        if any(term in query_lower for term in ['network', 'connection', 'port']):
-            enhanced_query += " network connection port scanning suspicious traffic"
+        # Malware Detection
+        elif any(term in query_lower for term in ['malware', 'virus', 'suspicious', 'trojan', 'backdoor', 'mencurigakan']):
+            return "malware virus trojan backdoor suspicious"
+            
+        # Network Threats
+        elif any(term in query_lower for term in ['network', 'connection', 'port', 'scanning', 'jaringan', 'koneksi']):
+            return "network connection port scanning traffic"
+            
+        # SQL Injection
+        elif any(term in query_lower for term in ['sql', 'injection', 'sqli', 'database', 'injeksi sql']):
+            return "SQL injection database web application"
+            
+        # Default: clean the query and add basic security context
+        else:
+            # Extract key security terms from the original query
+            security_terms = []
+            for word in query_lower.split():
+                if word in ['attack', 'threat', 'malicious', 'suspicious', 'security', 'error', 'warning', 
+                           'serangan', 'ancaman', 'berbahaya', 'mencurigakan', 'keamanan']:
+                    security_terms.append(word)
+            
+            if security_terms:
+                return f"security threat {' '.join(security_terms)}"
+            else:
+                return query  # Return original if no security context detected
         
-        return enhanced_query
+        return query
     
     def analyze_threat_level(self, security_event: Dict[str, Any], threat_score: float, matched_content: str) -> Dict[str, Any]:
         """
@@ -603,13 +625,14 @@ async def check_wazuh_log(
             }, indent=2)
         
         # Format comprehensive threat hunting report following Wazuh methodology
+        # For Telegram bot, keep output concise but comprehensive
         threat_report = {
             "status": "threats_identified",
             "wazuh_ai_analysis": {
                 "query": query,
                 "analysis_period": f"past {days_range} days", 
                 "total_threat_events": len(threat_events),
-                "analysis_timestamp": datetime.now().isoformat(),
+                "analysis_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "methodology": "Wazuh AI Threat Hunting with Vector Embeddings"
             },
             "threat_summary": {
@@ -621,62 +644,34 @@ async def check_wazuh_log(
             "security_events": []
         }
         
-        # Process each threat event with comprehensive analysis
+        # Process each threat event with CONCISE analysis for Telegram
         for i, event in enumerate(threat_events, 1):
             threat_event = {
-                "event_rank": i,
-                "threat_assessment": {
-                    "priority": event.get('threat_priority', 'UNKNOWN'),
-                    "category": event.get('threat_category', 'unknown'),
-                    "confidence_score": round(event.get('threat_score', 1.0), 4),
-                    "threat_indicators": event.get('threat_indicators', []),
-                    "requires_investigation": event.get('security_assessment', {}).get('requires_investigation', False)
-                },
-                "security_event_details": {
-                    "event_id": event.get("id"),
-                    "timestamp": event.get("timestamp"),
-                    "affected_system": {
-                        "agent_name": event.get("agent_name"),
-                        "agent_id": event.get("agent_id"),
-                        "manager": event.get("manager")
-                    },
-                    "security_rule": {
-                        "rule_id": event.get("rule_id"),
-                        "severity_level": event.get("rule_level"),
-                        "severity_classification": event.get('security_assessment', {}).get('rule_severity', 'Unknown'),
-                        "description": event.get("rule_description") or "No rule description available",
-                        "categories": event.get("rule_groups") or "uncategorized"
-                    },
-                    "event_source": {
-                        "location": event.get("location"),
-                        "decoder": event.get("decoder_name")
-                    }
-                },
-                "forensic_data": {
-                    "original_log": event.get("full_log", "N/A"),
-                    "structured_data": event.get("data", "N/A"),
-                    "json_metadata": event.get("json_data", "N/A"),
-                    "matched_content": event.get('security_assessment', {}).get('matched_content_preview', 'N/A')
-                }
+                "rank": i,
+                "priority": event.get('threat_priority', 'UNKNOWN'),
+                "confidence": round(event.get('threat_score', 1.0), 3),
+                "indicators": event.get('threat_indicators', [])[:3],  # Limit to top 3
+                "timestamp": event.get("timestamp", "")[:16],  # Short timestamp
+                "agent": event.get("agent_name", "N/A")[:20],  # Truncate agent name
+                "rule_id": event.get("rule_id"),
+                "severity": event.get("rule_level"),
+                "description": (event.get("rule_description") or "No description")[:100] + "..." if len(event.get("rule_description", "")) > 100 else event.get("rule_description", "No description"),
+                "location": (event.get("location") or "N/A")[:30],  # Truncate location
+                "log_preview": (event.get("full_log", ""))[:200] + "..." if len(event.get("full_log", "")) > 200 else event.get("full_log", "")
             }
             threat_report["security_events"].append(threat_event)
         
-        # Add threat hunting recommendations
+        # Add concise threat hunting recommendations
         threat_report["recommendations"] = {
-            "immediate_actions": [
-                "Review all CRITICAL and HIGH priority events immediately",
-                "Correlate related events from the same agents/timeframes", 
-                "Check for lateral movement patterns across affected systems"
+            "immediate": [
+                f"Review {threat_report['threat_summary']['critical_events']} critical events",
+                "Check for related events from same agents",
+                "Investigate authentication anomalies"
             ],
-            "investigation_priorities": [
-                f"Focus on {threat_report['threat_summary']['critical_events']} critical events first",
-                "Analyze authentication patterns for brute-force attempts",
-                "Monitor data exfiltration indicators and network anomalies"
-            ],
-            "next_steps": [
-                "Expand analysis time range if threats are detected",
-                "Cross-reference with external threat intelligence",
-                "Implement additional monitoring for identified attack patterns"
+            "investigation": [
+                "Analyze patterns across time periods",
+                "Cross-reference with threat intelligence",  
+                "Monitor for lateral movement"
             ]
         }
         
