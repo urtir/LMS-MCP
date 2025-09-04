@@ -37,7 +37,7 @@ async def test_telegram_vs_webapp():
             "check_wazuh_log",
             {
                 "query": webapp_query,
-                "max_results": 5,
+                "max_results": 100,
                 "days_range": 7
             }
         )
@@ -67,7 +67,7 @@ async def test_telegram_vs_webapp():
             "check_wazuh_log",
             {
                 "query": telegram_query,
-                "max_results": 10,
+                "max_results": 100,
                 "days_range": 7
             }
         )
@@ -97,7 +97,7 @@ async def test_telegram_vs_webapp():
             "check_wazuh_log",
             {
                 "query": simple_query,
-                "max_results": 5,
+                "max_results": 100,
                 "days_range": 7
             }
         )

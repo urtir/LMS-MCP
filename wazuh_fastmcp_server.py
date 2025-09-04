@@ -558,7 +558,7 @@ if LANGCHAIN_AVAILABLE:
 async def check_wazuh_log(
     ctx: Context,
     query: str,
-    max_results: int = 5,
+    max_results: int = 100,
     days_range: int = 7,
     rebuild_index: bool = False
 ) -> str:
@@ -593,7 +593,7 @@ async def check_wazuh_log(
     
     Args:
         query: Natural language threat hunting query describing the security patterns to search for
-        max_results: Maximum number of threat events to return (1-20, default: 5)
+        max_results: Maximum number of threat events to return (1-100, default: 100)
         days_range: Number of days of logs to analyze (1-365, default: 7)
         rebuild_index: Whether to rebuild the vector store with latest logs (default: False)
     
@@ -611,7 +611,7 @@ async def check_wazuh_log(
             await rag_system.create_vector_store(limit=None)
         
         # Perform Wazuh AI threat hunting search
-        threat_events = await rag_system.search(query, k=min(max_results, 20))
+        threat_events = await rag_system.search(query, k=min(max_results, 100))
         
         if not threat_events:
             return json.dumps({
