@@ -13,10 +13,12 @@ import asyncio
 import json
 import logging
 import os
+import sqlite3
 from typing import Optional, Dict, List, Any, Union
 from datetime import datetime
 import base64
 import ssl
+import re
 
 import httpx
 from fastmcp import FastMCP, Context
@@ -25,6 +27,18 @@ from pydantic import BaseModel
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# LangChain imports for RAG
+try:
+    from langchain.schema import Document
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
+    from langchain_community.vectorstores import FAISS
+    from langchain_huggingface import HuggingFaceEmbeddings
+    LANGCHAIN_AVAILABLE = True
+    logger.info("LangChain imports successful")
+except ImportError as e:
+    logger.warning(f"LangChain not available: {e}")
+    LANGCHAIN_AVAILABLE = False
 
 # Initialize FastMCP server
 mcp = FastMCP("Wazuh API Server")
@@ -132,6 +146,293 @@ async def get_api_info(ctx: Context) -> str:
     """Get Wazuh API basic information and status."""
     result = await make_api_request("GET", "/", ctx)
     return json.dumps(result, indent=2)
+
+# =============================================================================
+# RAG SYSTEM FOR WAZUH LOG SEARCH
+# =============================================================================
+
+# =============================================================================
+# RAG SYSTEM FOR WAZUH LOG SEARCH
+# =============================================================================
+
+class WazuhLangChainRAG:
+    """LangChain-based RAG system for searching Wazuh archives."""
+    
+    def __init__(self, db_path: str = "wazuh_archives.db"):
+        self.db_path = db_path
+        self.vectorstore = None
+        self.embeddings = None
+        self.text_splitter = None
+        
+        if LANGCHAIN_AVAILABLE:
+            self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            self.text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=500,
+                chunk_overlap=50,
+                separators=["\n", ". ", ", ", " "]
+            )
+    
+    async def get_logs_from_db(self, limit: int = 1000) -> List[Dict[str, Any]]:
+        """Retrieve logs from the database with all columns including full_log."""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT id, timestamp, agent_id, agent_name, manager, rule_id, rule_level,
+                       rule_description, rule_groups, location, decoder_name,
+                       data, full_log, json_data
+                FROM wazuh_archives 
+                ORDER BY timestamp DESC 
+                LIMIT ?
+            """, (limit,))
+            
+            columns = [description[0] for description in cursor.description]
+            results = []
+            
+            for row in cursor.fetchall():
+                results.append(dict(zip(columns, row)))
+            
+            conn.close()
+            return results
+            
+        except Exception as e:
+            logger.error(f"Error retrieving logs from database: {e}")
+            return []
+    
+    async def get_original_log_by_id(self, log_id: int) -> Dict[str, Any]:
+        """Get original log data by ID including full_log column."""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT id, timestamp, agent_id, agent_name, manager, rule_id, rule_level,
+                       rule_description, rule_groups, location, decoder_name,
+                       data, full_log, json_data
+                FROM wazuh_archives 
+                WHERE id = ?
+            """, (log_id,))
+            
+            # Get columns BEFORE closing connection
+            columns = [description[0] for description in cursor.description]
+            result = cursor.fetchone()
+            conn.close()
+            
+            if result:
+                return dict(zip(columns, result))
+            
+            return {}
+            
+        except Exception as e:
+            logger.error(f"Error retrieving log by ID {log_id}: {e}")
+            return {}
+    
+    async def create_vector_store(self, limit: int = 1000):
+        """Create or update the vector store from database logs."""
+        if not LANGCHAIN_AVAILABLE:
+            raise Exception("LangChain is not available. Please install required packages.")
+        
+        logs = await self.get_logs_from_db(limit)
+        
+        if not logs:
+            logger.warning("No logs found in database")
+            return
+        
+        documents = []
+        for log in logs:
+            # Create comprehensive text for each log entry similar to Wazuh documentation approach
+            content_parts = []
+            
+            # Basic event information
+            content_parts.append(f"Timestamp: {log['timestamp']}")
+            content_parts.append(f"Agent: {log['agent_name']} (ID: {log['agent_id']})")
+            
+            # Rule information
+            content_parts.append(f"Rule ID: {log['rule_id']} (Level: {log['rule_level']})")
+            content_parts.append(f"Rule Description: {log['rule_description']}")
+            if log['rule_groups']:
+                content_parts.append(f"Rule Groups: {log['rule_groups']}")
+            
+            # Location and decoder
+            if log['location']:
+                content_parts.append(f"Location: {log['location']}")
+            if log['decoder_name']:
+                content_parts.append(f"Decoder: {log['decoder_name']}")
+            
+            # Log data - the most important part for threat hunting
+            if log['full_log']:
+                content_parts.append(f"Log Data: {log['full_log']}")
+            
+            # Additional structured data
+            if log['data']:
+                content_parts.append(f"Additional Data: {log['data']}")
+            
+            # Join all parts with newlines for better text processing
+            content = "\n".join(content_parts)
+            
+            # Create metadata with enhanced information for threat hunting
+            metadata = {
+                "id": log['id'],
+                "timestamp": log['timestamp'],
+                "agent_id": log['agent_id'],
+                "agent_name": log['agent_name'],
+                "rule_id": log['rule_id'],
+                "rule_level": log['rule_level'],
+                "rule_description": log['rule_description'],
+                "rule_groups": log['rule_groups'],
+                "location": log['location'],
+                "decoder_name": log['decoder_name']
+            }
+            
+            documents.append(Document(page_content=content, metadata=metadata))
+        
+        # Split documents if needed
+        split_docs = self.text_splitter.split_documents(documents)
+        
+        # Create vector store
+        logger.info(f"Creating FAISS vector store with {len(split_docs)} document chunks...")
+        self.vectorstore = FAISS.from_documents(split_docs, self.embeddings)
+        logger.info(f"Successfully created vector store")
+    
+    async def search(self, query: str, k: int = 5) -> List[Dict[str, Any]]:
+        """Search the vector store for relevant logs."""
+        if not LANGCHAIN_AVAILABLE:
+            return []
+            
+        if not self.vectorstore:
+            await self.create_vector_store()
+        
+        if not self.vectorstore:
+            return []
+        
+        # Perform similarity search
+        results = self.vectorstore.similarity_search_with_score(query, k=k)
+        
+        formatted_results = []
+        for i, (doc, score) in enumerate(results, 1):
+            result = {
+                "rank": i,
+                "content": doc.page_content,
+                "metadata": doc.metadata,
+                "similarity_score": float(score),
+                "relevance": "high" if score < 0.5 else "medium" if score < 1.0 else "low"
+            }
+            formatted_results.append(result)
+        
+        return formatted_results
+
+# Initialize RAG system
+rag_system = WazuhLangChainRAG()
+
+@mcp.tool
+async def check_wazuh_log(
+    ctx: Context,
+    query: str,
+    max_results: int = 5,
+    rebuild_index: bool = False
+) -> str:
+    """
+    AI-powered threat hunting tool for Wazuh archives using RAG (Retrieval-Augmented Generation).
+    
+    This tool performs semantic search on Wazuh security logs to hunt for threats, analyze patterns,
+    and identify security incidents based on natural language queries. It follows the Wazuh AI
+    threat hunting methodology using vector embeddings and similarity search.
+    
+    Example queries for threat hunting:
+    - "Find SSH brute-force attempts or multiple failed logins"
+    - "Look for PowerShell data exfiltration using Invoke-WebRequest"
+    - "Identify suspicious network connections or port scanning"
+    - "Show authentication failures and privilege escalation attempts"
+    - "Find malware detection events or file execution anomalies"
+    - "Analyze network traffic anomalies or unusual outbound connections"
+    
+    Args:
+        query: Natural language threat hunting query (be specific about attack patterns)
+        max_results: Maximum number of relevant security events to return (1-20, default: 20)
+        rebuild_index: Whether to rebuild the vector index from latest data (default: False)
+    
+    Returns:
+        JSON string containing relevant security events with threat analysis, similarity scores,
+        and detailed metadata for security investigation
+    """
+    try:
+        await ctx.info(f"🔍 AI Threat Hunting: Searching for '{query}'")
+        
+        # Rebuild index if requested
+        if rebuild_index:
+            await ctx.info("🔄 Rebuilding vector store with latest security events...")
+            await rag_system.create_vector_store(limit=2000)  # Index last 2000 logs
+        
+        # Perform RAG-based threat hunting
+        results = await rag_system.search(query, k=min(max_results, 20))
+        
+        if not results:
+            return json.dumps({
+                "status": "no_threats_found",
+                "message": "No matching security events found for the specified threat pattern",
+                "query": query,
+                "total_results": 0,
+                "recommendation": "Try refining your query with specific attack indicators (e.g., 'failed login', 'brute force', 'malware', 'network scan')"
+            }, indent=2)
+        
+        # Format results for threat analysis
+        threat_analysis = {
+            "status": "threats_identified",
+            "query": query,
+            "total_security_events": len(results),
+            "analysis_timestamp": datetime.now().isoformat(),
+            "security_events": []
+        }
+        
+        for result in results:
+            # Get original log data from database for this specific event
+            original_log_data = await rag_system.get_original_log_by_id(result["metadata"]["id"])
+            
+            # Enhanced threat context with original full_log
+            threat_event = {
+                "rank": result["rank"],
+                "threat_relevance": result["relevance"],
+                "confidence_score": result["similarity_score"],
+                "security_event": {
+                    "event_id": result["metadata"]["id"],
+                    "timestamp": result["metadata"]["timestamp"],
+                    "agent_info": {
+                        "name": result["metadata"]["agent_name"],
+                        "id": result["metadata"]["agent_id"]
+                    },
+                    "security_rule": {
+                        "rule_id": result["metadata"]["rule_id"],
+                        "severity_level": result["metadata"]["rule_level"],
+                        "description": result["metadata"]["rule_description"],
+                        "categories": result["metadata"]["rule_groups"] or "uncategorized"
+                    },
+                    "event_source": result["metadata"]["location"],
+                    "decoder": result["metadata"]["decoder_name"]
+                },
+                "log_analysis": {
+                    "full_content": result["content"][:800] + "..." if len(result["content"]) > 800 else result["content"],
+                    "truncated": len(result["content"]) > 800
+                },
+                "original_log_data": {
+                    "full_log": original_log_data.get("full_log", "N/A") if original_log_data else "N/A",
+                    "data": original_log_data.get("data", "N/A") if original_log_data else "N/A",
+                    "json_data": original_log_data.get("json_data", "N/A") if original_log_data else "N/A"
+                }
+            }
+            threat_analysis["security_events"].append(threat_event)
+        
+        await ctx.info(f"🚨 Threat Analysis Complete: Found {len(results)} relevant security events")
+        return json.dumps(threat_analysis, indent=2)
+        
+    except Exception as e:
+        error_msg = f"Error searching Wazuh logs: {str(e)}"
+        await ctx.error(error_msg)
+        return json.dumps({
+            "status": "error",
+            "message": error_msg,
+            "query": query
+        }, indent=2)
 
 # =============================================================================
 # AGENT MANAGEMENT TOOLS
