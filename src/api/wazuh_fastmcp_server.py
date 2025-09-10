@@ -333,50 +333,27 @@ Base your analysis solely on the vectorized security logs provided."""
     
     def enhance_log_for_threat_hunting(self, full_log: str) -> str:
         """
-        Enhance log content with security context for better threat hunting.
+        Minimal log enhancement - preserve original semantic content.
         
-        This method adds security-relevant context to logs following Wazuh methodology
-        for improved threat detection and analysis.
+        Simply add minimal context structure without keyword analysis
+        to maintain pure semantic search capability.
         """
-        # Add security context markers for better threat hunting
-        enhanced_log = f"SECURITY LOG ANALYSIS:\n{full_log}"
-        
-        # Add common threat hunting keywords for better semantic search
-        threat_indicators = []
-        
-        # Check for common attack patterns
-        if any(indicator in full_log.lower() for indicator in ['failed', 'denied', 'blocked', 'unauthorized']):
-            threat_indicators.append("POTENTIAL_SECURITY_EVENT")
-        
-        if any(indicator in full_log.lower() for indicator in ['ssh', 'login', 'authentication']):
-            threat_indicators.append("AUTHENTICATION_EVENT")
-            
-        if any(indicator in full_log.lower() for indicator in ['powershell', 'invoke-webrequest', 'wget', 'curl']):
-            threat_indicators.append("POTENTIAL_DATA_EXFILTRATION")
-            
-        if any(indicator in full_log.lower() for indicator in ['malware', 'virus', 'trojan', 'backdoor']):
-            threat_indicators.append("MALWARE_DETECTION")
-            
-        if any(indicator in full_log.lower() for indicator in ['brute', 'force', 'multiple', 'repeated']):
-            threat_indicators.append("BRUTE_FORCE_ATTACK")
-        
-        if threat_indicators:
-            enhanced_log += f"\nTHREAT_INDICATORS: {', '.join(threat_indicators)}"
-        
-        return enhanced_log
+        # Minimal enhancement - just add log marker without keyword analysis
+        return f"WAZUH_LOG: {full_log}"
     
-    async def search(self, query: str, k: int = 5) -> List[Dict[str, Any]]:
+    async def search(self, query: str, k: int = 5, use_reranking: bool = True) -> List[Dict[str, Any]]:
         """
-        AI-powered threat hunting search following official Wazuh methodology.
+        Advanced AI-powered threat hunting search with semantic reranking.
         
-        This method implements the Wazuh approach for AI threat hunting:
+        This method implements enhanced Wazuh approach for AI threat hunting:
         1. Perform semantic search on enhanced security logs
-        2. Retrieve comprehensive security event data
-        3. Provide threat analysis with security context
+        2. Apply intelligent reranking for better relevance
+        3. Retrieve comprehensive security event data with threat analysis
         
         Args:
             query: Natural language threat hunting query
             k: Number of results to return
+            use_reranking: Enable intelligent reranking for better results
             
         Returns:
             List of comprehensive security events with threat analysis
@@ -393,20 +370,25 @@ Base your analysis solely on the vectorized security logs provided."""
         # Enhance query for better threat hunting results
         enhanced_query = self.enhance_query_for_threat_hunting(query)
         
-        # Step 1: Perform similarity search on enhanced security logs
-        results = self.vectorstore.similarity_search_with_score(enhanced_query, k=k)
+        # Step 1: Perform broader similarity search for reranking
+        search_k = k * 3 if use_reranking else k
+        results = self.vectorstore.similarity_search_with_score(enhanced_query, k=search_k)
         
-        # Step 2: Extract unique IDs from search results
+        # Step 2: Apply intelligent reranking if enabled
+        if use_reranking and len(results) > k:
+            results = self.rerank_results(query, results, k)
+        
+        # Step 3: Extract unique IDs from search results
         relevant_ids = []
         seen_ids = set()
         
-        for doc, score in results:
+        for doc, score in results[:k]:
             log_id = doc.metadata.get('id')
             if log_id and log_id not in seen_ids:
                 relevant_ids.append(log_id)
                 seen_ids.add(log_id)
         
-        # Step 3: Retrieve comprehensive security event data
+        # Step 4: Retrieve comprehensive security event data
         threat_events = []
         for log_id in relevant_ids:
             security_event = await self.get_original_log_by_id(log_id)
@@ -421,62 +403,57 @@ Base your analysis solely on the vectorized security logs provided."""
                         matched_content = doc.page_content
                         break
                 
-                # Apply Wazuh threat hunting analysis
-                threat_analysis = self.analyze_threat_level(security_event, threat_score, matched_content)
+                # Apply advanced threat analysis
+                threat_analysis = self.analyze_threat_level(security_event, threat_score, matched_content, query)
                 
                 security_event.update(threat_analysis)
                 threat_events.append(security_event)
         
-        # Sort by threat priority (lower score = higher priority)
-        threat_events.sort(key=lambda x: x['threat_score'])
+        # Sort by threat priority and relevance
+        threat_events.sort(key=lambda x: (x['threat_score'], -x.get('rule_level', 0)))
         
         return threat_events
     
+    def rerank_results(self, original_query: str, results: List[tuple], top_k: int) -> List[tuple]:
+        """
+        Pure similarity-based reranking without keyword matching.
+        
+        This method applies minimal reranking based only on similarity scores
+        and rule levels, preserving pure semantic search.
+        """
+        scored_results = []
+        
+        for doc, similarity_score in results:
+            # Extract rule level from metadata for priority boost
+            rule_level = doc.metadata.get('rule_level', 0)
+            
+            # Simple priority boost based on rule level only
+            priority_boost = 0
+            if rule_level >= 10:  # Critical
+                priority_boost = 0.2
+            elif rule_level >= 7:  # High
+                priority_boost = 0.1
+            
+            # Combine scores (lower is better for similarity_score)
+            final_score = similarity_score - priority_boost
+            
+            scored_results.append((doc, final_score))
+        
+        # Sort by final score and return top_k
+        scored_results.sort(key=lambda x: x[1])
+        return scored_results[:top_k]
+    
     def enhance_query_for_threat_hunting(self, query: str) -> str:
-        """Enhance user query with threat hunting context as per Wazuh methodology."""
-        query_lower = query.lower()
+        """
+        Pure semantic query - no keyword mapping or enhancement.
         
-        # XSS Detection (English and Indonesian) - Use consistent terms
-        if any(term in query_lower for term in ['xss', 'cross-site', 'cross site', 'script injection', 'serangan xss', 'cross-site scripting']):
-            return "XSS cross-site scripting libinjection modsecurity apache security2 error"
-            
-        # Authentication/Brute Force
-        elif any(term in query_lower for term in ['brute', 'force', 'login', 'failed', 'authentication', 'ssh', 'autentikasi', 'gagal login']):
-            return "authentication failed login brute force ssh"
-            
-        # Data Exfiltration  
-        elif any(term in query_lower for term in ['exfiltration', 'data', 'transfer', 'download', 'eksfiltrasi', 'bocor data']):
-            return "data exfiltration powershell invoke-webrequest file transfer"
-            
-        # Malware Detection
-        elif any(term in query_lower for term in ['malware', 'virus', 'suspicious', 'trojan', 'backdoor', 'mencurigakan']):
-            return "malware virus trojan backdoor suspicious"
-            
-        # Network Threats
-        elif any(term in query_lower for term in ['network', 'connection', 'port', 'scanning', 'jaringan', 'koneksi']):
-            return "network connection port scanning traffic"
-            
-        # SQL Injection
-        elif any(term in query_lower for term in ['sql', 'injection', 'sqli', 'database', 'injeksi sql']):
-            return "SQL injection database web application"
-            
-        # Default: clean the query and add basic security context
-        else:
-            # Extract key security terms from the original query
-            security_terms = []
-            for word in query_lower.split():
-                if word in ['attack', 'threat', 'malicious', 'suspicious', 'security', 'error', 'warning', 
-                           'serangan', 'ancaman', 'berbahaya', 'mencurigakan', 'keamanan']:
-                    security_terms.append(word)
-            
-            if security_terms:
-                return f"security threat {' '.join(security_terms)}"
-            else:
-                return query  # Return original if no security context detected
-        
+        Return the original query as-is to preserve semantic meaning
+        for pure vector similarity matching.
+        """
+        # Simply return the original query for pure semantic search
         return query
     
-    def analyze_threat_level(self, security_event: Dict[str, Any], threat_score: float, matched_content: str) -> Dict[str, Any]:
+    def analyze_threat_level(self, security_event: Dict[str, Any], threat_score: float, matched_content: str, query: str = "") -> Dict[str, Any]:
         """
         Analyze threat level and provide security assessment following Wazuh methodology.
         
@@ -499,18 +476,25 @@ Base your analysis solely on the vectorized security logs provided."""
             threat_priority = "LOW"
             threat_category = "informational"
         
-        # Generate threat indicators
+        # Generate threat indicators based on rule metadata only (no keyword matching)
         threat_indicators = []
-        full_log = security_event.get('full_log', '').lower()
+        rule_groups = security_event.get('rule_groups', '')
+        rule_description = security_event.get('rule_description', '')
         
-        if 'failed' in full_log and 'login' in full_log:
-            threat_indicators.append("Authentication Failure")
-        if 'brute' in full_log or 'multiple' in full_log:
-            threat_indicators.append("Brute Force Pattern")
-        if 'powershell' in full_log and ('invoke-webrequest' in full_log or 'downloadstring' in full_log):
-            threat_indicators.append("Potential Data Exfiltration")
-        if any(malware in full_log for malware in ['malware', 'virus', 'trojan', 'backdoor']):
-            threat_indicators.append("Malware Detection")
+        # Use only rule metadata for indicators (not keyword matching on log content)
+        if rule_groups:
+            if 'authentication' in rule_groups:
+                threat_indicators.append("Authentication Event")
+            if 'attack' in rule_groups:
+                threat_indicators.append("Attack Pattern")
+            if 'web' in rule_groups:
+                threat_indicators.append("Web Activity")
+            if 'malware' in rule_groups:
+                threat_indicators.append("Malware Related")
+        
+        # Use rule description if no groups available
+        if not threat_indicators and rule_description:
+            threat_indicators.append("Security Event")
         
         return {
             "threat_score": threat_score,
