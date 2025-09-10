@@ -205,61 +205,88 @@ def dashboard_data():
         # Database path
         db_path = os.path.join(project_root, 'data', 'wazuh_archives.db')
         
+        logger.info(f"Attempting to connect to database: {db_path}")
+        
         if not os.path.exists(db_path):
+            logger.error(f"Database not found at: {db_path}")
             return jsonify({'error': 'Database not found'}), 404
         
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
+        try:
+            conn = sqlite3.connect(db_path)
+            conn.row_factory = sqlite3.Row
+            logger.info("Successfully connected to database")
+        except Exception as db_error:
+            logger.error(f"Failed to connect to database: {db_error}")
+            return jsonify({'error': f'Database connection failed: {str(db_error)}'}), 500
         
-        # Get total alerts count
-        total_alerts = conn.execute('SELECT COUNT(*) as count FROM wazuh_archives').fetchone()['count']
-        
-        # Get alert distribution by rule level
-        rule_levels = conn.execute('''
-            SELECT rule_level, COUNT(*) as count 
-            FROM wazuh_archives 
-            GROUP BY rule_level 
-            ORDER BY rule_level
-        ''').fetchall()
-        
-        # Get top agents by alert count
-        top_agents = conn.execute('''
-            SELECT agent_name, COUNT(*) as count
-            FROM wazuh_archives 
-            WHERE agent_name IS NOT NULL 
-            GROUP BY agent_name 
-            ORDER BY count DESC 
-            LIMIT 10
-        ''').fetchall()
-        
-        # Get recent alerts
-        recent_alerts = conn.execute('''
-            SELECT id, timestamp, agent_name, rule_level, rule_description, location, rule_groups
-            FROM wazuh_archives 
-            ORDER BY id DESC 
-            LIMIT 50
-        ''').fetchall()
-        
-        # Get alerts by date for timeline chart
-        alerts_by_date = conn.execute('''
-            SELECT DATE(timestamp) as date, COUNT(*) as count
-            FROM wazuh_archives 
-            WHERE timestamp >= date('now', '-7 days')
-            GROUP BY DATE(timestamp)
-            ORDER BY date
-        ''').fetchall()
-        
-        # Get rule group distribution
-        rule_groups = conn.execute('''
-            SELECT rule_groups, COUNT(*) as count
-            FROM wazuh_archives 
-            WHERE rule_groups IS NOT NULL AND rule_groups != ''
-            GROUP BY rule_groups 
-            ORDER BY count DESC 
-            LIMIT 10
-        ''').fetchall()
+        try:
+            # Get total alerts count
+            logger.info("Querying total alerts count...")
+            total_alerts = conn.execute('SELECT COUNT(*) as count FROM wazuh_archives').fetchone()['count']
+            logger.info(f"Total alerts: {total_alerts}")
+            
+            # Get alert distribution by rule level
+            logger.info("Querying rule levels...")
+            rule_levels = conn.execute('''
+                SELECT rule_level, COUNT(*) as count 
+                FROM wazuh_archives 
+                GROUP BY rule_level 
+                ORDER BY rule_level
+            ''').fetchall()
+            logger.info(f"Found {len(rule_levels)} rule levels")
+            
+            # Get top agents by alert count
+            logger.info("Querying top agents...")
+            top_agents = conn.execute('''
+                SELECT agent_name, COUNT(*) as count
+                FROM wazuh_archives 
+                WHERE agent_name IS NOT NULL 
+                GROUP BY agent_name 
+                ORDER BY count DESC 
+                LIMIT 10
+            ''').fetchall()
+            logger.info(f"Found {len(top_agents)} agents")
+            
+            # Get recent alerts
+            logger.info("Querying recent alerts...")
+            recent_alerts = conn.execute('''
+                SELECT id, timestamp, agent_name, rule_level, rule_description, location, rule_groups
+                FROM wazuh_archives 
+                ORDER BY id DESC 
+                LIMIT 50
+            ''').fetchall()
+            logger.info(f"Found {len(recent_alerts)} recent alerts")
+            
+            # Get alerts by date for timeline chart
+            logger.info("Querying alerts by date...")
+            alerts_by_date = conn.execute('''
+                SELECT DATE(timestamp) as date, COUNT(*) as count
+                FROM wazuh_archives 
+                WHERE timestamp >= date('now', '-7 days')
+                GROUP BY DATE(timestamp)
+                ORDER BY date
+            ''').fetchall()
+            logger.info(f"Found {len(alerts_by_date)} date entries")
+            
+            # Get rule group distribution
+            logger.info("Querying rule groups...")
+            rule_groups = conn.execute('''
+                SELECT rule_groups, COUNT(*) as count
+                FROM wazuh_archives 
+                WHERE rule_groups IS NOT NULL AND rule_groups != ''
+                GROUP BY rule_groups 
+                ORDER BY count DESC 
+                LIMIT 10
+            ''').fetchall()
+            logger.info(f"Found {len(rule_groups)} rule groups")
+            
+        except Exception as query_error:
+            logger.error(f"Database query error: {query_error}")
+            conn.close()
+            return jsonify({'error': f'Database query failed: {str(query_error)}'}), 500
         
         conn.close()
+        logger.info("Database connection closed successfully")
         
         # Helper function for level descriptions
         def get_level_description(level):

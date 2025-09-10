@@ -13,8 +13,7 @@
     
     <style>
         :root {
-            /* Color scheme following 60-30-10 principle */
-            /* 60% - Primary/Neutral colors (backgrounds, text) */
+            /* 60% - Primary/Neutral colors (hitam-putih dominan) */
             --color-neutral-50: #fafafa;
             --color-neutral-100: #f4f4f5;
             --color-neutral-200: #e4e4e7;
@@ -26,7 +25,7 @@
             --color-neutral-800: #27272a;
             --color-neutral-900: #18181b;
             
-            /* 30% - Secondary colors (cards, sections) */
+            /* 30% - Secondary colors (abu-abu) */
             --color-slate-50: #f8fafc;
             --color-slate-100: #f1f5f9;
             --color-slate-200: #e2e8f0;
@@ -38,10 +37,7 @@
             --color-slate-800: #1e293b;
             --color-slate-900: #0f172a;
             
-            /* 10% - Accent colors (alerts, actions, highlights) */
-            --color-blue-500: #3b82f6;
-            --color-blue-600: #2563eb;
-            --color-blue-700: #1d4ed8;
+            /* 10% - Accent colors (minimal untuk alerts saja) */
             --color-green-500: #10b981;
             --color-green-600: #059669;
             --color-yellow-500: #eab308;
@@ -51,27 +47,27 @@
             --color-orange-500: #f97316;
             --color-orange-600: #ea580c;
             
-            /* Semantic colors */
-            --background: var(--color-neutral-50);
+            /* Semantic colors - hitam putih tema */
+            --background: linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #333333  75%, #ffffff 100%);
             --foreground: var(--color-neutral-900);
             --card: #ffffff;
             --card-foreground: var(--color-neutral-900);
-            --sidebar: var(--color-slate-900);
-            --sidebar-foreground: var(--color-slate-100);
-            --border: var(--color-neutral-200);
+            --sidebar: #000000;
+            --sidebar-foreground: #ffffff;
+            --border: var(--color-neutral-300);
             --input: var(--color-neutral-200);
-            --ring: var(--color-blue-500);
+            --ring: var(--color-neutral-600);
             --radius: 0.5rem;
         }
         
         .dark {
-            /* Dark mode - maintaining 60-30-10 principle */
-            --background: var(--color-neutral-900);
+            /* Dark mode - hitam putih dengan dominan gelap */
+            --background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 25%, #1a1a1a 75%, #000000 100%);
             --foreground: var(--color-neutral-100);
-            --card: var(--color-neutral-800);
+            --card: #1a1a1a;
             --card-foreground: var(--color-neutral-100);
-            --sidebar: var(--color-slate-950);
-            --sidebar-foreground: var(--color-slate-200);
+            --sidebar: #000000;
+            --sidebar-foreground: #ffffff;
             --border: var(--color-neutral-700);
             --input: var(--color-neutral-700);
         }
@@ -82,9 +78,10 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--background);
+            background: var(--background);
             color: var(--foreground);
             line-height: 1.6;
+            min-height: 100vh;
         }
         
         /* Animation for status indicators */
@@ -101,41 +98,45 @@
             }
         }
         
-        /* 60% - Main background gradient */
+        /* 60% - Main background gradient hitam-putih */
         .gradient-dashboard {
             background: linear-gradient(135deg, 
-                var(--color-slate-50) 0%, 
-                var(--color-neutral-50) 50%, 
-                var(--color-slate-100) 100%);
+                #000000 0%, 
+                #1a1a1a 25%, 
+                #666666 50%,
+                #cccccc 75%,
+                #ffffff 100%);
         }
         
-        /* 30% - Card styling */
+        /* 30% - Card styling dengan tema hitam-putih */
         .card {
-            background: var(--card);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: calc(var(--radius) + 2px);
-            color: var(--card-foreground);
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+            color: #000000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
         
         .card:hover {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            transform: translateY(-2px);
         }
         
-        /* Sidebar - 30% secondary color */
+        /* Sidebar - tema hitam */
         .sidebar {
-            background: var(--sidebar);
-            border-right: 1px solid var(--border);
-            color: var(--sidebar-foreground);
+            background: linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #333333 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ffffff;
         }
         
-        /* Navigation styling with better contrast */
+        /* Navigation styling dengan tema hitam-putih */
         .nav-item {
             display: flex;
             align-items: center;
             padding: 0.875rem 1rem;
-            color: var(--color-slate-400);
+            color: #cccccc;
             text-decoration: none;
             border-radius: calc(var(--radius));
             transition: all 0.2s ease;
@@ -143,18 +144,19 @@
         }
         
         .nav-item:hover {
-            background: var(--color-slate-800);
-            color: var(--color-slate-200);
-            transform: translateX(2px);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transform: translateX(4px);
         }
         
         .nav-item.active {
-            background: var(--color-blue-600);
-            color: white;
+            background: linear-gradient(90deg, #ffffff 0%, #f0f0f0 100%);
+            color: #000000;
             font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
         }
         
-        /* 10% - Accent badges with improved contrast */
+        /* 10% - Accent badges dengan tema minimal hitam-putih */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -168,24 +170,25 @@
         }
         
         .badge.success { 
-            background: var(--color-green-500); 
-            color: white;
-            border-color: var(--color-green-600);
+            background: #000000; 
+            color: #ffffff;
+            border-color: #333333;
         }
         .badge.warning { 
-            background: var(--color-yellow-500); 
-            color: white;
-            border-color: var(--color-yellow-600);
+            background: #666666; 
+            color: #ffffff;
+            border-color: #999999;
         }
         .badge.danger { 
-            background: var(--color-red-500); 
-            color: white;
-            border-color: var(--color-red-600);
+            background: #000000; 
+            color: #ffffff;
+            border-color: #ff0000;
+            box-shadow: 0 0 0 1px #ff0000;
         }
         .badge.info { 
-            background: var(--color-blue-500); 
-            color: white;
-            border-color: var(--color-blue-600);
+            background: #ffffff; 
+            color: #000000;
+            border-color: #333333;
         }
         
         /* Table styling with better readability */
@@ -428,7 +431,7 @@
             <header class="dashboard-header px-6 py-4">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-3xl font-bold text-slate-900">Security Dashboard</h2>
+                        <h2 class="text-3xl font-bold text-black">Security Dashboard</h2>
                         <p class="text-slate-600 mt-1">Real-time security monitoring and analysis</p>
                     </div>
                     <div class="flex items-center gap-4">
@@ -450,69 +453,69 @@
 
             <!-- Dashboard Content -->
             <main class="flex-1 overflow-y-auto p-6 space-y-8">
-                <!-- Stats Cards - 10% accent colors -->
+                <!-- Stats Cards - tema hitam-putih -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 stat-cards">
-                    <div class="card stat-card-red p-6">
+                    <div class="card p-6" style="background: linear-gradient(135deg, #000000 0%, #333333 100%); color: white;">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-sm font-medium text-red-100 uppercase tracking-wide">Total Alerts</h3>
+                                <h3 class="text-sm font-medium text-gray-200 uppercase tracking-wide">Total Alerts</h3>
                                 <p class="text-3xl font-bold text-white mt-2" id="total-alerts">0</p>
                             </div>
-                            <div class="stat-icon w-12 h-12 rounded-lg flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(255,255,255,0.1);">
                                 <i data-lucide="alert-triangle" class="w-6 h-6 text-white"></i>
                             </div>
                         </div>
                         <div class="mt-4 flex items-center text-sm">
-                            <i data-lucide="trending-up" class="w-4 h-4 text-red-200 mr-1"></i>
-                            <span class="text-red-100">+12% from last week</span>
+                            <i data-lucide="trending-up" class="w-4 h-4 text-gray-300 mr-1"></i>
+                            <span class="text-gray-200">+12% from last week</span>
                         </div>
                     </div>
 
-                    <div class="card stat-card-blue p-6">
+                    <div class="card p-6" style="background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%); color: black;">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-sm font-medium text-blue-100 uppercase tracking-wide">Active Agents</h3>
-                                <p class="text-3xl font-bold text-white mt-2" id="active-agents">0</p>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Active Agents</h3>
+                                <p class="text-3xl font-bold text-black mt-2" id="active-agents">0</p>
                             </div>
-                            <div class="stat-icon w-12 h-12 rounded-lg flex items-center justify-center">
-                                <i data-lucide="monitor" class="w-6 h-6 text-white"></i>
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(0,0,0,0.1);">
+                                <i data-lucide="monitor" class="w-6 h-6 text-black"></i>
                             </div>
                         </div>
                         <div class="mt-4 flex items-center text-sm">
-                            <i data-lucide="trending-up" class="w-4 h-4 text-blue-200 mr-1"></i>
-                            <span class="text-blue-100">+2 new agents</span>
+                            <i data-lucide="trending-up" class="w-4 h-4 text-gray-600 mr-1"></i>
+                            <span class="text-gray-600">+2 new agents</span>
                         </div>
                     </div>
 
-                    <div class="card stat-card-orange p-6">
+                    <div class="card p-6" style="background: linear-gradient(135deg, #333333 0%, #666666 100%); color: white;">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-sm font-medium text-orange-100 uppercase tracking-wide">Critical Events</h3>
+                                <h3 class="text-sm font-medium text-gray-200 uppercase tracking-wide">Critical Events</h3>
                                 <p class="text-3xl font-bold text-white mt-2" id="critical-events">0</p>
                             </div>
-                            <div class="stat-icon w-12 h-12 rounded-lg flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(255,255,255,0.1);">
                                 <i data-lucide="shield-alert" class="w-6 h-6 text-white"></i>
                             </div>
                         </div>
                         <div class="mt-4 flex items-center text-sm">
-                            <i data-lucide="trending-down" class="w-4 h-4 text-orange-200 mr-1"></i>
-                            <span class="text-orange-100">-8% from yesterday</span>
+                            <i data-lucide="trending-down" class="w-4 h-4 text-gray-300 mr-1"></i>
+                            <span class="text-gray-200">-8% from yesterday</span>
                         </div>
                     </div>
 
-                    <div class="card stat-card-green p-6">
+                    <div class="card p-6" style="background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%); color: black;">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-sm font-medium text-green-100 uppercase tracking-wide">Security Score</h3>
-                                <p class="text-3xl font-bold text-white mt-2">92<span class="text-lg">%</span></p>
+                                <h3 class="text-sm font-medium text-gray-600 uppercase tracking-wide">Security Score</h3>
+                                <p class="text-3xl font-bold text-black mt-2">92<span class="text-lg">%</span></p>
                             </div>
-                            <div class="stat-icon w-12 h-12 rounded-lg flex items-center justify-center">
-                                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+                            <div class="w-12 h-12 rounded-lg flex items-center justify-center" style="background: rgba(0,0,0,0.1);">
+                                <i data-lucide="shield-check" class="w-6 h-6 text-black"></i>
                             </div>
                         </div>
                         <div class="mt-4 flex items-center text-sm">
-                            <i data-lucide="trending-up" class="w-4 h-4 text-green-200 mr-1"></i>
-                            <span class="text-green-100">+5% improvement</span>
+                            <i data-lucide="trending-up" class="w-4 h-4 text-gray-600 mr-1"></i>
+                            <span class="text-gray-600">+5% improvement</span>
                         </div>
                     </div>
                 </div>
@@ -666,6 +669,10 @@
         // Initialize Lucide icons
         lucide.createIcons();
         
+        // Global variables for chart instances
+        let alertTimelineChart = null;
+        let alertLevelChart = null;
+        
         // Dashboard state
         let dashboardData = {
             alerts: [],
@@ -750,6 +757,16 @@
         function updateCharts() {
             console.log('Updating charts with REAL database data...');
             
+            // Destroy existing charts before creating new ones
+            if (alertTimelineChart) {
+                alertTimelineChart.destroy();
+                alertTimelineChart = null;
+            }
+            if (alertLevelChart) {
+                alertLevelChart.destroy();
+                alertLevelChart = null;
+            }
+            
             // Alert Timeline Chart - use REAL timeline data
             const ctx1 = document.getElementById('alertTimelineChart').getContext('2d');
             const timelineData = dashboardData.timeline || [];
@@ -759,7 +776,7 @@
             });
             const timelineCounts = timelineData.map(item => item.count);
             
-            new Chart(ctx1, {
+            alertTimelineChart = new Chart(ctx1, {
                 type: 'line',
                 data: {
                     labels: timelineLabels.length > 0 ? timelineLabels : ['No Data'],
@@ -806,7 +823,7 @@
             const ruleCounts = rules.map(r => r.count);
             const ruleLabels = rules.map(r => `Level ${r.level} (${r.count})`);
             
-            new Chart(ctx2, {
+            alertLevelChart = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
                     labels: ruleLabels.length > 0 ? ruleLabels : ['No Data'],
