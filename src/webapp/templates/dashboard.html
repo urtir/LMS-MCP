@@ -666,12 +666,15 @@
     </div>
 
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-        
-        // Global variables for chart instances
-        let alertTimelineChart = null;
-        let alertLevelChart = null;
+        // Initialize Lucide icons with error handling
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+                console.log('Lucide icons initialized');
+            } else {
+                console.warn('Lucide library not loaded');
+            }
+        });
         
         // Dashboard state
         let dashboardData = {
@@ -681,6 +684,24 @@
             currentPage: 0,
             pageSize: 10
         };
+        
+        // Force clear canvas and destroy charts
+        function clearCharts() {
+            // Destroy any existing Chart.js instances
+            Chart.helpers.each(Chart.instances, function(instance) {
+                if (instance.canvas && (instance.canvas.id === 'alertTimelineChart' || instance.canvas.id === 'alertLevelChart')) {
+                    instance.destroy();
+                }
+            });
+            
+            // Clear window references
+            if (window.alertTimelineChart) {
+                window.alertTimelineChart = null;
+            }
+            if (window.alertLevelChart) {
+                window.alertLevelChart = null;
+            }
+        }
         
         // Fetch data from backend - REAL DATABASE DATA ONLY
         async function fetchDashboardData() {
@@ -692,14 +713,23 @@
         async function loadRealData() {
             try {
                 console.log('Loading REAL data from database...');
+                
+                // Clear charts before loading new data
+                clearCharts();
+                
                 const response = await fetch('/api/dashboard-data');
                 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! status: ${response.status}: ${response.statusText}`);
                 }
                 
                 const data = await response.json();
-                console.log('Real data loaded:', data);
+                console.log('Real data loaded successfully:', data);
+                
+                // Check if data has error
+                if (data.error) {
+                    throw new Error(`Database error: ${data.error}`);
+                }
                 
                 // Use REAL data from database
                 dashboardData.alerts = data.alerts || [];
@@ -731,11 +761,18 @@
         
         // Update dashboard with data
         function updateDashboard() {
-            updateStats();
-            updateCharts();
-            updateAgentList();
-            updateRuleList();
-            updateAlertsTable();
+            try {
+                console.log('Updating dashboard with real data...');
+                updateStats();
+                updateCharts();
+                updateAgentList();
+                updateRuleList();
+                updateAlertsTable();
+                console.log('Dashboard updated successfully');
+            } catch (error) {
+                console.error('Error updating dashboard:', error);
+                showErrorMessage(`Dashboard update failed: ${error.message}`);
+            }
         }
         
         // Update statistics cards with REAL data
@@ -747,36 +784,49 @@
             
             console.log('Updating stats with REAL data:', stats);
             
-            document.getElementById('total-alerts').textContent = totalAlerts.toLocaleString();
-            document.getElementById('active-agents').textContent = activeAgents;
-            document.getElementById('critical-events').textContent = criticalEvents;
-            document.getElementById('alert-count').textContent = criticalEvents;
+            // Safe DOM updates with null checks
+            const totalAlertsEl = document.getElementById('total-alerts');
+            const activeAgentsEl = document.getElementById('active-agents');
+            const criticalEventsEl = document.getElementById('critical-events');
+            const alertCountEl = document.getElementById('alert-count');
+            
+            if (totalAlertsEl) totalAlertsEl.textContent = totalAlerts.toLocaleString();
+            if (activeAgentsEl) activeAgentsEl.textContent = activeAgents;
+            if (criticalEventsEl) criticalEventsEl.textContent = criticalEvents;
+            if (alertCountEl) alertCountEl.textContent = criticalEvents;
         }
         
         // Update charts with REAL data from database
         function updateCharts() {
             console.log('Updating charts with REAL database data...');
             
-            // Destroy existing charts before creating new ones
-            if (alertTimelineChart) {
-                alertTimelineChart.destroy();
-                alertTimelineChart = null;
+            // Force clear any existing charts
+            clearCharts();
+            
+            // Clear canvas contexts
+            const canvas1 = document.getElementById('alertTimelineChart');
+            const canvas2 = document.getElementById('alertLevelChart');
+            
+            if (canvas1) {
+                const ctx1 = canvas1.getContext('2d');
+                ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
             }
-            if (alertLevelChart) {
-                alertLevelChart.destroy();
-                alertLevelChart = null;
+            if (canvas2) {
+                const ctx2 = canvas2.getContext('2d');
+                ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
             }
             
-            // Alert Timeline Chart - use REAL timeline data
-            const ctx1 = document.getElementById('alertTimelineChart').getContext('2d');
-            const timelineData = dashboardData.timeline || [];
-            const timelineLabels = timelineData.map(item => {
-                const date = new Date(item.date);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            });
-            const timelineCounts = timelineData.map(item => item.count);
-            
-            alertTimelineChart = new Chart(ctx1, {
+            try {
+                // Alert Timeline Chart - use REAL timeline data
+                const ctx1 = document.getElementById('alertTimelineChart').getContext('2d');
+                const timelineData = dashboardData.timeline || [];
+                const timelineLabels = timelineData.map(item => {
+                    const date = new Date(item.date);
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                });
+                const timelineCounts = timelineData.map(item => item.count);
+                
+                window.alertTimelineChart = new Chart(ctx1, {
                 type: 'line',
                 data: {
                     labels: timelineLabels.length > 0 ? timelineLabels : ['No Data'],
@@ -823,7 +873,7 @@
             const ruleCounts = rules.map(r => r.count);
             const ruleLabels = rules.map(r => `Level ${r.level} (${r.count})`);
             
-            alertLevelChart = new Chart(ctx2, {
+            window.alertLevelChart = new Chart(ctx2, {
                 type: 'doughnut',
                 data: {
                     labels: ruleLabels.length > 0 ? ruleLabels : ['No Data'],
@@ -857,11 +907,39 @@
             });
             
             console.log('Charts updated with:', { timelineData, rules });
+            
+            } catch (error) {
+                console.error('Error updating charts:', error);
+                // Display error message to user
+                const alertTimelineChart = document.getElementById('alertTimelineChart');
+                const alertLevelChart = document.getElementById('alertLevelChart');
+                
+                if (alertTimelineChart) {
+                    const ctx1 = alertTimelineChart.getContext('2d');
+                    ctx1.fillStyle = '#666666';
+                    ctx1.font = '16px Arial';
+                    ctx1.textAlign = 'center';
+                    ctx1.fillText('Chart loading...', alertTimelineChart.width/2, alertTimelineChart.height/2);
+                }
+                
+                if (alertLevelChart) {
+                    const ctx2 = alertLevelChart.getContext('2d');
+                    ctx2.fillStyle = '#666666';
+                    ctx2.font = '16px Arial';
+                    ctx2.textAlign = 'center';
+                    ctx2.fillText('Chart loading...', alertLevelChart.width/2, alertLevelChart.height/2);
+                }
+            }
         }
         
         // Update agent list with improved styling
         function updateAgentList() {
             const agentList = document.getElementById('agent-list');
+            if (!agentList) {
+                console.warn('agent-list element not found');
+                return;
+            }
+            
             agentList.innerHTML = '';
             
             const agents = dashboardData.agents || [];
@@ -889,6 +967,11 @@
         // Update rule list with improved styling
         function updateRuleList() {
             const ruleList = document.getElementById('rule-list');
+            if (!ruleList) {
+                console.warn('rule-list element not found');
+                return;
+            }
+            
             ruleList.innerHTML = '';
             
             const rules = dashboardData.rules || [];
@@ -917,6 +1000,11 @@
         function updateAlertsTable() {
             console.log('Updating alerts table with REAL data...');
             const alertsTable = document.getElementById('alerts-table');
+            if (!alertsTable) {
+                console.warn('alerts-table element not found');
+                return;
+            }
+            
             const alerts = dashboardData.alerts || [];
             const startIndex = dashboardData.currentPage * dashboardData.pageSize;
             const endIndex = startIndex + dashboardData.pageSize;
@@ -959,15 +1047,17 @@
             }
             
             // Update pagination with REAL data
-            document.getElementById('showing-count').textContent = Math.min(endIndex, alerts.length);
-            document.getElementById('total-count').textContent = alerts.length;
-            
-            // Update pagination buttons
+            const showingCountEl = document.getElementById('showing-count');
+            const totalCountEl = document.getElementById('total-count');
             const prevBtn = document.getElementById('prev-btn');
             const nextBtn = document.getElementById('next-btn');
             
-            prevBtn.disabled = dashboardData.currentPage === 0;
-            nextBtn.disabled = endIndex >= alerts.length;
+            if (showingCountEl) showingCountEl.textContent = Math.min(endIndex, alerts.length);
+            if (totalCountEl) totalCountEl.textContent = alerts.length;
+            
+            // Update pagination buttons
+            if (prevBtn) prevBtn.disabled = dashboardData.currentPage === 0;
+            if (nextBtn) nextBtn.disabled = endIndex >= alerts.length;
             
             // Re-initialize icons for new elements
             lucide.createIcons();
@@ -996,10 +1086,68 @@
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Dashboard initializing - LOADING REAL DATA FROM DATABASE');
             
+            // Wait for Chart.js to be fully loaded
+            if (typeof Chart !== 'undefined') {
+                console.log('Chart.js is available, loading dashboard...');
+                initializeDashboard();
+            } else {
+                console.log('Waiting for Chart.js to load...');
+                window.addEventListener('load', initializeDashboard);
+            }
+        });
+        
+        async function initializeDashboard() {
+            try {
+                // Load REAL data from database  
+                await loadRealData();
+                
+                // Set up auto-refresh every 30 seconds for REAL data
+                setInterval(async () => {
+                    console.log('Auto-refreshing REAL data from database...');
+                    try {
+                        await loadRealData();
+                    } catch (error) {
+                        console.error('Auto-refresh failed:', error);
+                    }
+                }, 30000);
+                
+            } catch (error) {
+                console.error('Dashboard initialization failed:', error);
+                showErrorMessage(error.message);
+            }
+        }
+        
+        function showErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: fixed; top: 20px; right: 20px; 
+                background: #000000; color: white; 
+                padding: 15px; border-radius: 8px; 
+                z-index: 9999; border: 1px solid #ff0000;
+                max-width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            `;
+            errorDiv.innerHTML = `
+                <strong>Database Error:</strong><br>${message}<br>
+                <button onclick="location.reload()" style="
+                    background: white; color: black; border: none; 
+                    padding: 8px 15px; margin-top: 10px; 
+                    border-radius: 5px; cursor: pointer; font-weight: bold;
+                ">Retry</button>
+            `;
+            document.body.appendChild(errorDiv);
+            
+            // Auto-retry after 5 seconds
+            setTimeout(() => {
+                location.reload();
+            }, 5000);
+        }
+        
+        // Initialize event handlers
+        document.addEventListener('DOMContentLoaded', function() {
             // Load REAL data from database
             loadRealData();
             
-            // Set up auto-refresh every 30 seconds for REAL data
+            // Set up auto-refresh every 30 seconds for REAL data  
             setInterval(() => {
                 console.log('Auto-refreshing REAL data from database...');
                 loadRealData();
