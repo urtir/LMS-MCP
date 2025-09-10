@@ -1,9 +1,10 @@
 """
-Database models and operations for chat history
+Database models and operations for chat history and user authentication
 """
 import sqlite3
 import json
 import uuid
+import bcrypt
 from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
@@ -23,14 +24,30 @@ class ChatDatabase:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             
+            # Create users table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                    id TEXT PRIMARY KEY,
+                    username TEXT UNIQUE NOT NULL,
+                    email TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    full_name TEXT,
+                    is_active BOOLEAN DEFAULT 1,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    last_login TIMESTAMP
+                )
+            ''')
+            
             # Create chat_sessions table
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS chat_sessions (
                     id TEXT PRIMARY KEY,
+                    user_id TEXT NOT NULL,
                     title TEXT NOT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    message_count INTEGER DEFAULT 0
+                    message_count INTEGER DEFAULT 0,
+                    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
                 )
             ''')
             
@@ -54,8 +71,8 @@ class ChatDatabase:
             
             conn.commit()
     
-    def create_session(self, title: str = None) -> str:
-        """Create a new chat session"""
+    def create_session(self, user_id: str, title: str = None) -> str:
+        """Create a new chat session for a user"""
         session_id = str(uuid.uuid4())
         if not title:
             title = f"Chat Session {datetime.now().strftime('%Y-%m-%d %H:%M')}"
@@ -63,23 +80,24 @@ class ChatDatabase:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-                INSERT INTO chat_sessions (id, title, created_at, updated_at)
-                VALUES (?, ?, ?, ?)
-            ''', (session_id, title, datetime.now(), datetime.now()))
+                INSERT INTO chat_sessions (id, user_id, title, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (session_id, user_id, title, datetime.now(), datetime.now()))
             conn.commit()
         
         return session_id
     
-    def get_sessions(self, limit: int = 50) -> List[Dict]:
-        """Get all chat sessions ordered by most recent"""
+    def get_sessions(self, user_id: str, limit: int = 50) -> List[Dict]:
+        """Get all chat sessions for a user ordered by most recent"""
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
                 SELECT id, title, created_at, updated_at, message_count
                 FROM chat_sessions
+                WHERE user_id = ?
                 ORDER BY updated_at DESC
                 LIMIT ?
-            ''', (limit,))
+            ''', (user_id, limit))
             
             sessions = []
             for row in cursor.fetchall():
@@ -93,24 +111,33 @@ class ChatDatabase:
             
             return sessions
     
-    def get_session(self, session_id: str) -> Optional[Dict]:
-        """Get a specific session"""
+    def get_session(self, session_id: str, user_id: str = None) -> Optional[Dict]:
+        """Get a specific session, optionally filtered by user"""
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute('''
-                SELECT id, title, created_at, updated_at, message_count
-                FROM chat_sessions
-                WHERE id = ?
-            ''', (session_id,))
+            
+            if user_id:
+                cursor.execute('''
+                    SELECT id, user_id, title, created_at, updated_at, message_count
+                    FROM chat_sessions
+                    WHERE id = ? AND user_id = ?
+                ''', (session_id, user_id))
+            else:
+                cursor.execute('''
+                    SELECT id, user_id, title, created_at, updated_at, message_count
+                    FROM chat_sessions
+                    WHERE id = ?
+                ''', (session_id,))
             
             row = cursor.fetchone()
             if row:
                 return {
                     'id': row[0],
-                    'title': row[1],
-                    'created_at': row[2],
-                    'updated_at': row[3],
-                    'message_count': row[4]
+                    'user_id': row[1],
+                    'title': row[2],
+                    'created_at': row[3],
+                    'updated_at': row[4],
+                    'message_count': row[5]
                 }
             return None
     
@@ -239,3 +266,108 @@ class ChatDatabase:
                 'total_messages': total_messages,
                 'recent_sessions': recent_sessions
             }
+
+    # User Authentication Methods
+    def create_user(self, username: str, email: str, password: str, full_name: str = None) -> str:
+        """Create a new user"""
+        user_id = str(uuid.uuid4())
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO users (id, username, email, password_hash, full_name)
+                VALUES (?, ?, ?, ?, ?)
+            ''', (user_id, username, email, password_hash, full_name))
+            conn.commit()
+        
+        return user_id
+    
+    def authenticate_user(self, username: str, password: str) -> Optional[Dict]:
+        """Authenticate user by username and password"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT id, username, email, password_hash, full_name, is_active
+                FROM users 
+                WHERE username = ? AND is_active = 1
+            ''', (username,))
+            
+            user = cursor.fetchone()
+            if user and bcrypt.checkpw(password.encode('utf-8'), user[3].encode('utf-8')):
+                # Update last login
+                cursor.execute('''
+                    UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?
+                ''', (user[0],))
+                conn.commit()
+                
+                return {
+                    'id': user[0],
+                    'username': user[1],
+                    'email': user[2],
+                    'full_name': user[4],
+                    'is_active': user[5]
+                }
+        
+        return None
+    
+    def get_user_by_id(self, user_id: str) -> Optional[Dict]:
+        """Get user by ID"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT id, username, email, full_name, is_active, created_at, last_login
+                FROM users 
+                WHERE id = ? AND is_active = 1
+            ''', (user_id,))
+            
+            user = cursor.fetchone()
+            if user:
+                return {
+                    'id': user[0],
+                    'username': user[1],
+                    'email': user[2],
+                    'full_name': user[3],
+                    'is_active': user[4],
+                    'created_at': user[5],
+                    'last_login': user[6]
+                }
+        
+        return None
+    
+    def get_user_by_username(self, username: str) -> Optional[Dict]:
+        """Get user by username"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                SELECT id, username, email, full_name, is_active, created_at, last_login
+                FROM users 
+                WHERE username = ? AND is_active = 1
+            ''', (username,))
+            
+            user = cursor.fetchone()
+            if user:
+                return {
+                    'id': user[0],
+                    'username': user[1],
+                    'email': user[2],
+                    'full_name': user[3],
+                    'is_active': user[4],
+                    'created_at': user[5],
+                    'last_login': user[6]
+                }
+        
+        return None
+    
+    def user_exists(self, username: str = None, email: str = None) -> bool:
+        """Check if user exists by username or email"""
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            if username:
+                cursor.execute('SELECT COUNT(*) FROM users WHERE username = ?', (username,))
+            elif email:
+                cursor.execute('SELECT COUNT(*) FROM users WHERE email = ?', (email,))
+            else:
+                return False
+            
+            return cursor.fetchone()[0] > 0

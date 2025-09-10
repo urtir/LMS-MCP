@@ -16,7 +16,9 @@ import os
 from typing import Dict, List, Any
 from pathlib import Path
 import sys
-from flask import Flask, render_template, request, jsonify, Response
+from flask import Flask, render_template, request, jsonify, Response, redirect, url_for, flash, session
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from functools import wraps
 import itertools
 
 # Add parent directories to path for importing project modules
@@ -28,6 +30,7 @@ sys.path.insert(0, str(project_root / 'src'))
 # Import project components
 from src.database import ChatDatabase
 from src.api import FastMCPBridge
+from src.models.user import User
 
 # LM Studio client
 from openai import OpenAI
@@ -53,7 +56,23 @@ FLASK_CONFIG = {
 # Initialize Flask app with correct template folder
 template_dir = Path(__file__).parent / 'templates'
 app = Flask(__name__, template_folder=str(template_dir))
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-change-this')
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-change-this-in-production')
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'Please log in to access this page.'
+login_manager.login_message_category = 'info'
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Load user for Flask-Login"""
+    db = get_database()
+    user_data = db.get_user_by_id(user_id)
+    if user_data:
+        return User(user_data)
+    return None
 
 # Global instances (singleton pattern to avoid re-initialization)
 _db_instance = None
@@ -179,23 +198,124 @@ class Spinner:
             self.thread.join()
         self.write("\r")
 
-# Flask routes
+# Flask Routes
+@app.route('/')
+def landing():
+    """Landing page - accessible without login"""
+    return render_template('landing.html', user=current_user if current_user.is_authenticated else None)
+
+@app.route('/login')
+def login():
+    """Login page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('chat'))
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    """Register page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('chat'))
+    return render_template('register.html')
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    """Handle login API"""
+    try:
+        data = request.get_json()
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        
+        if not username or not password:
+            return jsonify({'error': 'Username and password are required'}), 400
+        
+        # Authenticate user
+        user_data = db.authenticate_user(username, password)
+        if user_data:
+            user = User(user_data)
+            login_user(user, remember=True)
+            return jsonify({
+                'success': True,
+                'message': 'Login successful',
+                'user': user.to_dict()
+            })
+        else:
+            return jsonify({'error': 'Invalid username or password'}), 401
+            
+    except Exception as e:
+        logger.error(f"Login error: {e}")
+        return jsonify({'error': 'Login failed'}), 500
+
+@app.route('/api/register', methods=['POST'])
+def api_register():
+    """Handle registration API"""
+    try:
+        data = request.get_json()
+        username = data.get('username', '').strip()
+        email = data.get('email', '').strip()
+        password = data.get('password', '')
+        full_name = data.get('full_name', '').strip()
+        
+        # Validate input
+        if not username or not email or not password:
+            return jsonify({'error': 'Username, email, and password are required'}), 400
+        
+        if len(password) < 6:
+            return jsonify({'error': 'Password must be at least 6 characters long'}), 400
+        
+        # Check if user already exists
+        if db.user_exists(username=username):
+            return jsonify({'error': 'Username already exists'}), 400
+        
+        if db.user_exists(email=email):
+            return jsonify({'error': 'Email already exists'}), 400
+        
+        # Create user
+        user_id = db.create_user(username, email, password, full_name)
+        user_data = db.get_user_by_id(user_id)
+        
+        if user_data:
+            user = User(user_data)
+            login_user(user, remember=True)
+            return jsonify({
+                'success': True,
+                'message': 'Registration successful',
+                'user': user.to_dict()
+            })
+        else:
+            return jsonify({'error': 'Registration failed'}), 500
+            
+    except Exception as e:
+        logger.error(f"Registration error: {e}")
+        return jsonify({'error': 'Registration failed'}), 500
+
+@app.route('/api/logout', methods=['POST'])
+@login_required
+def api_logout():
+    """Handle logout API"""
+    logout_user()
+    return jsonify({'success': True, 'message': 'Logged out successfully'})
+
+@app.route('/chat')
+@login_required
+def chat():
+    """Chat page - requires login"""
+    return render_template('chat_with_history.html', user=current_user)
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """Dashboard page - requires login"""
+    return render_template('dashboard.html', user=current_user)
+
+# Existing routes (dashboard data, etc.)
 @app.route('/')
 def index():
     """Serve landing page"""
     return render_template('landing.html')
 
-@app.route('/chat')
-def chat_interface():
-    """Serve chat interface with session history"""
-    return render_template('chat_with_history.html')
-
-@app.route('/dashboard')
-def dashboard():
-    """Serve dashboard interface"""
-    return render_template('dashboard.html')
-
 @app.route('/api/dashboard-data')
+@login_required
 def dashboard_data():
     """API endpoint for dashboard data"""
     try:
@@ -359,7 +479,8 @@ def dashboard_data():
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/chat', methods=['POST'])
-def chat():
+@login_required
+def api_chat():
     """Handle chat messages"""
     try:
         data = request.json
@@ -371,11 +492,12 @@ def chat():
         
         # Create new session if none provided
         if not session_id:
-            session_id = db.create_session()
+            session_id = db.create_session(current_user.id)
         
-        # Check if session exists in database
-        if not db.get_session(session_id):
-            return jsonify({"error": "Session not found"}), 404
+        # Check if session exists and belongs to current user
+        session_data = db.get_session(session_id, current_user.id)
+        if not session_data:
+            return jsonify({"error": "Session not found or access denied"}), 404
         
         # Get or create chat session object
         if session_id not in chat_sessions:
@@ -520,6 +642,7 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
         }
 
 @app.route('/api/tools', methods=['GET'])
+@login_required
 def get_tools():
     """Get available MCP tools"""
     try:
@@ -549,7 +672,7 @@ def get_tools():
 
 @app.route('/api/status', methods=['GET'])
 def get_status():
-    """Get system status - only check MCP"""
+    """Get system status - accessible from landing page"""
     try:
         # Check FastMCP connection only
         mcp_status = "connected" if mcp_bridge.client else "disconnected"
@@ -565,34 +688,37 @@ def get_status():
 
 # Session management endpoints
 @app.route('/api/sessions', methods=['GET'])
+@login_required
 def get_sessions():
-    """Get all chat sessions"""
+    """Get all chat sessions for current user"""
     try:
-        sessions = db.get_sessions()
+        sessions = db.get_sessions(current_user.id)
         return jsonify({"sessions": sessions})
     except Exception as e:
         logger.error(f"Error getting sessions: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/sessions', methods=['POST'])
+@login_required
 def create_session():
-    """Create a new chat session"""
+    """Create a new chat session for current user"""
     try:
         data = request.json or {}
         title = data.get('title')
-        session_id = db.create_session(title)
+        session_id = db.create_session(current_user.id, title)
         return jsonify({"session_id": session_id, "message": "Session created successfully"})
     except Exception as e:
         logger.error(f"Error creating session: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/sessions/<session_id>', methods=['GET'])
+@login_required
 def get_session_messages(session_id):
     """Get messages for a specific session"""
     try:
-        session = db.get_session(session_id)
+        session = db.get_session(session_id, current_user.id)
         if not session:
-            return jsonify({"error": "Session not found"}), 404
+            return jsonify({"error": "Session not found or access denied"}), 404
         
         messages = db.get_messages(session_id)
         return jsonify({
@@ -604,9 +730,15 @@ def get_session_messages(session_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/sessions/<session_id>', methods=['PUT'])
+@login_required
 def update_session(session_id):
     """Update session title"""
     try:
+        # Check if session belongs to current user
+        session = db.get_session(session_id, current_user.id)
+        if not session:
+            return jsonify({"error": "Session not found or access denied"}), 404
+        
         data = request.json
         title = data.get('title')
         if not title:
@@ -619,9 +751,15 @@ def update_session(session_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/sessions/<session_id>', methods=['DELETE'])
+@login_required
 def delete_session(session_id):
     """Delete a chat session"""
     try:
+        # Check if session belongs to current user
+        session = db.get_session(session_id, current_user.id)
+        if not session:
+            return jsonify({"error": "Session not found or access denied"}), 404
+        
         db.delete_session(session_id)
         return jsonify({"message": "Session deleted successfully"})
     except Exception as e:
@@ -629,27 +767,45 @@ def delete_session(session_id):
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/sessions/search', methods=['GET'])
+@login_required
 def search_sessions():
-    """Search sessions by query"""
+    """Search sessions by query for current user"""
     try:
         query = request.args.get('q', '')
         if not query:
             return jsonify({"sessions": []})
         
+        # Note: search_sessions method needs to be updated to filter by user_id
         sessions = db.search_sessions(query)
-        return jsonify({"sessions": sessions})
+        # Filter by user_id in Python for now
+        user_sessions = [s for s in sessions if db.get_session(s['id'], current_user.id)]
+        return jsonify({"sessions": user_sessions})
     except Exception as e:
         logger.error(f"Error searching sessions: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
-    """Get database statistics"""
+    """Get basic database statistics - accessible from landing page"""
     try:
+        # Get basic stats (no user-specific data)
         stats = db.get_stats()
         return jsonify(stats)
     except Exception as e:
         logger.error(f"Error getting stats: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/user-stats', methods=['GET'])
+@login_required
+def get_user_stats():
+    """Get user-specific database statistics"""
+    try:
+        # Get user-specific stats for logged-in users
+        stats = db.get_stats()
+        # Note: You might want to add user-specific stats methods later
+        return jsonify(stats)
+    except Exception as e:
+        logger.error(f"Error getting user stats: {e}")
         return jsonify({"error": str(e)}), 500
 
 # Initialize on startup
@@ -700,5 +856,6 @@ if __name__ == "__main__":
         debug=True,  # Enable debug mode for development
         host=FLASK_CONFIG['host'], 
         port=FLASK_CONFIG['port'],
-        use_reloader=False  # Disable reloader to prevent re-initialization
+        use_reloader=False,  # Disable reloader to prevent re-initialization
+        threaded=True  # Enable threading for concurrent requests
     )

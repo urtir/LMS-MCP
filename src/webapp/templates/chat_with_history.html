@@ -319,10 +319,34 @@
                     <h1 class="text-xl font-semibold" id="currentSessionTitle">New Chat</h1>
                     <p class="text-sm text-muted-foreground">LLM Chat powered by FastMCP</p>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-4">
+                    <!-- User info -->
+                    <div class="flex items-center gap-2 text-sm">
+                        <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
+                        <span class="text-foreground">{{ user.get_display_name() }}</span>
+                    </div>
+                    <!-- Status indicator -->
                     <div id="statusIndicator" class="flex items-center gap-2 text-sm">
                         <div class="w-2 h-2 rounded-full bg-muted animate-pulse" id="statusDot"></div>
                         <span class="text-muted-foreground" id="statusText">Checking...</span>
+                    </div>
+                    <!-- User menu -->
+                    <div class="relative">
+                        <button onclick="toggleUserMenu()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 w-8">
+                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                        </button>
+                        <div id="userMenu" class="hidden absolute right-0 top-10 w-48 bg-background border border-border rounded-md shadow-lg z-50">
+                            <div class="py-1">
+                                <a href="/dashboard" class="block px-4 py-2 text-sm text-foreground hover:bg-accent hover:text-accent-foreground">
+                                    <i data-lucide="bar-chart-3" class="w-4 h-4 inline mr-2"></i>
+                                    Dashboard
+                                </a>
+                                <button onclick="logout()" class="w-full text-left block px-4 py-2 text-sm text-destructive hover:bg-accent">
+                                    <i data-lucide="log-out" class="w-4 h-4 inline mr-2"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -605,6 +629,8 @@
             displayMessage('assistant', '', [], null, loadingId, true);
             
             try {
+                const controller = new AbortController();
+                
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: {
@@ -614,6 +640,7 @@
                         message: message,
                         session_id: currentSessionId
                     })
+                    // No timeout - allow unlimited time for long responses
                 });
                 
                 const data = await response.json();
@@ -1035,6 +1062,44 @@ ${thinking}
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
             };
+        }
+
+        // User menu functions
+        function toggleUserMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('userMenu');
+            const button = event.target.closest('button[onclick="toggleUserMenu()"]');
+            
+            if (!button && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+
+        // Logout function
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    console.error('Logout failed');
+                    alert('Logout failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                alert('Logout failed. Please try again.');
+            }
         }
 
         // Periodic status check - DISABLED to prevent spam
