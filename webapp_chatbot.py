@@ -38,7 +38,7 @@ app.secret_key = 'your-secret-key-change-this'
 db = ChatDatabase()
 
 # Initialize LM Studio client (same as tool-use-example.py)
-client = OpenAI(base_url="http://192.168.56.1:1234/v1", api_key="lm-studio")
+client = OpenAI(base_url="http://172.29.160.1:1234/v1", api_key="lm-studio")
 MODEL = "qwen/qwen3-1.7b"
 
 # Initialize FastMCP bridge
@@ -326,25 +326,12 @@ def get_tools():
 
 @app.route('/api/status', methods=['GET'])
 def get_status():
-    """Get system status"""
+    """Get system status - only check MCP"""
     try:
-        # Check LM Studio connection
-        lm_studio_status = "unknown"
-        try:
-            test_response = client.chat.completions.create(
-                model=MODEL,
-                messages=[{"role": "user", "content": "test"}],
-                max_tokens=1
-            )
-            lm_studio_status = "connected"
-        except:
-            lm_studio_status = "disconnected"
-        
-        # Check FastMCP connection
+        # Check FastMCP connection only
         mcp_status = "connected" if mcp_bridge.client else "disconnected"
         
         return jsonify({
-            "lm_studio": lm_studio_status,
             "fastmcp": mcp_status,
             "model": MODEL
         })
@@ -474,7 +461,7 @@ if __name__ == "__main__":
     print(f"🌐 Web Interface: http://127.0.0.1:5000")
     print("=" * 60)
     print("\nMake sure:")
-    print("1. LM Studio is running at http://192.168.56.1:1234")
+    print("1. LM Studio is running at http://172.29.160.1:1234")
     print("2. Model 'qwen/qwen3-1.7b' is loaded")
     print("3. wazuh_fastmcp_server.py is accessible")
     print("4. Wazuh API credentials are configured")

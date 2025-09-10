@@ -509,7 +509,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <span class="text-muted-foreground">Endpoint:</span>
-                                <span class="text-xs">http://192.168.56.1:1234</span>
+                                <span class="text-xs">http://172.29.160.1:1234</span>
                             </div>
                         </div>
                     </div>
@@ -623,18 +623,17 @@
             checkAllSystems();
             loadStats();
             
-            // Check status periodically
-            setInterval(checkAllSystems, 30000);
+            // Check status periodically - DISABLED to prevent spam
+            // setInterval(checkAllSystems, 30000);
             setInterval(loadStats, 10000);
         });
 
-        // System status checking
+        // System status checking - only MCP
         async function checkAllSystems() {
             try {
                 const response = await fetch('/api/status');
                 const data = await response.json();
                 
-                updateSystemStatus('lm-studio', data.lm_studio);
                 updateSystemStatus('fastmcp', data.fastmcp);
                 updateOverallStatus(data);
                 
@@ -643,9 +642,8 @@
                 
             } catch (error) {
                 console.error('Status check failed:', error);
-                updateSystemStatus('lm-studio', 'error');
                 updateSystemStatus('fastmcp', 'error');
-                updateOverallStatus({lm_studio: 'error', fastmcp: 'error'});
+                updateOverallStatus({fastmcp: 'error'});
             }
         }
 

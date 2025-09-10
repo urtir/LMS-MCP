@@ -400,33 +400,14 @@ Pilih menu di bawah untuk memulai:
             )
     
     async def handle_system_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle system status check"""
+        """Handle system status check - only MCP"""
         query = update.callback_query
         
-        await query.edit_message_text("🔄 Checking system status...")
+        await query.edit_message_text("🔄 Checking MCP status...")
         
         try:
-            # Check LM Studio connection
-            lm_status = "✅ Connected"
-            try:
-                test_response = self.llm_client.chat.completions.create(
-                    model=self.config.LM_STUDIO_CONFIG['model'],
-                    messages=[{"role": "user", "content": "test"}],
-                    max_tokens=1
-                )
-                lm_status = "✅ Connected"
-            except Exception:
-                lm_status = "❌ Disconnected"
-            
-            # Check MCP connection
+            # Check MCP connection only
             mcp_status = "✅ Connected" if self.mcp_bridge.client else "❌ Disconnected"
-            
-            # Check database
-            try:
-                stats = self.chat_db.get_stats()
-                db_status = f"✅ Connected ({stats.get('total_sessions', 0)} sessions)"
-            except Exception:
-                db_status = "❌ Error"
             
             # Check report generator
             report_status = "✅ Ready" if self.report_generator else "❌ Not initialized"
@@ -435,9 +416,7 @@ Pilih menu di bawah untuk memulai:
 🔧 **System Status**
 
 **Core Components:**
-• LM Studio: {lm_status}
 • FastMCP Server: {mcp_status}
-• Database: {db_status}
 • Report Generator: {report_status}
 
 **🚨 Alert System:**

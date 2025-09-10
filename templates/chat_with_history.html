@@ -979,24 +979,20 @@ ${thinking}
                 const statusDot = document.getElementById('statusDot');
                 const statusText = document.getElementById('statusText');
                 
-                const lmStudioOk = data.lm_studio === 'connected';
                 const fastmcpOk = data.fastmcp === 'connected';
                 
-                if (lmStudioOk && fastmcpOk) {
+                if (fastmcpOk) {
                     statusDot.className = 'w-2 h-2 rounded-full bg-green-500';
-                    statusText.textContent = 'All systems operational';
+                    statusText.textContent = 'MCP operational';
                     statusText.className = 'text-green-600';
-                } else if (lmStudioOk || fastmcpOk) {
-                    statusDot.className = 'w-2 h-2 rounded-full bg-yellow-500';
-                    statusText.textContent = 'Partial connectivity';
-                    statusText.className = 'text-yellow-600';
                 } else {
                     statusDot.className = 'w-2 h-2 rounded-full bg-red-500';
-                    statusText.textContent = 'Connection issues';
+                    statusText.textContent = 'MCP connection issues';
                     statusText.className = 'text-red-600';
                 }
                 
-                document.getElementById('sendButton').disabled = !lmStudioOk || document.getElementById('messageInput').value.trim() === '';
+                // Enable send button regardless of MCP status
+                document.getElementById('sendButton').disabled = document.getElementById('messageInput').value.trim() === '';
                 
             } catch (error) {
                 console.error('Status check failed:', error);
@@ -1004,10 +1000,11 @@ ${thinking}
                 const statusText = document.getElementById('statusText');
                 
                 statusDot.className = 'w-2 h-2 rounded-full bg-red-500';
-                statusText.textContent = 'Connection failed';
+                statusText.textContent = 'Status check failed';
                 statusText.className = 'text-red-600';
                 
-                document.getElementById('sendButton').disabled = true;
+                // Enable send button regardless of status check failure
+                document.getElementById('sendButton').disabled = document.getElementById('messageInput').value.trim() === '';
             }
         }
 
@@ -1040,8 +1037,8 @@ ${thinking}
             };
         }
 
-        // Periodic status check
-        setInterval(checkStatus, 30000);
+        // Periodic status check - DISABLED to prevent spam
+        // setInterval(checkStatus, 30000);
     </script>
 </body>
 </html>
