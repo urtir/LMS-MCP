@@ -190,6 +190,147 @@ def chat_interface():
     """Serve chat interface with session history"""
     return render_template('chat_with_history.html')
 
+@app.route('/dashboard')
+def dashboard():
+    """Serve dashboard interface"""
+    return render_template('dashboard.html')
+
+@app.route('/api/dashboard-data')
+def dashboard_data():
+    """API endpoint for dashboard data"""
+    try:
+        import sqlite3
+        from datetime import datetime, timedelta
+        
+        # Database path
+        db_path = os.path.join(project_root, 'data', 'wazuh_archives.db')
+        
+        if not os.path.exists(db_path):
+            return jsonify({'error': 'Database not found'}), 404
+        
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        
+        # Get total alerts count
+        total_alerts = conn.execute('SELECT COUNT(*) as count FROM wazuh_archives').fetchone()['count']
+        
+        # Get alert distribution by rule level
+        rule_levels = conn.execute('''
+            SELECT rule_level, COUNT(*) as count 
+            FROM wazuh_archives 
+            GROUP BY rule_level 
+            ORDER BY rule_level
+        ''').fetchall()
+        
+        # Get top agents by alert count
+        top_agents = conn.execute('''
+            SELECT agent_name, COUNT(*) as count
+            FROM wazuh_archives 
+            WHERE agent_name IS NOT NULL 
+            GROUP BY agent_name 
+            ORDER BY count DESC 
+            LIMIT 10
+        ''').fetchall()
+        
+        # Get recent alerts
+        recent_alerts = conn.execute('''
+            SELECT id, timestamp, agent_name, rule_level, rule_description, location, rule_groups
+            FROM wazuh_archives 
+            ORDER BY id DESC 
+            LIMIT 50
+        ''').fetchall()
+        
+        # Get alerts by date for timeline chart
+        alerts_by_date = conn.execute('''
+            SELECT DATE(timestamp) as date, COUNT(*) as count
+            FROM wazuh_archives 
+            WHERE timestamp >= date('now', '-7 days')
+            GROUP BY DATE(timestamp)
+            ORDER BY date
+        ''').fetchall()
+        
+        # Get rule group distribution
+        rule_groups = conn.execute('''
+            SELECT rule_groups, COUNT(*) as count
+            FROM wazuh_archives 
+            WHERE rule_groups IS NOT NULL AND rule_groups != ''
+            GROUP BY rule_groups 
+            ORDER BY count DESC 
+            LIMIT 10
+        ''').fetchall()
+        
+        conn.close()
+        
+        # Helper function for level descriptions
+        def get_level_description(level):
+            descriptions = {
+                0: 'Informational events',
+                1: 'Low priority alerts',
+                2: 'Low priority alerts', 
+                3: 'Medium priority alerts',
+                4: 'Medium priority alerts',
+                5: 'Medium priority alerts',
+                6: 'High priority alerts',
+                7: 'High priority alerts',
+                8: 'Critical alerts',
+                9: 'Critical alerts',
+                10: 'Emergency alerts'
+            }
+            return descriptions.get(level, f'Level {level} alerts')
+        
+        # Format data for response
+        response_data = {
+            'stats': {
+                'total_alerts': total_alerts,
+                'active_agents': len([agent for agent in top_agents if agent['count'] > 0]),
+                'critical_events': sum([rule['count'] for rule in rule_levels if rule['rule_level'] >= 8]),
+                'security_score': 92  # Mock security score
+            },
+            'rule_levels': [
+                {
+                    'level': rule['rule_level'],
+                    'count': rule['count'],
+                    'description': get_level_description(rule['rule_level'])
+                } for rule in rule_levels
+            ],
+            'agents': [
+                {
+                    'name': agent['agent_name'],
+                    'count': agent['count'],
+                    'status': 'active' if agent['count'] > 100 else 'inactive'
+                } for agent in top_agents
+            ],
+            'alerts': [
+                {
+                    'id': alert['id'],
+                    'timestamp': alert['timestamp'],
+                    'agent_name': alert['agent_name'] or 'Unknown',
+                    'rule_level': alert['rule_level'],
+                    'rule_description': alert['rule_description'] or 'No description',
+                    'location': alert['location'] or 'Unknown',
+                    'rule_groups': alert['rule_groups'] or ''
+                } for alert in recent_alerts
+            ],
+            'timeline': [
+                {
+                    'date': row['date'],
+                    'count': row['count']
+                } for row in alerts_by_date
+            ],
+            'rule_groups': [
+                {
+                    'name': group['rule_groups'],
+                    'count': group['count']
+                } for group in rule_groups
+            ]
+        }
+        
+        return jsonify(response_data)
+        
+    except Exception as e:
+        logger.error(f"Error fetching dashboard data: {e}")
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
     """Handle chat messages"""
@@ -529,7 +670,7 @@ if __name__ == "__main__":
     print("\nStarting webapp...")
     
     app.run(
-        debug=False,  # Disable debug to prevent auto-reload
+        debug=True,  # Enable debug mode for development
         host=FLASK_CONFIG['host'], 
         port=FLASK_CONFIG['port'],
         use_reloader=False  # Disable reloader to prevent re-initialization
