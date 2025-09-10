@@ -1739,17 +1739,6 @@ async def ingest_events(ctx: Context, events: str) -> str:
 # RESOURCES FOR SYSTEM INFORMATION
 # =============================================================================
 
-@mcp.resource("wazuh://config")
-def get_wazuh_config():
-    """Get current Wazuh server configuration."""
-    return {
-        "base_url": config.base_url,
-        "username": config.username,
-        "verify_ssl": config.verify_ssl,
-        "timeout": config.timeout,
-        "authenticated": config._token is not None
-    }
-
 @mcp.resource("wazuh://api-endpoints")
 def get_api_endpoints():
     """List all available Wazuh API endpoints implemented."""
