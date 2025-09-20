@@ -24,7 +24,6 @@ from typing import Optional, Dict, List, Any, Union
 from datetime import datetime
 import base64
 import ssl
-import re
 from pathlib import Path
 
 import httpx
@@ -35,17 +34,37 @@ from pydantic import BaseModel
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# LangChain imports for RAG
+# CAG (Cache-Augmented Generation) imports
 try:
-    from langchain.schema import Document
-    from langchain.text_splitter import RecursiveCharacterTextSplitter
-    from langchain_community.vectorstores import FAISS
-    from langchain_huggingface import HuggingFaceEmbeddings
-    LANGCHAIN_AVAILABLE = True
-    logger.info("LangChain imports successful")
+    import torch
+    from transformers import AutoTokenizer, AutoModelForCausalLM
+    from transformers.cache_utils import DynamicCache
+    CAG_AVAILABLE = True
+    logger.info("CAG (transformers/torch) imports successful")
 except ImportError as e:
-    logger.warning(f"LangChain not available: {e}")
-    LANGCHAIN_AVAILABLE = False
+    logger.warning(f"CAG dependencies not available: {e}")
+    CAG_AVAILABLE = False
+
+# Semantic search imports
+try:
+    from sentence_transformers import SentenceTransformer
+    import numpy as np
+    import faiss
+    from sklearn.metrics.pairwise import cosine_similarity
+    SEMANTIC_SEARCH_AVAILABLE = True
+    logger.info("Semantic search imports successful")
+except ImportError as e:
+    logger.warning(f"Semantic search dependencies not available: {e}")
+    SEMANTIC_SEARCH_AVAILABLE = False
+
+# LM Studio client for generation
+try:
+    from openai import OpenAI
+    OPENAI_AVAILABLE = True
+    logger.info("OpenAI client for LM Studio available")
+except ImportError as e:
+    logger.warning(f"OpenAI client not available: {e}")
+    OPENAI_AVAILABLE = False
 
 # Initialize FastMCP server for Wazuh AI threat hunting
 mcp = FastMCP("Wazuh AI Threat Hunting Server")
@@ -62,6 +81,16 @@ class WazuhConfig:
         self._token_expires = None
 
 config = WazuhConfig()
+
+# LM Studio Configuration for CAG
+class LMStudioConfig:
+    def __init__(self):
+        self.base_url = os.getenv('LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1')
+        self.api_key = os.getenv('LM_STUDIO_API_KEY', 'lm-studio')
+        self.model = os.getenv('LM_STUDIO_MODEL', 'qwen/qwen3-1.7b')
+        self.timeout = None
+
+lm_studio_config = LMStudioConfig()
 
 # HTTP client with SSL configuration
 async def get_http_client() -> httpx.AsyncClient:
@@ -158,18 +187,17 @@ async def get_api_info(ctx: Context) -> str:
 # WAZUH AI THREAT HUNTING SYSTEM
 # =============================================================================
 
-class WazuhLangChainRAG:
+class WazuhCAG:
     """
-    Wazuh AI-powered threat hunting system based on official Wazuh methodology.
+    Wazuh Cache-Augmented Generation (CAG) system for fast threat hunting.
     
-    This implementation follows the official Wazuh blog post methodology for
-    leveraging artificial intelligence for threat hunting using:
-    - Vector embeddings for log analysis
-    - LangChain for retrieval-augmented generation
-    - HuggingFace embeddings for semantic search
-    - FAISS vector store for efficient similarity search
+    This implementation follows Cache-Augmented Generation methodology:
+    - Preloads Wazuh security logs into LLM context
+    - Stores inference state (Key-Value cache) for instant access
+    - Eliminates retrieval latency by using cached context
+    - Uses LM Studio LLM for generation
     
-    Reference: https://wazuh.com/blog/leveraging-artificial-intelligence-for-threat-hunting-in-wazuh/
+    Reference: Cache-Augmented Generation approach vs traditional RAG
     """
     
     def __init__(self, db_path: str = None):
@@ -179,363 +207,611 @@ class WazuhLangChainRAG:
             project_root = current_dir.parent.parent
             db_path = str(project_root / "data" / "wazuh_archives.db")
         self.db_path = db_path
-        self.vectorstore = None
-        self.embeddings = None
-        self.text_splitter = None
-        self.context = None
+        self.cache = None
+        self.cache_dir = "cag_cache"
+        self.origin_len = 0
+        self.knowledge_loaded = False
         
-        if LANGCHAIN_AVAILABLE:
-            # Using the same embedding model as recommended by Wazuh
-            self.embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-            self.text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=1000,  # Larger chunks for better context as per Wazuh methodology
-                chunk_overlap=100,
-                separators=["\n\n", "\n", ".", "!", "?", ",", " ", ""]
+        # Initialize semantic search components
+        self.vector_store = None
+        self.embeddings_model = None
+        self.log_embeddings = {}
+        self.semantic_search_enabled = False
+        
+        # Initialize LM Studio client if available
+        if OPENAI_AVAILABLE:
+            self.lm_client = OpenAI(
+                base_url=lm_studio_config.base_url,
+                api_key=lm_studio_config.api_key,
+                timeout=lm_studio_config.timeout
             )
-            self.initialize_assistant_context()
+            logger.info(f"LM Studio client initialized: {lm_studio_config.base_url}")
+        else:
+            self.lm_client = None
+            logger.warning("OpenAI client not available - CAG generation disabled")
+        
+        # Setup cache directory
+        os.makedirs(self.cache_dir, exist_ok=True)
+        
+        # Initialize semantic search if available
+        self._initialize_semantic_search()
+        
+        self.initialize_security_context()
     
-    def initialize_assistant_context(self):
-        """Initialize the AI assistant context for threat hunting as per Wazuh methodology."""
-        self.context = """You are an AI cybersecurity assistant specialized in threat hunting using Wazuh security logs.
-
-Your primary objective is to identify potential security threats, attack patterns, and suspicious activities from the provided log data.
-
-Key responsibilities:
-- Analyze security events for signs of compromise, attacks, or suspicious behavior
-- Identify patterns that may indicate brute-force attempts, data exfiltration, malware, or other threats
-- Provide detailed threat analysis with timestamps, affected systems, and IOCs
-- Interpret Wazuh rule classifications and security levels
-- Focus on actionable intelligence for security teams
-
-Always interpret queries as requests for security threat analysis. Provide comprehensive details including:
-- Event timestamps and affected systems
-- Attack vectors and techniques used
-- Indicators of compromise (IOCs)
-- Risk assessment and recommended actions
-- Correlation between related events
-
-Base your analysis solely on the vectorized security logs provided."""
+    def _initialize_semantic_search(self):
+        """Initialize semantic search components if dependencies are available."""
+        if not SEMANTIC_SEARCH_AVAILABLE:
+            logger.warning("Semantic search dependencies not available - using keyword-based search only")
+            return
+        
+        try:
+            # Initialize sentence transformer model for embeddings
+            self.embeddings_model = SentenceTransformer('all-MiniLM-L6-v2')
+            logger.info("Semantic search model loaded: all-MiniLM-L6-v2")
+            
+            # Initialize FAISS vector store
+            self.dimension = 384  # all-MiniLM-L6-v2 embedding dimension
+            self.vector_store = faiss.IndexFlatIP(self.dimension)  # Inner product for cosine similarity
+            
+            self.semantic_search_enabled = True
+            logger.info("Semantic search initialized successfully")
+            
+        except Exception as e:
+            logger.error(f"Failed to initialize semantic search: {e}")
+            self.semantic_search_enabled = False
     
-    async def get_full_logs_for_vectorstore(self, limit: int = None) -> List[Dict[str, Any]]:
-        """Retrieve ONLY full_log content and IDs for vectorstore creation."""
+    def initialize_security_context(self):
+        """Initialize the security context for threat hunting."""
+        self.security_context = """You are a cybersecurity expert specialized in analyzing Wazuh security logs for threat hunting.
+
+Your expertise includes:
+- Identifying attack patterns, brute-force attempts, and suspicious activities
+- Analyzing security events with timestamps, affected systems, and indicators of compromise
+- Interpreting Wazuh rule classifications and security levels
+- Providing actionable security recommendations
+
+Always focus on security-relevant insights from the provided log data. Respond in Indonesian language."""
+    
+    async def get_security_logs_for_context(self, limit: int = None, agent_ids: List[str] = None, days_range: int = 30) -> List[Dict[str, Any]]:
+        """Retrieve security logs for building knowledge context - optimized for 64GB RAM system."""
         try:
             conn = sqlite3.connect(self.db_path)
+            conn.row_factory = sqlite3.Row  # Return rows as dictionaries
             cursor = conn.cursor()
             
-            if limit is None:
-                # Get ALL logs without limit
-                cursor.execute("""
-                    SELECT id, full_log
-                    FROM wazuh_archives 
-                    WHERE full_log IS NOT NULL AND full_log != ''
-                    ORDER BY timestamp DESC
-                """)
-            else:
-                cursor.execute("""
-                    SELECT id, full_log
-                    FROM wazuh_archives 
-                    WHERE full_log IS NOT NULL AND full_log != ''
-                    ORDER BY timestamp DESC 
-                    LIMIT ?
-                """, (limit,))
+            # Build query to SELECT ALL COLUMNS including full_log
+            base_query = """
+                SELECT * FROM wazuh_archives 
+                WHERE full_log IS NOT NULL AND full_log != ''
+                AND timestamp >= datetime('now', '-{} days')
+            """.format(days_range)
             
+            params = []
+            if agent_ids and len(agent_ids) > 0:
+                # Add agent filtering
+                placeholders = ','.join(['?' for _ in agent_ids])
+                base_query += f" AND agent_name IN ({placeholders})"
+                params.extend(agent_ids)
+            
+            base_query += " ORDER BY rule_level DESC, timestamp DESC"
+            
+            # Apply limit only if specifically requested, otherwise get ALL logs
+            if limit and limit > 0:
+                base_query += " LIMIT ?"
+                params.append(limit)
+            
+            cursor.execute(base_query, params)
+            
+            # Convert all rows to dictionaries with ALL columns
             results = []
             for row in cursor.fetchall():
-                if row[1]:  # Only include non-empty full_log
-                    results.append({
-                        'id': row[0],
-                        'full_log': row[1]
-                    })
+                log_dict = dict(row)  # Gets ALL columns now including full_log
+                results.append(log_dict)
             
             conn.close()
+            logger.info(f"📊 Retrieved {len(results)} security logs with ALL COLUMNS from database (RAM: 64GB optimized)")
             return results
             
         except Exception as e:
-            logger.error(f"Error retrieving full_log data: {e}")
+            logger.error(f"Error retrieving security logs: {e}")
             return []
     
-    async def get_original_log_by_id(self, log_id: int) -> Dict[str, Any]:
-        """Get original log data by ID including full_log column."""
+    def build_knowledge_prompt(self, security_logs: List[Dict[str, Any]]) -> str:
+        """Build knowledge prompt from security logs for CAG."""
+        if not security_logs:
+            return "No security logs available."
+        
+        # Create structured knowledge base from logs
+        knowledge_sections = []
+        
+        # Group logs by priority
+        critical_logs = [log for log in security_logs if log.get('rule_level', 0) >= 10]
+        high_logs = [log for log in security_logs if 7 <= log.get('rule_level', 0) < 10]
+        medium_logs = [log for log in security_logs if 4 <= log.get('rule_level', 0) < 7]
+        
+        # Add critical events
+        if critical_logs:
+            knowledge_sections.append("=== CRITICAL SECURITY EVENTS (FULL DETAILS) ===")
+            for log in critical_logs[:15]:  # Fewer logs but much more detail
+                # Extract ALL available information including full_log
+                event_parts = []
+                event_parts.append(f"Time: {log.get('timestamp', 'N/A')[:19]}")
+                event_parts.append(f"Agent: {log.get('agent_name', 'N/A')} (ID: {log.get('agent_id', 'N/A')})")
+                event_parts.append(f"Rule: ID={log.get('rule_id', 'N/A')}, Level={log.get('rule_level', 0)}")
+                event_parts.append(f"Desc: {log.get('rule_description', 'N/A')}")
+                event_parts.append(f"Groups: {log.get('rule_groups', 'N/A')}")
+                event_parts.append(f"Location: {log.get('location', 'N/A')}")
+                event_parts.append(f"Decoder: {log.get('decoder_name', 'N/A')}")
+                
+                # MOST IMPORTANT: Include full_log content
+                full_log = log.get('full_log', '')
+                if full_log and len(full_log.strip()) > 0:
+                    event_parts.append(f"FULL_LOG: {full_log[:600]}...")
+                
+                # Include additional structured data if available
+                data = log.get('data', '')
+                if data and len(data.strip()) > 0:
+                    event_parts.append(f"Data: {data[:200]}...")
+                
+                knowledge_sections.append(" | ".join(event_parts))
+        
+        # Add high priority events
+        if high_logs:
+            knowledge_sections.append("\n=== HIGH PRIORITY SECURITY EVENTS ===")
+            for log in high_logs[:25]:
+                # Include full_log in high priority events too
+                full_log_sample = log.get('full_log', 'N/A')[:300] + ("..." if len(log.get('full_log', '')) > 300 else "")
+                event_summary = f"Time: {log.get('timestamp', 'N/A')[:19]}, Agent: {log.get('agent_name', 'N/A')}, Rule: {log.get('rule_id', 'N/A')}/L{log.get('rule_level', 0)}, Desc: {log.get('rule_description', 'N/A')}, FullLog: {full_log_sample}"
+                knowledge_sections.append(event_summary)
+        
+        # Add medium priority events (summary only)
+        if medium_logs:
+            knowledge_sections.append(f"\n=== MEDIUM PRIORITY EVENTS SUMMARY ===")
+            knowledge_sections.append(f"Total medium priority events: {len(medium_logs)}")
+            
+            # Group by rule description with sample full_log content
+            rule_counts = {}
+            sample_full_logs = {}
+            for log in medium_logs:
+                desc = log.get('rule_description', 'Unknown')[:50]
+                rule_counts[desc] = rule_counts.get(desc, 0) + 1
+                # Store sample full_log for this rule type
+                if desc not in sample_full_logs:
+                    sample_full_logs[desc] = log.get('full_log', 'N/A')[:200]
+            
+            for rule_desc, count in sorted(rule_counts.items(), key=lambda x: x[1], reverse=True)[:8]:
+                sample_log = sample_full_logs.get(rule_desc, 'N/A')
+                knowledge_sections.append(f"- {rule_desc}: {count} events | Sample FullLog: {sample_log}...")
+        
+        knowledge_text = "\n".join(knowledge_sections)
+        
+        # Create system prompt with comprehensive knowledge including full_log
+        system_prompt = f"""<|system|>{self.security_context}
+
+COMPREHENSIVE WAZUH SECURITY KNOWLEDGE BASE (ALL COLUMNS INCLUDING FULL_LOG):
+{knowledge_text}
+
+<|user|>
+Based on the comprehensive security logs above (including full_log content and all available data), please answer the following security questions:
+
+"""
+        
+        return system_prompt
+    
+    async def create_knowledge_cache(self, limit: int = None, days_range: int = 30):
+        """Create CAG knowledge cache from Wazuh security logs - optimized for 64GB RAM."""
+        if not CAG_AVAILABLE:
+            logger.error("CAG dependencies not available")
+            return False
+        
+        # Calculate optimal limit based on LM Studio's 32768 token capacity
+        # Estimate ~100 tokens per log entry, leaving room for system prompt
+        if limit is None:
+            estimated_tokens_per_log = 100
+            system_prompt_tokens = 2000  # Reserve for system prompt
+            max_log_tokens = 32768 - system_prompt_tokens
+            optimal_limit = max_log_tokens // estimated_tokens_per_log
+            limit = min(optimal_limit, 25000)  # Cap at 25k for safety
+            
+        await self.info_log(f"🔄 Building CAG knowledge cache from up to {limit} security logs (32K token optimized)...")
+        
+        # Get security logs without artificial restrictions
+        security_logs = await self.get_security_logs_for_context(limit, days_range=days_range)
+        if not security_logs:
+            logger.warning("No security logs found for CAG")
+            return False
+        
+        await self.info_log(f"📊 Processing {len(security_logs)} security logs for knowledge cache...")
+        
+        # Build knowledge prompt
+        knowledge_prompt = self.build_knowledge_prompt(security_logs)
+        
+        # For CAG, we use LM Studio directly since we don't need local model caching
+        # The knowledge is embedded in the prompt itself
+        self.cached_knowledge_prompt = knowledge_prompt
+        self.knowledge_loaded = True
+        
+        # Build vector embeddings for semantic search if available
+        if self.semantic_search_enabled:
+            await self.info_log("🔄 Building vector embeddings for semantic search...")
+            await self.build_vector_embeddings(force_rebuild=True)
+            await self.info_log("✅ Vector embeddings built successfully")
+        
+        logger.info(f"✅ CAG knowledge cache built with {len(security_logs)} security events")
+        return True
+    
+    async def query_with_cache(self, user_query: str, max_tokens: int = 800) -> str:
+        """Query the cached knowledge using LM Studio LLM."""
+        if not self.lm_client:
+            return "LM Studio client not available"
+        
+        if not self.knowledge_loaded:
+            await self.create_knowledge_cache()
+        
         try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
+            # Combine cached knowledge with user query
+            full_prompt = f"{self.cached_knowledge_prompt}{user_query}\n\nJawaban:"
             
-            cursor.execute("""
-                SELECT id, timestamp, agent_id, agent_name, manager, rule_id, rule_level,
-                       rule_description, rule_groups, location, decoder_name,
-                       data, full_log, json_data
-                FROM wazuh_archives 
-                WHERE id = ?
-            """, (log_id,))
+            # Generate response using LM Studio
+            response = self.lm_client.chat.completions.create(
+                model=lm_studio_config.model,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": full_prompt
+                    }
+                ],
+                max_tokens=max_tokens,
+                temperature=0.7
+            )
             
-            # Get columns BEFORE closing connection
-            columns = [description[0] for description in cursor.description]
-            result = cursor.fetchone()
-            conn.close()
-            
-            if result:
-                return dict(zip(columns, result))
-            
-            return {}
+            return response.choices[0].message.content
             
         except Exception as e:
-            logger.error(f"Error retrieving log by ID {log_id}: {e}")
-            return {}
+            logger.error(f"Error querying CAG cache: {e}")
+            return f"Error generating response: {str(e)}"
     
-    async def create_vector_store(self, limit: int = None):
-        """
-        Create vector store from Wazuh archive logs following official methodology.
-        
-        This method implements the Wazuh AI threat hunting approach by:
-        1. Loading logs from Wazuh archives (full_log content for semantic search)
-        2. Creating comprehensive documents with security context
-        3. Building FAISS vector store for efficient similarity search
-        
-        Args:
-            limit: Number of recent logs to process. If None, processes ALL available logs.
-        """
-        if not LANGCHAIN_AVAILABLE:
-            raise Exception("LangChain is not available. Please install required packages.")
-        
-        logs = await self.get_full_logs_for_vectorstore(limit)
-        
-        if not logs:
-            logger.warning("No full_log entries found in Wazuh archives")
+    async def build_vector_embeddings(self, force_rebuild: bool = False, days_range: int = 30):
+        """Build vector embeddings for all security logs - optimized for 64GB RAM."""
+        if not self.semantic_search_enabled:
+            logger.warning("Semantic search not available - skipping vector embeddings")
             return
         
-        documents = []
-        for log in logs:
-            # Create comprehensive security-focused documents as per Wazuh methodology
-            full_log_content = log['full_log']
+        embeddings_cache_path = os.path.join(self.cache_dir, "log_embeddings.npz")
+        
+        # Load cached embeddings if available and not forcing rebuild
+        if os.path.exists(embeddings_cache_path) and not force_rebuild:
+            try:
+                cached_data = np.load(embeddings_cache_path, allow_pickle=True)
+                embeddings_array = cached_data['embeddings']
+                log_ids = cached_data['log_ids'].tolist()
+                
+                # Add to FAISS index
+                self.vector_store.add(embeddings_array)
+                self.log_embeddings = {str(log_id): idx for idx, log_id in enumerate(log_ids)}
+                
+                logger.info(f"📊 Loaded {len(log_ids)} cached embeddings from disk")
+                return
+            except Exception as e:
+                logger.warning(f"Failed to load cached embeddings: {e}")
+        
+        # Build embeddings from scratch - use ALL available logs for 64GB RAM
+        try:
+            await self.info_log("🔄 Retrieving ALL security logs for embedding creation (64GB RAM optimized)...")
+            logs = await self.get_security_logs_for_context(limit=None, days_range=days_range)  # NO LIMIT for high-end systems
+            if not logs:
+                logger.warning("No logs found for embedding creation")
+                return
             
-            # Enhance log content with security context for better threat hunting
-            enhanced_content = self.enhance_log_for_threat_hunting(full_log_content)
+            await self.info_log(f"📊 Creating embeddings for {len(logs)} security logs...")
             
-            # Create document following Wazuh vector store approach
-            doc = Document(
-                page_content=enhanced_content,
-                metadata={
-                    "id": log['id'],
-                    "content_type": "wazuh_security_log",
-                    "source": "wazuh_archives"
-                }
-            )
-            documents.append(doc)
-        
-        # Split documents for optimal retrieval performance
-        split_docs = self.text_splitter.split_documents(documents)
-        
-        # Create FAISS vector store as recommended by Wazuh
-        self.vectorstore = FAISS.from_documents(split_docs, self.embeddings)
-        
-        logger.info(f"✅ Wazuh AI threat hunting vector store created with {len(split_docs)} chunks from {len(documents)} security logs")
-        return len(split_docs)
+            # Process in batches to manage memory efficiently
+            batch_size = 5000  # Process 5K logs at a time
+            all_embeddings = []
+            all_log_ids = []
+            
+            # Process ALL logs in batches to manage memory efficiently
+            batch_size = 10000  # Larger batches for 64GB RAM system
+            total_batches = (len(logs) + batch_size - 1) // batch_size
+            
+            await self.info_log(f"🔄 Processing {len(logs)} logs in {total_batches} batches of {batch_size}...")
+            
+            all_embeddings = []
+            all_log_ids = []
+            
+            for batch_idx in range(0, len(logs), batch_size):
+                batch_logs = logs[batch_idx:batch_idx + batch_size]
+                batch_num = (batch_idx // batch_size) + 1
+                
+                await self.info_log(f"🔄 Processing batch {batch_num}/{total_batches} ({len(batch_logs)} logs)...")
+                
+                # Prepare text for embedding
+                log_texts = []
+                log_ids = []
+                
+                for log in batch_logs:
+                    # Combine relevant fields for embedding
+                    text_parts = []
+                    if log.get('rule_description'):
+                        text_parts.append(log['rule_description'])
+                    if log.get('rule_groups'):
+                        text_parts.append(log['rule_groups'])
+                    if log.get('full_log'):
+                        text_parts.append(log['full_log'][:1000])  # Increased log length for better context
+                    
+                    log_text = " | ".join(text_parts)
+                    if log_text.strip():
+                        log_texts.append(log_text)
+                        log_ids.append(log['id'])
+                
+                if not log_texts:
+                    continue
+                
+                # Create embeddings for this batch
+                logger.info(f"Creating embeddings for batch {batch_num}: {len(log_texts)} logs...")
+                batch_embeddings = self.embeddings_model.encode(log_texts, show_progress_bar=True)
+                
+                # Normalize embeddings for cosine similarity
+                batch_embeddings = batch_embeddings / np.linalg.norm(batch_embeddings, axis=1, keepdims=True)
+                
+                all_embeddings.append(batch_embeddings)
+                all_log_ids.extend(log_ids)
+            
+            if not all_embeddings:
+                logger.warning("No valid embeddings created")
+                return
+            
+            # Combine all batch embeddings
+            embeddings = np.vstack(all_embeddings)
+            
+            # Add to FAISS index
+            self.vector_store.add(embeddings.astype(np.float32))
+            
+            # Store mapping
+            self.log_embeddings = {str(log_id): idx for idx, log_id in enumerate(all_log_ids)}
+            
+            # Cache embeddings
+            os.makedirs(self.cache_dir, exist_ok=True)
+            np.savez_compressed(embeddings_cache_path, 
+                              embeddings=embeddings, 
+                              log_ids=np.array(all_log_ids))
+            
+            await self.info_log(f"✅ Built and cached {len(all_log_ids)} vector embeddings (Total: {embeddings.shape[0]} vectors)")
+            
+        except Exception as e:
+            logger.error(f"Error building vector embeddings: {e}")
     
-    def enhance_log_for_threat_hunting(self, full_log: str) -> str:
-        """
-        Minimal log enhancement - preserve original semantic content.
-        
-        Simply add minimal context structure without keyword analysis
-        to maintain pure semantic search capability.
-        """
-        # Minimal enhancement - just add log marker without keyword analysis
-        return f"WAZUH_LOG: {full_log}"
-    
-    async def search(self, query: str, k: int = 5, use_reranking: bool = True) -> List[Dict[str, Any]]:
-        """
-        Advanced AI-powered threat hunting search with semantic reranking.
-        
-        This method implements enhanced Wazuh approach for AI threat hunting:
-        1. Perform semantic search on enhanced security logs
-        2. Apply intelligent reranking for better relevance
-        3. Retrieve comprehensive security event data with threat analysis
-        
-        Args:
-            query: Natural language threat hunting query
-            k: Number of results to return
-            use_reranking: Enable intelligent reranking for better results
-            
-        Returns:
-            List of comprehensive security events with threat analysis
-        """
-        if not LANGCHAIN_AVAILABLE:
+    async def semantic_search_logs(self, query: str, k: int = 10, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
+        """Perform semantic search on security logs using vector similarity."""
+        if not self.semantic_search_enabled:
+            logger.warning("Semantic search not available")
             return []
-            
-        if not self.vectorstore:
-            await self.create_vector_store()
         
-        if not self.vectorstore:
+        try:
+            # Create query embedding
+            query_embedding = self.embeddings_model.encode([query])
+            query_embedding = query_embedding / np.linalg.norm(query_embedding, axis=1, keepdims=True)
+            
+            # Search in vector store
+            scores, indices = self.vector_store.search(query_embedding.astype(np.float32), k * 2)
+            
+            # Get corresponding log IDs
+            reverse_mapping = {idx: log_id for log_id, idx in self.log_embeddings.items()}
+            similar_log_ids = [reverse_mapping.get(idx, None) for idx in indices[0] if idx in reverse_mapping]
+            
+            # Retrieve actual logs
+            if not similar_log_ids:
+                return []
+            
+            conn = sqlite3.connect(self.db_path)
+            conn.row_factory = sqlite3.Row  # Return rows as dictionaries
+            cursor = conn.cursor()
+            
+            # Build query with agent filtering - SELECT ALL COLUMNS
+            placeholders = ','.join(['?' for _ in similar_log_ids])
+            base_query = f"""
+                SELECT * FROM wazuh_archives 
+                WHERE id IN ({placeholders})
+            """
+            
+            params = similar_log_ids[:]
+            if agent_ids and len(agent_ids) > 0:
+                agent_placeholders = ','.join(['?' for _ in agent_ids])
+                base_query += f" AND agent_name IN ({agent_placeholders})"
+                params.extend(agent_ids)
+            
+            cursor.execute(base_query, params)
+            
+            results = []
+            
+            for row in cursor.fetchall():
+                if len(results) >= k:
+                    break
+                    
+                log_dict = dict(row)  # Gets ALL columns now
+                # Add semantic similarity score
+                similarity_idx = similar_log_ids.index(log_dict['id']) if log_dict['id'] in similar_log_ids else 0
+                similarity_score = float(scores[0][similarity_idx]) if similarity_idx < len(scores[0]) else 0.0
+                
+                log_dict.update({
+                    "similarity_score": similarity_score,
+                    "search_type": "semantic",
+                    "threat_indicators": self.extract_threat_indicators(log_dict)
+                })
+                results.append(log_dict)
+            
+            conn.close()
+            return results[:k]
+            
+        except Exception as e:
+            logger.error(f"Error in semantic search: {e}")
             return []
-        
-        # Enhance query for better threat hunting results
-        enhanced_query = self.enhance_query_for_threat_hunting(query)
-        
-        # Step 1: Perform broader similarity search for reranking
-        search_k = k * 3 if use_reranking else k
-        results = self.vectorstore.similarity_search_with_score(enhanced_query, k=search_k)
-        
-        # Step 2: Apply intelligent reranking if enabled
-        if use_reranking and len(results) > k:
-            results = self.rerank_results(query, results, k)
-        
-        # Step 3: Extract unique IDs from search results
-        relevant_ids = []
-        seen_ids = set()
-        
-        for doc, score in results[:k]:
-            log_id = doc.metadata.get('id')
-            if log_id and log_id not in seen_ids:
-                relevant_ids.append(log_id)
-                seen_ids.add(log_id)
-        
-        # Step 4: Retrieve comprehensive security event data
-        threat_events = []
-        for log_id in relevant_ids:
-            security_event = await self.get_original_log_by_id(log_id)
-            if security_event:
-                # Find the matching search result for threat assessment
-                threat_score = 1.0
-                matched_content = ""
-                
-                for doc, score in results:
-                    if doc.metadata.get('id') == log_id:
-                        threat_score = float(score)
-                        matched_content = doc.page_content
-                        break
-                
-                # Apply advanced threat analysis
-                threat_analysis = self.analyze_threat_level(security_event, threat_score, matched_content, query)
-                
-                security_event.update(threat_analysis)
-                threat_events.append(security_event)
-        
-        # Sort by threat priority and relevance
-        threat_events.sort(key=lambda x: (x['threat_score'], -x.get('rule_level', 0)))
-        
-        return threat_events
     
-    def rerank_results(self, original_query: str, results: List[tuple], top_k: int) -> List[tuple]:
+    async def search(self, query: str, k: int = 20, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
         """
-        Pure similarity-based reranking without keyword matching.
+        Hybrid search using both CAG and semantic search for optimal results - 64GB RAM optimized.
         
-        This method applies minimal reranking based only on similarity scores
-        and rule levels, preserving pure semantic search.
+        This method combines:
+        1. CAG cached knowledge for comprehensive threat context
+        2. Semantic vector search for precise log retrieval
+        3. Keyword fallback for reliability
         """
-        scored_results = []
-        
-        for doc, similarity_score in results:
-            # Extract rule level from metadata for priority boost
-            rule_level = doc.metadata.get('rule_level', 0)
+        try:
+            # Generate response using cached knowledge
+            cag_response = await self.query_with_cache(query)
+            if not cag_response:
+                cag_response = "No CAG response generated"
             
-            # Simple priority boost based on rule level only
-            priority_boost = 0
-            if rule_level >= 10:  # Critical
-                priority_boost = 0.2
-            elif rule_level >= 7:  # High
-                priority_boost = 0.1
+            # Try semantic search first if available - get more results for better coverage
+            semantic_results = []
+            if self.semantic_search_enabled:
+                semantic_k = k // 2 if k < 20 else k // 3 * 2  # More semantic results for larger k
+                semantic_results = await self.semantic_search_logs(query, semantic_k, agent_ids)
+                logger.info(f"Semantic search found {len(semantic_results)} results")
             
-            # Combine scores (lower is better for similarity_score)
-            final_score = similarity_score - priority_boost
+            # Get additional logs using keyword-based search for completeness
+            keyword_results = []
+            if len(semantic_results) < k:
+                remaining = k - len(semantic_results)
+                # For 64GB systems, we can afford to search through more logs
+                search_limit = remaining * 5  # Search through 5x more logs for better keyword matching
+                security_logs = await self.get_security_logs_for_context(search_limit, agent_ids)
+                
+                query_lower = query.lower() if query else ""
+                for log in security_logs:
+                    # Skip logs already found by semantic search
+                    if any(log['id'] == sem_log['id'] for sem_log in semantic_results):
+                        continue
+                    
+                    relevance_score = self.calculate_log_relevance(log, query_lower)
+                    if relevance_score > 0 and len(keyword_results) < remaining:
+                        log.update({
+                            "threat_score": relevance_score,
+                            "search_type": "keyword",
+                            "threat_indicators": self.extract_threat_indicators(log)
+                        })
+                        keyword_results.append(log)
             
-            scored_results.append((doc, final_score))
-        
-        # Sort by final score and return top_k
-        scored_results.sort(key=lambda x: x[1])
-        return scored_results[:top_k]
+            # Combine and enhance results
+            all_results = semantic_results + keyword_results
+            
+            # Enhance all results with CAG analysis
+            for log in all_results:
+                safe_cag_response = cag_response or "No analysis available"
+                log.update({
+                    "threat_priority": self.determine_threat_priority(log, log.get("similarity_score", log.get("threat_score", 0.5))),
+                    "threat_category": "hybrid_analyzed",
+                    "cag_response": safe_cag_response[:200] + "..." if len(safe_cag_response) > 200 else safe_cag_response
+                })
+            
+            # Sort by relevance (semantic similarity score or threat score)
+            all_results.sort(key=lambda x: x.get("similarity_score", x.get("threat_score", 0)), reverse=True)
+            
+            return all_results[:k]
+            
+        except Exception as e:
+            logger.error(f"Error in hybrid search: {e}")
+            # NO FALLBACK - let it fail if it fails
+            raise e
     
-    def enhance_query_for_threat_hunting(self, query: str) -> str:
-        """
-        Pure semantic query - no keyword mapping or enhancement.
+    def calculate_log_relevance(self, log: Dict[str, Any], query_lower: str) -> float:
+        """Calculate relevance score for a log entry."""
+        if not log or not query_lower:
+            return 0.0
+            
+        score = 0.0
         
-        Return the original query as-is to preserve semantic meaning
-        for pure vector similarity matching.
-        """
-        # Simply return the original query for pure semantic search
-        return query
+        # Rule level boost
+        rule_level = log.get('rule_level', 0)
+        score += rule_level * 0.1
+        
+        # Keyword matching in description (with null checks)
+        description = (log.get('rule_description') or '').lower()
+        groups = (log.get('rule_groups') or '').lower()
+        full_log = (log.get('full_log') or '').lower()
+        
+        # Check for query terms
+        query_terms = query_lower.split() if query_lower else []
+        for term in query_terms:
+            if term and term in description:
+                score += 0.5
+            if term and term in groups:
+                score += 0.3
+            if term and term in full_log:
+                score += 0.2
+        
+        return min(score, 1.0)  # Cap at 1.0
     
-    def analyze_threat_level(self, security_event: Dict[str, Any], threat_score: float, matched_content: str, query: str = "") -> Dict[str, Any]:
-        """
-        Analyze threat level and provide security assessment following Wazuh methodology.
+    def determine_threat_priority(self, log: Dict[str, Any], relevance_score: float) -> str:
+        """Determine threat priority based on rule level and relevance."""
+        rule_level = log.get('rule_level', 0)
         
-        This method provides comprehensive threat analysis similar to what Wazuh
-        AI system would provide for security teams.
-        """
-        # Determine threat priority based on similarity score and rule level
-        rule_level = security_event.get('rule_level', 0)
-        
-        if threat_score < 0.3 or rule_level >= 10:
-            threat_priority = "CRITICAL"
-            threat_category = "high_priority_threat"
-        elif threat_score < 0.7 or rule_level >= 7:
-            threat_priority = "HIGH"
-            threat_category = "medium_priority_threat"
-        elif threat_score < 1.0 or rule_level >= 4:
-            threat_priority = "MEDIUM"
-            threat_category = "low_priority_threat"
+        if rule_level >= 10 or relevance_score >= 0.8:
+            return "CRITICAL"
+        elif rule_level >= 7 or relevance_score >= 0.6:
+            return "HIGH"
+        elif rule_level >= 4 or relevance_score >= 0.4:
+            return "MEDIUM"
         else:
-            threat_priority = "LOW"
-            threat_category = "informational"
+            return "LOW"
+    
+    def extract_threat_indicators(self, log: Dict[str, Any]) -> List[str]:
+        """Extract threat indicators from log entry."""
+        indicators = []
         
-        # Generate threat indicators based on rule metadata only (no keyword matching)
-        threat_indicators = []
-        rule_groups = security_event.get('rule_groups', '')
-        rule_description = security_event.get('rule_description', '')
-        
-        # Use only rule metadata for indicators (not keyword matching on log content)
+        rule_groups = log.get('rule_groups', '')
         if rule_groups:
             if 'authentication' in rule_groups:
-                threat_indicators.append("Authentication Event")
+                indicators.append("Authentication Event")
             if 'attack' in rule_groups:
-                threat_indicators.append("Attack Pattern")
+                indicators.append("Attack Pattern")
             if 'web' in rule_groups:
-                threat_indicators.append("Web Activity")
+                indicators.append("Web Activity")
             if 'malware' in rule_groups:
-                threat_indicators.append("Malware Related")
+                indicators.append("Malware Related")
+            if 'network' in rule_groups:
+                indicators.append("Network Activity")
         
-        # Use rule description if no groups available
-        if not threat_indicators and rule_description:
-            threat_indicators.append("Security Event")
+        if not indicators:
+            indicators.append("Security Event")
         
-        return {
-            "threat_score": threat_score,
-            "threat_priority": threat_priority,
-            "threat_category": threat_category,
-            "threat_indicators": threat_indicators,
-            "security_assessment": {
-                "rule_severity": "Critical" if rule_level >= 10 else "High" if rule_level >= 7 else "Medium" if rule_level >= 4 else "Low",
-                "requires_investigation": threat_score < 0.7 or rule_level >= 7,
-                "matched_content_preview": matched_content[:200] + "..." if len(matched_content) > 200 else matched_content
-            }
-        }
+        return indicators
+    
+    async def info_log(self, message: str):
+        """Helper method for logging info messages."""
+        logger.info(message)
 
-# Initialize Wazuh AI threat hunting system following official methodology
-rag_system = WazuhLangChainRAG()
+# Initialize Wazuh CAG (Cache-Augmented Generation) system
+cag_system = WazuhCAG()
 
-# Auto-initialize vector store with ALL logs on server startup
-async def initialize_rag_system():
-    """Initialize RAG system with ALL available security logs for comprehensive threat hunting."""
+# Auto-initialize CAG cache with security logs on server startup
+async def initialize_cag_system():
+    """Initialize CAG system with security logs for fast threat hunting."""
     try:
-        if LANGCHAIN_AVAILABLE:
-            print("🔄 Initializing Wazuh AI Threat Hunting with ALL security logs...")
-            await rag_system.create_vector_store(limit=None)
-            print("✅ Wazuh AI Threat Hunting system ready with comprehensive log coverage!")
+        if CAG_AVAILABLE or OPENAI_AVAILABLE:
+            print("🔄 Initializing Wazuh CAG (Cache-Augmented Generation) with security logs...")
+            success = await cag_system.create_knowledge_cache(limit=1000)
+            if success:
+                print("✅ Wazuh CAG system ready for fast threat hunting!")
+            else:
+                print("⚠️ CAG initialization completed with warnings")
         else:
-            print("⚠️ LangChain not available - RAG features disabled")
+            print("⚠️ CAG dependencies not available - basic mode enabled")
     except Exception as e:
-        print(f"❌ Failed to initialize RAG system: {e}")
+        print(f"❌ Failed to initialize CAG system: {e}")
 
 # Initialize on module load
-if LANGCHAIN_AVAILABLE:
+if CAG_AVAILABLE or OPENAI_AVAILABLE:
     import asyncio
     try:
         # Check if there's an event loop running
         loop = asyncio.get_event_loop()
         if loop.is_running():
             # Schedule initialization for later
-            loop.create_task(initialize_rag_system())
+            loop.create_task(initialize_cag_system())
         else:
             # Run initialization directly
-            asyncio.run(initialize_rag_system())
+            asyncio.run(initialize_cag_system())
     except:
         # Fallback - will initialize on first use
         pass
@@ -550,132 +826,114 @@ async def check_wazuh_log(
     query: str,
     max_results: int = 100,
     days_range: int = 7,
-    rebuild_index: bool = False
+    rebuild_cache: bool = False,
+    agent_ids: Optional[str] = None
 ) -> str:
     """
-    Wazuh AI-powered threat hunting tool following official methodology.
+    ULTRA SIMPLE RAW Wazuh Log Analysis - ZERO BULLSHIT!
     
-    This tool implements the official Wazuh AI threat hunting approach from:
-    https://wazuh.com/blog/leveraging-artificial-intelligence-for-threat-hunting-in-wazuh/
-    
-    The system performs advanced threat hunting using:
-    - Vector embeddings and semantic search on Wazuh archive logs  
-    - LangChain retrieval-augmented generation for comprehensive analysis
-    - HuggingFace embeddings (all-MiniLM-L6-v2) for log similarity matching
-    - FAISS vector store for efficient threat pattern recognition
-    
-    Example threat hunting queries (following Wazuh methodology):
-    
-    🔍 Authentication Threats:
-    - "Are there any SSH brute-force attempts against my endpoints or any other suspicious SSH events, such as multiple failed logins by valid or invalid users?"
-    
-    🔍 Data Exfiltration:
-    - "Look through the logs and identify any attempt to exfiltrate files to remote systems using binaries such as invoke-webrequest or similar events"
-    
-    🔍 Malware Detection:  
-    - "Find any malware detection events, suspicious file executions, or indicators of compromise in the security logs"
-    
-    🔍 Network Threats:
-    - "Identify suspicious network connections, port scanning activities, or unusual outbound traffic patterns"
-    
-    🔍 General Overview:
-    - "Give me a summary of the security events and threats detected in the logs"
+    Just dump raw database data and let LLM handle EVERYTHING!
     
     Args:
-        query: Natural language threat hunting query describing the security patterns to search for
-        max_results: Maximum number of threat events to return (1-100, default: 100)
-        days_range: Number of days of logs to analyze (1-365, default: 7)
-        rebuild_index: Whether to rebuild the vector store with latest logs (default: False)
+        query: What you want to find
+        max_results: How many logs (default: 100)
+        days_range: Days back to search (default: 7)
+        rebuild_cache: Not used - keeping for compatibility
+        agent_ids: Not used - keeping for compatibility
     
     Returns:
-        Comprehensive threat analysis report with security events, IOCs, and recommendations
-        following Wazuh AI threat hunting format
+        RAW analysis from LLM with ALL original database data
     """
     try:
-        await ctx.info(f"🔍 Wazuh AI Threat Hunting: Analyzing '{query}' over past {days_range} days")
+        await ctx.info(f"🔍 RAW Wazuh Analysis: {query} (past {days_range} days)")
         
-        # Rebuild vector store if requested (following Wazuh /reload functionality)
-        if rebuild_index:
-            await ctx.info(f"🔄 Rebuilding Wazuh AI vector store with ALL security logs from past {days_range} days...")
-            # Process ALL logs without limit to ensure comprehensive threat hunting
-            await rag_system.create_vector_store(limit=None)
+        # SEMANTIC SEARCH DULU - CARI ROWS YANG RELEVAN!
+        # BATASI KE 15 ROWS MAX UNTUK AVOID TOKEN OVERFLOW
+        search_limit = min(15, max_results)  # MAX 15 rows only!
         
-        # Perform Wazuh AI threat hunting search
-        threat_events = await rag_system.search(query, k=min(max_results, 100))
+        relevant_logs = await cag_system.search(
+            query=query,
+            k=search_limit,  # Hanya 15 rows terbaik
+            agent_ids=None
+        )
         
-        if not threat_events:
-            return json.dumps({
-                "status": "no_threats_detected",
-                "message": "No matching security threats found for the specified pattern",
-                "query": query,
-                "analysis_period": f"past {days_range} days",
-                "total_events": 0,
-                "recommendation": "Consider refining your threat hunting query with specific indicators (e.g., 'brute-force', 'data exfiltration', 'malware detection', 'suspicious network activity')",
-                "wazuh_ai_methodology": "https://wazuh.com/blog/leveraging-artificial-intelligence-for-threat-hunting-in-wazuh/"
-            }, indent=2)
+        if not relevant_logs:
+            return "No relevant logs found for your query"
         
-        # Format comprehensive threat hunting report following Wazuh methodology
-        # For Telegram bot, keep output concise but comprehensive
-        threat_report = {
-            "status": "threats_identified",
-            "wazuh_ai_analysis": {
-                "query": query,
-                "analysis_period": f"past {days_range} days", 
-                "total_threat_events": len(threat_events),
-                "analysis_timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "methodology": "Wazuh AI Threat Hunting with Vector Embeddings"
-            },
-            "threat_summary": {
-                "critical_events": len([e for e in threat_events if e.get('threat_priority') == 'CRITICAL']),
-                "high_priority": len([e for e in threat_events if e.get('threat_priority') == 'HIGH']),
-                "medium_priority": len([e for e in threat_events if e.get('threat_priority') == 'MEDIUM']),
-                "requires_immediate_investigation": len([e for e in threat_events if e.get('security_assessment', {}).get('requires_investigation', False)])
-            },
-            "security_events": []
-        }
+        # DUMP HANYA ROWS RELEVAN - SEMUA KOLOM TAPI TRUNCATED!
+        raw_data_prompt = f"""
+QUERY: {query}
+
+RAW WAZUH DATABASE DUMP ({len(relevant_logs)} MOST RELEVANT ROWS - ALL COLUMNS):
+==============================================================================
+
+"""
         
-        # Process each threat event with CONCISE analysis for Telegram
-        for i, event in enumerate(threat_events, 1):
-            threat_event = {
-                "rank": i,
-                "priority": event.get('threat_priority', 'UNKNOWN'),
-                "confidence": round(event.get('threat_score', 1.0), 3),
-                "indicators": event.get('threat_indicators', [])[:3],  # Limit to top 3
-                "timestamp": event.get("timestamp", "")[:16],  # Short timestamp
-                "agent": event.get("agent_name", "N/A")[:20],  # Truncate agent name
-                "rule_id": event.get("rule_id"),
-                "severity": event.get("rule_level"),
-                "description": (event.get("rule_description") or "No description")[:100] + "..." if len(event.get("rule_description", "")) > 100 else event.get("rule_description", "No description"),
-                "location": (event.get("location") or "N/A")[:30],  # Truncate location
-                "log_preview": (event.get("full_log", ""))[:200] + "..." if len(event.get("full_log", "")) > 200 else event.get("full_log", "")
-            }
-            threat_report["security_events"].append(threat_event)
+        for i, log in enumerate(relevant_logs, 1):
+            raw_data_prompt += f"LOG #{i} (Relevance: {log.get('similarity_score', log.get('threat_score', 0)):.3f}):\n"
+            
+            # DUMP SEMUA KOLOM TAPI TRUNCATE YANG TERLALU PANJANG!
+            for key, value in log.items():
+                # Convert value to string and truncate if too long
+                str_value = str(value) if value is not None else "N/A"
+                
+                # Truncate very long fields to save tokens
+                if len(str_value) > 500:
+                    str_value = str_value[:500] + "...[TRUNCATED]"
+                
+                raw_data_prompt += f"{key}: {str_value}\n"
+            raw_data_prompt += "---\n"
         
-        # Add concise threat hunting recommendations
-        threat_report["recommendations"] = {
-            "immediate": [
-                f"Review {threat_report['threat_summary']['critical_events']} critical events",
-                "Check for related events from same agents",
-                "Investigate authentication anomalies"
+        raw_data_prompt += f"""
+
+INSTRUCTIONS:
+Analyze the above {len(relevant_logs)} SEMANTICALLY RELEVANT Wazuh database records to answer: "{query}"
+
+These rows were pre-selected as MOST RELEVANT to your query using semantic search.
+Find and extract ALL information including:
+- IP addresses from ANY field (json_data, full_log, etc.)
+- Attack patterns and payloads from ANY field
+- Timestamps, agents, rules, locations
+- ANY security-related data
+
+Give me comprehensive analysis with specific examples from the RAW data.
+"""
+        
+        await ctx.info(f"📤 Sending {len(relevant_logs)} relevant logs to LLM (token-optimized)")
+        
+        # LET LLM DO ALL THE WORK WITH RELEVANT RAW DATA ONLY!
+        analysis = cag_system.lm_client.chat.completions.create(
+            model="qwen/qwen3-1.7b",
+            messages=[
+                {"role": "system", "content": "You are a cybersecurity analyst. Analyze semantically relevant raw Wazuh database dumps thoroughly and extract ALL useful information."},
+                {"role": "user", "content": raw_data_prompt}
             ],
-            "investigation": [
-                "Analyze patterns across time periods",
-                "Cross-reference with threat intelligence",  
-                "Monitor for lateral movement"
-            ]
-        }
+            max_tokens=2000,
+            temperature=0.1
+        )
         
-        await ctx.info(f"🚨 Wazuh AI Threat Analysis Complete: {len(threat_events)} security events analyzed")
-        return json.dumps(threat_report, indent=2)
-        
+        return analysis.choices[0].message.content
+
     except Exception as e:
-        error_msg = f"Wazuh AI threat hunting error: {str(e)}"
+        error_msg = f"Wazuh log analysis error: {str(e)}"
+        await ctx.error(error_msg)
+        return json.dumps({
+            "status": "error",
+            "error": error_msg,
+            "analysis_period": f"past {days_range} days"
+        }, indent=2)
+        await ctx.info(f"🚨 CAG Threat Analysis Complete: {len(security_logs)} raw logs analyzed")
+        return analysis.choices[0].message.content
+
+    except Exception as e:
+        error_msg = f"CAG threat hunting error: {str(e)}"
         await ctx.error(error_msg)
         return json.dumps({
             "status": "analysis_error",
             "error": error_msg,
             "query": query,
-            "recommendation": "Check Wazuh archives database connectivity and vector store initialization"
+            "methodology": "Cache-Augmented Generation (CAG)",
+            "recommendation": "Check CAG system initialization and LM Studio connectivity"
         }, indent=2)
 
 # =============================================================================

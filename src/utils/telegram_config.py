@@ -16,7 +16,7 @@ class TelegramBotConfig:
         
         # LM Studio Configuration
         self.LM_STUDIO_CONFIG = {
-            'base_url': os.getenv('LM_STUDIO_BASE_URL', 'http://172.20.80.1:1234/v1'),
+            'base_url': os.getenv('LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
             'api_key': os.getenv('LM_STUDIO_API_KEY', 'lm-studio'),
             'model': os.getenv('LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
             'timeout': None  # No timeout

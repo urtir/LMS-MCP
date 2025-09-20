@@ -79,7 +79,7 @@ class TelegramBotConfig:
     
     # LM Studio Configuration (existing)
     LM_STUDIO_CONFIG = {
-        'base_url': "http://172.20.80.1:1234/v1",
+        'base_url': "http://192.168.56.1:1234/v1",
         'api_key': "lm-studio",
         'model': "qwen/qwen3-1.7b",
         'max_tokens': 2000,
