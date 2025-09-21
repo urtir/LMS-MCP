@@ -91,11 +91,13 @@
 
     <script>
         let currentConfig = {};
-        let activeTab = 'security';
+        let servicesStatus = {};
+        let activeTab = 'overview';
 
         // Load configuration on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadConfiguration();
+            loadServicesStatus();
         });
 
         async function loadConfiguration() {
@@ -115,6 +117,24 @@
             }
         }
 
+        async function loadServicesStatus() {
+            try {
+                const response = await fetch('/admin/api/services/status');
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error);
+                }
+
+                servicesStatus = data.services;
+                if (activeTab === 'overview') {
+                    renderTabContent();
+                }
+            } catch (error) {
+                showToast(`Failed to load services status: ${error.message}`, 'error');
+            }
+        }
+
         function renderConfiguration() {
             renderTabs();
             renderTabContent();
@@ -124,6 +144,18 @@
             const tabsContainer = document.getElementById('config-tabs');
             tabsContainer.innerHTML = '';
 
+            // Add Overview tab first
+            const overviewTab = document.createElement('button');
+            overviewTab.className = `py-2 px-1 border-b-2 font-medium text-sm flex-shrink-0 ${
+                activeTab === 'overview' 
+                    ? 'border-indigo-500 text-indigo-600' 
+                    : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+            }`;
+            overviewTab.textContent = '📊 Overview';
+            overviewTab.onclick = () => switchTab('overview');
+            tabsContainer.appendChild(overviewTab);
+
+            // Add configuration tabs
             Object.keys(currentConfig).forEach(categoryId => {
                 const category = currentConfig[categoryId];
                 const tab = document.createElement('button');
@@ -146,6 +178,11 @@
         function renderTabContent() {
             const contentContainer = document.getElementById('tab-content');
             contentContainer.innerHTML = '';
+
+            if (activeTab === 'overview') {
+                renderOverviewContent(contentContainer);
+                return;
+            }
 
             if (!currentConfig[activeTab]) {
                 return;
@@ -363,6 +400,262 @@
                     }
                 }, 300);
             }, 5000);
+        }
+
+        // Service status and control functions
+        function renderOverviewContent(container) {
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <!-- Services Status Header -->
+                    <div class="mb-6">
+                        <h2 class="text-lg font-medium text-slate-900">System Overview</h2>
+                        <p class="mt-1 text-sm text-slate-600">Monitor and control system services</p>
+                    </div>
+
+                    <!-- Services Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Wazuh Realtime Server Card -->
+                        <div class="bg-white rounded-lg border border-slate-200 p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="text-base font-medium text-slate-900">Wazuh Realtime Server</h3>
+                                    <p class="text-sm text-slate-600">Real-time log monitoring and analysis</p>
+                                </div>
+                                <div id="wazuh-status-indicator" class="w-3 h-3 rounded-full bg-slate-400"></div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="text-sm text-slate-600">
+                                    Status: <span id="wazuh-status-text" class="font-medium">Loading...</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button id="start-wazuh-btn" 
+                                            onclick="controlService('wazuh_realtime', 'start')"
+                                            class="px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Start
+                                    </button>
+                                    <button id="stop-wazuh-btn" 
+                                            onclick="controlService('wazuh_realtime', 'stop')"
+                                            class="px-3 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Stop
+                                    </button>
+                                    <button id="restart-wazuh-btn" 
+                                            onclick="controlService('wazuh_realtime', 'restart')"
+                                            class="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Restart
+                                    </button>
+                                    <button onclick="viewServiceLogs('wazuh_realtime')"
+                                            class="px-3 py-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Logs
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Telegram Bot Card -->
+                        <div class="bg-white rounded-lg border border-slate-200 p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="text-base font-medium text-slate-900">Telegram Security Bot</h3>
+                                    <p class="text-sm text-slate-600">Telegram chatbot for security queries</p>
+                                </div>
+                                <div id="telegram-status-indicator" class="w-3 h-3 rounded-full bg-slate-400"></div>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="text-sm text-slate-600">
+                                    Status: <span id="telegram-status-text" class="font-medium">Loading...</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button id="start-telegram-btn" 
+                                            onclick="controlService('telegram_bot', 'start')"
+                                            class="px-3 py-2 text-sm bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Start
+                                    </button>
+                                    <button id="stop-telegram-btn" 
+                                            onclick="controlService('telegram_bot', 'stop')"
+                                            class="px-3 py-2 text-sm bg-red-600 text-white rounded-md hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Stop
+                                    </button>
+                                    <button id="restart-telegram-btn" 
+                                            onclick="controlService('telegram_bot', 'restart')"
+                                            class="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Restart
+                                    </button>
+                                    <button onclick="viewServiceLogs('telegram_bot')"
+                                            class="px-3 py-2 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Logs
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Status Summary -->
+                    <div class="bg-slate-50 rounded-lg p-4">
+                        <h4 class="text-sm font-medium text-slate-900 mb-2">System Status</h4>
+                        <div class="text-sm text-slate-600">
+                            <div>Last updated: <span id="last-updated">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Load services status after rendering
+            loadServicesStatus();
+        }
+
+        async function controlService(service, action) {
+            try {
+                console.log(`Controlling service: ${service} -> ${action}`);
+                
+                const response = await fetch(`/admin/api/services/${service}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                console.log(`Service control response:`, result);
+                
+                if (result.success) {
+                    showToast(`${service} service ${action}ed successfully`, 'success');
+                    // Refresh service status after 2 seconds
+                    setTimeout(loadServicesStatus, 2000);
+                } else {
+                    showToast(`Failed to ${action} ${service} service: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                console.error(`Error controlling ${service} service:`, error);
+                showToast(`Error controlling ${service} service`, 'error');
+            }
+        }
+
+        function loadServicesStatus() {
+            fetch('/admin/api/services/status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update service status indicators
+                        const wazuhStatus = data.services.wazuh_realtime?.running ? 'running' : 'stopped';
+                        const telegramStatus = data.services.telegram_bot?.running ? 'running' : 'stopped';
+                        
+                        updateServiceStatus('wazuh_realtime', wazuhStatus);
+                        updateServiceStatus('telegram_bot', telegramStatus);
+                        
+                        // Update last updated timestamp
+                        const lastUpdated = document.getElementById('last-updated');
+                        if (lastUpdated) {
+                            lastUpdated.textContent = new Date().toLocaleTimeString();
+                        }
+                        
+                        // Debug log
+                        console.log('Services status loaded:', {
+                            wazuh: wazuhStatus,
+                            telegram: telegramStatus,
+                            raw_data: data.services
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading services status:', error);
+                });
+        }
+
+        function updateServiceStatus(service, status) {
+            // Map service names to UI element names
+            const serviceMap = {
+                'wazuh_realtime': 'wazuh',
+                'telegram_bot': 'telegram'
+            };
+            
+            const uiServiceName = serviceMap[service] || service;
+            
+            const statusIndicator = document.getElementById(`${uiServiceName}-status-indicator`);
+            const statusText = document.getElementById(`${uiServiceName}-status-text`);
+            const startBtn = document.getElementById(`start-${uiServiceName}-btn`);
+            const stopBtn = document.getElementById(`stop-${uiServiceName}-btn`);
+            const restartBtn = document.getElementById(`restart-${uiServiceName}-btn`);
+
+            if (statusIndicator && statusText) {
+                if (status === 'running') {
+                    statusIndicator.className = 'w-3 h-3 rounded-full bg-green-500';
+                    statusText.textContent = 'Running';
+                    statusText.className = 'font-medium text-green-600';
+                    if (startBtn) startBtn.disabled = true;
+                    if (stopBtn) stopBtn.disabled = false;
+                    if (restartBtn) restartBtn.disabled = false;
+                } else {
+                    statusIndicator.className = 'w-3 h-3 rounded-full bg-red-500';
+                    statusText.textContent = 'Stopped';
+                    statusText.className = 'font-medium text-red-600';
+                    if (startBtn) startBtn.disabled = false;
+                    if (stopBtn) stopBtn.disabled = true;
+                    if (restartBtn) restartBtn.disabled = true;
+                }
+            }
+        }
+
+        async function viewServiceLogs(service) {
+            try {
+                const response = await fetch(`/admin/api/services/${service}/logs`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Create a modal or popup to show logs
+                    const logModal = document.createElement('div');
+                    logModal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                    logModal.innerHTML = `
+                        <div class="bg-white rounded-lg p-6 max-w-4xl max-h-[80vh] overflow-hidden">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium">Service Logs: ${service}</h3>
+                                <button onclick="this.closest('.fixed').remove()" 
+                                        class="text-gray-500 hover:text-gray-700">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="bg-black text-green-400 p-4 rounded-lg overflow-y-auto max-h-96 font-mono text-sm">
+                                <pre>${result.logs || 'No logs available'}</pre>
+                            </div>
+                            <div class="mt-4 text-sm text-gray-600">
+                                Log file: ${result.log_file || 'N/A'}
+                            </div>
+                            <div class="mt-4 flex justify-end">
+                                <button onclick="refreshServiceLogs('${service}', this.closest('.fixed'))" 
+                                        class="mr-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                    Refresh
+                                </button>
+                                <button onclick="this.closest('.fixed').remove()" 
+                                        class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(logModal);
+                } else {
+                    showToast(`Failed to get logs for ${service}: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                console.error(`Error getting logs for ${service}:`, error);
+                showToast(`Error getting logs for ${service}`, 'error');
+            }
+        }
+
+        async function refreshServiceLogs(service, modal) {
+            try {
+                const response = await fetch(`/admin/api/services/${service}/logs`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const logsContainer = modal.querySelector('pre');
+                    logsContainer.textContent = result.logs || 'No logs available';
+                }
+            } catch (error) {
+                console.error(`Error refreshing logs for ${service}:`, error);
+            }
         }
     </script>
 </body>

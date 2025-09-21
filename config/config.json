@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "created": "2025-09-21T15:35:17.066149",
-    "last_updated": "2025-09-21T17:37:01.632868",
+    "last_updated": "2025-09-21T20:54:35.605952",
     "description": "LMS MCP Centralized Configuration"
   },
   "security": {
@@ -61,5 +61,11 @@
     "PDF_TITLE_FONT_SIZE": "24",
     "THREE_DAY_MAX_EVENTS": "100",
     "WEEKLY_MAX_EVENTS": "200"
+  },
+  "services": {
+    "WAZUH_REALTIME_ENABLED": "true",
+    "TELEGRAM_BOT_ENABLED": "true",
+    "REALTIME_FETCH_INTERVAL": "5",
+    "ALERT_CHECK_INTERVAL": "10"
   }
 }

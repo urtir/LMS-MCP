@@ -9,6 +9,9 @@ import os
 import sys
 import json
 import logging
+import subprocess
+import threading
+import time
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Optional
@@ -43,6 +46,17 @@ console_handler.setFormatter(console_formatter)
 logger.addHandler(console_handler)
 
 logger.info("Admin module loaded - comprehensive error logging enabled")
+
+# Global variables for service tracking
+RUNNING_SERVICES = {
+    "wazuh_realtime": None,  # Store process object
+    "telegram_bot": None     # Store process object
+}
+
+SERVICE_STATUS = {
+    "wazuh_realtime": False,
+    "telegram_bot": False
+}
 
 # Create Blueprint
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -384,6 +398,38 @@ CONFIG_CATEGORIES = {
                 "validation": {"min": 8, "max": 24}
             }
         }
+    },
+    "services": {
+        "name": "⚙️ Service Management",
+        "description": "Control and monitor system services",
+        "variables": {
+            "WAZUH_REALTIME_ENABLED": {
+                "type": "boolean",
+                "default": "false",
+                "description": "Enable Wazuh realtime database fetching service",
+                "required": False
+            },
+            "TELEGRAM_BOT_ENABLED": {
+                "type": "boolean", 
+                "default": "false",
+                "description": "Enable Telegram security bot service",
+                "required": False
+            },
+            "REALTIME_FETCH_INTERVAL": {
+                "type": "number",
+                "default": "5",
+                "description": "Wazuh realtime fetching interval in seconds",
+                "required": False,
+                "validation": {"min": 1, "max": 60}
+            },
+            "ALERT_CHECK_INTERVAL": {
+                "type": "number",
+                "default": "10", 
+                "description": "Telegram alert monitoring interval in seconds",
+                "required": False,
+                "validation": {"min": 5, "max": 300}
+            }
+        }
     }
 }
 
@@ -487,6 +533,275 @@ def validate_variable(var_name: str, value: str, var_config: Dict) -> List[str]:
         logger.error(f"Error details: {str(e)}")
         errors.append(f"Validation error for {var_name}")
         return errors
+
+# Service Management Functions
+def start_wazuh_realtime_service():
+    """Start Wazuh realtime fetching service"""
+    global RUNNING_SERVICES, SERVICE_STATUS
+    
+    try:
+        logger.info(f"Attempting to start Wazuh realtime service...")
+        logger.info(f"Current RUNNING_SERVICES state: {RUNNING_SERVICES}")
+        
+        if RUNNING_SERVICES["wazuh_realtime"] is not None:
+            logger.warning("Wazuh realtime service already running")
+            return False, "Service already running"
+        
+        # Get project root directory
+        project_root = Path(__file__).parent.parent.parent
+        script_path = project_root / "src" / "api" / "wazuh_realtime_server.py"
+        
+        logger.info(f"Script path: {script_path}")
+        logger.info(f"Script exists: {script_path.exists()}")
+        
+        if not script_path.exists():
+            logger.error(f"Wazuh realtime script not found: {script_path}")
+            return False, "Service script not found"
+        
+        # Start the service process with proper logging
+        logger.info(f"Starting Wazuh realtime service: {script_path}")
+        
+        # Create log files for the service
+        log_dir = project_root / "logs"
+        log_dir.mkdir(exist_ok=True)
+        wazuh_log_file = log_dir / "wazuh_realtime.log"
+        
+        # Set environment variables
+        env = os.environ.copy()
+        env['PYTHONPATH'] = str(project_root)
+        env['PYTHONIOENCODING'] = 'utf-8'  # Force UTF-8 encoding
+        if sys.platform == "win32":
+            env['PYTHONLEGACYWINDOWSSTDIO'] = '1'  # Enable UTF-8 on Windows
+        
+        with open(wazuh_log_file, 'a') as log_file:
+            process = subprocess.Popen(
+                [sys.executable, str(script_path)],
+                stdout=log_file,
+                stderr=subprocess.STDOUT,  # Redirect stderr to stdout
+                cwd=str(project_root),
+                env=env,
+                shell=False,  # Changed to False for better control
+                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
+            )
+        
+        # Wait a moment to check if process started successfully
+        time.sleep(2)
+        if process.poll() is not None:
+            # Process has already terminated
+            with open(wazuh_log_file, 'r') as f:
+                error_output = f.read()
+            logger.error(f"Wazuh realtime service failed to start. Output: {error_output}")
+            return False, f"Service failed to start. Check logs: {error_output[:200]}"
+        
+        RUNNING_SERVICES["wazuh_realtime"] = process
+        SERVICE_STATUS["wazuh_realtime"] = True
+        
+        logger.info(f"Wazuh realtime service started with PID: {process.pid}")
+        logger.info(f"Updated RUNNING_SERVICES state: {RUNNING_SERVICES}")
+        logger.info(f"Log file: {wazuh_log_file}")
+        
+        return True, f"Service started (PID: {process.pid}). Logs: {wazuh_log_file}"
+        
+    except Exception as e:
+        logger.error(f"Failed to start Wazuh realtime service: {e}")
+        return False, str(e)
+
+def stop_wazuh_realtime_service():
+    """Stop Wazuh realtime fetching service"""
+    global RUNNING_SERVICES, SERVICE_STATUS
+    
+    try:
+        process = RUNNING_SERVICES["wazuh_realtime"]
+        if process is None:
+            logger.warning("Wazuh realtime service not running")
+            return False, "Service not running"
+        
+        logger.info(f"Stopping Wazuh realtime service (PID: {process.pid})")
+        process.terminate()
+        
+        # Wait for process to terminate
+        try:
+            process.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            logger.warning("Process didn't terminate gracefully, killing...")
+            process.kill()
+            process.wait()
+        
+        RUNNING_SERVICES["wazuh_realtime"] = None
+        SERVICE_STATUS["wazuh_realtime"] = False
+        
+        logger.info("Wazuh realtime service stopped")
+        return True, "Service stopped"
+        
+    except Exception as e:
+        logger.error(f"Failed to stop Wazuh realtime service: {e}")
+        return False, str(e)
+
+def start_telegram_bot_service():
+    """Start Telegram bot service"""
+    global RUNNING_SERVICES, SERVICE_STATUS
+    
+    try:
+        logger.info(f"Attempting to start Telegram bot service...")
+        logger.info(f"Current RUNNING_SERVICES state: {RUNNING_SERVICES}")
+        
+        if RUNNING_SERVICES["telegram_bot"] is not None:
+            logger.warning("Telegram bot service already running")
+            return False, "Service already running"
+        
+        # Get project root directory
+        project_root = Path(__file__).parent.parent.parent
+        script_path = project_root / "src" / "telegram" / "telegram_security_bot.py"
+        
+        logger.info(f"Script path: {script_path}")
+        logger.info(f"Script exists: {script_path.exists()}")
+        
+        if not script_path.exists():
+            logger.error(f"Telegram bot script not found: {script_path}")
+            return False, "Service script not found"
+        
+        # Start the service process with proper logging
+        logger.info(f"Starting Telegram bot service: {script_path}")
+        
+        # Create log files for the service
+        log_dir = project_root / "logs"
+        log_dir.mkdir(exist_ok=True)
+        telegram_log_file = log_dir / "telegram_bot.log"
+        
+        # Set environment variables
+        env = os.environ.copy()
+        env['PYTHONPATH'] = str(project_root)
+        env['PYTHONIOENCODING'] = 'utf-8'  # Force UTF-8 encoding
+        if sys.platform == "win32":
+            env['PYTHONLEGACYWINDOWSSTDIO'] = '1'  # Enable UTF-8 on Windows
+        
+        with open(telegram_log_file, 'a') as log_file:
+            process = subprocess.Popen(
+                [sys.executable, str(script_path)],
+                stdout=log_file,
+                stderr=subprocess.STDOUT,  # Redirect stderr to stdout
+                cwd=str(project_root),
+                env=env,
+                shell=False,  # Changed to False for better control
+                creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if sys.platform == "win32" else 0
+            )
+        
+        # Wait a moment to check if process started successfully
+        time.sleep(2)
+        if process.poll() is not None:
+            # Process has already terminated
+            with open(telegram_log_file, 'r') as f:
+                error_output = f.read()
+            logger.error(f"Telegram bot service failed to start. Output: {error_output}")
+            return False, f"Service failed to start. Check logs: {error_output[:200]}"
+        
+        RUNNING_SERVICES["telegram_bot"] = process
+        SERVICE_STATUS["telegram_bot"] = True
+        
+        logger.info(f"Telegram bot service started with PID: {process.pid}")
+        logger.info(f"Updated RUNNING_SERVICES state: {RUNNING_SERVICES}")
+        logger.info(f"Log file: {telegram_log_file}")
+        
+        return True, f"Service started (PID: {process.pid}). Logs: {telegram_log_file}"
+        
+    except Exception as e:
+        logger.error(f"Failed to start Telegram bot service: {e}")
+        return False, str(e)
+
+def stop_telegram_bot_service():
+    """Stop Telegram bot service"""
+    global RUNNING_SERVICES, SERVICE_STATUS
+    
+    try:
+        process = RUNNING_SERVICES["telegram_bot"]
+        if process is None:
+            logger.warning("Telegram bot service not running")
+            return False, "Service not running"
+        
+        logger.info(f"Stopping Telegram bot service (PID: {process.pid})")
+        process.terminate()
+        
+        # Wait for process to terminate
+        try:
+            process.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            logger.warning("Process didn't terminate gracefully, killing...")
+            process.kill()
+            process.wait()
+        
+        RUNNING_SERVICES["telegram_bot"] = None
+        SERVICE_STATUS["telegram_bot"] = False
+        
+        logger.info("Telegram bot service stopped")
+        return True, "Service stopped"
+        
+    except Exception as e:
+        logger.error(f"Failed to stop Telegram bot service: {e}")
+        return False, str(e)
+
+def get_service_status():
+    """Get current status of all services"""
+    global RUNNING_SERVICES, SERVICE_STATUS
+    
+    status = {}
+    
+    # Check Wazuh realtime service
+    process = RUNNING_SERVICES["wazuh_realtime"]
+    if process is not None:
+        poll_result = process.poll()
+        if poll_result is None:  # Process is still running
+            status["wazuh_realtime"] = {
+                "running": True,
+                "pid": process.pid,
+                "status": "running"
+            }
+            SERVICE_STATUS["wazuh_realtime"] = True
+        else:  # Process has terminated
+            logger.warning(f"Wazuh realtime process terminated with code: {poll_result}")
+            RUNNING_SERVICES["wazuh_realtime"] = None
+            SERVICE_STATUS["wazuh_realtime"] = False
+            status["wazuh_realtime"] = {
+                "running": False,
+                "pid": None,
+                "status": "stopped",
+                "exit_code": poll_result
+            }
+    else:
+        status["wazuh_realtime"] = {
+            "running": False,
+            "pid": None,
+            "status": "stopped"
+        }
+    
+    # Check Telegram bot service
+    process = RUNNING_SERVICES["telegram_bot"]
+    if process is not None:
+        poll_result = process.poll()
+        if poll_result is None:  # Process is still running
+            status["telegram_bot"] = {
+                "running": True,
+                "pid": process.pid,
+                "status": "running"
+            }
+            SERVICE_STATUS["telegram_bot"] = True
+        else:  # Process has terminated
+            logger.warning(f"Telegram bot process terminated with code: {poll_result}")
+            RUNNING_SERVICES["telegram_bot"] = None
+            SERVICE_STATUS["telegram_bot"] = False
+            status["telegram_bot"] = {
+                "running": False,
+                "pid": None,
+                "status": "stopped",
+                "exit_code": poll_result
+            }
+    else:
+        status["telegram_bot"] = {
+            "running": False,
+            "pid": None,
+            "status": "stopped"
+        }
+    
+    return status
 
 # Routes
 @admin_bp.route('/')
@@ -765,6 +1080,239 @@ def restart_application():
         logger.error(f"ADMIN ERROR - Failed to restart application for user {current_user.username}: {e}")
         logger.error(f"Exception type: {type(e).__name__}")
         logger.error(f"Error details: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@admin_bp.route('/api/services/status')
+@login_required
+@admin_required
+def get_services_status():
+    """Get status of all services"""
+    try:
+        logger.info(f"Admin {current_user.username} requesting services status")
+        
+        status = get_service_status()
+        logger.info(f"Current service status: {status}")
+        
+        # Add configuration values
+        wazuh_enabled = config.get('services.WAZUH_REALTIME_ENABLED', 'false').lower() == 'true'
+        telegram_enabled = config.get('services.TELEGRAM_BOT_ENABLED', 'false').lower() == 'true'
+        
+        result = {
+            'success': True,
+            'services': {
+                'wazuh_realtime': {
+                    **status['wazuh_realtime'],
+                    'enabled': wazuh_enabled,
+                    'name': 'Wazuh Realtime Fetcher'
+                },
+                'telegram_bot': {
+                    **status['telegram_bot'],
+                    'enabled': telegram_enabled,
+                    'name': 'Telegram Security Bot'
+                }
+            }
+        }
+        
+        logger.info(f"Returning service status response: {result}")
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"ADMIN ERROR - Failed to get services status for user {current_user.username}: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@admin_bp.route('/api/services/<service_name>/start', methods=['POST'])
+@login_required
+@admin_required
+def start_service(service_name):
+    """Start a specific service"""
+    try:
+        logger.info(f"Admin {current_user.username} starting service: {service_name}")
+        
+        success = False
+        message = ""
+        
+        if service_name == 'wazuh_realtime':
+            success, message = start_wazuh_realtime_service()
+            if success:
+                # Update config to reflect service is enabled
+                config.set('services.WAZUH_REALTIME_ENABLED', 'true')
+        elif service_name == 'telegram_bot':
+            success, message = start_telegram_bot_service()
+            if success:
+                # Update config to reflect service is enabled
+                config.set('services.TELEGRAM_BOT_ENABLED', 'true')
+        else:
+            logger.warning(f"Invalid service name: {service_name}")
+            return jsonify({
+                'success': False,
+                'error': 'Invalid service name'
+            }), 400
+        
+        if success:
+            logger.info(f"Service {service_name} started successfully by {current_user.username}")
+        
+        return jsonify({
+            'success': success,
+            'message': message
+        })
+        
+    except Exception as e:
+        logger.error(f"ADMIN ERROR - Failed to start service {service_name} for user {current_user.username}: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@admin_bp.route('/api/services/<service_name>/stop', methods=['POST'])
+@login_required
+@admin_required
+def stop_service(service_name):
+    """Stop a specific service"""
+    try:
+        logger.info(f"Admin {current_user.username} stopping service: {service_name}")
+        
+        success = False
+        message = ""
+        
+        if service_name == 'wazuh_realtime':
+            success, message = stop_wazuh_realtime_service()
+            if success:
+                # Update config to reflect service is disabled
+                config.set('services.WAZUH_REALTIME_ENABLED', 'false')
+        elif service_name == 'telegram_bot':
+            success, message = stop_telegram_bot_service()
+            if success:
+                # Update config to reflect service is disabled
+                config.set('services.TELEGRAM_BOT_ENABLED', 'false')
+        else:
+            logger.warning(f"Invalid service name: {service_name}")
+            return jsonify({
+                'success': False,
+                'error': 'Invalid service name'
+            }), 400
+        
+        if success:
+            logger.info(f"Service {service_name} stopped successfully by {current_user.username}")
+        
+        return jsonify({
+            'success': success,
+            'message': message
+        })
+        
+    except Exception as e:
+        logger.error(f"ADMIN ERROR - Failed to stop service {service_name} for user {current_user.username}: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@admin_bp.route('/api/services/<service_name>/restart', methods=['POST'])
+@login_required
+@admin_required
+def restart_service(service_name):
+    """Restart a specific service"""
+    try:
+        logger.info(f"Admin {current_user.username} restarting service: {service_name}")
+        
+        # Stop service first
+        if service_name == 'wazuh_realtime':
+            stop_success, stop_message = stop_wazuh_realtime_service()
+            if stop_success:
+                time.sleep(2)  # Wait a bit before restarting
+                start_success, start_message = start_wazuh_realtime_service()
+                if start_success:
+                    config.set('services.WAZUH_REALTIME_ENABLED', 'true')
+                message = f"Stopped: {stop_message}, Started: {start_message}"
+                success = start_success
+            else:
+                success = False
+                message = f"Failed to stop service: {stop_message}"
+                
+        elif service_name == 'telegram_bot':
+            stop_success, stop_message = stop_telegram_bot_service()
+            if stop_success:
+                time.sleep(2)  # Wait a bit before restarting
+                start_success, start_message = start_telegram_bot_service()
+                if start_success:
+                    config.set('services.TELEGRAM_BOT_ENABLED', 'true')
+                message = f"Stopped: {stop_message}, Started: {start_message}"
+                success = start_success
+            else:
+                success = False
+                message = f"Failed to stop service: {stop_message}"
+        else:
+            logger.warning(f"Invalid service name: {service_name}")
+            return jsonify({
+                'success': False,
+                'error': 'Invalid service name'
+            }), 400
+        
+        if success:
+            logger.info(f"Service {service_name} restarted successfully by {current_user.username}")
+        
+        return jsonify({
+            'success': success,
+            'message': message
+        })
+        
+    except Exception as e:
+        logger.error(f"ADMIN ERROR - Failed to restart service {service_name} for user {current_user.username}: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@admin_bp.route('/api/services/<service_name>/logs', methods=['GET'])
+@login_required
+@admin_required
+def get_service_logs(service_name):
+    """Get logs for a specific service"""
+    try:
+        logger.info(f"Admin {current_user.username} requesting logs for service: {service_name}")
+        
+        project_root = Path(__file__).parent.parent.parent
+        log_dir = project_root / "logs"
+        
+        if service_name == 'wazuh_realtime':
+            log_file = log_dir / "wazuh_realtime.log"
+        elif service_name == 'telegram_bot':
+            log_file = log_dir / "telegram_bot.log"
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Invalid service name'
+            }), 400
+        
+        if not log_file.exists():
+            return jsonify({
+                'success': True,
+                'logs': 'No logs available yet'
+            })
+        
+        # Get last 50 lines of the log file
+        try:
+            with open(log_file, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                recent_lines = lines[-50:] if len(lines) > 50 else lines
+                logs_content = ''.join(recent_lines)
+        except Exception as e:
+            logger.error(f"Error reading log file {log_file}: {e}")
+            logs_content = f"Error reading log file: {e}"
+        
+        return jsonify({
+            'success': True,
+            'logs': logs_content,
+            'log_file': str(log_file)
+        })
+        
+    except Exception as e:
+        logger.error(f"ADMIN ERROR - Failed to get logs for service {service_name}: {e}")
         return jsonify({
             'success': False,
             'error': str(e)

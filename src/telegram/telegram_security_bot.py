@@ -5,6 +5,24 @@ Telegram Security Bot with RAG Integration
 Main bot implementation with report generation and Q&A capabilities
 """
 
+# Fix Windows Unicode encoding issues
+import sys
+if sys.platform == "win32":
+    import io
+    # Force UTF-8 encoding on Windows
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+
+# Safe print function for Windows
+def safe_print(text):
+    """Print text with fallback for Windows encoding issues"""
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        # Remove emojis and special characters if encoding fails
+        safe_text = text.encode('ascii', errors='ignore').decode('ascii')
+        print(safe_text)
+
 import asyncio
 import logging
 import json
@@ -15,7 +33,6 @@ import sqlite3
 from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 from pathlib import Path
-import sys
 
 # Add config directory to path
 project_root = Path(__file__).parent.parent.parent
@@ -1005,7 +1022,8 @@ Commands:
             
             # Start bot
             logger.info("✅ Bot initialized successfully")
-            logger.info(f"🤖 Bot Username: @{(await self.application.bot.get_me()).username}")
+            bot_info = await self.application.bot.get_me()
+            logger.info(f"Bot Username: @{bot_info.username}")
             logger.info("🔄 Starting polling...")
             
             # Use simple polling approach that works with existing event loop
@@ -1147,12 +1165,12 @@ def main():
 if __name__ == "__main__":
     # Create config instance for display
     config_instance = TelegramBotConfig()
-    print("=" * 60)
-    print("🚀 Telegram Security Bot Starting")
-    print("=" * 60)
-    print(f"🤖 Bot Token: {config_instance.BOT_TOKEN[:10]}...") 
-    print(f"🔧 LM Studio: {config_instance.LM_STUDIO_CONFIG['base_url']}")
-    print(f"🗄️  Database: {config_instance.DATABASE_CONFIG['wazuh_db']}")
+    safe_print("=" * 60)
+    safe_print("🚀 Telegram Security Bot Starting")
+    safe_print("=" * 60)
+    safe_print(f"🤖 Bot Token: {config_instance.BOT_TOKEN[:10]}...") 
+    safe_print(f"🔧 LM Studio: {config_instance.LM_STUDIO_CONFIG['base_url']}")
+    safe_print(f"🗄️  Database: {config_instance.DATABASE_CONFIG['wazuh_db']}")
     print("=" * 60)
     print()
     print("Features:")
