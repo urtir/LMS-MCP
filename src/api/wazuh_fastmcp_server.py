@@ -826,20 +826,23 @@ async def check_wazuh_log(
     query: str,
     max_results: int = 100,
     days_range: int = 7,
-    rebuild_cache: bool = False,
-    agent_ids: Optional[str] = None
+    rebuild_cache: bool = False
 ) -> str:
     """
     ULTRA SIMPLE RAW Wazuh Log Analysis - ZERO BULLSHIT!
     
     Just dump raw database data and let LLM handle EVERYTHING!
     
-    Args:
-        query: What you want to find
-        max_results: How many logs (default: 100)
-        days_range: Days back to search (default: 7)
-        rebuild_cache: Not used - keeping for compatibility
-        agent_ids: Not used - keeping for compatibility
+    IMPORTANT: This tool ONLY accepts these parameters:
+    - query: What you want to find (REQUIRED - include ALL search terms here)
+    - max_results: How many logs (default: 100) 
+    - days_range: Days back to search (default: 7)
+    - rebuild_cache: Not used - keeping for compatibility
+    
+    DO NOT USE: agent_ids, os_platform, status, group - put everything in query!
+    
+    Example correct usage:
+    query="XSS attack kali linux agent" (put OS, agent info in query text)
     
     Returns:
         RAW analysis from LLM with ALL original database data
@@ -847,14 +850,28 @@ async def check_wazuh_log(
     try:
         await ctx.info(f"🔍 RAW Wazuh Analysis: {query} (past {days_range} days)")
         
+        # OPTIMIZE QUERY - gabungkan semua informasi menjadi satu query yang komprehensif
+        optimized_query = query
+        
+        # Auto-enhance query jika user menyebutkan OS atau agent tertentu
+        query_lower = query.lower()
+        if "kali linux" in query_lower or "kali" in query_lower:
+            if "kali" not in optimized_query.lower():
+                optimized_query += " kali linux client"
+        
+        if "xss" in query_lower:
+            if "cross-site scripting" not in optimized_query.lower():
+                optimized_query += " cross-site scripting attack"
+        
+        await ctx.info(f"🔍 Optimized search query: {optimized_query}")
+        
         # SEMANTIC SEARCH DULU - CARI ROWS YANG RELEVAN!
         # BATASI KE 15 ROWS MAX UNTUK AVOID TOKEN OVERFLOW
         search_limit = min(15, max_results)  # MAX 15 rows only!
         
         relevant_logs = await cag_system.search(
-            query=query,
-            k=search_limit,  # Hanya 15 rows terbaik
-            agent_ids=None
+            query=optimized_query,  # Gunakan optimized query
+            k=search_limit  # Hanya 15 rows terbaik
         )
         
         if not relevant_logs:

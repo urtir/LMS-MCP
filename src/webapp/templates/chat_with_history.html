@@ -780,7 +780,7 @@
                     <div class="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center flex-shrink-0 shadow-sm border border-border">
                         <i data-lucide="bot" class="w-4 h-4"></i>
                     </div>
-                    <div class="flex-1 min-w-0 max-w-full overflow-hidden">
+                    <div class="flex-1 min-w-0 max-w-full">
                         ${messageContent}
                     </div>
                 `;
@@ -940,7 +940,7 @@ ${thinking}
                 // Regular code blocks
                 .replace(/```([\s\S]*?)```/g, '<div class="code-block bg-muted border rounded-md p-3 my-2 overflow-x-auto"><pre class="text-sm"><code>$1</code></pre></div>')
                 // Inline code
-                .replace(/`([^`]+)`/g, '<code class="bg-muted text-muted-foreground px-2 py-1 rounded text-xs font-mono">$1</code>')
+                .replace(/`([^`]+)`/g, (match, code) => `<code class="bg-muted text-muted-foreground px-2 py-1 rounded text-xs font-mono">${escapeHtml(code)}</code>`)
                 // Headers
                 .replace(/^###### (.*$)/gm, '<h6 class="text-xs font-medium mt-2 mb-1">$1</h6>')
                 .replace(/^##### (.*$)/gm, '<h5 class="text-sm font-medium mt-2 mb-1">$1</h5>')
@@ -980,7 +980,7 @@ ${thinking}
                             <i id="${thinkingId}-icon" data-lucide="chevron-down" class="w-4 h-4 transition-transform"></i>
                         </div>
                         <div id="${thinkingId}" class="thinking-content collapsed bg-card border-t border-border p-4">
-                            <div class="prose prose-sm max-w-full overflow-hidden text-foreground">
+                            <div class="prose prose-sm max-w-full text-foreground">
                                 ${formatMessage(thinking)}
                             </div>
                         </div>
