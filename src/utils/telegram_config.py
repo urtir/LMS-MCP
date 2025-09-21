@@ -12,20 +12,21 @@ from typing import Dict, Any
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 from config.config_manager import ConfigManager
-config = ConfigManager()
+config_manager = ConfigManager()
 
 class TelegramBotConfig:
     """Configuration class for Telegram Bot"""
     
     def __init__(self):
         # Bot Token from JSON config
-        self.BOT_TOKEN = config.get('security.TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
+        self.BOT_TOKEN = config_manager.get('security.TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
         
         # LM Studio Configuration
         self.LM_STUDIO_CONFIG = {
-            'base_url': config.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
-            'api_key': config.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio'),
-            'model': config.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
+            'base_url': config_manager.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
+            'api_key': config_manager.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio'),
+            'model': config_manager.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
+            'temperature': float(config_manager.get('ai_model.AI_TEMPERATURE', '0.8')),
             'timeout': None  # No timeout
         }
         
@@ -62,14 +63,25 @@ class TelegramBotConfig:
             'chart_colors': ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'],
             'export_formats': ['pdf', 'json', 'csv']
         }
+        
+        # Bot Commands Configuration
+        self.BOT_COMMANDS = [
+            ("start", "🚀 Show main menu"),
+            ("menu", "📋 Return to main menu"),
+            ("status", "🔧 Check system status"),
+            ("help", "📖 Show help and commands"),
+            ("enable_alerts", "🚨 Enable realtime alerts"),
+            ("disable_alerts", "🔕 Disable realtime alerts"),
+            ("alert_status", "📊 Check alert system status")
+        ]
 
 # Global instance
-config = TelegramBotConfig()
+telegram_config = TelegramBotConfig()
 
 # Export for backward compatibility
-BOT_TOKEN = config.BOT_TOKEN
-LM_STUDIO_CONFIG = config.LM_STUDIO_CONFIG
-DATABASE_CONFIG = config.DATABASE_CONFIG
-PDF_CONFIG = config.PDF_CONFIG
-AUTHORIZED_USERS = config.AUTHORIZED_USERS
-REPORT_CONFIG = config.REPORT_CONFIG
+BOT_TOKEN = telegram_config.BOT_TOKEN
+LM_STUDIO_CONFIG = telegram_config.LM_STUDIO_CONFIG
+DATABASE_CONFIG = telegram_config.DATABASE_CONFIG
+PDF_CONFIG = telegram_config.PDF_CONFIG
+AUTHORIZED_USERS = telegram_config.AUTHORIZED_USERS
+REPORT_CONFIG = telegram_config.REPORT_CONFIG

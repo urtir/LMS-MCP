@@ -27,7 +27,7 @@ from src.database import ChatDatabase
 from src.api import FastMCPBridge
 
 # Import internal telegram config
-from ..utils.telegram_config import TelegramBotConfig
+from src.utils.telegram_config import TelegramBotConfig
 
 logger = logging.getLogger(__name__)
 

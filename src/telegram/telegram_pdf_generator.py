@@ -31,7 +31,7 @@ project_root = current_dir.parent.parent
 sys.path.insert(0, str(project_root))
 
 # Import internal telegram config
-from ..utils.telegram_config import TelegramBotConfig
+from src.utils.telegram_config import TelegramBotConfig
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,8 @@ class PDFReportGenerator:
     
     def __init__(self):
         self.styles = getSampleStyleSheet()
-        self.config = TelegramBotConfig.PDF_CONFIG
+        self.telegram_config = TelegramBotConfig()
+        self.config = self.telegram_config.PDF_CONFIG
         self._setup_custom_styles()
         
     def _setup_custom_styles(self):

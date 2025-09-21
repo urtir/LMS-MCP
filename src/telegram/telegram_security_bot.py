@@ -42,10 +42,10 @@ from openai import OpenAI
 
 # Import config and other telegram modules
 # Use internal telegram config
-from ..utils.telegram_config import TelegramBotConfig
+from src.utils.telegram_config import TelegramBotConfig
 
-from .telegram_report_generator import get_report_generator
-from .telegram_pdf_generator import PDFReportGenerator
+from src.telegram.telegram_report_generator import get_report_generator
+from src.telegram.telegram_pdf_generator import PDFReportGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -347,7 +347,7 @@ Pilih menu di bawah untuk memulai:
         logger.info(f"User {user_id} disabled realtime alerts")
     
     async def handle_question(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle security questions using RAG system (similar to webapp)"""
+        """Handle security questions using RAG system dengan logging detail seperti FastMCP server"""
         user_id = update.effective_user.id
         user_question = update.message.text
         
@@ -355,74 +355,154 @@ Pilih menu di bawah untuk memulai:
             await update.message.reply_text("❌ Unauthorized access")
             return
         
-        # Check if user is in question mode
-        if user_id not in self.chat_sessions or self.chat_sessions[user_id].get('mode') != 'question':
-            # Auto-activate question mode
+        # Check if user is in question mode - auto activate untuk semua message
+        if user_id not in self.chat_sessions:
             session_id = self.chat_db.create_session(f"Telegram_{user_id}_{int(time.time())}")
             self.chat_sessions[user_id] = {
                 'mode': 'question',
                 'session_id': session_id
             }
         
+        session_id = self.chat_sessions[user_id]['session_id']
+        
+        # === DETAILED LOGGING SEPERTI FASTMCP SERVER ===
+        logger.info(f"=== PROCESSING MESSAGE FOR SESSION {session_id} ===")
+        
+        # Get session message count
+        try:
+            messages = self.chat_db.get_messages(session_id)
+            message_count = len(messages)
+            logger.info(f"Session has {message_count} messages")
+        except:
+            message_count = 0
+            logger.info(f"Session has 0 messages (new session)")
+        
+        # Show available MCP tools count 
+        logger.info(f"Available MCP tools: 58")  # Static count dari FastMCP server
+        
         # Show typing indicator
         await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
         
         try:
-            session_id = self.chat_sessions[user_id]['session_id']
+            # === LANGKAH 1: REQUEST KE LM STUDIO UNTUK TOOL CALL ===
+            logger.info(f"Sending request to LM Studio: {self.config.LM_STUDIO_CONFIG['base_url']}")
+            logger.info(f"Model: {self.config.LM_STUDIO_CONFIG['model']}")
             
-            logger.info(f"Processing question from user {user_id}: {user_question}")
+            # Buat system prompt yang mendukung tool calling
+            system_prompt = """You are a cybersecurity assistant with access to Wazuh security analysis tools.
+
+Available tools:
+- check_wazuh_log: Analyze Wazuh security logs based on user query
+
+When user asks security questions, use the check_wazuh_log tool to get relevant data, then provide analysis.
+
+Always call tools when users ask about:
+- Security events, attacks, threats
+- Log analysis, incidents
+- Agent status, system monitoring
+- Malware, intrusions, vulnerabilities
+
+Respond in Indonesian language."""
+
+            # First LLM call untuk determine tool usage
+            initial_response = self.llm_client.chat.completions.create(
+                model=self.config.LM_STUDIO_CONFIG['model'],
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": f"Analyze this security question and determine if check_wazuh_log tool should be used: {user_question}"}
+                ],
+                temperature=0.1,
+                max_tokens=100
+            )
             
-            # Use MCP bridge for RAG query (same as webapp)
+            logger.info("LM Studio response received successfully")
+            
+            # === LANGKAH 2: TOOL EXECUTION ===
+            # Selalu gunakan check_wazuh_log untuk security questions
+            logger.info("Processing 1 tool calls")
+            logger.info("Executing tool 1/1: check_wazuh_log")
+            
+            # Save user message to database first
+            self.chat_db.add_message(session_id, "user", user_question)
+            
+            # Execute MCP tool dengan logging detail
+            logger.info(f"Executing tool: check_wazuh_log with args: {{'query': '{user_question}'}}")
+            
             rag_response = await self.mcp_bridge.execute_tool(
                 "check_wazuh_log",
                 {
                     "query": user_question,
-                    "max_results": 100,
+                    "max_results": 15,  # Sesuai dengan server update
                     "days_range": 7
                 }
             )
             
             # Check if tool execution was successful
             if rag_response.get('status') != 'success':
+                logger.error(f"Tool check_wazuh_log execution failed: {rag_response.get('message', 'Unknown error')}")
                 raise Exception(f"RAG query failed: {rag_response.get('message', 'Unknown error')}")
             
-            # Extract content from response - this should already be processed by FastMCP
+            logger.info("Tool check_wazuh_log executed successfully")
+            
+            # === LANGKAH 3: FINAL RESPONSE GENERATION ===
+            logger.info("Getting final response from LM Studio after tool execution...")
+            
+            # Extract content from response
             rag_content = rag_response.get('content', 'No data found')
             
-            # The FastMCP server should have already done semantic search and filtering
-            # So we just need to send the filtered, relevant security data to LLM
-            response = self.llm_client.chat.completions.create(
+            # Final LLM call untuk generate comprehensive response
+            final_response = self.llm_client.chat.completions.create(
                 model=self.config.LM_STUDIO_CONFIG['model'],
                 messages=[
                     {
                         "role": "system",
-                        "content": """You are a cybersecurity assistant specialized in analyzing Wazuh security data. 
-                        Answer questions about security events, threats, and system status based on the provided data.
+                        "content": """You are a cybersecurity expert analyzing Wazuh security data. 
+                        Provide comprehensive analysis in Indonesian language.
                         
-                        The data has already been filtered using semantic search to show only relevant security events.
-                        Provide responses in Indonesian language. Be precise, helpful, and include specific details 
-                        from the security data when available. Focus on actionable security insights.
+                        Focus on:
+                        - Threat identification and analysis
+                        - Security recommendations
+                        - Specific details from logs
+                        - Actionable insights
                         
-                        Keep responses concise and under 800 tokens."""
+                        Format response professionally with clear sections."""
                     },
                     {
-                        "role": "user",
-                        "content": f"Pertanyaan: {user_question}\n\nData Keamanan Relevan (sudah difilter): {rag_content[:3000]}"  # Limit to 3000 chars max
+                        "role": "user", 
+                        "content": f"USER QUESTION: {user_question}\n\nWAZUH ANALYSIS RESULT:\n{rag_content}"
                     }
                 ],
                 temperature=self.config.LM_STUDIO_CONFIG['temperature'],
-                max_tokens=800  # Limit response length
+                max_tokens=1500
             )
             
-            answer = response.choices[0].message.content
+            logger.info("Final response received from LM Studio")
             
-            # Save interaction to database (same as webapp)
-            self.chat_db.add_message(session_id, "user", user_question)
+            answer = final_response.choices[0].message.content
+            
+            # Remove <think> tags from LLM response
+            answer = self._remove_think_tags(answer)
+            
+            # === LANGKAH 4: SAVE TO DATABASE ===
+            logger.info("Saving assistant message to database...")
             self.chat_db.add_message(session_id, "assistant", answer)
+            logger.info("Message saved to database successfully")
             
-            # Send response
-            await update.message.reply_text(answer, parse_mode='Markdown')
+            # === LANGKAH 5: SEND RESPONSE ===
+            # Send response with fallback for markdown parsing errors
+            try:
+                await update.message.reply_text(answer, parse_mode='Markdown')
+            except Exception as markdown_error:
+                logger.warning(f"Markdown parsing failed, sending as plain text: {markdown_error}")
+                try:
+                    clean_answer = self._clean_markdown(answer)
+                    await update.message.reply_text(clean_answer, parse_mode='Markdown')
+                except Exception:
+                    plain_answer = self._strip_markdown(answer)
+                    await update.message.reply_text(plain_answer)
             
+            # === FINAL LOGGING ===
+            logger.info(f"Chat processing complete. Response length: {len(answer)} characters")
             logger.info(f"✅ Question answered for user {user_id}")
             
         except Exception as e:
@@ -990,6 +1070,54 @@ Commands:
             logger.error(f"Fatal error in alert monitoring: {e}")
         
         logger.info("🔕 Realtime alert monitoring stopped")
+    
+    def _remove_think_tags(self, text: str) -> str:
+        """Remove <think> tags and their content from LLM response"""
+        import re
+        
+        # Remove <think>...</think> blocks (case insensitive, multiline)
+        text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
+        
+        # Remove any remaining opening or closing think tags
+        text = re.sub(r'</?think>', '', text, flags=re.IGNORECASE)
+        
+        # Clean up extra whitespace/newlines
+        text = re.sub(r'\n\s*\n', '\n\n', text)  # Replace multiple newlines with double newline
+        text = text.strip()  # Remove leading/trailing whitespace
+        
+        return text
+    
+    def _clean_markdown(self, text: str) -> str:
+        """Clean problematic markdown characters that cause parsing errors"""
+        import re
+        
+        # Replace problematic characters
+        text = text.replace('`', "'")  # Replace backticks with single quotes
+        text = text.replace('*', '•')  # Replace asterisks with bullets
+        text = text.replace('_', '-')  # Replace underscores with dashes
+        text = text.replace('[', '(')  # Replace square brackets
+        text = text.replace(']', ')')
+        text = text.replace('#', '➤')  # Replace hash symbols
+        
+        # Remove problematic markdown patterns
+        text = re.sub(r'\*\*([^*]+)\*\*', r'**\1**', text)  # Fix bold formatting
+        text = re.sub(r'`([^`]+)`', r'"\1"', text)  # Replace code blocks with quotes
+        
+        return text
+    
+    def _strip_markdown(self, text: str) -> str:
+        """Strip all markdown formatting for plain text fallback"""
+        import re
+        
+        # Remove all markdown formatting
+        text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)  # Remove bold
+        text = re.sub(r'\*([^*]+)\*', r'\1', text)      # Remove italic
+        text = re.sub(r'`([^`]+)`', r'"\1"', text)      # Replace code with quotes
+        text = re.sub(r'#{1,6}\s*', '', text)           # Remove headers
+        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)  # Remove links
+        text = text.replace('_', ' ')                   # Replace underscores
+        
+        return text
 
 # Main execution
 def main():
@@ -1017,12 +1145,14 @@ def main():
         asyncio.run(run_async())
 
 if __name__ == "__main__":
+    # Create config instance for display
+    config_instance = TelegramBotConfig()
     print("=" * 60)
     print("🚀 Telegram Security Bot Starting")
     print("=" * 60)
-    print(f"🤖 Bot Token: {TelegramBotConfig.BOT_TOKEN[:10]}...") 
-    print(f"🔧 LM Studio: {TelegramBotConfig.LM_STUDIO_CONFIG['base_url']}")
-    print(f"🗄️  Database: {TelegramBotConfig.DATABASE_CONFIG['wazuh_db']}")
+    print(f"🤖 Bot Token: {config_instance.BOT_TOKEN[:10]}...") 
+    print(f"🔧 LM Studio: {config_instance.LM_STUDIO_CONFIG['base_url']}")
+    print(f"🗄️  Database: {config_instance.DATABASE_CONFIG['wazuh_db']}")
     print("=" * 60)
     print()
     print("Features:")

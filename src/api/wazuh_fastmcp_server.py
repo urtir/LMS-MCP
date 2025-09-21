@@ -656,12 +656,11 @@ Based on the comprehensive security logs above (including full_log content and a
     
     async def search(self, query: str, k: int = 20, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
         """
-        Hybrid search using both CAG and semantic search for optimal results - 64GB RAM optimized.
+        Pure semantic search untuk hasil yang optimal - TANPA keyword optimization.
         
-        This method combines:
-        1. CAG cached knowledge for comprehensive threat context
-        2. Semantic vector search for precise log retrieval
-        3. Keyword fallback for reliability
+        Hanya menggunakan:
+        1. Semantic vector search untuk log retrieval yang tepat
+        2. CAG cached knowledge untuk context
         """
         try:
             # Generate response using cached knowledge
@@ -669,85 +668,32 @@ Based on the comprehensive security logs above (including full_log content and a
             if not cag_response:
                 cag_response = "No CAG response generated"
             
-            # Try semantic search first if available - get more results for better coverage
-            semantic_results = []
+            # HANYA semantic search - TIDAK ADA keyword fallback
+            results = []
             if self.semantic_search_enabled:
-                semantic_k = k // 2 if k < 20 else k // 3 * 2  # More semantic results for larger k
-                semantic_results = await self.semantic_search_logs(query, semantic_k, agent_ids)
-                logger.info(f"Semantic search found {len(semantic_results)} results")
+                results = await self.semantic_search_logs(query, k, agent_ids)
+                logger.info(f"Semantic search found {len(results)} results")
+            else:
+                logger.warning("Semantic search not available")
+                return []
             
-            # Get additional logs using keyword-based search for completeness
-            keyword_results = []
-            if len(semantic_results) < k:
-                remaining = k - len(semantic_results)
-                # For 64GB systems, we can afford to search through more logs
-                search_limit = remaining * 5  # Search through 5x more logs for better keyword matching
-                security_logs = await self.get_security_logs_for_context(search_limit, agent_ids)
-                
-                query_lower = query.lower() if query else ""
-                for log in security_logs:
-                    # Skip logs already found by semantic search
-                    if any(log['id'] == sem_log['id'] for sem_log in semantic_results):
-                        continue
-                    
-                    relevance_score = self.calculate_log_relevance(log, query_lower)
-                    if relevance_score > 0 and len(keyword_results) < remaining:
-                        log.update({
-                            "threat_score": relevance_score,
-                            "search_type": "keyword",
-                            "threat_indicators": self.extract_threat_indicators(log)
-                        })
-                        keyword_results.append(log)
-            
-            # Combine and enhance results
-            all_results = semantic_results + keyword_results
-            
-            # Enhance all results with CAG analysis
-            for log in all_results:
+            # Enhance results dengan CAG analysis saja
+            for log in results:
                 safe_cag_response = cag_response or "No analysis available"
                 log.update({
-                    "threat_priority": self.determine_threat_priority(log, log.get("similarity_score", log.get("threat_score", 0.5))),
-                    "threat_category": "hybrid_analyzed",
+                    "threat_priority": self.determine_threat_priority(log, log.get("similarity_score", 0.5)),
+                    "threat_category": "semantic_analyzed",
                     "cag_response": safe_cag_response[:200] + "..." if len(safe_cag_response) > 200 else safe_cag_response
                 })
             
-            # Sort by relevance (semantic similarity score or threat score)
-            all_results.sort(key=lambda x: x.get("similarity_score", x.get("threat_score", 0)), reverse=True)
+            # Sort by semantic similarity score
+            results.sort(key=lambda x: x.get("similarity_score", 0), reverse=True)
             
-            return all_results[:k]
+            return results[:k]
             
         except Exception as e:
-            logger.error(f"Error in hybrid search: {e}")
-            # NO FALLBACK - let it fail if it fails
+            logger.error(f"Error in semantic search: {e}")
             raise e
-    
-    def calculate_log_relevance(self, log: Dict[str, Any], query_lower: str) -> float:
-        """Calculate relevance score for a log entry."""
-        if not log or not query_lower:
-            return 0.0
-            
-        score = 0.0
-        
-        # Rule level boost
-        rule_level = log.get('rule_level', 0)
-        score += rule_level * 0.1
-        
-        # Keyword matching in description (with null checks)
-        description = (log.get('rule_description') or '').lower()
-        groups = (log.get('rule_groups') or '').lower()
-        full_log = (log.get('full_log') or '').lower()
-        
-        # Check for query terms
-        query_terms = query_lower.split() if query_lower else []
-        for term in query_terms:
-            if term and term in description:
-                score += 0.5
-            if term and term in groups:
-                score += 0.3
-            if term and term in full_log:
-                score += 0.2
-        
-        return min(score, 1.0)  # Cap at 1.0
     
     def determine_threat_priority(self, log: Dict[str, Any], relevance_score: float) -> str:
         """Determine threat priority based on rule level and relevance."""
@@ -831,133 +777,126 @@ if CAG_AVAILABLE or OPENAI_AVAILABLE:
 async def check_wazuh_log(
     ctx: Context,
     query: str,
-    max_results: int = 100,
+    max_results: int = 15,
     days_range: int = 7,
     rebuild_cache: bool = False
 ) -> str:
     """
-    ULTRA SIMPLE RAW Wazuh Log Analysis - ZERO BULLSHIT!
+    Wazuh AI Threat Hunting dengan LLM Processing
     
-    Just dump raw database data and let LLM handle EVERYTHING!
+    Langkah 1: LLM mengolah pertanyaan user dan membuat query RAG
+    Langkah 2: RAG mengambil logs yang relevan 
+    Langkah 3: LLM menganalisis logs dan memberikan jawaban
     
-    IMPORTANT: This tool ONLY accepts these parameters:
-    - query: What you want to find (REQUIRED - include ALL search terms here)
-    - max_results: How many logs (default: 100) 
-    - days_range: Days back to search (default: 7)
-    - rebuild_cache: Not used - keeping for compatibility
-    
-    DO NOT USE: agent_ids, os_platform, status, group - put everything in query!
-    
-    Example correct usage:
-    query="XSS attack kali linux agent" (put OS, agent info in query text)
+    Args:
+        query: Pertanyaan user dalam bahasa natural
+        max_results: Maksimal logs yang diambil (default: 15)
+        days_range: Range hari untuk pencarian (default: 7)
+        rebuild_cache: Rebuild cache (tidak digunakan)
     
     Returns:
-        RAW analysis from LLM with ALL original database data
+        Analisis komprehensif dari LLM berdasarkan logs yang relevan
     """
     try:
-        await ctx.info(f"🔍 RAW Wazuh Analysis: {query} (past {days_range} days)")
+        await ctx.info(f"🔍 Memproses pertanyaan: {query}")
         
-        # OPTIMIZE QUERY - gabungkan semua informasi menjadi satu query yang komprehensif
-        optimized_query = query
+        # LANGKAH 1: LLM mengolah pertanyaan user dan membuat query untuk RAG
+        query_processing_prompt = f"""
+Saya adalah sistem AI threat hunting untuk Wazuh security logs. 
+
+PERTANYAAN USER: "{query}"
+
+Tugas saya: Buat search query yang optimal untuk mencari logs Wazuh yang relevan.
+
+Pertimbangkan:
+- Keywords kunci dari pertanyaan
+- Jenis ancaman/serangan yang dicari
+- Entity penting (IP, agent, rule, dll)
+- Konteks keamanan yang relevan
+
+Berikan search query yang fokus dan efektif:
+"""
         
-        # Auto-enhance query jika user menyebutkan OS atau agent tertentu
-        query_lower = query.lower()
-        if "kali linux" in query_lower or "kali" in query_lower:
-            if "kali" not in optimized_query.lower():
-                optimized_query += " kali linux client"
+        # Generate optimized search query using LLM
+        query_response = cag_system.lm_client.chat.completions.create(
+            model="qwen/qwen3-1.7b",
+            messages=[
+                {"role": "system", "content": "You are a cybersecurity expert. Create optimal search queries for Wazuh log analysis."},
+                {"role": "user", "content": query_processing_prompt}
+            ],
+            max_tokens=200,
+            temperature=0.3
+        )
         
-        if "xss" in query_lower:
-            if "cross-site scripting" not in optimized_query.lower():
-                optimized_query += " cross-site scripting attack"
+        processed_query = query_response.choices[0].message.content.strip()
+        await ctx.info(f"🔍 Query RAG yang dihasilkan: {processed_query}")
         
-        await ctx.info(f"🔍 Optimized search query: {optimized_query}")
-        
-        # SEMANTIC SEARCH DULU - CARI ROWS YANG RELEVAN!
-        # BATASI KE 15 ROWS MAX UNTUK AVOID TOKEN OVERFLOW
-        search_limit = min(15, max_results)  # MAX 15 rows only!
-        
+        # LANGKAH 2: RAG search menggunakan processed query
         relevant_logs = await cag_system.search(
-            query=optimized_query,  # Gunakan optimized query
-            k=search_limit  # Hanya 15 rows terbaik
+            query=processed_query,
+            k=max_results
         )
         
         if not relevant_logs:
-            return "No relevant logs found for your query"
+            return "Tidak ditemukan logs yang relevan untuk pertanyaan Anda"
         
-        # DUMP HANYA ROWS RELEVAN - SEMUA KOLOM TAPI TRUNCATED!
+        # LANGKAH 3: Dump SEMUA data tanpa truncation (32K token capacity)
         raw_data_prompt = f"""
-QUERY: {query}
+PERTANYAAN USER: {query}
+PROCESSED QUERY: {processed_query}
 
-RAW WAZUH DATABASE DUMP ({len(relevant_logs)} MOST RELEVANT ROWS - ALL COLUMNS):
+RAW WAZUH DATABASE LOGS ({len(relevant_logs)} RECORDS - ALL COLUMNS FULL DATA):
 ==============================================================================
 
 """
         
         for i, log in enumerate(relevant_logs, 1):
-            raw_data_prompt += f"LOG #{i} (Relevance: {log.get('similarity_score', log.get('threat_score', 0)):.3f}):\n"
+            raw_data_prompt += f"LOG #{i} (Relevance Score: {log.get('similarity_score', log.get('threat_score', 0)):.3f}):\n"
             
-            # DUMP SEMUA KOLOM TAPI TRUNCATE YANG TERLALU PANJANG!
+            # DUMP SEMUA KOLOM TANPA TRUNCATION - FULL DATA
             for key, value in log.items():
-                # Convert value to string and truncate if too long
                 str_value = str(value) if value is not None else "N/A"
-                
-                # Truncate very long fields to save tokens
-                if len(str_value) > 500:
-                    str_value = str_value[:500] + "...[TRUNCATED]"
-                
                 raw_data_prompt += f"{key}: {str_value}\n"
             raw_data_prompt += "---\n"
         
         raw_data_prompt += f"""
 
-INSTRUCTIONS:
-Analyze the above {len(relevant_logs)} SEMANTICALLY RELEVANT Wazuh database records to answer: "{query}"
+INSTRUKSI ANALISIS:
+Berdasarkan {len(relevant_logs)} logs Wazuh di atas, jawab pertanyaan user: "{query}"
 
-These rows were pre-selected as MOST RELEVANT to your query using semantic search.
-Find and extract ALL information including:
-- IP addresses from ANY field (json_data, full_log, etc.)
-- Attack patterns and payloads from ANY field
-- Timestamps, agents, rules, locations
-- ANY security-related data
+Analisis yang komprehensif dengan:
+- Ekstraksi semua informasi relevan dari SEMUA field
+- Identifikasi pola serangan dan indikator ancaman
+- Analisis timeline dan correlation events
+- IP addresses, payloads, attack vectors dari field manapun
+- Rekomendasi keamanan berdasarkan temuan
 
-Give me comprehensive analysis with specific examples from the RAW data.
+Berikan analisis detail dengan contoh spesifik dari data mentah.
 """
         
-        await ctx.info(f"📤 Sending {len(relevant_logs)} relevant logs to LLM (token-optimized)")
+        await ctx.info(f"📤 Mengirim {len(relevant_logs)} logs ke LLM untuk analisis final")
         
-        # LET LLM DO ALL THE WORK WITH RELEVANT RAW DATA ONLY!
-        analysis = cag_system.lm_client.chat.completions.create(
+        # LANGKAH 4: LLM analisis final
+        final_analysis = cag_system.lm_client.chat.completions.create(
             model="qwen/qwen3-1.7b",
             messages=[
-                {"role": "system", "content": "You are a cybersecurity analyst. Analyze semantically relevant raw Wazuh database dumps thoroughly and extract ALL useful information."},
+                {"role": "system", "content": "Anda adalah analis keamanan cyber expert. Analisis logs Wazuh secara menyeluruh dan berikan jawaban komprehensif dalam bahasa Indonesia."},
                 {"role": "user", "content": raw_data_prompt}
             ],
-            max_tokens=2000,
-            temperature=0.1
+            max_tokens=3000,
+            temperature=0.2
         )
         
-        return analysis.choices[0].message.content
+        return final_analysis.choices[0].message.content
 
     except Exception as e:
-        error_msg = f"Wazuh log analysis error: {str(e)}"
+        error_msg = f"Error dalam analisis Wazuh: {str(e)}"
         await ctx.error(error_msg)
         return json.dumps({
             "status": "error",
             "error": error_msg,
-            "analysis_period": f"past {days_range} days"
-        }, indent=2)
-        await ctx.info(f"🚨 CAG Threat Analysis Complete: {len(security_logs)} raw logs analyzed")
-        return analysis.choices[0].message.content
-
-    except Exception as e:
-        error_msg = f"CAG threat hunting error: {str(e)}"
-        await ctx.error(error_msg)
-        return json.dumps({
-            "status": "analysis_error",
-            "error": error_msg,
             "query": query,
-            "methodology": "Cache-Augmented Generation (CAG)",
-            "recommendation": "Check CAG system initialization and LM Studio connectivity"
+            "analysis_period": f"past {days_range} days"
         }, indent=2)
 
 # =============================================================================
