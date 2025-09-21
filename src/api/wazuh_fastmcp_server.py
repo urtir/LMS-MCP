@@ -76,26 +76,56 @@ except ImportError as e:
 # Initialize FastMCP server for Wazuh AI threat hunting
 mcp = FastMCP("Wazuh AI Threat Hunting Server")
 
-# Configuration using JSON config
+# Configuration using JSON config - NO FALLBACKS!
 class WazuhConfig:
     def __init__(self):
-        self.base_url = config.get("network.WAZUH_API_URL", "https://localhost:55000")
-        self.username = config.get("wazuh.WAZUH_USERNAME", "wazuh-wui")
-        self.password = config.get("security.WAZUH_PASSWORD", "MyS3cr37P450r.*-")
-        self.verify_ssl = config.get("wazuh.WAZUH_VERIFY_SSL", "false").lower() == "true"
-        self.timeout = int(config.get("wazuh.WAZUH_TIMEOUT", "30"))
+        # NO FALLBACKS - FORCE FROM CONFIG!
+        self.base_url = config.get("network.WAZUH_API_URL")
+        self.username = config.get("wazuh.WAZUH_USERNAME")
+        self.password = config.get("security.WAZUH_PASSWORD")
+        self.verify_ssl = config.get("wazuh.WAZUH_VERIFY_SSL").lower() == "true"
+        self.timeout = int(config.get("wazuh.WAZUH_TIMEOUT"))
+        self.critical_level = int(config.get("security_thresholds.CRITICAL_RULE_LEVEL"))
+        self.high_level = int(config.get("security_thresholds.HIGH_RULE_LEVEL"))
+        self.medium_level = int(config.get("security_thresholds.MEDIUM_RULE_LEVEL"))
+        self.critical_score = float(config.get("security_thresholds.CRITICAL_SCORE"))
+        self.high_score = float(config.get("security_thresholds.HIGH_SCORE"))
+        self.medium_score = float(config.get("security_thresholds.MEDIUM_SCORE"))
         self._token = None
         self._token_expires = None
+        
+        # Validate required config
+        if not all([self.base_url, self.username, self.password]):
+            raise ValueError("Missing required Wazuh config in JSON!")
 
 wazuh_config = WazuhConfig()
 
-# LM Studio Configuration for CAG using JSON config
+# LM Studio Configuration for CAG using JSON config - NO FALLBACKS!
 class LMStudioConfig:
     def __init__(self):
-        self.base_url = config.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1')
-        self.api_key = config.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio')
-        self.model = config.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b')
+        # NO FALLBACKS - FORCE FROM CONFIG!
+        self.base_url = config.get('network.LM_STUDIO_BASE_URL')
+        self.api_key = config.get('ai_model.LM_STUDIO_API_KEY')
+        self.model = config.get('ai_model.LM_STUDIO_MODEL')
+        self.max_tokens = int(config.get('ai_model.AI_MAX_TOKENS'))
+        self.temperature = float(config.get('ai_model.AI_TEMPERATURE'))
+        self.estimated_tokens_per_log = int(config.get('ai_model.ESTIMATED_TOKENS_PER_LOG'))
+        self.system_prompt_tokens = int(config.get('ai_model.SYSTEM_PROMPT_TOKENS'))
+        self.max_log_limit = int(config.get('ai_model.MAX_LOG_LIMIT'))
+        self.small_batch_size = int(config.get('ai_model.SMALL_BATCH_SIZE'))
+        self.large_batch_size = int(config.get('ai_model.LARGE_BATCH_SIZE'))
+        self.embedding_dimension = int(config.get('ai_model.EMBEDDING_DIMENSION'))
+        self.default_days_range = int(config.get('performance.DEFAULT_DAYS_RANGE'))
+        self.default_search_k = int(config.get('performance.DEFAULT_SEARCH_K'))
+        self.default_hybrid_search_k = int(config.get('performance.DEFAULT_HYBRID_SEARCH_K'))
+        self.tool_days_range = int(config.get('performance.TOOL_DAYS_RANGE'))
+        self.default_tool_max_results = int(config.get('performance.DEFAULT_TOOL_MAX_RESULTS'))
+        self.default_tool_limit = int(config.get('performance.DEFAULT_TOOL_LIMIT'))
         self.timeout = None
+        
+        # Validate required config
+        if not all([self.base_url, self.api_key, self.model, self.max_tokens, self.temperature]):
+            raise ValueError("Missing required LM Studio config in JSON!")
 
 lm_studio_config = LMStudioConfig()
 
@@ -207,7 +237,7 @@ class WazuhCAG:
     Reference: Cache-Augmented Generation approach vs traditional RAG
     """
     
-    def __init__(self, db_path: str = None):
+    def __init__(self, lm_studio_config, wazuh_config, db_path: str = None):
         if db_path is None:
             # Get path relative to project root
             current_dir = Path(__file__).parent
@@ -218,6 +248,12 @@ class WazuhCAG:
         self.cache_dir = "cag_cache"
         self.origin_len = 0
         self.knowledge_loaded = False
+        
+        # Store reference to lm_studio_config parameter
+        self.lm_studio_config = lm_studio_config
+        
+        # Initialize wazuh_config - also needed for rule level checks
+        self.wazuh_config = wazuh_config
         
         # Initialize semantic search components
         self.vector_store = None
@@ -257,7 +293,7 @@ class WazuhCAG:
             logger.info("Semantic search model loaded: all-MiniLM-L6-v2")
             
             # Initialize FAISS vector store
-            self.dimension = 384  # all-MiniLM-L6-v2 embedding dimension
+            self.dimension = lm_studio_config.embedding_dimension  # all-MiniLM-L6-v2 embedding dimension
             self.vector_store = faiss.IndexFlatIP(self.dimension)  # Inner product for cosine similarity
             
             self.semantic_search_enabled = True
@@ -279,8 +315,11 @@ Your expertise includes:
 
 Always focus on security-relevant insights from the provided log data. Respond in Indonesian language."""
     
-    async def get_security_logs_for_context(self, limit: int = None, agent_ids: List[str] = None, days_range: int = 30) -> List[Dict[str, Any]]:
+    async def get_security_logs_for_context(self, limit: int = None, agent_ids: List[str] = None, days_range: int = None) -> List[Dict[str, Any]]:
         """Retrieve security logs for building knowledge context - optimized for 64GB RAM system."""
+        if days_range is None:
+            days_range = self.lm_studio_config.default_days_range
+            
         try:
             conn = sqlite3.connect(self.db_path)
             conn.row_factory = sqlite3.Row  # Return rows as dictionaries
@@ -332,9 +371,9 @@ Always focus on security-relevant insights from the provided log data. Respond i
         knowledge_sections = []
         
         # Group logs by priority
-        critical_logs = [log for log in security_logs if log.get('rule_level', 0) >= 10]
-        high_logs = [log for log in security_logs if 7 <= log.get('rule_level', 0) < 10]
-        medium_logs = [log for log in security_logs if 4 <= log.get('rule_level', 0) < 7]
+        critical_logs = [log for log in security_logs if log.get('rule_level', 0) >= self.wazuh_config.critical_level]
+        high_logs = [log for log in security_logs if self.wazuh_config.high_level <= log.get('rule_level', 0) < self.wazuh_config.critical_level]
+        medium_logs = [log for log in security_logs if self.wazuh_config.medium_level <= log.get('rule_level', 0) < self.wazuh_config.high_level]
         
         # Add critical events
         if critical_logs:
@@ -405,22 +444,25 @@ Based on the comprehensive security logs above (including full_log content and a
         
         return system_prompt
     
-    async def create_knowledge_cache(self, limit: int = None, days_range: int = 30):
+    async def create_knowledge_cache(self, limit: int = None, days_range: int = None):
         """Create CAG knowledge cache from Wazuh security logs - optimized for 64GB RAM."""
         if not CAG_AVAILABLE:
             logger.error("CAG dependencies not available")
             return False
         
-        # Calculate optimal limit based on LM Studio's 32768 token capacity
-        # Estimate ~100 tokens per log entry, leaving room for system prompt
+        if days_range is None:
+            days_range = self.lm_studio_config.default_days_range
+        
+        # Calculate optimal limit based on LM Studio token capacity
+        # Estimate tokens per log entry, leaving room for system prompt
         if limit is None:
-            estimated_tokens_per_log = 100
-            system_prompt_tokens = 2000  # Reserve for system prompt
-            max_log_tokens = 32768 - system_prompt_tokens
+            estimated_tokens_per_log = self.lm_studio_config.estimated_tokens_per_log
+            system_prompt_tokens = self.lm_studio_config.system_prompt_tokens
+            max_log_tokens = self.lm_studio_config.max_tokens - system_prompt_tokens
             optimal_limit = max_log_tokens // estimated_tokens_per_log
-            limit = min(optimal_limit, 25000)  # Cap at 25k for safety
+            limit = min(optimal_limit, self.lm_studio_config.max_log_limit)
             
-        await self.info_log(f"🔄 Building CAG knowledge cache from up to {limit} security logs (32K token optimized)...")
+        await self.info_log(f"🔄 Building CAG knowledge cache from up to {limit} security logs ({self.lm_studio_config.max_tokens} token optimized)...")
         
         # Get security logs without artificial restrictions
         security_logs = await self.get_security_logs_for_context(limit, days_range=days_range)
@@ -447,13 +489,17 @@ Based on the comprehensive security logs above (including full_log content and a
         logger.info(f"✅ CAG knowledge cache built with {len(security_logs)} security events")
         return True
     
-    async def query_with_cache(self, user_query: str, max_tokens: int = 800) -> str:
+    async def query_with_cache(self, user_query: str, max_tokens: int = None) -> str:
         """Query the cached knowledge using LM Studio LLM."""
         if not self.lm_client:
             return "LM Studio client not available"
         
         if not self.knowledge_loaded:
             await self.create_knowledge_cache()
+        
+        # Use config max_tokens if not specified
+        if max_tokens is None:
+            max_tokens = lm_studio_config.max_tokens // 4  # Use 1/4 of max for cache queries
         
         try:
             # Combine cached knowledge with user query
@@ -469,7 +515,7 @@ Based on the comprehensive security logs above (including full_log content and a
                     }
                 ],
                 max_tokens=max_tokens,
-                temperature=0.7
+                temperature=lm_studio_config.temperature  # NO HARDCODED!
             )
             
             return response.choices[0].message.content
@@ -478,11 +524,14 @@ Based on the comprehensive security logs above (including full_log content and a
             logger.error(f"Error querying CAG cache: {e}")
             return f"Error generating response: {str(e)}"
     
-    async def build_vector_embeddings(self, force_rebuild: bool = False, days_range: int = 30):
+    async def build_vector_embeddings(self, force_rebuild: bool = False, days_range: int = None):
         """Build vector embeddings for all security logs - optimized for 64GB RAM."""
         if not self.semantic_search_enabled:
             logger.warning("Semantic search not available - skipping vector embeddings")
             return
+        
+        if days_range is None:
+            days_range = self.lm_studio_config.default_days_range
         
         embeddings_cache_path = os.path.join(self.cache_dir, "log_embeddings.npz")
         
@@ -513,12 +562,12 @@ Based on the comprehensive security logs above (including full_log content and a
             await self.info_log(f"📊 Creating embeddings for {len(logs)} security logs...")
             
             # Process in batches to manage memory efficiently
-            batch_size = 5000  # Process 5K logs at a time
+            batch_size = self.lm_studio_config.small_batch_size
             all_embeddings = []
             all_log_ids = []
             
             # Process ALL logs in batches to manage memory efficiently
-            batch_size = 10000  # Larger batches for 64GB RAM system
+            batch_size = self.lm_studio_config.large_batch_size
             total_batches = (len(logs) + batch_size - 1) // batch_size
             
             await self.info_log(f"🔄 Processing {len(logs)} logs in {total_batches} batches of {batch_size}...")
@@ -588,10 +637,14 @@ Based on the comprehensive security logs above (including full_log content and a
         except Exception as e:
             logger.error(f"Error building vector embeddings: {e}")
     
-    async def semantic_search_logs(self, query: str, k: int = 10, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
+    async def semantic_search_logs(self, query: str, k: int = None, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
         """Perform semantic search on security logs using vector similarity."""
         if not self.semantic_search_enabled:
             logger.warning("Semantic search not available")
+            return []
+        
+        if k is None:
+            k = self.lm_studio_config.default_search_k
             return []
         
         try:
@@ -654,7 +707,7 @@ Based on the comprehensive security logs above (including full_log content and a
             logger.error(f"Error in semantic search: {e}")
             return []
     
-    async def search(self, query: str, k: int = 20, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
+    async def search(self, query: str, k: int = None, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
         """
         Pure semantic search untuk hasil yang optimal - TANPA keyword optimization.
         
@@ -662,6 +715,9 @@ Based on the comprehensive security logs above (including full_log content and a
         1. Semantic vector search untuk log retrieval yang tepat
         2. CAG cached knowledge untuk context
         """
+        if k is None:
+            k = self.lm_studio_config.default_hybrid_search_k
+            
         try:
             # Generate response using cached knowledge
             cag_response = await self.query_with_cache(query)
@@ -699,11 +755,11 @@ Based on the comprehensive security logs above (including full_log content and a
         """Determine threat priority based on rule level and relevance."""
         rule_level = log.get('rule_level', 0)
         
-        if rule_level >= 10 or relevance_score >= 0.8:
+        if rule_level >= self.wazuh_config.critical_level or relevance_score >= self.wazuh_config.critical_score:
             return "CRITICAL"
-        elif rule_level >= 7 or relevance_score >= 0.6:
+        elif rule_level >= self.wazuh_config.high_level or relevance_score >= self.wazuh_config.high_score:
             return "HIGH"
-        elif rule_level >= 4 or relevance_score >= 0.4:
+        elif rule_level >= self.wazuh_config.medium_level or relevance_score >= self.wazuh_config.medium_score:
             return "MEDIUM"
         else:
             return "LOW"
@@ -735,7 +791,7 @@ Based on the comprehensive security logs above (including full_log content and a
         logger.info(message)
 
 # Initialize Wazuh CAG (Cache-Augmented Generation) system
-cag_system = WazuhCAG()
+cag_system = WazuhCAG(lm_studio_config, wazuh_config)
 
 # Auto-initialize CAG cache with security logs on server startup
 async def initialize_cag_system():
@@ -777,8 +833,8 @@ if CAG_AVAILABLE or OPENAI_AVAILABLE:
 async def check_wazuh_log(
     ctx: Context,
     query: str,
-    max_results: int = 15,
-    days_range: int = 7,
+    max_results: int = None,
+    days_range: int = None,
     rebuild_cache: bool = False
 ) -> str:
     """
@@ -791,12 +847,17 @@ async def check_wazuh_log(
     Args:
         query: Pertanyaan user dalam bahasa natural
         max_results: Maksimal logs yang diambil (default: 15)
-        days_range: Range hari untuk pencarian (default: 7)
+        days_range: Range hari untuk pencarian (uses config default)
         rebuild_cache: Rebuild cache (tidak digunakan)
     
     Returns:
         Analisis komprehensif dari LLM berdasarkan logs yang relevan
     """
+    if days_range is None:
+        days_range = lm_studio_config.tool_days_range
+    if max_results is None:
+        max_results = lm_studio_config.default_tool_max_results
+        
     try:
         await ctx.info(f"🔍 Memproses pertanyaan: {query}")
         
@@ -819,13 +880,13 @@ Berikan search query yang fokus dan efektif:
         
         # Generate optimized search query using LLM
         query_response = cag_system.lm_client.chat.completions.create(
-            model="qwen/qwen3-1.7b",
+            model=lm_studio_config.model,  # Use config for model
             messages=[
                 {"role": "system", "content": "You are a cybersecurity expert. Create optimal search queries for Wazuh log analysis."},
                 {"role": "user", "content": query_processing_prompt}
             ],
-            max_tokens=200,
-            temperature=0.3
+            max_tokens=lm_studio_config.max_tokens // 160,  # Use config-based calculation (32000/160 = 200)
+            temperature=lm_studio_config.temperature  # NO HARDCODED!
         )
         
         processed_query = query_response.choices[0].message.content.strip()
@@ -878,13 +939,13 @@ Berikan analisis detail dengan contoh spesifik dari data mentah.
         
         # LANGKAH 4: LLM analisis final
         final_analysis = cag_system.lm_client.chat.completions.create(
-            model="qwen/qwen3-1.7b",
+            model=lm_studio_config.model,  # Use config for model
             messages=[
                 {"role": "system", "content": "Anda adalah analis keamanan cyber expert. Analisis logs Wazuh secara menyeluruh dan berikan jawaban komprehensif dalam bahasa Indonesia."},
                 {"role": "user", "content": raw_data_prompt}
             ],
-            max_tokens=3000,
-            temperature=0.2
+            max_tokens=lm_studio_config.max_tokens,  # Use config for max_tokens!
+            temperature=lm_studio_config.temperature  # NO HARDCODED!
         )
         
         return final_analysis.choices[0].message.content

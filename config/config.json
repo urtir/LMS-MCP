@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "created": "2025-09-21T15:35:17.066149",
-    "last_updated": "2025-09-21T20:54:35.605952",
+    "last_updated": "2025-09-21T22:28:03.912616",
     "description": "LMS MCP Centralized Configuration"
   },
   "security": {
@@ -31,23 +31,39 @@
     "WAZUH_DB_NAME": "wazuh_archives.db"
   },
   "ai_model": {
-    "AI_MAX_TOKENS": "32000",
+    "AI_MAX_TOKENS": "32768",
     "AI_TEMPERATURE": "0.8",
     "LM_STUDIO_API_KEY": "lm-studio",
-    "LM_STUDIO_MODEL": "qwen/qwen3-1.7b"
+    "LM_STUDIO_MODEL": "qwen/qwen3-1.7b",
+    "ESTIMATED_TOKENS_PER_LOG": "100",
+    "SYSTEM_PROMPT_TOKENS": "2000",
+    "MAX_LOG_LIMIT": "25000",
+    "SMALL_BATCH_SIZE": "5000",
+    "LARGE_BATCH_SIZE": "10000",
+    "EMBEDDING_DIMENSION": "384"
   },
   "performance": {
     "CACHE_BUILD_LIMIT": "10000",
     "DEFAULT_MAX_RESULTS": "100",
     "MAX_LOG_LENGTH": "10000",
-    "MAX_RAG_CONTENT": "20000"
+    "MAX_RAG_CONTENT": "20000",
+    "DEFAULT_DAYS_RANGE": "30",
+    "DEFAULT_SEARCH_K": "10",
+    "DEFAULT_HYBRID_SEARCH_K": "20",
+    "TOOL_DAYS_RANGE": "7",
+    "DEFAULT_TOOL_MAX_RESULTS": "15",
+    "DEFAULT_TOOL_LIMIT": "100"
   },
   "security_thresholds": {
     "AGENT_ACTIVE_THRESHOLD": "100",
-    "CRITICAL_RULE_LEVEL": "6",
+    "CRITICAL_RULE_LEVEL": "10",
     "DEFAULT_DAYS_RANGE": "7",
     "EMERGENCY_RULE_LEVEL": "8",
-    "HIGH_RULE_LEVEL": "7"
+    "HIGH_RULE_LEVEL": "7",
+    "MEDIUM_RULE_LEVEL": "4",
+    "CRITICAL_SCORE": "0.8",
+    "HIGH_SCORE": "0.6",
+    "MEDIUM_SCORE": "0.4"
   },
   "wazuh": {
     "WAZUH_TIMEOUT": "30",

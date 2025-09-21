@@ -5,15 +5,13 @@ echo ========================================
 
 cd /d "c:\Users\risqu\Desktop\LMS MCP"
 
-echo Setting up environment...
-set FLASK_DEBUG=false
-set FLASK_HOST=127.0.0.1
-set FLASK_PORT=5000
+echo All configuration loaded from config.json
+echo No hardcoded environment variables used
 
 echo.
 echo Starting webapp server...
-echo Admin panel will be available at:
-echo http://127.0.0.1:5000/admin
+echo Admin panel will be available at config-defined host:port/admin
+echo Check config.json for flask.FLASK_HOST and flask.FLASK_PORT values
 echo.
 echo Note: Login as 'admin' user to access admin panel
 echo.

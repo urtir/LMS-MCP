@@ -57,6 +57,9 @@ from src.database import ChatDatabase
 from src.api import FastMCPBridge
 from openai import OpenAI
 
+# Import webapp chatbot components for consistency
+from src.webapp.webapp_chatbot import ChatSession, process_chat_message
+
 # Import config and other telegram modules
 # Use internal telegram config
 from src.utils.telegram_config import TelegramBotConfig
@@ -73,9 +76,9 @@ class TelegramSecurityBot:
         self.config = TelegramBotConfig()
         
         # Setup database paths from JSON configuration
-        database_dir = config.get('database.DATABASE_DIR', './data')
-        self.wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db') 
-        self.chat_db_name = config.get('database.CHAT_DB_NAME', 'chat_history.db')
+        database_dir = config.get('database.DATABASE_DIR')
+        self.wazuh_db_name = config.get('database.WAZUH_DB_NAME') 
+        self.chat_db_name = config.get('database.CHAT_DB_NAME')
         
         # Build full paths
         self.wazuh_db_path = os.path.join(database_dir, self.wazuh_db_name)
@@ -364,7 +367,7 @@ Pilih menu di bawah untuk memulai:
         logger.info(f"User {user_id} disabled realtime alerts")
     
     async def handle_question(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        """Handle security questions using RAG system dengan logging detail seperti FastMCP server"""
+        """Handle security questions using SAME SYSTEM as webapp chatbot"""
         user_id = update.effective_user.id
         user_question = update.message.text
         
@@ -375,151 +378,61 @@ Pilih menu di bawah untuk memulai:
         # Check if user is in question mode - auto activate untuk semua message
         if user_id not in self.chat_sessions:
             session_id = self.chat_db.create_session(f"Telegram_{user_id}_{int(time.time())}")
+            # Use SAME ChatSession class as webapp chatbot
+            chat_session = ChatSession(session_id)
             self.chat_sessions[user_id] = {
                 'mode': 'question',
-                'session_id': session_id
+                'session_id': session_id,
+                'chat_session': chat_session  # Add actual ChatSession object
             }
         
+        chat_session = self.chat_sessions[user_id]['chat_session']
         session_id = self.chat_sessions[user_id]['session_id']
         
-        # === DETAILED LOGGING SEPERTI FASTMCP SERVER ===
-        logger.info(f"=== PROCESSING MESSAGE FOR SESSION {session_id} ===")
+        # Initialize tools if not already done (SAME as webapp)
+        await chat_session.initialize_tools()
         
-        # Get session message count
-        try:
-            messages = self.chat_db.get_messages(session_id)
-            message_count = len(messages)
-            logger.info(f"Session has {message_count} messages")
-        except:
-            message_count = 0
-            logger.info(f"Session has 0 messages (new session)")
-        
-        # Show available MCP tools count 
-        logger.info(f"Available MCP tools: 58")  # Static count dari FastMCP server
+        # Add user message to session (SAME as webapp)
+        chat_session.add_message("user", user_question)
         
         # Show typing indicator
         await context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
         
         try:
-            # === LANGKAH 1: REQUEST KE LM STUDIO UNTUK TOOL CALL ===
-            logger.info(f"Sending request to LM Studio: {self.config.LM_STUDIO_CONFIG['base_url']}")
-            logger.info(f"Model: {self.config.LM_STUDIO_CONFIG['model']}")
+            # === USE MODIFIED PROCESS FOR TELEGRAM BOT (ASYNC COMPATIBLE) ===
             
-            # Buat system prompt yang mendukung tool calling
-            system_prompt = """You are a cybersecurity assistant with access to Wazuh security analysis tools.
-
-Available tools:
-- check_wazuh_log: Analyze Wazuh security logs based on user query
-
-When user asks security questions, use the check_wazuh_log tool to get relevant data, then provide analysis.
-
-Always call tools when users ask about:
-- Security events, attacks, threats
-- Log analysis, incidents
-- Agent status, system monitoring
-- Malware, intrusions, vulnerabilities
-
-Respond in Indonesian language."""
-
-            # First LLM call untuk determine tool usage
-            initial_response = self.llm_client.chat.completions.create(
-                model=self.config.LM_STUDIO_CONFIG['model'],
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"Analyze this security question and determine if check_wazuh_log tool should be used: {user_question}"}
-                ],
-                temperature=0.1,
-                max_tokens=100
-            )
+            logger.info(f"=== PROCESSING MESSAGE FOR SESSION {session_id} ===")
+            logger.info(f"Using MODIFIED async-compatible system for Telegram bot")
             
-            logger.info("LM Studio response received successfully")
+            # Call our async-compatible version instead of webapp function
+            result = await self.process_chat_message_async(chat_session, session_id)
             
-            # === LANGKAH 2: TOOL EXECUTION ===
-            # Selalu gunakan check_wazuh_log untuk security questions
-            logger.info("Processing 1 tool calls")
-            logger.info("Executing tool 1/1: check_wazuh_log")
+            if "error" in result:
+                error_message = f"❌ Error processing question: {result['error']}"
+                await update.message.reply_text(error_message)
+                logger.error(f"Chat processing error: {result['error']}")
+                return
             
-            # Save user message to database first
-            self.chat_db.add_message(session_id, "user", user_question)
+            # Get the response content (webapp returns "response" key, not "content")
+            response_content = result.get("response", "Maaf, tidak ada response yang dihasilkan.")
             
-            # Execute MCP tool dengan logging detail
-            logger.info(f"Executing tool: check_wazuh_log with args: {{'query': '{user_question}'}}")
+            # Clean response for Telegram (remove think tags, etc.)
+            response_content = self._remove_think_tags(response_content)
+            response_content = self._clean_markdown(response_content)
             
-            rag_response = await self.mcp_bridge.execute_tool(
-                "check_wazuh_log",
-                {
-                    "query": user_question,
-                    "max_results": 15,  # Sesuai dengan server update
-                    "days_range": 7
-                }
-            )
+            # NOTE: No need to save to database again - process_chat_message already saved it
             
-            # Check if tool execution was successful
-            if rag_response.get('status') != 'success':
-                logger.error(f"Tool check_wazuh_log execution failed: {rag_response.get('message', 'Unknown error')}")
-                raise Exception(f"RAG query failed: {rag_response.get('message', 'Unknown error')}")
+            # Split long responses for Telegram
+            max_length = 4096  # Telegram message limit
+            if len(response_content) > max_length:
+                parts = [response_content[i:i+max_length] for i in range(0, len(response_content), max_length)]
+                for part in parts:
+                    await update.message.reply_text(part, parse_mode='Markdown')
+            else:
+                await update.message.reply_text(response_content, parse_mode='Markdown')
             
-            logger.info("Tool check_wazuh_log executed successfully")
-            
-            # === LANGKAH 3: FINAL RESPONSE GENERATION ===
-            logger.info("Getting final response from LM Studio after tool execution...")
-            
-            # Extract content from response
-            rag_content = rag_response.get('content', 'No data found')
-            
-            # Final LLM call untuk generate comprehensive response
-            final_response = self.llm_client.chat.completions.create(
-                model=self.config.LM_STUDIO_CONFIG['model'],
-                messages=[
-                    {
-                        "role": "system",
-                        "content": """You are a cybersecurity expert analyzing Wazuh security data. 
-                        Provide comprehensive analysis in Indonesian language.
-                        
-                        Focus on:
-                        - Threat identification and analysis
-                        - Security recommendations
-                        - Specific details from logs
-                        - Actionable insights
-                        
-                        Format response professionally with clear sections."""
-                    },
-                    {
-                        "role": "user", 
-                        "content": f"USER QUESTION: {user_question}\n\nWAZUH ANALYSIS RESULT:\n{rag_content}"
-                    }
-                ],
-                temperature=self.config.LM_STUDIO_CONFIG['temperature'],
-                max_tokens=1500
-            )
-            
-            logger.info("Final response received from LM Studio")
-            
-            answer = final_response.choices[0].message.content
-            
-            # Remove <think> tags from LLM response
-            answer = self._remove_think_tags(answer)
-            
-            # === LANGKAH 4: SAVE TO DATABASE ===
-            logger.info("Saving assistant message to database...")
-            self.chat_db.add_message(session_id, "assistant", answer)
-            logger.info("Message saved to database successfully")
-            
-            # === LANGKAH 5: SEND RESPONSE ===
-            # Send response with fallback for markdown parsing errors
-            try:
-                await update.message.reply_text(answer, parse_mode='Markdown')
-            except Exception as markdown_error:
-                logger.warning(f"Markdown parsing failed, sending as plain text: {markdown_error}")
-                try:
-                    clean_answer = self._clean_markdown(answer)
-                    await update.message.reply_text(clean_answer, parse_mode='Markdown')
-                except Exception:
-                    plain_answer = self._strip_markdown(answer)
-                    await update.message.reply_text(plain_answer)
-            
-            # === FINAL LOGGING ===
-            logger.info(f"Chat processing complete. Response length: {len(answer)} characters")
+            logger.info("Response sent successfully to Telegram")
+            logger.info(f"Chat processing complete. Response length: {len(response_content)} characters")
             logger.info(f"✅ Question answered for user {user_id}")
             
         except Exception as e:
@@ -1090,17 +1003,35 @@ Commands:
         logger.info("🔕 Realtime alert monitoring stopped")
     
     def _remove_think_tags(self, text: str) -> str:
-        """Remove <think> tags and their content from LLM response"""
+        """Remove <think> tags and their content from LLM response - AGGRESSIVE VERSION"""
         import re
         
-        # Remove <think>...</think> blocks (case insensitive, multiline)
+        if not text:
+            return text
+        
+        # Remove <think>...</think> blocks (case insensitive, multiline, greedy)
         text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
         
         # Remove any remaining opening or closing think tags
         text = re.sub(r'</?think>', '', text, flags=re.IGNORECASE)
         
-        # Clean up extra whitespace/newlines
-        text = re.sub(r'\n\s*\n', '\n\n', text)  # Replace multiple newlines with double newline
+        # Also handle cases where think content might be at the beginning
+        # Remove everything from start until first non-think content
+        lines = text.split('\n')
+        cleaned_lines = []
+        found_content = False
+        
+        for line in lines:
+            line_stripped = line.strip()
+            # Skip empty lines and think-related content at start
+            if not found_content and (not line_stripped or 'think' in line_stripped.lower()):
+                continue
+            found_content = True
+            cleaned_lines.append(line)
+        
+        # Rejoin and clean up extra whitespace/newlines
+        text = '\n'.join(cleaned_lines)
+        text = re.sub(r'\n\s*\n\s*\n', '\n\n', text)  # Replace multiple newlines with double newline
         text = text.strip()  # Remove leading/trailing whitespace
         
         return text
@@ -1136,6 +1067,157 @@ Commands:
         text = text.replace('_', ' ')                   # Replace underscores
         
         return text
+    
+    async def process_chat_message_async(self, session: "ChatSession", session_id: str) -> Dict[str, Any]:
+        """Process chat message with LM Studio and MCP tools (ASYNC VERSION for Telegram)"""
+        try:
+            logger.info(f"=== PROCESSING MESSAGE FOR SESSION {session.session_id} ===")
+            logger.info(f"Session has {len(session.get_messages())} messages")
+            logger.info(f"Available MCP tools: {len(session.mcp_tools) if session.mcp_tools else 0}")
+            
+            # Get LM Studio response with tools
+            logger.info(f"Sending request to LM Studio: {self.config.LM_STUDIO_CONFIG['base_url']}")
+            logger.info(f"Model: {self.config.LM_STUDIO_CONFIG['model']}")
+            
+            messages = session.get_messages()
+            logger.debug(f"Messages to send: {messages}")
+            
+            response = self.llm_client.chat.completions.create(
+                model=self.config.LM_STUDIO_CONFIG['model'],
+                messages=messages,
+                tools=session.mcp_tools,
+                tool_choice="auto"
+            )
+            
+            logger.info("LM Studio response received successfully")
+            
+            assistant_message = response.choices[0].message
+            tool_results = []
+            
+            if assistant_message.tool_calls:
+                logger.info(f"Processing {len(assistant_message.tool_calls)} tool calls")
+                
+                # Add assistant message with tool calls
+                session.messages.append({
+                    "role": "assistant",
+                    "tool_calls": [
+                        {
+                            "id": tool_call.id,
+                            "type": tool_call.type,
+                            "function": tool_call.function,
+                        }
+                        for tool_call in assistant_message.tool_calls
+                    ],
+                })
+                
+                # Execute each tool call (ASYNC VERSION)
+                for i, tool_call in enumerate(assistant_message.tool_calls):
+                    try:
+                        tool_name = tool_call.function.name
+                        arguments = json.loads(tool_call.function.arguments)
+                        
+                        logger.info(f"Executing tool {i+1}/{len(assistant_message.tool_calls)}: {tool_name}")
+                        logger.debug(f"Tool arguments: {arguments}")
+                        
+                        # Execute MCP tool (AWAIT instead of asyncio.run)
+                        result = await self.mcp_bridge.execute_tool(tool_name, arguments)
+                        logger.info(f"Tool {tool_name} executed successfully")
+                        logger.debug(f"Tool result: {result}")
+                        
+                        # Log actual tool content for debugging
+                        if result and "content" in result:
+                            content_preview = str(result["content"])[:200] + "..." if len(str(result["content"])) > 200 else str(result["content"])
+                            logger.info(f"Tool content preview: {content_preview}")
+                        
+                        tool_results.append({
+                            "name": tool_name,
+                            "arguments": arguments,
+                            "result": result
+                        })
+                        
+                        # Add tool result to messages
+                        session.messages.append({
+                            "role": "tool",
+                            "content": json.dumps(result),
+                            "tool_call_id": tool_call.id,
+                        })
+                        
+                    except Exception as e:
+                        logger.error(f"Tool execution error for {tool_call.function.name}: {e}", exc_info=True)
+                        error_result = {
+                            "status": "error",
+                            "message": str(e),
+                            "tool_name": tool_call.function.name
+                        }
+                        tool_results.append({
+                            "name": tool_call.function.name,
+                            "arguments": {},
+                            "result": error_result
+                        })
+                        
+                        session.messages.append({
+                            "role": "tool",
+                            "content": json.dumps(error_result),
+                            "tool_call_id": tool_call.id,
+                        })
+                
+                # Get final response after tool execution
+                logger.info("Getting final response from LM Studio after tool execution...")
+                final_response = self.llm_client.chat.completions.create(
+                    model=self.config.LM_STUDIO_CONFIG['model'],
+                    messages=session.get_messages()
+                )
+                
+                final_message = final_response.choices[0].message.content
+                logger.info("Final response received from LM Studio")
+                logger.debug(f"Final message: {final_message}")
+                
+                # Clean think tags immediately from final message
+                if final_message:
+                    cleaned_message = self._remove_think_tags(final_message)
+                    logger.info(f"Message cleaned from think tags. Original length: {len(final_message) if final_message else 0}, Cleaned length: {len(cleaned_message)}")
+                    final_message = cleaned_message
+                
+                session.add_message("assistant", final_message)
+                
+                # Save assistant message to database with tool usage
+                logger.info("Saving assistant message to database...")
+                self.chat_db.add_message(session_id, "assistant", final_message, tool_results)
+                logger.info("Message saved to database successfully")
+                
+                return {
+                    "response": final_message,
+                    "tool_calls": tool_results,
+                    "thinking": None,
+                    "session_id": session.session_id
+                }
+            
+            else:
+                # No tool calls, regular response
+                logger.info("No tool calls - processing regular response")
+                response_text = assistant_message.content
+                logger.debug(f"Response text: {response_text}")
+                
+                session.add_message("assistant", response_text)
+                
+                # Save assistant message to database
+                logger.info("Saving regular response to database...")
+                self.chat_db.add_message(session_id, "assistant", response_text)
+                logger.info("Response saved to database successfully")
+                
+                return {
+                    "response": response_text,
+                    "tool_calls": [],
+                    "thinking": None,
+                    "session_id": session.session_id
+                }
+        
+        except Exception as e:
+            logger.error(f"ERROR PROCESSING CHAT MESSAGE: {e}", exc_info=True)
+            return {
+                "error": f"Failed to process message: {str(e)}",
+                "session_id": session.session_id
+            }
 
 # Main execution
 def main():

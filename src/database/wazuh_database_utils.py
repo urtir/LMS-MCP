@@ -27,8 +27,8 @@ class WazuhDatabaseQuery:
     def __init__(self, db_path: str = None):
         if db_path is None:
             # Use JSON configuration for database settings
-            database_dir = config.get('database.DATABASE_DIR', './data')
-            wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+            database_dir = config.get('database.DATABASE_DIR')
+            wazuh_db_name = config.get('database.WAZUH_DB_NAME')
             db_path = os.path.join(database_dir, wazuh_db_name)
             
             # Ensure absolute path

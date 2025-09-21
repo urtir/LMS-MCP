@@ -1,5 +1,12 @@
 """
-Telegram Bot Configuration Module
+Telegram Bot Con        self.BOT_TOKEN = config_manager.get('security.TELEGRAM_BOT_TOKEN')
+        
+        # LM Studio configuration - NO FALLBACKS!
+        self.LM_STUDIO = {
+            'base_url': config_manager.get('network.LM_STUDIO_BASE_URL'),
+            'api_key': config_manager.get('ai_model.LM_STUDIO_API_KEY'),
+            'model': config_manager.get('ai_model.LM_STUDIO_MODEL'),
+            'temperature': float(config_manager.get('ai_model.AI_TEMPERATURE')),on Module
 Centralized configuration for telegram bot functionality
 """
 

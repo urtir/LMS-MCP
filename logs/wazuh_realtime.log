@@ -2372,3 +2372,863 @@ risqu\Desktop\LMS MCP\data\wazuh_archives.db
 2025-09-21 20:53:31,353 - __main__ - INFO - ==================================================
 2025-09-21 20:53:31,353 - __main__ - INFO - Stopping Wazuh Real-time Data Fetcher...
 2025-09-21 20:53:31,354 - __main__ - INFO - Service stopped
+2025-09-21 22:12:32,050 - __main__ - INFO - Database initialized: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:12:32,050 - __main__ - INFO - Loaded last processed timestamp: 2025-09-21T13:53:10.919+0000
+2025-09-21 22:12:32,087 - __main__ - INFO - Connected to Docker daemon
+2025-09-21 22:12:32,120 - __main__ - INFO - Found Wazuh container: single-node-wazuh.manager-1 (ee33420bfec5)
+2025-09-21 22:12:32,120 - __main__ - INFO - Starting Wazuh Real-time Data Fetcher...
+2025-09-21 22:12:32,121 - __main__ - INFO - Fetch loop started with interval: 5s
+2025-09-21 22:12:32,122 - __main__ - INFO - ==================================================
+2025-09-21 22:12:32,122 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:12:32,122 - __main__ - INFO - ==================================================
+2025-09-21 22:12:32,122 - __main__ - INFO - Total Records: 64
+2025-09-21 22:12:32,122 - __main__ - INFO - Last Fetch: 2025-09-21 13:53:12
+2025-09-21 22:12:32,122 - __main__ - INFO - Latest Record: 2025-09-21T13:53:10.919+0000
+2025-09-21 22:12:32,122 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:12:32,122 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T13:53:10.919+0000
+2025-09-21 22:12:32,122 - __main__ - INFO - ==================================================
+2025-09-21 22:12:42,122 - __main__ - INFO - ==================================================
+2025-09-21 22:12:42,122 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:12:42,122 - __main__ - INFO - ==================================================
+2025-09-21 22:12:42,122 - __main__ - INFO - Total Records: 64
+2025-09-21 22:12:42,122 - __main__ - INFO - Last Fetch: 2025-09-21 13:53:12
+2025-09-21 22:12:42,122 - __main__ - INFO - Latest Record: 2025-09-21T13:53:10.919+0000
+2025-09-21 22:12:42,122 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:12:42,122 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T13:53:10.919+0000
+2025-09-21 22:12:42,122 - __main__ - INFO - ==================================================
+2025-09-21 22:12:52,123 - __main__ - INFO - ==================================================
+2025-09-21 22:12:52,123 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:12:52,123 - __main__ - INFO - ==================================================
+2025-09-21 22:12:52,123 - __main__ - INFO - Total Records: 64
+2025-09-21 22:12:52,123 - __main__ - INFO - Last Fetch: 2025-09-21 13:53:12
+2025-09-21 22:12:52,123 - __main__ - INFO - Latest Record: 2025-09-21T13:53:10.919+0000
+2025-09-21 22:12:52,123 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:12:52,123 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T13:53:10.919+0000
+2025-09-21 22:12:52,123 - __main__ - INFO - ==================================================
+2025-09-21 22:12:52,560 - __main__ - WARNING - Failed to parse JSON line: {"timestamp":"2025-09-21T15:12:52.468+0000","agent":{"id":"006","name":"CLIENT-KALI-LINUX","ip":"10.... Error: Unterminated string starting at: line 1 column 184 (char 183)
+2025-09-21 22:12:52,564 - __main__ - INFO - Successfully inserted 39/49 records
+2025-09-21 22:12:52,564 - __main__ - INFO - Processed 50 lines, found 49 new records, inserted 39
+2025-09-21 22:12:57,685 - __main__ - WARNING - Failed to parse JSON line: {"timestamp":"2025-09-21T15:12:57.408+0000","agent":{"id":"006","name":"CLIENT-KALI-LINUX","ip":"10.... Error: Expecting value: line 1 column 1075 (char 1074)
+2025-09-21 22:12:57,689 - __main__ - INFO - Successfully inserted 37/37 records
+2025-09-21 22:12:57,689 - __main__ - INFO - Processed 50 lines, found 37 new records, inserted 37
+2025-09-21 22:13:02,123 - __main__ - INFO - ==================================================
+2025-09-21 22:13:02,123 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:13:02,123 - __main__ - INFO - ==================================================
+2025-09-21 22:13:02,123 - __main__ - INFO - Total Records: 140
+2025-09-21 22:13:02,123 - __main__ - INFO - Last Fetch: 2025-09-21 15:12:57
+2025-09-21 22:13:02,123 - __main__ - INFO - Latest Record: 2025-09-21T15:12:57.214+0000
+2025-09-21 22:13:02,123 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:13:02,123 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:12:57.214+0000
+2025-09-21 22:13:02,123 - __main__ - INFO - ==================================================
+2025-09-21 22:13:02,809 - __main__ - INFO - Successfully inserted 41/41 records
+2025-09-21 22:13:02,809 - __main__ - INFO - Processed 50 lines, found 41 new records, inserted 41
+2025-09-21 22:13:07,962 - __main__ - INFO - Successfully inserted 26/26 records
+2025-09-21 22:13:07,962 - __main__ - INFO - Processed 50 lines, found 26 new records, inserted 26
+2025-09-21 22:13:12,124 - __main__ - INFO - ==================================================
+2025-09-21 22:13:12,124 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:13:12,124 - __main__ - INFO - ==================================================
+2025-09-21 22:13:12,124 - __main__ - INFO - Total Records: 207
+2025-09-21 22:13:12,124 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:07
+2025-09-21 22:13:12,124 - __main__ - INFO - Latest Record: 2025-09-21T15:13:05.878+0000
+2025-09-21 22:13:12,124 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:13:12,124 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:05.878+0000
+2025-09-21 22:13:12,124 - __main__ - INFO - ==================================================
+2025-09-21 22:13:22,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:22,125 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:13:22,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:22,125 - __main__ - INFO - Total Records: 207
+2025-09-21 22:13:22,125 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:07
+2025-09-21 22:13:22,125 - __main__ - INFO - Latest Record: 2025-09-21T15:13:05.878+0000
+2025-09-21 22:13:22,125 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:13:22,125 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:05.878+0000
+2025-09-21 22:13:22,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:32,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:32,125 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:13:32,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:32,125 - __main__ - INFO - Total Records: 207
+2025-09-21 22:13:32,125 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:07
+2025-09-21 22:13:32,125 - __main__ - INFO - Latest Record: 2025-09-21T15:13:05.878+0000
+2025-09-21 22:13:32,125 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:13:32,125 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:05.878+0000
+2025-09-21 22:13:32,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:33,459 - __main__ - INFO - Successfully inserted 1/2 records
+2025-09-21 22:13:33,459 - __main__ - INFO - Processed 50 lines, found 2 new records, inserted 1
+2025-09-21 22:13:42,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:42,125 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:13:42,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:42,125 - __main__ - INFO - Total Records: 208
+2025-09-21 22:13:42,125 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:13:42,125 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:13:42,125 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:13:42,125 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:13:42,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:52,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:52,125 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:13:52,125 - __main__ - INFO - ==================================================
+2025-09-21 22:13:52,125 - __main__ - INFO - Total Records: 208
+2025-09-21 22:13:52,125 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:13:52,125 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:13:52,125 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:13:52,125 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:13:52,125 - __main__ - INFO - ==================================================
+2025-09-21 22:14:02,126 - __main__ - INFO - ==================================================
+2025-09-21 22:14:02,126 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:14:02,126 - __main__ - INFO - ==================================================
+2025-09-21 22:14:02,126 - __main__ - INFO - Total Records: 208
+2025-09-21 22:14:02,126 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:14:02,126 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:02,126 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:14:02,126 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:02,126 - __main__ - INFO - ==================================================
+2025-09-21 22:14:12,126 - __main__ - INFO - ==================================================
+2025-09-21 22:14:12,126 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:14:12,126 - __main__ - INFO - ==================================================
+2025-09-21 22:14:12,126 - __main__ - INFO - Total Records: 208
+2025-09-21 22:14:12,126 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:14:12,126 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:12,126 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:14:12,126 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:12,126 - __main__ - INFO - ==================================================
+2025-09-21 22:14:22,127 - __main__ - INFO - ==================================================
+2025-09-21 22:14:22,127 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:14:22,127 - __main__ - INFO - ==================================================
+2025-09-21 22:14:22,127 - __main__ - INFO - Total Records: 208
+2025-09-21 22:14:22,127 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:14:22,127 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:22,127 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:14:22,127 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:22,127 - __main__ - INFO - ==================================================
+2025-09-21 22:14:32,127 - __main__ - INFO - ==================================================
+2025-09-21 22:14:32,127 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:14:32,127 - __main__ - INFO - ==================================================
+2025-09-21 22:14:32,127 - __main__ - INFO - Total Records: 208
+2025-09-21 22:14:32,127 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:14:32,127 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:32,127 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:14:32,127 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:32,127 - __main__ - INFO - ==================================================
+2025-09-21 22:14:42,130 - __main__ - INFO - ==================================================
+2025-09-21 22:14:42,130 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:14:42,130 - __main__ - INFO - ==================================================
+2025-09-21 22:14:42,131 - __main__ - INFO - Total Records: 208
+2025-09-21 22:14:42,131 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:14:42,131 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:42,131 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:14:42,131 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:42,131 - __main__ - INFO - ==================================================
+2025-09-21 22:14:52,132 - __main__ - INFO - ==================================================
+2025-09-21 22:14:52,132 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:14:52,132 - __main__ - INFO - ==================================================
+2025-09-21 22:14:52,132 - __main__ - INFO - Total Records: 208
+2025-09-21 22:14:52,132 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:14:52,132 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:52,132 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:14:52,132 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:14:52,132 - __main__ - INFO - ==================================================
+2025-09-21 22:15:02,133 - __main__ - INFO - ==================================================
+2025-09-21 22:15:02,133 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:15:02,133 - __main__ - INFO - ==================================================
+2025-09-21 22:15:02,133 - __main__ - INFO - Total Records: 208
+2025-09-21 22:15:02,133 - __main__ - INFO - Last Fetch: 2025-09-21 15:13:33
+2025-09-21 22:15:02,133 - __main__ - INFO - Latest Record: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:15:02,133 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:15:02,133 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:13:29.775+0000
+2025-09-21 22:15:02,133 - __main__ - INFO - ==================================================
+2025-09-21 22:15:04,882 - __main__ - INFO - Successfully inserted 2/3 records
+2025-09-21 22:15:04,882 - __main__ - INFO - Processed 50 lines, found 3 new records, inserted 2
+2025-09-21 22:15:12,133 - __main__ - INFO - ==================================================
+2025-09-21 22:15:12,133 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:15:12,133 - __main__ - INFO - ==================================================
+2025-09-21 22:15:12,133 - __main__ - INFO - Total Records: 210
+2025-09-21 22:15:12,133 - __main__ - INFO - Last Fetch: 2025-09-21 15:15:04
+2025-09-21 22:15:12,133 - __main__ - INFO - Latest Record: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:12,133 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:15:12,133 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:12,133 - __main__ - INFO - ==================================================
+2025-09-21 22:15:22,134 - __main__ - INFO - ==================================================
+2025-09-21 22:15:22,134 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:15:22,134 - __main__ - INFO - ==================================================
+2025-09-21 22:15:22,134 - __main__ - INFO - Total Records: 210
+2025-09-21 22:15:22,134 - __main__ - INFO - Last Fetch: 2025-09-21 15:15:04
+2025-09-21 22:15:22,134 - __main__ - INFO - Latest Record: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:22,134 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:15:22,134 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:22,134 - __main__ - INFO - ==================================================
+2025-09-21 22:15:32,135 - __main__ - INFO - ==================================================
+2025-09-21 22:15:32,135 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:15:32,135 - __main__ - INFO - ==================================================
+2025-09-21 22:15:32,135 - __main__ - INFO - Total Records: 210
+2025-09-21 22:15:32,135 - __main__ - INFO - Last Fetch: 2025-09-21 15:15:04
+2025-09-21 22:15:32,135 - __main__ - INFO - Latest Record: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:32,135 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:15:32,135 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:32,135 - __main__ - INFO - ==================================================
+2025-09-21 22:15:42,136 - __main__ - INFO - ==================================================
+2025-09-21 22:15:42,136 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:15:42,136 - __main__ - INFO - ==================================================
+2025-09-21 22:15:42,137 - __main__ - INFO - Total Records: 210
+2025-09-21 22:15:42,137 - __main__ - INFO - Last Fetch: 2025-09-21 15:15:04
+2025-09-21 22:15:42,137 - __main__ - INFO - Latest Record: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:42,137 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:15:42,137 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:42,137 - __main__ - INFO - ==================================================
+2025-09-21 22:15:52,138 - __main__ - INFO - ==================================================
+2025-09-21 22:15:52,138 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:15:52,138 - __main__ - INFO - ==================================================
+2025-09-21 22:15:52,138 - __main__ - INFO - Total Records: 210
+2025-09-21 22:15:52,138 - __main__ - INFO - Last Fetch: 2025-09-21 15:15:04
+2025-09-21 22:15:52,138 - __main__ - INFO - Latest Record: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:52,138 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:15:52,138 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:15:01.833+0000
+2025-09-21 22:15:52,138 - __main__ - INFO - ==================================================
+2025-09-21 22:16:00,812 - __main__ - INFO - Successfully inserted 2/5 records
+2025-09-21 22:16:00,812 - __main__ - INFO - Processed 50 lines, found 5 new records, inserted 2
+2025-09-21 22:16:02,138 - __main__ - INFO - ==================================================
+2025-09-21 22:16:02,139 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:16:02,139 - __main__ - INFO - ==================================================
+2025-09-21 22:16:02,139 - __main__ - INFO - Total Records: 212
+2025-09-21 22:16:02,139 - __main__ - INFO - Last Fetch: 2025-09-21 15:16:00
+2025-09-21 22:16:02,139 - __main__ - INFO - Latest Record: 2025-09-21T15:15:58.521+0000
+2025-09-21 22:16:02,140 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:16:02,140 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:15:58.521+0000
+2025-09-21 22:16:02,140 - __main__ - INFO - ==================================================
+2025-09-21 22:16:11,117 - __main__ - INFO - Successfully inserted 1/1 records
+2025-09-21 22:16:11,118 - __main__ - INFO - Processed 50 lines, found 1 new records, inserted 1
+2025-09-21 22:16:12,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:12,141 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:16:12,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:12,141 - __main__ - INFO - Total Records: 213
+2025-09-21 22:16:12,141 - __main__ - INFO - Last Fetch: 2025-09-21 15:16:11
+2025-09-21 22:16:12,141 - __main__ - INFO - Latest Record: 2025-09-21T15:16:08.671+0000
+2025-09-21 22:16:12,141 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:16:12,141 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:16:08.671+0000
+2025-09-21 22:16:12,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:22,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:22,141 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:16:22,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:22,141 - __main__ - INFO - Total Records: 213
+2025-09-21 22:16:22,141 - __main__ - INFO - Last Fetch: 2025-09-21 15:16:11
+2025-09-21 22:16:22,141 - __main__ - INFO - Latest Record: 2025-09-21T15:16:08.671+0000
+2025-09-21 22:16:22,141 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:16:22,141 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:16:08.671+0000
+2025-09-21 22:16:22,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:32,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:32,141 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:16:32,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:32,141 - __main__ - INFO - Total Records: 213
+2025-09-21 22:16:32,141 - __main__ - INFO - Last Fetch: 2025-09-21 15:16:11
+2025-09-21 22:16:32,141 - __main__ - INFO - Latest Record: 2025-09-21T15:16:08.671+0000
+2025-09-21 22:16:32,141 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:16:32,141 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:16:08.671+0000
+2025-09-21 22:16:32,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:36,594 - __main__ - INFO - Successfully inserted 1/9 records
+2025-09-21 22:16:36,594 - __main__ - INFO - Processed 50 lines, found 9 new records, inserted 1
+2025-09-21 22:16:42,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:42,141 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:16:42,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:42,141 - __main__ - INFO - Total Records: 214
+2025-09-21 22:16:42,141 - __main__ - INFO - Last Fetch: 2025-09-21 15:16:36
+2025-09-21 22:16:42,141 - __main__ - INFO - Latest Record: 2025-09-21T15:16:32.107+0000
+2025-09-21 22:16:42,141 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:16:42,141 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:16:32.107+0000
+2025-09-21 22:16:42,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:52,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:52,141 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:16:52,141 - __main__ - INFO - ==================================================
+2025-09-21 22:16:52,141 - __main__ - INFO - Total Records: 214
+2025-09-21 22:16:52,141 - __main__ - INFO - Last Fetch: 2025-09-21 15:16:36
+2025-09-21 22:16:52,141 - __main__ - INFO - Latest Record: 2025-09-21T15:16:32.107+0000
+2025-09-21 22:16:52,141 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:16:52,141 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:16:32.107+0000
+2025-09-21 22:16:52,141 - __main__ - INFO - ==================================================
+2025-09-21 22:17:02,142 - __main__ - INFO - ==================================================
+2025-09-21 22:17:02,142 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:17:02,142 - __main__ - INFO - ==================================================
+2025-09-21 22:17:02,142 - __main__ - INFO - Total Records: 214
+2025-09-21 22:17:02,142 - __main__ - INFO - Last Fetch: 2025-09-21 15:16:36
+2025-09-21 22:17:02,142 - __main__ - INFO - Latest Record: 2025-09-21T15:16:32.107+0000
+2025-09-21 22:17:02,142 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:17:02,142 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:16:32.107+0000
+2025-09-21 22:17:02,142 - __main__ - INFO - ==================================================
+2025-09-21 22:17:07,106 - __main__ - INFO - Successfully inserted 2/3 records
+2025-09-21 22:17:07,106 - __main__ - INFO - Processed 50 lines, found 3 new records, inserted 2
+2025-09-21 22:17:12,143 - __main__ - INFO - ==================================================
+2025-09-21 22:17:12,143 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:17:12,143 - __main__ - INFO - ==================================================
+2025-09-21 22:17:12,143 - __main__ - INFO - Total Records: 216
+2025-09-21 22:17:12,143 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:07
+2025-09-21 22:17:12,143 - __main__ - INFO - Latest Record: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:12,143 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:17:12,143 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:12,143 - __main__ - INFO - ==================================================
+2025-09-21 22:17:22,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:22,144 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:17:22,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:22,144 - __main__ - INFO - Total Records: 216
+2025-09-21 22:17:22,144 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:07
+2025-09-21 22:17:22,144 - __main__ - INFO - Latest Record: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:22,144 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:17:22,144 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:22,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:32,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:32,144 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:17:32,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:32,144 - __main__ - INFO - Total Records: 216
+2025-09-21 22:17:32,144 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:07
+2025-09-21 22:17:32,144 - __main__ - INFO - Latest Record: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:32,144 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:17:32,144 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:32,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:42,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:42,144 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:17:42,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:42,144 - __main__ - INFO - Total Records: 216
+2025-09-21 22:17:42,144 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:07
+2025-09-21 22:17:42,144 - __main__ - INFO - Latest Record: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:42,144 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:17:42,144 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:02.200+0000
+2025-09-21 22:17:42,144 - __main__ - INFO - ==================================================
+2025-09-21 22:17:47,727 - __main__ - INFO - Successfully inserted 4/12 records
+2025-09-21 22:17:47,727 - __main__ - INFO - Processed 50 lines, found 12 new records, inserted 4
+2025-09-21 22:17:52,145 - __main__ - INFO - ==================================================
+2025-09-21 22:17:52,145 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:17:52,145 - __main__ - INFO - ==================================================
+2025-09-21 22:17:52,145 - __main__ - INFO - Total Records: 220
+2025-09-21 22:17:52,145 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:47
+2025-09-21 22:17:52,145 - __main__ - INFO - Latest Record: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:17:52,145 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:17:52,145 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:17:52,145 - __main__ - INFO - ==================================================
+2025-09-21 22:18:02,146 - __main__ - INFO - ==================================================
+2025-09-21 22:18:02,146 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:18:02,146 - __main__ - INFO - ==================================================
+2025-09-21 22:18:02,146 - __main__ - INFO - Total Records: 220
+2025-09-21 22:18:02,146 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:47
+2025-09-21 22:18:02,146 - __main__ - INFO - Latest Record: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:02,146 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:18:02,146 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:02,146 - __main__ - INFO - ==================================================
+2025-09-21 22:18:12,146 - __main__ - INFO - ==================================================
+2025-09-21 22:18:12,146 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:18:12,146 - __main__ - INFO - ==================================================
+2025-09-21 22:18:12,146 - __main__ - INFO - Total Records: 220
+2025-09-21 22:18:12,146 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:47
+2025-09-21 22:18:12,146 - __main__ - INFO - Latest Record: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:12,146 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:18:12,146 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:12,146 - __main__ - INFO - ==================================================
+2025-09-21 22:18:22,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:22,147 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:18:22,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:22,147 - __main__ - INFO - Total Records: 220
+2025-09-21 22:18:22,147 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:47
+2025-09-21 22:18:22,147 - __main__ - INFO - Latest Record: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:22,147 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:18:22,147 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:22,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:32,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:32,147 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:18:32,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:32,147 - __main__ - INFO - Total Records: 220
+2025-09-21 22:18:32,147 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:47
+2025-09-21 22:18:32,147 - __main__ - INFO - Latest Record: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:32,147 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:18:32,147 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:32,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:42,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:42,147 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:18:42,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:42,147 - __main__ - INFO - Total Records: 220
+2025-09-21 22:18:42,147 - __main__ - INFO - Last Fetch: 2025-09-21 15:17:47
+2025-09-21 22:18:42,147 - __main__ - INFO - Latest Record: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:42,147 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:18:42,147 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:17:44.179+0000
+2025-09-21 22:18:42,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:43,570 - __main__ - INFO - Successfully inserted 1/2 records
+2025-09-21 22:18:43,570 - __main__ - INFO - Processed 50 lines, found 2 new records, inserted 1
+2025-09-21 22:18:52,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:52,147 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:18:52,147 - __main__ - INFO - ==================================================
+2025-09-21 22:18:52,147 - __main__ - INFO - Total Records: 221
+2025-09-21 22:18:52,147 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:18:52,147 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:18:52,147 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:18:52,147 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:18:52,147 - __main__ - INFO - ==================================================
+2025-09-21 22:19:02,148 - __main__ - INFO - ==================================================
+2025-09-21 22:19:02,148 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:19:02,148 - __main__ - INFO - ==================================================
+2025-09-21 22:19:02,148 - __main__ - INFO - Total Records: 221
+2025-09-21 22:19:02,148 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:19:02,148 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:02,148 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:19:02,148 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:02,148 - __main__ - INFO - ==================================================
+2025-09-21 22:19:12,148 - __main__ - INFO - ==================================================
+2025-09-21 22:19:12,148 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:19:12,148 - __main__ - INFO - ==================================================
+2025-09-21 22:19:12,148 - __main__ - INFO - Total Records: 221
+2025-09-21 22:19:12,148 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:19:12,148 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:12,148 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:19:12,148 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:12,148 - __main__ - INFO - ==================================================
+2025-09-21 22:19:22,149 - __main__ - INFO - ==================================================
+2025-09-21 22:19:22,149 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:19:22,149 - __main__ - INFO - ==================================================
+2025-09-21 22:19:22,149 - __main__ - INFO - Total Records: 221
+2025-09-21 22:19:22,149 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:19:22,149 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:22,149 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:19:22,149 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:22,149 - __main__ - INFO - ==================================================
+2025-09-21 22:19:32,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:32,150 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:19:32,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:32,150 - __main__ - INFO - Total Records: 221
+2025-09-21 22:19:32,150 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:19:32,150 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:32,150 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:19:32,150 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:32,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:42,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:42,150 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:19:42,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:42,150 - __main__ - INFO - Total Records: 221
+2025-09-21 22:19:42,150 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:19:42,150 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:42,150 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:19:42,150 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:42,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:52,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:52,150 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:19:52,150 - __main__ - INFO - ==================================================
+2025-09-21 22:19:52,150 - __main__ - INFO - Total Records: 221
+2025-09-21 22:19:52,150 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:19:52,150 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:52,150 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:19:52,150 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:19:52,150 - __main__ - INFO - ==================================================
+2025-09-21 22:20:02,150 - __main__ - INFO - ==================================================
+2025-09-21 22:20:02,150 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:20:02,150 - __main__ - INFO - ==================================================
+2025-09-21 22:20:02,150 - __main__ - INFO - Total Records: 221
+2025-09-21 22:20:02,150 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:20:02,150 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:02,150 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:20:02,150 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:02,150 - __main__ - INFO - ==================================================
+2025-09-21 22:20:12,151 - __main__ - INFO - ==================================================
+2025-09-21 22:20:12,151 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:20:12,151 - __main__ - INFO - ==================================================
+2025-09-21 22:20:12,151 - __main__ - INFO - Total Records: 221
+2025-09-21 22:20:12,151 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:20:12,151 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:12,151 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:20:12,151 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:12,151 - __main__ - INFO - ==================================================
+2025-09-21 22:20:22,152 - __main__ - INFO - ==================================================
+2025-09-21 22:20:22,152 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:20:22,152 - __main__ - INFO - ==================================================
+2025-09-21 22:20:22,152 - __main__ - INFO - Total Records: 221
+2025-09-21 22:20:22,152 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:20:22,152 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:22,152 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:20:22,152 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:22,152 - __main__ - INFO - ==================================================
+2025-09-21 22:20:32,154 - __main__ - INFO - ==================================================
+2025-09-21 22:20:32,154 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:20:32,154 - __main__ - INFO - ==================================================
+2025-09-21 22:20:32,154 - __main__ - INFO - Total Records: 221
+2025-09-21 22:20:32,154 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:20:32,154 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:32,154 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:20:32,154 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:32,154 - __main__ - INFO - ==================================================
+2025-09-21 22:20:42,154 - __main__ - INFO - ==================================================
+2025-09-21 22:20:42,154 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:20:42,155 - __main__ - INFO - ==================================================
+2025-09-21 22:20:42,155 - __main__ - INFO - Total Records: 221
+2025-09-21 22:20:42,155 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:20:42,155 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:42,155 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:20:42,155 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:42,155 - __main__ - INFO - ==================================================
+2025-09-21 22:20:52,155 - __main__ - INFO - ==================================================
+2025-09-21 22:20:52,155 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:20:52,155 - __main__ - INFO - ==================================================
+2025-09-21 22:20:52,155 - __main__ - INFO - Total Records: 221
+2025-09-21 22:20:52,155 - __main__ - INFO - Last Fetch: 2025-09-21 15:18:43
+2025-09-21 22:20:52,155 - __main__ - INFO - Latest Record: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:52,155 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:20:52,155 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:18:40.138+0000
+2025-09-21 22:20:52,155 - __main__ - INFO - ==================================================
+2025-09-21 22:21:00,481 - __main__ - INFO - Successfully inserted 3/7 records
+2025-09-21 22:21:00,481 - __main__ - INFO - Processed 50 lines, found 7 new records, inserted 3
+2025-09-21 22:21:02,157 - __main__ - INFO - ==================================================
+2025-09-21 22:21:02,157 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:21:02,157 - __main__ - INFO - ==================================================
+2025-09-21 22:21:02,157 - __main__ - INFO - Total Records: 224
+2025-09-21 22:21:02,157 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:00
+2025-09-21 22:21:02,157 - __main__ - INFO - Latest Record: 2025-09-21T15:20:58.076+0000
+2025-09-21 22:21:02,157 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:21:02,158 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:20:58.076+0000
+2025-09-21 22:21:02,158 - __main__ - INFO - ==================================================
+2025-09-21 22:21:05,630 - __main__ - INFO - Successfully inserted 4/4 records
+2025-09-21 22:21:05,630 - __main__ - INFO - Processed 50 lines, found 4 new records, inserted 4
+2025-09-21 22:21:10,782 - __main__ - INFO - Successfully inserted 1/1 records
+2025-09-21 22:21:10,782 - __main__ - INFO - Processed 50 lines, found 1 new records, inserted 1
+2025-09-21 22:21:12,160 - __main__ - INFO - ==================================================
+2025-09-21 22:21:12,160 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:21:12,160 - __main__ - INFO - ==================================================
+2025-09-21 22:21:12,160 - __main__ - INFO - Total Records: 229
+2025-09-21 22:21:12,160 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:10
+2025-09-21 22:21:12,160 - __main__ - INFO - Latest Record: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:12,160 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:21:12,160 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:12,160 - __main__ - INFO - ==================================================
+2025-09-21 22:21:22,160 - __main__ - INFO - ==================================================
+2025-09-21 22:21:22,160 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:21:22,160 - __main__ - INFO - ==================================================
+2025-09-21 22:21:22,160 - __main__ - INFO - Total Records: 229
+2025-09-21 22:21:22,160 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:10
+2025-09-21 22:21:22,160 - __main__ - INFO - Latest Record: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:22,160 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:21:22,160 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:22,160 - __main__ - INFO - ==================================================
+2025-09-21 22:21:32,161 - __main__ - INFO - ==================================================
+2025-09-21 22:21:32,161 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:21:32,161 - __main__ - INFO - ==================================================
+2025-09-21 22:21:32,161 - __main__ - INFO - Total Records: 229
+2025-09-21 22:21:32,162 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:10
+2025-09-21 22:21:32,162 - __main__ - INFO - Latest Record: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:32,162 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:21:32,162 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:32,162 - __main__ - INFO - ==================================================
+2025-09-21 22:21:42,162 - __main__ - INFO - ==================================================
+2025-09-21 22:21:42,163 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:21:42,163 - __main__ - INFO - ==================================================
+2025-09-21 22:21:42,163 - __main__ - INFO - Total Records: 229
+2025-09-21 22:21:42,163 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:10
+2025-09-21 22:21:42,163 - __main__ - INFO - Latest Record: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:42,163 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:21:42,163 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:08.062+0000
+2025-09-21 22:21:42,163 - __main__ - INFO - ==================================================
+2025-09-21 22:21:46,452 - __main__ - INFO - Successfully inserted 3/4 records
+2025-09-21 22:21:46,453 - __main__ - INFO - Processed 50 lines, found 4 new records, inserted 3
+2025-09-21 22:21:52,164 - __main__ - INFO - ==================================================
+2025-09-21 22:21:52,164 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:21:52,164 - __main__ - INFO - ==================================================
+2025-09-21 22:21:52,164 - __main__ - INFO - Total Records: 232
+2025-09-21 22:21:52,164 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:46
+2025-09-21 22:21:52,164 - __main__ - INFO - Latest Record: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:21:52,164 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:21:52,164 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:21:52,164 - __main__ - INFO - ==================================================
+2025-09-21 22:22:02,165 - __main__ - INFO - ==================================================
+2025-09-21 22:22:02,165 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:22:02,165 - __main__ - INFO - ==================================================
+2025-09-21 22:22:02,165 - __main__ - INFO - Total Records: 232
+2025-09-21 22:22:02,165 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:46
+2025-09-21 22:22:02,165 - __main__ - INFO - Latest Record: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:02,165 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:22:02,165 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:02,165 - __main__ - INFO - ==================================================
+2025-09-21 22:22:12,166 - __main__ - INFO - ==================================================
+2025-09-21 22:22:12,166 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:22:12,166 - __main__ - INFO - ==================================================
+2025-09-21 22:22:12,166 - __main__ - INFO - Total Records: 232
+2025-09-21 22:22:12,166 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:46
+2025-09-21 22:22:12,166 - __main__ - INFO - Latest Record: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:12,166 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:22:12,167 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:12,167 - __main__ - INFO - ==================================================
+2025-09-21 22:22:22,168 - __main__ - INFO - ==================================================
+2025-09-21 22:22:22,168 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:22:22,168 - __main__ - INFO - ==================================================
+2025-09-21 22:22:22,168 - __main__ - INFO - Total Records: 232
+2025-09-21 22:22:22,168 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:46
+2025-09-21 22:22:22,168 - __main__ - INFO - Latest Record: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:22,168 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:22:22,168 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:22,168 - __main__ - INFO - ==================================================
+2025-09-21 22:22:32,169 - __main__ - INFO - ==================================================
+2025-09-21 22:22:32,169 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:22:32,169 - __main__ - INFO - ==================================================
+2025-09-21 22:22:32,169 - __main__ - INFO - Total Records: 232
+2025-09-21 22:22:32,169 - __main__ - INFO - Last Fetch: 2025-09-21 15:21:46
+2025-09-21 22:22:32,169 - __main__ - INFO - Latest Record: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:32,169 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:22:32,169 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:21:42.733+0000
+2025-09-21 22:22:32,169 - __main__ - INFO - ==================================================
+2025-09-21 22:22:37,436 - __main__ - INFO - Successfully inserted 1/9 records
+2025-09-21 22:22:37,436 - __main__ - INFO - Processed 50 lines, found 9 new records, inserted 1
+2025-09-21 22:22:42,170 - __main__ - INFO - ==================================================
+2025-09-21 22:22:42,171 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:22:42,171 - __main__ - INFO - ==================================================
+2025-09-21 22:22:42,171 - __main__ - INFO - Total Records: 233
+2025-09-21 22:22:42,171 - __main__ - INFO - Last Fetch: 2025-09-21 15:22:37
+2025-09-21 22:22:42,171 - __main__ - INFO - Latest Record: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:22:42,171 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:22:42,171 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:22:42,171 - __main__ - INFO - ==================================================
+2025-09-21 22:22:52,171 - __main__ - INFO - ==================================================
+2025-09-21 22:22:52,171 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:22:52,171 - __main__ - INFO - ==================================================
+2025-09-21 22:22:52,171 - __main__ - INFO - Total Records: 233
+2025-09-21 22:22:52,171 - __main__ - INFO - Last Fetch: 2025-09-21 15:22:37
+2025-09-21 22:22:52,171 - __main__ - INFO - Latest Record: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:22:52,171 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:22:52,171 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:22:52,171 - __main__ - INFO - ==================================================
+2025-09-21 22:23:02,171 - __main__ - INFO - ==================================================
+2025-09-21 22:23:02,171 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:23:02,171 - __main__ - INFO - ==================================================
+2025-09-21 22:23:02,171 - __main__ - INFO - Total Records: 233
+2025-09-21 22:23:02,171 - __main__ - INFO - Last Fetch: 2025-09-21 15:22:37
+2025-09-21 22:23:02,171 - __main__ - INFO - Latest Record: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:02,171 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:23:02,171 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:02,171 - __main__ - INFO - ==================================================
+2025-09-21 22:23:12,172 - __main__ - INFO - ==================================================
+2025-09-21 22:23:12,172 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:23:12,172 - __main__ - INFO - ==================================================
+2025-09-21 22:23:12,172 - __main__ - INFO - Total Records: 233
+2025-09-21 22:23:12,172 - __main__ - INFO - Last Fetch: 2025-09-21 15:22:37
+2025-09-21 22:23:12,172 - __main__ - INFO - Latest Record: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:12,172 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:23:12,172 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:12,172 - __main__ - INFO - ==================================================
+2025-09-21 22:23:22,172 - __main__ - INFO - ==================================================
+2025-09-21 22:23:22,172 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:23:22,172 - __main__ - INFO - ==================================================
+2025-09-21 22:23:22,172 - __main__ - INFO - Total Records: 233
+2025-09-21 22:23:22,172 - __main__ - INFO - Last Fetch: 2025-09-21 15:22:37
+2025-09-21 22:23:22,172 - __main__ - INFO - Latest Record: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:22,172 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:23:22,172 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:22,172 - __main__ - INFO - ==================================================
+2025-09-21 22:23:32,173 - __main__ - INFO - ==================================================
+2025-09-21 22:23:32,173 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:23:32,173 - __main__ - INFO - ==================================================
+2025-09-21 22:23:32,173 - __main__ - INFO - Total Records: 233
+2025-09-21 22:23:32,173 - __main__ - INFO - Last Fetch: 2025-09-21 15:22:37
+2025-09-21 22:23:32,173 - __main__ - INFO - Latest Record: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:32,173 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:23:32,173 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:32,173 - __main__ - INFO - ==================================================
+2025-09-21 22:23:42,173 - __main__ - INFO - ==================================================
+2025-09-21 22:23:42,173 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:23:42,173 - __main__ - INFO - ==================================================
+2025-09-21 22:23:42,173 - __main__ - INFO - Total Records: 233
+2025-09-21 22:23:42,173 - __main__ - INFO - Last Fetch: 2025-09-21 15:22:37
+2025-09-21 22:23:42,173 - __main__ - INFO - Latest Record: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:42,173 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:23:42,173 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:22:32.467+0000
+2025-09-21 22:23:42,173 - __main__ - INFO - ==================================================
+2025-09-21 22:23:48,586 - __main__ - INFO - Successfully inserted 3/12 records
+2025-09-21 22:23:48,586 - __main__ - INFO - Processed 50 lines, found 12 new records, inserted 3
+2025-09-21 22:23:52,174 - __main__ - INFO - ==================================================
+2025-09-21 22:23:52,174 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:23:52,174 - __main__ - INFO - ==================================================
+2025-09-21 22:23:52,174 - __main__ - INFO - Total Records: 236
+2025-09-21 22:23:52,174 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:23:52,174 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:23:52,174 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:23:52,174 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:23:52,174 - __main__ - INFO - ==================================================
+2025-09-21 22:24:02,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:02,175 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:24:02,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:02,175 - __main__ - INFO - Total Records: 236
+2025-09-21 22:24:02,175 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:24:02,175 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:02,175 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:24:02,175 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:02,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:12,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:12,175 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:24:12,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:12,175 - __main__ - INFO - Total Records: 236
+2025-09-21 22:24:12,175 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:24:12,175 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:12,175 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:24:12,175 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:12,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:22,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:22,175 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:24:22,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:22,175 - __main__ - INFO - Total Records: 236
+2025-09-21 22:24:22,175 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:24:22,175 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:22,175 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:24:22,175 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:22,175 - __main__ - INFO - ==================================================
+2025-09-21 22:24:32,176 - __main__ - INFO - ==================================================
+2025-09-21 22:24:32,176 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:24:32,176 - __main__ - INFO - ==================================================
+2025-09-21 22:24:32,176 - __main__ - INFO - Total Records: 236
+2025-09-21 22:24:32,176 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:24:32,176 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:32,176 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:24:32,176 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:32,176 - __main__ - INFO - ==================================================
+2025-09-21 22:24:42,177 - __main__ - INFO - ==================================================
+2025-09-21 22:24:42,177 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:24:42,177 - __main__ - INFO - ==================================================
+2025-09-21 22:24:42,177 - __main__ - INFO - Total Records: 236
+2025-09-21 22:24:42,177 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:24:42,177 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:42,177 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:24:42,177 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:42,177 - __main__ - INFO - ==================================================
+2025-09-21 22:24:52,177 - __main__ - INFO - ==================================================
+2025-09-21 22:24:52,177 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:24:52,177 - __main__ - INFO - ==================================================
+2025-09-21 22:24:52,177 - __main__ - INFO - Total Records: 236
+2025-09-21 22:24:52,177 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:24:52,177 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:52,177 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:24:52,177 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:24:52,177 - __main__ - INFO - ==================================================
+2025-09-21 22:25:02,178 - __main__ - INFO - ==================================================
+2025-09-21 22:25:02,178 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:25:02,178 - __main__ - INFO - ==================================================
+2025-09-21 22:25:02,178 - __main__ - INFO - Total Records: 236
+2025-09-21 22:25:02,178 - __main__ - INFO - Last Fetch: 2025-09-21 15:23:48
+2025-09-21 22:25:02,178 - __main__ - INFO - Latest Record: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:25:02,178 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:25:02,178 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:23:44.410+0000
+2025-09-21 22:25:02,178 - __main__ - INFO - ==================================================
+2025-09-21 22:25:04,747 - __main__ - INFO - Successfully inserted 2/3 records
+2025-09-21 22:25:04,749 - __main__ - INFO - Processed 50 lines, found 3 new records, inserted 2
+2025-09-21 22:25:12,178 - __main__ - INFO - ==================================================
+2025-09-21 22:25:12,178 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:25:12,178 - __main__ - INFO - ==================================================
+2025-09-21 22:25:12,178 - __main__ - INFO - Total Records: 238
+2025-09-21 22:25:12,178 - __main__ - INFO - Last Fetch: 2025-09-21 15:25:04
+2025-09-21 22:25:12,178 - __main__ - INFO - Latest Record: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:12,178 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:25:12,178 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:12,178 - __main__ - INFO - ==================================================
+2025-09-21 22:25:22,179 - __main__ - INFO - ==================================================
+2025-09-21 22:25:22,179 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:25:22,179 - __main__ - INFO - ==================================================
+2025-09-21 22:25:22,179 - __main__ - INFO - Total Records: 238
+2025-09-21 22:25:22,179 - __main__ - INFO - Last Fetch: 2025-09-21 15:25:04
+2025-09-21 22:25:22,179 - __main__ - INFO - Latest Record: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:22,179 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:25:22,179 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:22,179 - __main__ - INFO - ==================================================
+2025-09-21 22:25:32,180 - __main__ - INFO - ==================================================
+2025-09-21 22:25:32,180 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:25:32,180 - __main__ - INFO - ==================================================
+2025-09-21 22:25:32,180 - __main__ - INFO - Total Records: 238
+2025-09-21 22:25:32,180 - __main__ - INFO - Last Fetch: 2025-09-21 15:25:04
+2025-09-21 22:25:32,180 - __main__ - INFO - Latest Record: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:32,180 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:25:32,180 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:32,180 - __main__ - INFO - ==================================================
+2025-09-21 22:25:42,181 - __main__ - INFO - ==================================================
+2025-09-21 22:25:42,181 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:25:42,181 - __main__ - INFO - ==================================================
+2025-09-21 22:25:42,181 - __main__ - INFO - Total Records: 238
+2025-09-21 22:25:42,181 - __main__ - INFO - Last Fetch: 2025-09-21 15:25:04
+2025-09-21 22:25:42,181 - __main__ - INFO - Latest Record: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:42,181 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:25:42,181 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:42,181 - __main__ - INFO - ==================================================
+2025-09-21 22:25:52,181 - __main__ - INFO - ==================================================
+2025-09-21 22:25:52,181 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:25:52,181 - __main__ - INFO - ==================================================
+2025-09-21 22:25:52,181 - __main__ - INFO - Total Records: 238
+2025-09-21 22:25:52,181 - __main__ - INFO - Last Fetch: 2025-09-21 15:25:04
+2025-09-21 22:25:52,181 - __main__ - INFO - Latest Record: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:52,181 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:25:52,181 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:25:02.432+0000
+2025-09-21 22:25:52,181 - __main__ - INFO - ==================================================
+2025-09-21 22:26:00,791 - __main__ - INFO - Successfully inserted 2/5 records
+2025-09-21 22:26:00,791 - __main__ - INFO - Processed 50 lines, found 5 new records, inserted 2
+2025-09-21 22:26:02,182 - __main__ - INFO - ==================================================
+2025-09-21 22:26:02,182 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:26:02,182 - __main__ - INFO - ==================================================
+2025-09-21 22:26:02,182 - __main__ - INFO - Total Records: 240
+2025-09-21 22:26:02,182 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:00
+2025-09-21 22:26:02,182 - __main__ - INFO - Latest Record: 2025-09-21T15:25:58.569+0000
+2025-09-21 22:26:02,182 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:26:02,182 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:25:58.569+0000
+2025-09-21 22:26:02,182 - __main__ - INFO - ==================================================
+2025-09-21 22:26:11,036 - __main__ - INFO - Successfully inserted 1/1 records
+2025-09-21 22:26:11,037 - __main__ - INFO - Processed 50 lines, found 1 new records, inserted 1
+2025-09-21 22:26:12,182 - __main__ - INFO - ==================================================
+2025-09-21 22:26:12,182 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:26:12,182 - __main__ - INFO - ==================================================
+2025-09-21 22:26:12,182 - __main__ - INFO - Total Records: 241
+2025-09-21 22:26:12,182 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:26:12,182 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:12,182 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:26:12,182 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:12,182 - __main__ - INFO - ==================================================
+2025-09-21 22:26:22,183 - __main__ - INFO - ==================================================
+2025-09-21 22:26:22,183 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:26:22,183 - __main__ - INFO - ==================================================
+2025-09-21 22:26:22,183 - __main__ - INFO - Total Records: 241
+2025-09-21 22:26:22,183 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:26:22,183 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:22,183 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:26:22,183 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:22,183 - __main__ - INFO - ==================================================
+2025-09-21 22:26:32,183 - __main__ - INFO - ==================================================
+2025-09-21 22:26:32,183 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:26:32,183 - __main__ - INFO - ==================================================
+2025-09-21 22:26:32,183 - __main__ - INFO - Total Records: 241
+2025-09-21 22:26:32,183 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:26:32,183 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:32,183 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:26:32,183 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:32,183 - __main__ - INFO - ==================================================
+2025-09-21 22:26:42,184 - __main__ - INFO - ==================================================
+2025-09-21 22:26:42,184 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:26:42,184 - __main__ - INFO - ==================================================
+2025-09-21 22:26:42,184 - __main__ - INFO - Total Records: 241
+2025-09-21 22:26:42,184 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:26:42,184 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:42,184 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:26:42,184 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:42,184 - __main__ - INFO - ==================================================
+2025-09-21 22:26:52,185 - __main__ - INFO - ==================================================
+2025-09-21 22:26:52,185 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:26:52,185 - __main__ - INFO - ==================================================
+2025-09-21 22:26:52,185 - __main__ - INFO - Total Records: 241
+2025-09-21 22:26:52,185 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:26:52,185 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:52,185 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:26:52,185 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:26:52,185 - __main__ - INFO - ==================================================
+2025-09-21 22:27:02,185 - __main__ - INFO - ==================================================
+2025-09-21 22:27:02,185 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:27:02,185 - __main__ - INFO - ==================================================
+2025-09-21 22:27:02,185 - __main__ - INFO - Total Records: 241
+2025-09-21 22:27:02,185 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:27:02,185 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:27:02,185 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:27:02,185 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:27:02,185 - __main__ - INFO - ==================================================
+2025-09-21 22:27:12,186 - __main__ - INFO - ==================================================
+2025-09-21 22:27:12,186 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:27:12,186 - __main__ - INFO - ==================================================
+2025-09-21 22:27:12,186 - __main__ - INFO - Total Records: 241
+2025-09-21 22:27:12,186 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:27:12,186 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:27:12,186 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:27:12,186 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:27:12,186 - __main__ - INFO - ==================================================
+2025-09-21 22:27:22,187 - __main__ - INFO - ==================================================
+2025-09-21 22:27:22,187 - __main__ - INFO - WAZUH REALTIME SERVER STATS
+2025-09-21 22:27:22,187 - __main__ - INFO - ==================================================
+2025-09-21 22:27:22,187 - __main__ - INFO - Total Records: 241
+2025-09-21 22:27:22,187 - __main__ - INFO - Last Fetch: 2025-09-21 15:26:11
+2025-09-21 22:27:22,187 - __main__ - INFO - Latest Record: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:27:22,187 - __main__ - INFO - Database File: C:\Users\risqu\Desktop\LMS MCP\data\wazuh_archives.db
+2025-09-21 22:27:22,187 - __main__ - INFO - Last Processed Timestamp: 2025-09-21T15:26:08.539+0000
+2025-09-21 22:27:22,187 - __main__ - INFO - ==================================================

@@ -57,24 +57,24 @@ logger = logging.getLogger(__name__)
 # Ensure logs directory exists
 os.makedirs('logs', exist_ok=True)
 
-# Configuration from JSON config
+# Configuration from JSON config - NO FALLBACKS!
 LM_STUDIO_CONFIG = {
-    'base_url': config.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
-    'api_key': config.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio'),
-    'model': config.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
+    'base_url': config.get('network.LM_STUDIO_BASE_URL'),
+    'api_key': config.get('ai_model.LM_STUDIO_API_KEY'),
+    'model': config.get('ai_model.LM_STUDIO_MODEL'),
     'timeout': None  # No timeout
 }
 
 FLASK_CONFIG = {
-    'host': config.get('flask.FLASK_HOST', '127.0.0.1'),
-    'port': int(config.get('flask.FLASK_PORT', '5000')),
-    'debug': config.get('flask.FLASK_DEBUG', 'true').lower() == 'true'
+    'host': config.get('flask.FLASK_HOST'),
+    'port': int(config.get('flask.FLASK_PORT')),
+    'debug': config.get('flask.FLASK_DEBUG').lower() == 'true'
 }
 
 # Initialize Flask app with correct template folder
 template_dir = Path(__file__).parent / 'templates'
 app = Flask(__name__, template_folder=str(template_dir))
-app.secret_key = config.get('security.FLASK_SECRET_KEY', 'your-secret-key-change-this-in-production')
+app.secret_key = config.get('security.FLASK_SECRET_KEY')
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -370,8 +370,8 @@ def dashboard_data():
         from datetime import datetime, timedelta
         
         # Database path
-        database_dir = config.get('database.DATABASE_DIR', './data')
-        wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+        database_dir = config.get('database.DATABASE_DIR')
+        wazuh_db_name = config.get('database.WAZUH_DB_NAME')
         db_path = os.path.join(project_root, database_dir, wazuh_db_name)
         
         logger.info(f"Attempting to connect to database: {db_path}")
@@ -954,7 +954,7 @@ if __name__ == "__main__":
     print("\nStarting webapp...")
     
     app.run(
-        debug=config.get('flask.FLASK_DEBUG', 'false').lower() == 'true',  # Use JSON config for debug
+        debug=config.get('flask.FLASK_DEBUG').lower() == 'true',  # Use JSON config for debug
         host=FLASK_CONFIG['host'], 
         port=FLASK_CONFIG['port'],
         use_reloader=False,  # Disable reloader to prevent re-initialization

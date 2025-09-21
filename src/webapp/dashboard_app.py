@@ -15,8 +15,8 @@ config = ConfigManager()
 app = Flask(__name__)
 
 # Database path - use JSON configuration
-DATABASE_DIR = config.get('database.DATABASE_DIR', './data')
-WAZUH_DB_NAME = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+DATABASE_DIR = config.get('database.DATABASE_DIR')
+WAZUH_DB_NAME = config.get('database.WAZUH_DB_NAME')
 DB_PATH = os.path.join(DATABASE_DIR, WAZUH_DB_NAME)
 
 # Ensure absolute path
@@ -294,9 +294,9 @@ if __name__ == '__main__':
     print(f"Database exists: {os.path.exists(DB_PATH)}")
     
     # Load configuration from environment variables
-    debug_mode = config.get('flask.DASHBOARD_DEBUG', 'false').lower() == 'true'
-    host = config.get('flask.DASHBOARD_HOST', '127.0.0.1')
-    port = int(config.get('flask.DASHBOARD_PORT', '5000'))
+    debug_mode = config.get('flask.DASHBOARD_DEBUG').lower() == 'true'
+    host = config.get('flask.DASHBOARD_HOST')
+    port = int(config.get('flask.DASHBOARD_PORT'))
     
     print(f"Starting dashboard on {host}:{port} (debug={debug_mode})")
     app.run(debug=debug_mode, host=host, port=port)
