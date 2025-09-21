@@ -4,21 +4,28 @@ Centralized configuration for telegram bot functionality
 """
 
 import os
+import sys
 from pathlib import Path
 from typing import Dict, Any
+
+# Add config directory to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
 
 class TelegramBotConfig:
     """Configuration class for Telegram Bot"""
     
     def __init__(self):
-        # Bot Token from environment or default
-        self.BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
+        # Bot Token from JSON config
+        self.BOT_TOKEN = config.get('security.TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
         
         # LM Studio Configuration
         self.LM_STUDIO_CONFIG = {
-            'base_url': os.getenv('LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
-            'api_key': os.getenv('LM_STUDIO_API_KEY', 'lm-studio'),
-            'model': os.getenv('LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
+            'base_url': config.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
+            'api_key': config.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio'),
+            'model': config.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
             'timeout': None  # No timeout
         }
         

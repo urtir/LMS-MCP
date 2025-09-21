@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "version": "1.0",
+    "created": "2025-09-21T15:35:17.066149",
+    "last_updated": "2025-09-21T15:35:17.066149",
+    "description": "LMS MCP Centralized Configuration"
+  },
+  "security": {
+    "FLASK_SECRET_KEY": "your-secret-key-change-this-in-production",
+    "TELEGRAM_BOT_TOKEN": "YOUR_BOT_TOKEN_HERE",
+    "WAZUH_PASSWORD": "MyS3cr37P450r.*-"
+  },
+  "network": {
+    "LM_STUDIO_BASE_URL": "http://192.168.56.1:1234/v1",
+    "WAZUH_API_URL": "https://localhost:55000",
+    "WAZUH_ARCHIVES_PATH": "/var/ossec/logs/archives/archives.json",
+    "DOCKER_CONTAINER_NAME": "single-node-wazuh.manager-1"
+  },
+  "flask": {
+    "FLASK_HOST": "127.0.0.1",
+    "FLASK_PORT": "5000",
+    "FLASK_DEBUG": "false",
+    "DASHBOARD_HOST": "127.0.0.1",
+    "DASHBOARD_PORT": "5000",
+    "DASHBOARD_DEBUG": "false"
+  },
+  "database": {
+    "DATABASE_DIR": "./data",
+    "WAZUH_DB_NAME": "wazuh_archives.db",
+    "CHAT_DB_NAME": "chat_history.db",
+    "LOG_DIR": "./logs"
+  },
+  "ai_model": {
+    "LM_STUDIO_API_KEY": "lm-studio",
+    "LM_STUDIO_MODEL": "qwen/qwen3-1.7b",
+    "AI_MAX_TOKENS": "2000",
+    "AI_TEMPERATURE": "0.3"
+  },
+  "performance": {
+    "MAX_LOG_LENGTH": "1000",
+    "MAX_RAG_CONTENT": "3000",
+    "DEFAULT_MAX_RESULTS": "100",
+    "CACHE_BUILD_LIMIT": "1000"
+  },
+  "security_thresholds": {
+    "CRITICAL_RULE_LEVEL": "6",
+    "HIGH_RULE_LEVEL": "7",
+    "EMERGENCY_RULE_LEVEL": "8",
+    "AGENT_ACTIVE_THRESHOLD": "100",
+    "DEFAULT_DAYS_RANGE": "7"
+  },
+  "wazuh": {
+    "WAZUH_USERNAME": "wazuh-wui",
+    "WAZUH_VERIFY_SSL": "false",
+    "WAZUH_TIMEOUT": "30"
+  },
+  "reports": {
+    "DAILY_MAX_EVENTS": "50",
+    "THREE_DAY_MAX_EVENTS": "100",
+    "WEEKLY_MAX_EVENTS": "200",
+    "MONTHLY_MAX_EVENTS": "500",
+    "PDF_TITLE_FONT_SIZE": "24",
+    "PDF_BODY_FONT_SIZE": "12"
+  }
+}

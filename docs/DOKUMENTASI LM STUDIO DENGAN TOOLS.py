@@ -1,6 +1,6 @@
 """
 LM Studio Tool Use Demo: Wikipedia Querying Chatbot
-Demonstrates how an LM Studio model can query Wikipedia
+Demonstrates how an LM Studio model can query Wikipedia using JSON configuration
 """
 
 # Standard library imports
@@ -12,13 +12,24 @@ import threading
 import time
 import urllib.parse
 import urllib.request
+from pathlib import Path
+
+# Add config directory to path
+project_root = Path(__file__).parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
 
 # Third-party imports
 from openai import OpenAI
+import os
 
-# Initialize LM Studio client
-client = OpenAI(base_url="http://0.0.0.0:1234/v1", api_key="lm-studio")
-MODEL = "qwen/qwen3-1.7b"
+# Initialize LM Studio client using JSON configuration
+LM_STUDIO_BASE_URL = config.get('ai_model.LM_STUDIO_BASE_URL', 'http://0.0.0.0:1234/v1')
+LM_STUDIO_API_KEY = config.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio')
+MODEL = config.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b')
+
+client = OpenAI(base_url=LM_STUDIO_BASE_URL, api_key=LM_STUDIO_API_KEY)
 
 
 def fetch_wikipedia_content(search_query: str) -> dict:

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Configuration - LMS MCP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(214.3 31.8% 91.4%)",
+                        input: "hsl(214.3 31.8% 91.4%)",
+                        ring: "hsl(222.2 84% 4.9%)",
+                        background: "hsl(0 0% 100%)",
+                        foreground: "hsl(222.2 84% 4.9%)",
+                        primary: {
+                            DEFAULT: "hsl(222.2 47.4% 11.2%)",
+                            foreground: "hsl(210 40% 98%)"
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)"
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(0 84.2% 60.2%)",
+                            foreground: "hsl(210 40% 98%)"
+                        },
+                        muted: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(215.4 16.3% 46.9%)"
+                        },
+                        accent: {
+                            DEFAULT: "hsl(210 40% 96%)",
+                            foreground: "hsl(222.2 84% 4.9%)"
+                        },
+                        card: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(222.2 84% 4.9%)"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full">
+    <div class="min-h-full bg-slate-50">
+        <!-- Header -->
+        <div class="bg-white border-b border-slate-200 px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900">⚙️ Configuration Management</h1>
+                    <p class="mt-1 text-sm text-slate-600">Manage system configuration settings</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="validateConfiguration()" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        🔍 Validate
+                    </button>
+                    <button onclick="createBackup()" class="inline-flex items-center px-3 py-2 border border-slate-300 text-sm leading-4 font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        💾 Backup
+                    </button>
+                    <button onclick="saveConfiguration()" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        💾 Save All
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <!-- Tabs -->
+            <div class="mb-6">
+                <div class="border-b border-slate-200">
+                    <nav class="-mb-px flex space-x-8" id="config-tabs">
+                        <!-- Tabs will be generated here -->
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div id="tab-content">
+                <!-- Content will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <script>
+        let currentConfig = {};
+        let activeTab = 'security';
+
+        // Load configuration on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfiguration();
+        });
+
+        async function loadConfiguration() {
+            try {
+                const response = await fetch('/admin/api/config');
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error);
+                }
+
+                currentConfig = data.config;
+                renderConfiguration();
+            } catch (error) {
+                showToast(`Failed to load configuration: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        function renderConfiguration() {
+            renderTabs();
+            renderTabContent();
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('config-tabs');
+            tabsContainer.innerHTML = '';
+
+            Object.keys(currentConfig).forEach(categoryId => {
+                const category = currentConfig[categoryId];
+                const tab = document.createElement('button');
+                tab.className = `whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === categoryId 
+                        ? 'border-indigo-500 text-indigo-600' 
+                        : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                }`;
+                tab.textContent = category.name;
+                tab.onclick = () => switchTab(categoryId);
+                tabsContainer.appendChild(tab);
+            });
+        }
+
+        function switchTab(categoryId) {
+            activeTab = categoryId;
+            renderConfiguration();
+        }
+
+        function renderTabContent() {
+            const contentContainer = document.getElementById('tab-content');
+            contentContainer.innerHTML = '';
+
+            if (!currentConfig[activeTab]) {
+                return;
+            }
+
+            const category = currentConfig[activeTab];
+            
+            // Category header
+            const header = document.createElement('div');
+            header.className = 'mb-6';
+            header.innerHTML = `
+                <h2 class="text-lg font-medium text-slate-900">${category.name}</h2>
+                <p class="mt-1 text-sm text-slate-600">${category.description}</p>
+            `;
+            contentContainer.appendChild(header);
+
+            // Variables grid
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3';
+
+            Object.entries(category.variables).forEach(([varName, varConfig]) => {
+                const card = createVariableCard(activeTab, varName, varConfig);
+                grid.appendChild(card);
+            });
+
+            contentContainer.appendChild(grid);
+        }
+
+        function createVariableCard(categoryId, varName, varConfig) {
+            const card = document.createElement('div');
+            card.className = 'bg-white border border-slate-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow';
+
+            const isRequired = varConfig.required;
+            const inputType = getInputType(varConfig.type);
+            const currentValue = varConfig.current_value || '';
+
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-sm font-medium text-slate-900">${varName}</h3>
+                    ${isRequired ? '<span class="text-xs text-red-500 font-medium">Required</span>' : ''}
+                </div>
+                <p class="text-xs text-slate-600 mb-4">${varConfig.description}</p>
+                <div class="space-y-2">
+                    ${createInput(categoryId, varName, varConfig, currentValue, inputType)}
+                    ${varConfig.validation ? createValidationHint(varConfig.validation) : ''}
+                </div>
+            `;
+
+            return card;
+        }
+
+        function getInputType(configType) {
+            switch(configType) {
+                case 'password': return 'password';
+                case 'number': return 'number';
+                case 'boolean': return 'checkbox';
+                case 'url': return 'url';
+                default: return 'text';
+            }
+        }
+
+        function createInput(categoryId, varName, varConfig, currentValue, inputType) {
+            const inputId = `${categoryId}_${varName}`;
+            
+            if (inputType === 'checkbox') {
+                const checked = currentValue === 'true' ? 'checked' : '';
+                return `
+                    <div class="flex items-center">
+                        <input type="checkbox" id="${inputId}" name="${varName}" ${checked} 
+                               onchange="updateConfigValue('${categoryId}', '${varName}', this.checked.toString())"
+                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded">
+                        <label for="${inputId}" class="ml-2 block text-sm text-slate-700">Enabled</label>
+                    </div>
+                `;
+            } else {
+                const step = varConfig.validation?.step ? `step="${varConfig.validation.step}"` : '';
+                const min = varConfig.validation?.min ? `min="${varConfig.validation.min}"` : '';
+                const max = varConfig.validation?.max ? `max="${varConfig.validation.max}"` : '';
+                
+                return `
+                    <input type="${inputType}" id="${inputId}" name="${varName}" value="${currentValue}"
+                           ${step} ${min} ${max}
+                           onchange="updateConfigValue('${categoryId}', '${varName}', this.value)"
+                           class="block w-full px-3 py-2 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                `;
+            }
+        }
+
+        function createValidationHint(validation) {
+            const hints = [];
+            if (validation.min_length) hints.push(`Min length: ${validation.min_length}`);
+            if (validation.min) hints.push(`Min: ${validation.min}`);
+            if (validation.max) hints.push(`Max: ${validation.max}`);
+            if (validation.pattern) hints.push('Must match required format');
+            
+            return hints.length > 0 ? `<p class="text-xs text-slate-500">${hints.join(', ')}</p>` : '';
+        }
+
+        function updateConfigValue(categoryId, varName, value) {
+            if (!currentConfig[categoryId]) {
+                currentConfig[categoryId] = { variables: {} };
+            }
+            if (!currentConfig[categoryId].variables) {
+                currentConfig[categoryId].variables = {};
+            }
+            if (!currentConfig[categoryId].variables[varName]) {
+                currentConfig[categoryId].variables[varName] = {};
+            }
+            
+            currentConfig[categoryId].variables[varName].current_value = value;
+        }
+
+        async function saveConfiguration() {
+            try {
+                const configToSave = {};
+                
+                Object.keys(currentConfig).forEach(categoryId => {
+                    configToSave[categoryId] = {};
+                    const category = currentConfig[categoryId];
+                    
+                    if (category.variables) {
+                        Object.keys(category.variables).forEach(varName => {
+                            const variable = category.variables[varName];
+                            configToSave[categoryId][varName] = variable.current_value;
+                        });
+                    }
+                });
+
+                const response = await fetch('/admin/api/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ config: configToSave })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Configuration saved successfully!', 'success');
+                } else {
+                    throw new Error(data.error || 'Failed to save configuration');
+                }
+            } catch (error) {
+                showToast(`Failed to save configuration: ${error.message}`, 'error');
+            }
+        }
+
+        async function validateConfiguration() {
+            try {
+                const response = await fetch('/admin/api/validate');
+                const data = await response.json();
+
+                if (data.success) {
+                    let errorCount = 0;
+                    Object.values(data.validation).forEach(category => {
+                        Object.values(category).forEach(variable => {
+                            if (!variable.valid) {
+                                errorCount += variable.errors.length;
+                            }
+                        });
+                    });
+
+                    if (errorCount === 0) {
+                        showToast('Configuration validation passed!', 'success');
+                    } else {
+                        showToast(`Configuration has ${errorCount} validation errors`, 'error');
+                    }
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                showToast(`Validation failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function createBackup() {
+            try {
+                const response = await fetch('/admin/api/backup', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Configuration backup created successfully!', 'success');
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                showToast(`Backup failed: ${error.message}`, 'error');
+            }
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            
+            toast.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+            toast.textContent = message;
+            
+            const container = document.getElementById('toast-container');
+            container.appendChild(toast);
+            
+            // Animate in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (container.contains(toast)) {
+                        container.removeChild(toast);
+                    }
+                }, 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

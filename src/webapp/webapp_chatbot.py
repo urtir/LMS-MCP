@@ -27,10 +27,18 @@ project_root = current_dir.parent.parent
 sys.path.insert(0, str(project_root))
 sys.path.insert(0, str(project_root / 'src'))
 
+# Add config directory to path
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
+
 # Import project components
 from src.database import ChatDatabase
 from src.api import FastMCPBridge
 from src.models.user import User
+
+# Import admin blueprint
+from src.webapp.admin import admin_bp
 
 # LM Studio client
 from openai import OpenAI
@@ -39,24 +47,24 @@ from openai import OpenAI
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Configuration from environment variables
+# Configuration from JSON config
 LM_STUDIO_CONFIG = {
-    'base_url': os.getenv('LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
-    'api_key': os.getenv('LM_STUDIO_API_KEY', 'lm-studio'),
-    'model': os.getenv('LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
+    'base_url': config.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
+    'api_key': config.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio'),
+    'model': config.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
     'timeout': None  # No timeout
 }
 
 FLASK_CONFIG = {
-    'host': os.getenv('FLASK_HOST', '127.0.0.1'),
-    'port': int(os.getenv('FLASK_PORT', '5000')),
-    'debug': os.getenv('FLASK_DEBUG', 'true').lower() == 'true'
+    'host': config.get('flask.FLASK_HOST', '127.0.0.1'),
+    'port': int(config.get('flask.FLASK_PORT', '5000')),
+    'debug': config.get('flask.FLASK_DEBUG', 'true').lower() == 'true'
 }
 
 # Initialize Flask app with correct template folder
 template_dir = Path(__file__).parent / 'templates'
 app = Flask(__name__, template_folder=str(template_dir))
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-change-this-in-production')
+app.secret_key = config.get('security.FLASK_SECRET_KEY', 'your-secret-key-change-this-in-production')
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -64,6 +72,21 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message = 'Please log in to access this page.'
 login_manager.login_message_category = 'info'
+
+# Register blueprints
+app.register_blueprint(admin_bp)
+
+# Create main blueprint for organizing routes
+from flask import Blueprint
+main_bp = Blueprint('main', __name__)
+
+@main_bp.route('/')
+def landing():
+    """Landing page - accessible without login"""
+    return render_template('landing.html', user=current_user if current_user.is_authenticated else None)
+
+# Register main blueprint  
+app.register_blueprint(main_bp)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -199,11 +222,6 @@ class Spinner:
         self.write("\r")
 
 # Flask Routes
-@app.route('/')
-def landing():
-    """Landing page - accessible without login"""
-    return render_template('landing.html', user=current_user if current_user.is_authenticated else None)
-
 @app.route('/login')
 def login():
     """Login page"""
@@ -328,7 +346,9 @@ def dashboard_data():
         from datetime import datetime, timedelta
         
         # Database path
-        db_path = os.path.join(project_root, 'data', 'wazuh_archives.db')
+        database_dir = config.get('database.DATABASE_DIR', './data')
+        wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+        db_path = os.path.join(project_root, database_dir, wazuh_db_name)
         
         logger.info(f"Attempting to connect to database: {db_path}")
         
@@ -858,7 +878,7 @@ if __name__ == "__main__":
     print("\nStarting webapp...")
     
     app.run(
-        debug=True,  # Enable debug mode for development
+        debug=config.get('flask.FLASK_DEBUG', 'false').lower() == 'true',  # Use JSON config for debug
         host=FLASK_CONFIG['host'], 
         port=FLASK_CONFIG['port'],
         use_reloader=False,  # Disable reloader to prevent re-initialization

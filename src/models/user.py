@@ -10,6 +10,7 @@ class User(UserMixin):
         self.email = user_data['email']
         self.full_name = user_data.get('full_name')
         self._is_active = user_data.get('is_active', True)
+        self.is_admin = user_data.get('is_admin', False) or self.username == 'admin'  # Admin privilege
         self.created_at = user_data.get('created_at')
         self.last_login = user_data.get('last_login')
     
@@ -41,6 +42,7 @@ class User(UserMixin):
             'email': self.email,
             'full_name': self.full_name,
             'is_active': self._is_active,
+            'is_admin': self.is_admin,
             'created_at': self.created_at,
             'last_login': self.last_login
         }

@@ -19,12 +19,19 @@ import asyncio
 import json
 import logging
 import os
+import sys
 import sqlite3
 from typing import Optional, Dict, List, Any, Union
 from datetime import datetime
 import base64
 import ssl
 from pathlib import Path
+
+# Add config directory to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
 
 import httpx
 from fastmcp import FastMCP, Context
@@ -69,25 +76,25 @@ except ImportError as e:
 # Initialize FastMCP server for Wazuh AI threat hunting
 mcp = FastMCP("Wazuh AI Threat Hunting Server")
 
-# Configuration
+# Configuration using JSON config
 class WazuhConfig:
     def __init__(self):
-        self.base_url = os.getenv("WAZUH_API_URL", "https://localhost:55000")
-        self.username = os.getenv("WAZUH_USERNAME", "wazuh-wui")
-        self.password = os.getenv("WAZUH_PASSWORD", "MyS3cr37P450r.*-")
-        self.verify_ssl = os.getenv("WAZUH_VERIFY_SSL", "false").lower() == "true"
-        self.timeout = int(os.getenv("WAZUH_TIMEOUT", "30"))
+        self.base_url = config.get("network.WAZUH_API_URL", "https://localhost:55000")
+        self.username = config.get("wazuh.WAZUH_USERNAME", "wazuh-wui")
+        self.password = config.get("security.WAZUH_PASSWORD", "MyS3cr37P450r.*-")
+        self.verify_ssl = config.get("wazuh.WAZUH_VERIFY_SSL", "false").lower() == "true"
+        self.timeout = int(config.get("wazuh.WAZUH_TIMEOUT", "30"))
         self._token = None
         self._token_expires = None
 
-config = WazuhConfig()
+wazuh_config = WazuhConfig()
 
-# LM Studio Configuration for CAG
+# LM Studio Configuration for CAG using JSON config
 class LMStudioConfig:
     def __init__(self):
-        self.base_url = os.getenv('LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1')
-        self.api_key = os.getenv('LM_STUDIO_API_KEY', 'lm-studio')
-        self.model = os.getenv('LM_STUDIO_MODEL', 'qwen/qwen3-1.7b')
+        self.base_url = config.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1')
+        self.api_key = config.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio')
+        self.model = config.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b')
         self.timeout = None
 
 lm_studio_config = LMStudioConfig()
@@ -96,40 +103,40 @@ lm_studio_config = LMStudioConfig()
 async def get_http_client() -> httpx.AsyncClient:
     """Create HTTP client with proper SSL configuration."""
     return httpx.AsyncClient(
-        verify=config.verify_ssl,
-        timeout=config.timeout,
+        verify=wazuh_config.verify_ssl,
+        timeout=wazuh_config.timeout,
         headers={"Content-Type": "application/json"}
     )
 
 # Authentication functions
 async def get_auth_token(ctx: Context) -> str:
     """Get or refresh JWT authentication token."""
-    if config._token and config._token_expires:
+    if wazuh_config._token and wazuh_config._token_expires:
         # Check if token is still valid (with 1 minute buffer)
         import time
-        if time.time() < (config._token_expires - 60):
-            return config._token
+        if time.time() < (wazuh_config._token_expires - 60):
+            return wazuh_config._token
     
     await ctx.info("Getting new Wazuh API authentication token...")
     
     async with await get_http_client() as client:
         # Encode credentials for basic auth
-        credentials = base64.b64encode(f"{config.username}:{config.password}".encode()).decode()
+        credentials = base64.b64encode(f"{wazuh_config.username}:{wazuh_config.password}".encode()).decode()
         headers = {"Authorization": f"Basic {credentials}"}
         
         response = await client.post(
-            f"{config.base_url}/security/user/authenticate",
+            f"{wazuh_config.base_url}/security/user/authenticate",
             headers=headers
         )
         
         if response.status_code == 200:
             data = response.json()
-            config._token = data["data"]["token"]
+            wazuh_config._token = data["data"]["token"]
             # JWT tokens typically expire in 15 minutes (900 seconds)
             import time
-            config._token_expires = time.time() + 900
+            wazuh_config._token_expires = time.time() + 900
             await ctx.info("Successfully authenticated with Wazuh API")
-            return config._token
+            return wazuh_config._token
         else:
             raise Exception(f"Authentication failed: {response.status_code} - {response.text}")
 
@@ -150,7 +157,7 @@ async def make_api_request(
             "Content-Type": content_type
         }
         
-        url = f"{config.base_url}{endpoint}"
+        url = f"{wazuh_config.base_url}{endpoint}"
         
         # Log request
         await ctx.info(f"Making {method} request to {endpoint}")
@@ -2135,10 +2142,10 @@ if __name__ == "__main__":
     try:
         print("Wazuh FastMCP Server v1.0.0")
         print("==========================================")
-        print(f"Base URL: {config.base_url}")
-        print(f"Username: {config.username}")
-        print(f"SSL Verify: {config.verify_ssl}")
-        print(f"Timeout: {config.timeout}s")
+        print(f"Base URL: {wazuh_config.base_url}")
+        print(f"Username: {wazuh_config.username}")
+        print(f"SSL Verify: {wazuh_config.verify_ssl}")
+        print(f"Timeout: {wazuh_config.timeout}s")
         print("")
         print("Available tools: 70+ Wazuh API endpoints")
         print("Available resources: 2 information resources")

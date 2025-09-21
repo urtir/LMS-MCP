@@ -8,6 +8,7 @@ Main bot implementation with report generation and Q&A capabilities
 import asyncio
 import logging
 import json
+import os
 import threading
 import time
 import sqlite3
@@ -15,6 +16,12 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import sys
+
+# Add config directory to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
 
 from telegram import Bot, Update, InlineKeyboardButton, InlineKeyboardMarkup, BotCommand
 from telegram.ext import (
@@ -47,6 +54,21 @@ class TelegramSecurityBot:
     
     def __init__(self):
         self.config = TelegramBotConfig()
+        
+        # Setup database paths from JSON configuration
+        database_dir = config.get('database.DATABASE_DIR', './data')
+        self.wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db') 
+        self.chat_db_name = config.get('database.CHAT_DB_NAME', 'chat_history.db')
+        
+        # Build full paths
+        self.wazuh_db_path = os.path.join(database_dir, self.wazuh_db_name)
+        self.chat_db_path = os.path.join(database_dir, self.chat_db_name)
+        
+        # Ensure absolute paths
+        if not os.path.isabs(self.wazuh_db_path):
+            self.wazuh_db_path = os.path.join(project_root, self.wazuh_db_path)
+        if not os.path.isabs(self.chat_db_path):
+            self.chat_db_path = os.path.join(project_root, self.chat_db_path)
         self.token = self.config.BOT_TOKEN
         self.authorized_users = set()  # Will be populated from database/config
         
@@ -631,7 +653,7 @@ Contact your system administrator for technical support.
         """Check database for new critical events (rule level 5+) - REALTIME with duplicate prevention"""
         try:
             # Connect to Wazuh archives database
-            conn = sqlite3.connect('wazuh_archives.db')
+            conn = sqlite3.connect(self.wazuh_db_path)
             conn.row_factory = sqlite3.Row  # Enable column access by name
             cursor = conn.cursor()
             

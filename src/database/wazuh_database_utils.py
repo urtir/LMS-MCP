@@ -5,11 +5,19 @@ Database utilities for Wazuh SQLite operations
 
 import sqlite3
 import json
+import os
+import sys
 import pandas as pd
 from typing import Dict, List, Optional, Any
 from datetime import datetime, timedelta
 import logging
 from pathlib import Path
+
+# Add config directory to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
 
 logger = logging.getLogger(__name__)
 
@@ -18,10 +26,17 @@ class WazuhDatabaseQuery:
     
     def __init__(self, db_path: str = None):
         if db_path is None:
-            # Get path relative to project root
-            current_dir = Path(__file__).parent
-            project_root = current_dir.parent.parent
-            db_path = str(project_root / "data" / "wazuh_archives.db")
+            # Use JSON configuration for database settings
+            database_dir = config.get('database.DATABASE_DIR', './data')
+            wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+            db_path = os.path.join(database_dir, wazuh_db_name)
+            
+            # Ensure absolute path
+            if not os.path.isabs(db_path):
+                current_dir = Path(__file__).parent
+                project_root = current_dir.parent.parent
+                db_path = str(project_root / db_path)
+        
         self.db_path = db_path
     
     def get_connection(self):
@@ -206,8 +221,12 @@ def main():
     parser.add_argument("--agents", action="store_true", help="Show agent statistics")
     parser.add_argument("--rules", action="store_true", help="Show rule statistics")
     parser.add_argument("--export", type=str, help="Export to CSV file")
-    # Default database path using project structure
-    default_db_path = str(Path(__file__).parent.parent.parent / "data" / "wazuh_archives.db")
+    # Default database path using environment variables
+    database_dir = config.get('database.DATABASE_DIR', './data')
+    wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+    default_db_path = os.path.join(database_dir, wazuh_db_name)
+    if not os.path.isabs(default_db_path):
+        default_db_path = str(Path(__file__).parent.parent.parent / default_db_path)
     parser.add_argument("--db", type=str, help="Database file path", default=default_db_path)
     
     args = parser.parse_args()

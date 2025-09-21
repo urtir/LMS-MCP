@@ -3,11 +3,25 @@ import sqlite3
 import json
 from datetime import datetime, timedelta
 import os
+import sys
+from pathlib import Path
+
+# Add config directory to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
 
 app = Flask(__name__)
 
-# Database path
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'data', 'wazuh_archives.db')
+# Database path - use JSON configuration
+DATABASE_DIR = config.get('database.DATABASE_DIR', './data')
+WAZUH_DB_NAME = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+DB_PATH = os.path.join(DATABASE_DIR, WAZUH_DB_NAME)
+
+# Ensure absolute path
+if not os.path.isabs(DB_PATH):
+    DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), DB_PATH)
 
 def get_db_connection():
     """Get database connection"""
@@ -278,4 +292,11 @@ def get_stats():
 if __name__ == '__main__':
     print(f"Database path: {DB_PATH}")
     print(f"Database exists: {os.path.exists(DB_PATH)}")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    
+    # Load configuration from environment variables
+    debug_mode = config.get('flask.DASHBOARD_DEBUG', 'false').lower() == 'true'
+    host = config.get('flask.DASHBOARD_HOST', '127.0.0.1')
+    port = int(config.get('flask.DASHBOARD_PORT', '5000'))
+    
+    print(f"Starting dashboard on {host}:{port} (debug={debug_mode})")
+    app.run(debug=debug_mode, host=host, port=port)

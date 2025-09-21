@@ -6,24 +6,38 @@ Fetches JSON data from Wazuh Manager Docker container and stores it in SQLite3 d
 
 import sqlite3
 import json
+import os
+import sys
 import docker
 import time
 import threading
 import logging
 import signal
-import sys
 from datetime import datetime
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 import asyncio
-import os
+
+# Add config directory to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
 
 # Configure logging
+LOG_DIR = config.get('database.LOG_DIR', './logs')
+WAZUH_REALTIME_LOG = config.get('logs.WAZUH_REALTIME_LOG', 'wazuh_realtime.log')
+log_path = os.path.join(LOG_DIR, WAZUH_REALTIME_LOG)
+
+# Ensure absolute path
+if not os.path.isabs(log_path):
+    log_path = str(Path(__file__).parent.parent.parent / log_path)
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(str(Path(__file__).parent.parent.parent / 'logs' / 'wazuh_realtime.log')),
+        logging.FileHandler(log_path),
         logging.StreamHandler()
     ]
 )
@@ -34,10 +48,12 @@ class WazuhSQLiteDatabase:
     
     def __init__(self, db_path: str = None):
         if db_path is None:
-            # Get path relative to project root
+            # Get path relative to project root using environment variables
             current_dir = Path(__file__).parent
             project_root = current_dir.parent.parent
-            db_path = str(project_root / "data" / "wazuh_archives.db")
+            database_dir = config.get('database.DATABASE_DIR', 'data')
+            wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+            db_path = str(project_root / database_dir / wazuh_db_name)
         self.db_path = db_path
         self.connection = None
         self.init_database()
@@ -234,8 +250,8 @@ class WazuhDockerClient:
     def __init__(self):
         self.docker_client = None
         self.wazuh_container = None
-        self.container_name = "single-node-wazuh.manager-1"  # From your docker ps output
-        self.archives_path = "/var/ossec/logs/archives/archives.json"
+        self.container_name = config.get('network.DOCKER_CONTAINER_NAME', "single-node-wazuh.manager-1")
+        self.archives_path = config.get('network.WAZUH_ARCHIVES_PATH', "/var/ossec/logs/archives/archives.json")
         self.last_position = 0
         
         self.connect_docker()
@@ -442,15 +458,20 @@ class WazuhRealtimeServer:
 
 def main():
     """Main entry point."""
+    container_name = config.get('network.DOCKER_CONTAINER_NAME', "single-node-wazuh.manager-1")
+    archives_path = config.get('network.WAZUH_ARCHIVES_PATH', "/var/ossec/logs/archives/archives.json")
+    
     print("="*60)
     print("WAZUH REAL-TIME DATA FETCHER TO SQLITE3")
     print("="*60)
-    print("Fetching data from: /var/ossec/logs/archives/archives.json")
-    print("Container: single-node-wazuh.manager-1")
-    # Calculate database path
+    print(f"Fetching data from: {archives_path}")
+    print(f"Container: {container_name}")
+    # Calculate database path using environment variables
     current_dir = Path(__file__).parent
     project_root = current_dir.parent.parent
-    db_path = project_root / "data" / "wazuh_archives.db"
+    database_dir = config.get('database.DATABASE_DIR', 'data')
+    wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+    db_path = project_root / database_dir / wazuh_db_name
     print(f"Database: {db_path}")
     print("="*60)
     

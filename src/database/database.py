@@ -5,17 +5,32 @@ import sqlite3
 import json
 import uuid
 import bcrypt
+import os
+import sys
 from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 from pathlib import Path
 
+# Add config directory to path
+project_root = Path(__file__).parent.parent.parent
+sys.path.append(str(project_root))
+from config.config_manager import ConfigManager
+config = ConfigManager()
+
 class ChatDatabase:
     def __init__(self, db_path: str = None):
         if db_path is None:
-            # Get path relative to project root
-            current_dir = Path(__file__).parent
-            project_root = current_dir.parent.parent
-            db_path = str(project_root / "data" / "chat_history.db")
+            # Use JSON configuration for database settings
+            database_dir = config.get('database.DATABASE_DIR', './data') 
+            chat_db_name = config.get('database.CHAT_DB_NAME', 'chat_history.db')
+            db_path = os.path.join(database_dir, chat_db_name)
+            
+            # Ensure absolute path
+            if not os.path.isabs(db_path):
+                current_dir = Path(__file__).parent
+                project_root = current_dir.parent.parent
+                db_path = str(project_root / db_path)
+        
         self.db_path = db_path
         self.init_database()
     
@@ -33,6 +48,7 @@ class ChatDatabase:
                     password_hash TEXT NOT NULL,
                     full_name TEXT,
                     is_active BOOLEAN DEFAULT 1,
+                    is_admin BOOLEAN DEFAULT 0,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     last_login TIMESTAMP
                 )
@@ -288,7 +304,7 @@ class ChatDatabase:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-                SELECT id, username, email, password_hash, full_name, is_active
+                SELECT id, username, email, password_hash, full_name, is_active, is_admin
                 FROM users 
                 WHERE username = ? AND is_active = 1
             ''', (username,))
@@ -306,7 +322,8 @@ class ChatDatabase:
                     'username': user[1],
                     'email': user[2],
                     'full_name': user[4],
-                    'is_active': user[5]
+                    'is_active': user[5],
+                    'is_admin': bool(user[6]) if user[6] is not None else False
                 }
         
         return None
@@ -316,7 +333,7 @@ class ChatDatabase:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-                SELECT id, username, email, full_name, is_active, created_at, last_login
+                SELECT id, username, email, full_name, is_active, created_at, last_login, is_admin
                 FROM users 
                 WHERE id = ? AND is_active = 1
             ''', (user_id,))
@@ -330,7 +347,8 @@ class ChatDatabase:
                     'full_name': user[3],
                     'is_active': user[4],
                     'created_at': user[5],
-                    'last_login': user[6]
+                    'last_login': user[6],
+                    'is_admin': bool(user[7]) if user[7] is not None else False
                 }
         
         return None

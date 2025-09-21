@@ -156,6 +156,13 @@
                             </button>
                             <div id="userMenu" class="hidden absolute right-0 top-10 w-48 bg-background border border-border rounded-md shadow-lg z-50">
                                 <div class="py-1">
+                                    {% if current_user.is_admin %}
+                                    <button onclick="window.location.href='/admin'" class="w-full text-left block px-4 py-2 text-sm hover:bg-accent">
+                                        <i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>
+                                        Admin Panel
+                                    </button>
+                                    <hr class="my-1 border-border">
+                                    {% endif %}
                                     <button onclick="logout()" class="w-full text-left block px-4 py-2 text-sm text-destructive hover:bg-accent">
                                         <i data-lucide="log-out" class="w-4 h-4 inline mr-2"></i>
                                         Logout
