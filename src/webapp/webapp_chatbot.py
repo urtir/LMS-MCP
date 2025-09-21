@@ -16,7 +16,7 @@ import os
 from typing import Dict, List, Any
 from pathlib import Path
 import sys
-from flask import Flask, render_template, request, jsonify, Response, redirect, url_for, flash, session
+from flask import Flask, render_template, request, jsonify, Response, redirect, url_for, flash, session, make_response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from functools import wraps
 import itertools
@@ -300,7 +300,12 @@ def api_logout():
 @login_required
 def chat():
     """Chat page - requires login"""
-    return render_template('chat_with_history.html', user=current_user)
+    response = make_response(render_template('chat_with_history.html', user=current_user))
+    # Add anti-cache headers to prevent browser caching of old JavaScript
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 @app.route('/dashboard')
 @login_required
