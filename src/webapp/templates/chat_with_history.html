@@ -645,6 +645,17 @@
                 
                 const data = await response.json();
                 
+                // Debug logging for response
+                console.log('=== RESPONSE DEBUG ===');
+                console.log('Response status:', response.status);
+                console.log('Response data:', data);
+                console.log('Data type:', typeof data);
+                console.log('Has error:', !!data.error);
+                console.log('Has response:', !!data.response);
+                console.log('Response content:', data.response);
+                console.log('Tool calls:', data.tool_calls);
+                console.log('======================');
+                
                 // Remove loading indicator
                 const loadingElement = document.getElementById(loadingId);
                 if (loadingElement) {
@@ -652,8 +663,10 @@
                 }
                 
                 if (data.error) {
+                    console.log('Displaying error message:', data.error);
                     displayMessage('assistant', `Error: ${data.error}`, [], null, null, false, true);
                 } else {
+                    console.log('Displaying assistant response:', data.response);
                     displayMessage('assistant', data.response, data.tool_calls, data.thinking);
                     
                     // Update session in sidebar if this was a new session
@@ -683,6 +696,16 @@
 
         // Keep existing display functions but update for session support
         function displayMessage(role, content, toolCalls = [], thinking = null, messageId = null, isLoading = false, isError = false) {
+            console.log('=== DISPLAY MESSAGE DEBUG ===');
+            console.log('Role:', role);
+            console.log('Content:', content);
+            console.log('Content type:', typeof content);
+            console.log('Content length:', content ? content.length : 'null');
+            console.log('Tool calls:', toolCalls);
+            console.log('Is loading:', isLoading);
+            console.log('Is error:', isError);
+            console.log('=============================');
+            
             const messagesDiv = document.getElementById('messages');
             const messageDiv = document.createElement('div');
             
@@ -960,6 +983,9 @@ ${thinking}
                 // Lists - ordered (remove the number and dot)
                 .replace(/^\d+\. (.*)$/gm, '<li class="list-item-number">$1</li>');
             
+            // Process Markdown tables
+            processedText = processMarkdownTables(processedText);
+            
             // Wrap consecutive list items in proper containers
             processedText = processedText.replace(/(<li class="list-item-bullet"[^>]*>.*?<\/li>)(<span[^>]*><\/span><li class="list-item-bullet"[^>]*>.*?<\/li>)*/g, function(match) {
                 return '<ul class="my-1 space-y-0 list-disc pl-6">' + match.replace(/<span[^>]*><\/span>/g, '').replace(/class="list-item-bullet"/g, 'class="mb-0"') + '</ul>';
@@ -990,6 +1016,92 @@ ${thinking}
             });
             
             return processedText;
+        }
+
+        function processMarkdownTables(text) {
+            // Split text into lines
+            const lines = text.split('<span style="display: block; height: 2px; line-height: 2px; font-size: 1px;"></span>');
+            const result = [];
+            let i = 0;
+            
+            while (i < lines.length) {
+                const line = lines[i].trim();
+                
+                // Check if this line looks like a table header
+                if (line.includes('|') && lines[i + 1] && lines[i + 1].trim().match(/^\|[\s\-\|]+\|$/)) {
+                    // Found a table
+                    const tableLines = [];
+                    tableLines.push(line); // Header
+                    tableLines.push(lines[i + 1]); // Separator
+                    i += 2;
+                    
+                    // Collect table rows
+                    while (i < lines.length && lines[i].trim().includes('|') && !lines[i].trim().match(/^\|[\s\-\|]+\|$/)) {
+                        tableLines.push(lines[i].trim());
+                        i++;
+                    }
+                    
+                    // Convert to HTML table
+                    result.push(convertTableToHTML(tableLines));
+                } else {
+                    result.push(line);
+                    i++;
+                }
+            }
+            
+            return result.join('<span style="display: block; height: 2px; line-height: 2px; font-size: 1px;"></span>');
+        }
+        
+        function convertTableToHTML(tableLines) {
+            if (tableLines.length < 2) return tableLines.join('\n');
+            
+            const header = tableLines[0];
+            const separator = tableLines[1];
+            const rows = tableLines.slice(2);
+            
+            // Parse header
+            const headerCells = header.split('|').map(cell => cell.trim()).filter(cell => cell !== '');
+            
+            // Parse rows
+            const bodyRows = rows.map(row => 
+                row.split('|').map(cell => cell.trim()).filter(cell => cell !== '')
+            );
+            
+            // Build HTML table
+            let html = `
+                <div class="table-container my-4 overflow-x-auto border border-border rounded-lg">
+                    <table class="w-full text-sm">
+                        <thead class="bg-muted/50">
+                            <tr>
+            `;
+            
+            // Add header cells
+            headerCells.forEach(cell => {
+                html += `<th class="px-3 py-2 text-left font-medium border-b border-border">${cell}</th>`;
+            });
+            
+            html += `
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add body rows
+            bodyRows.forEach((row, rowIndex) => {
+                html += `<tr class="${rowIndex % 2 === 0 ? 'bg-card' : 'bg-muted/20'}">`;
+                row.forEach(cell => {
+                    html += `<td class="px-3 py-2 border-b border-border">${cell}</td>`;
+                });
+                html += '</tr>';
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            return html;
         }
 
         function escapeHtml(text) {

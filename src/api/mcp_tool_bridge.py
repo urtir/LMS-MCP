@@ -75,12 +75,19 @@ class FastMCPBridge:
         try:
             logger.info("Connecting to FastMCP server...")
             
-            # Connect to server via stdio - proper format
+            # If we have an old client, clean it up
+            if self.client:
+                try:
+                    await self.client.__aexit__(None, None, None)
+                except:
+                    pass
+            
+            # Connect to server via stdio - proper format with context manager
             self.client = Client(self.mcp_server_script)
-            await self.client.__aenter__()
+            # Don't call __aenter__ here, it will be called in execute_tool
             self._is_connected = True
             
-            logger.info("Successfully connected to FastMCP server")
+            logger.info("FastMCP client created successfully")
             return True
             
         except Exception as e:
@@ -98,78 +105,66 @@ class FastMCPBridge:
         try:
             logger.info("Loading tools from FastMCP server...")
             
-            # Ensure we have a fresh connection
-            if self.client:
-                try:
-                    await self.client.__aexit__(None, None, None)
-                except:
-                    pass
+            # Use fresh client connection with proper context manager
+            client = Client(self.mcp_server_script)
             
-            # Create new client connection
-            self.client = Client(self.mcp_server_script)
-            await self.client.__aenter__()
-            
-            # Get tools from MCP server
-            tools_list = await self.client.list_tools()
-            logger.info(f"Found {len(tools_list)} tools from FastMCP server")
-            
-            # Convert MCP tools to OpenAI format
-            self.openai_tools = []
-            self.tools_cache = {}
-            
-            for tool in tools_list:
-                # Store tool info
-                self.tools_cache[tool.name] = tool
+            async with client:
+                # Get tools from MCP server
+                tools_list = await client.list_tools()
+                logger.info(f"Found {len(tools_list)} tools from FastMCP server")
                 
-                # Convert to OpenAI function format
-                openai_tool = {
-                    "type": "function",
-                    "function": {
-                        "name": tool.name,
-                        "description": tool.description or f"Execute {tool.name} tool",
-                        "parameters": {
-                            "type": "object",
-                            "properties": {},
-                            "required": []
+                # Convert MCP tools to OpenAI format
+                self.openai_tools = []
+                self.tools_cache = {}
+                
+                for tool in tools_list:
+                    # Store tool info
+                    self.tools_cache[tool.name] = tool
+                    
+                    # Convert to OpenAI function format
+                    openai_tool = {
+                        "type": "function",
+                        "function": {
+                            "name": tool.name,
+                            "description": tool.description or f"Execute {tool.name} tool",
+                            "parameters": {
+                                "type": "object",
+                                "properties": {},
+                                "required": []
+                            }
                         }
                     }
-                }
+                    
+                    # Add schema if available
+                    if hasattr(tool, 'inputSchema') and tool.inputSchema:
+                        schema = tool.inputSchema
+                        if 'properties' in schema:
+                            openai_tool["function"]["parameters"]["properties"] = schema['properties']
+                        if 'required' in schema:
+                            openai_tool["function"]["parameters"]["required"] = schema['required']
+                    
+                    self.openai_tools.append(openai_tool)
                 
-                # Add parameters if available
-                if hasattr(tool, 'inputSchema') and tool.inputSchema:
-                    schema = tool.inputSchema
-                    if 'properties' in schema:
-                        openai_tool["function"]["parameters"]["properties"] = schema['properties']
-                    if 'required' in schema:
-                        openai_tool["function"]["parameters"]["required"] = schema['required']
-                
-                self.openai_tools.append(openai_tool)
-            
-            logger.info(f"Converted {len(self.openai_tools)} tools to OpenAI format")
-            return self.openai_tools
+                logger.info(f"Converted {len(self.openai_tools)} tools to OpenAI format")
+                return self.openai_tools
             
         except Exception as e:
             logger.error(f"Failed to load tools: {e}")
             return []
     
     async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute MCP tool and return result"""
+        """Execute MCP tool and return result using proper context manager - NO TIMEOUT"""
         try:
             logger.info(f"Executing tool: {tool_name} with args: {arguments}")
             
-            # Ensure we have a fresh connection for each tool execution
-            if self.client:
-                try:
-                    await self.client.__aexit__(None, None, None)
-                except:
-                    pass
+            # Use fresh client connection with proper context manager
+            client = Client(self.mcp_server_script)
             
-            # Create new client connection
-            self.client = Client(self.mcp_server_script)
-            await self.client.__aenter__()
-            
-            # Execute tool via FastMCP client
-            result = await self.client.call_tool(tool_name, arguments)
+            # Execute tool via FastMCP client with proper context manager - NO TIMEOUT
+            async with client:
+                logger.info(f"Connected to MCP server, executing tool: {tool_name}")
+                # NO TIMEOUT - let it run as long as needed
+                result = await client.call_tool(tool_name, arguments)
             
             logger.info(f"Tool {tool_name} executed successfully")
             
@@ -182,7 +177,7 @@ class FastMCPBridge:
             }
             
         except Exception as e:
-            logger.error(f"Failed to execute tool {tool_name}: {e}")
+            logger.error(f"Failed to execute tool {tool_name}: {e}", exc_info=True)
             return {
                 "status": "error",
                 "message": str(e),

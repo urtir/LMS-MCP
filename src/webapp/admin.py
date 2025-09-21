@@ -21,8 +21,28 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 from config.config_manager import ConfigManager
 config = ConfigManager()
 
-# Configure logging
+# Configure logging dengan detail level
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),  # Output ke terminal
+        logging.FileHandler('logs/admin.log', mode='a')  # Output ke file log
+    ]
+)
 logger = logging.getLogger(__name__)
+
+# Set logging level to INFO untuk memastikan semua admin errors terlihat
+logger.setLevel(logging.INFO)
+
+# Tambahkan handler untuk memastikan error muncul di terminal
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.ERROR)
+console_formatter = logging.Formatter('🚨 ADMIN ERROR: %(message)s')
+console_handler.setFormatter(console_formatter)
+logger.addHandler(console_handler)
+
+logger.info("Admin module loaded - comprehensive error logging enabled")
 
 # Create Blueprint
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -369,58 +389,104 @@ CONFIG_CATEGORIES = {
 
 def load_current_config() -> Dict[str, Any]:
     """Load current configuration from JSON"""
-    return config.get_all()
+    try:
+        logger.info("Loading current configuration from JSON")
+        config_data = config.get_all()
+        logger.info(f"Successfully loaded config with {len(config_data)} categories")
+        return config_data
+    except Exception as e:
+        logger.error(f"ADMIN ERROR - Failed to load current configuration: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
+        return {}
 
 def save_config_data(config_data: Dict[str, Any]) -> bool:
     """Save configuration data to JSON"""
     try:
+        logger.info(f"Saving configuration data with {len(config_data)} categories")
+        
         # Update each category
         for category, values in config_data.items():
             if category != 'meta':  # Skip meta information
+                logger.info(f"Updating category '{category}' with {len(values)} variables")
                 config.set_category(category, values)
+        
+        logger.info("Configuration saved successfully")
         return True
     except Exception as e:
-        logger.error(f"Error saving config: {e}")
+        logger.error(f"ADMIN ERROR - Failed to save config: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
+        logger.error(f"Config data being saved: {config_data}")
         return False
 
 def validate_variable(var_name: str, value: str, var_config: Dict) -> List[str]:
     """Validate a configuration variable"""
     errors = []
     
-    if var_config.get('required', False) and not value:
-        errors.append(f"{var_name} is required")
+    try:
+        logger.debug(f"Validating variable {var_name} with value: {value[:50]}..." if len(str(value)) > 50 else f"Validating variable {var_name} with value: {value}")
+        
+        if var_config.get('required', False) and not value:
+            error_msg = f"{var_name} is required"
+            errors.append(error_msg)
+            logger.warning(f"Validation error: {error_msg}")
+            return errors
+        
+        if not value:
+            logger.debug(f"Variable {var_name} is empty but not required")
+            return errors
+        
+        validation = var_config.get('validation', {})
+        var_type = var_config.get('type', 'text')
+        
+        # Type-specific validation
+        if var_type == 'number':
+            try:
+                num_value = float(value)
+                if 'min' in validation and num_value < validation['min']:
+                    error_msg = f"{var_name} must be at least {validation['min']}"
+                    errors.append(error_msg)
+                    logger.warning(f"Validation error: {error_msg}")
+                if 'max' in validation and num_value > validation['max']:
+                    error_msg = f"{var_name} must be at most {validation['max']}"
+                    errors.append(error_msg)
+                    logger.warning(f"Validation error: {error_msg}")
+            except ValueError:
+                error_msg = f"{var_name} must be a valid number"
+                errors.append(error_msg)
+                logger.warning(f"Validation error: {error_msg}")
+        
+        elif var_type == 'url':
+            if not (value.startswith('http://') or value.startswith('https://')):
+                error_msg = f"{var_name} must be a valid URL"
+                errors.append(error_msg)
+                logger.warning(f"Validation error: {error_msg}")
+        
+        elif var_type in ['text', 'password']:
+            if 'min_length' in validation and len(value) < validation['min_length']:
+                error_msg = f"{var_name} must be at least {validation['min_length']} characters"
+                errors.append(error_msg)
+                logger.warning(f"Validation error: {error_msg}")
+            if 'pattern' in validation:
+                import re
+                if not re.match(validation['pattern'], value):
+                    error_msg = f"{var_name} has invalid format"
+                    errors.append(error_msg)
+                    logger.warning(f"Validation error: {error_msg}")
+        
+        if not errors:
+            logger.debug(f"Variable {var_name} validation passed")
+            
         return errors
-    
-    if not value:
+        
+    except Exception as e:
+        error_msg = f"Exception during validation of {var_name}: {e}"
+        logger.error(f"ADMIN ERROR - {error_msg}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
+        errors.append(f"Validation error for {var_name}")
         return errors
-    
-    validation = var_config.get('validation', {})
-    var_type = var_config.get('type', 'text')
-    
-    # Type-specific validation
-    if var_type == 'number':
-        try:
-            num_value = float(value)
-            if 'min' in validation and num_value < validation['min']:
-                errors.append(f"{var_name} must be at least {validation['min']}")
-            if 'max' in validation and num_value > validation['max']:
-                errors.append(f"{var_name} must be at most {validation['max']}")
-        except ValueError:
-            errors.append(f"{var_name} must be a valid number")
-    
-    elif var_type == 'url':
-        if not (value.startswith('http://') or value.startswith('https://')):
-            errors.append(f"{var_name} must be a valid URL")
-    
-    elif var_type in ['text', 'password']:
-        if 'min_length' in validation and len(value) < validation['min_length']:
-            errors.append(f"{var_name} must be at least {validation['min_length']} characters")
-        if 'pattern' in validation:
-            import re
-            if not re.match(validation['pattern'], value):
-                errors.append(f"{var_name} has invalid format")
-    
-    return errors
 
 # Routes
 @admin_bp.route('/')
@@ -436,11 +502,13 @@ def index():
 def get_config():
     """Get current configuration"""
     try:
+        logger.info(f"Admin {current_user.username} requesting configuration")
         current_config = load_current_config()
         
         # Structure the response with categories
         result = {}
         for category_id, category in CONFIG_CATEGORIES.items():
+            logger.debug(f"Processing category: {category_id}")
             result[category_id] = {
                 'name': category['name'],
                 'description': category['description'],
@@ -456,13 +524,16 @@ def get_config():
                     'current_value': category_data.get(var_name, var_info['default'])
                 }
         
+        logger.info("Configuration retrieved successfully")
         return jsonify({
             'success': True,
             'config': result
         })
     
     except Exception as e:
-        logger.error(f"Error getting config: {e}")
+        logger.error(f"ADMIN ERROR - Failed to get config for user {current_user.username}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
         return jsonify({
             'success': False, 
             'error': str(e)
@@ -474,27 +545,39 @@ def get_config():
 def save_config_api():
     """Save configuration changes"""
     try:
+        logger.info(f"Admin {current_user.username} attempting to save configuration")
         data = request.get_json()
+        
         if not data:
+            logger.warning(f"Admin {current_user.username} provided no data")
             return jsonify({'success': False, 'error': 'No data provided'}), 400
         
         config_changes = data.get('config', {})
+        logger.info(f"Received config changes for {len(config_changes)} categories")
+        
         validation_errors = []
         
         # Validate all changes
         for category_id, variables in config_changes.items():
             if category_id not in CONFIG_CATEGORIES:
+                logger.warning(f"Unknown category: {category_id}")
                 continue
                 
+            logger.debug(f"Validating category '{category_id}' with {len(variables)} variables")
+            
             for var_name, value in variables.items():
                 if var_name not in CONFIG_CATEGORIES[category_id]['variables']:
+                    logger.warning(f"Unknown variable '{var_name}' in category '{category_id}'")
                     continue
                     
                 var_config = CONFIG_CATEGORIES[category_id]['variables'][var_name]
                 errors = validate_variable(var_name, str(value), var_config)
+                if errors:
+                    logger.warning(f"Validation errors for {var_name}: {errors}")
                 validation_errors.extend(errors)
         
         if validation_errors:
+            logger.error(f"ADMIN ERROR - Validation failed for user {current_user.username}: {validation_errors}")
             return jsonify({
                 'success': False,
                 'errors': validation_errors
@@ -502,19 +585,23 @@ def save_config_api():
         
         # Save to JSON config
         if save_config_data(config_changes):
-            logger.info(f"Configuration updated by {current_user.username}")
+            logger.info(f"Configuration updated successfully by {current_user.username}")
             return jsonify({
                 'success': True,
                 'message': 'Configuration saved successfully'
             })
         else:
+            logger.error(f"ADMIN ERROR - Failed to save configuration for user {current_user.username}")
             return jsonify({
                 'success': False,
                 'error': 'Failed to save configuration'
             }), 500
     
     except Exception as e:
-        logger.error(f"Error saving config: {e}")
+        logger.error(f"ADMIN ERROR - Exception while saving config for user {current_user.username}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
+        logger.error(f"Request data: {request.get_json()}")
         return jsonify({
             'success': False,
             'error': str(e)
@@ -526,29 +613,39 @@ def save_config_api():
 def validate_config():
     """Validate current configuration"""
     try:
+        logger.info(f"Admin {current_user.username} validating configuration")
         current_config = load_current_config()
         validation_results = {}
+        total_errors = 0
         
         for category_id, category in CONFIG_CATEGORIES.items():
+            logger.debug(f"Validating category: {category_id}")
             validation_results[category_id] = {}
             category_data = current_config.get(category_id, {})
             
             for var_name, var_config in category['variables'].items():
                 current_value = category_data.get(var_name, var_config['default'])
                 errors = validate_variable(var_name, current_value, var_config)
+                if errors:
+                    total_errors += len(errors)
+                    logger.warning(f"Validation errors for {category_id}.{var_name}: {errors}")
+                
                 validation_results[category_id][var_name] = {
                     'valid': len(errors) == 0,
                     'errors': errors,
                     'value': current_value
                 }
         
+        logger.info(f"Validation completed with {total_errors} total errors")
         return jsonify({
             'success': True,
             'validation': validation_results
         })
     
     except Exception as e:
-        logger.error(f"Error validating config: {e}")
+        logger.error(f"ADMIN ERROR - Exception during validation for user {current_user.username}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e)
@@ -560,7 +657,10 @@ def validate_config():
 def delete_category(category):
     """Delete entire configuration category"""
     try:
+        logger.info(f"Admin {current_user.username} deleting category: {category}")
+        
         if category not in CONFIG_CATEGORIES:
+            logger.warning(f"Invalid category deletion attempt: {category}")
             return jsonify({'success': False, 'error': 'Invalid category'}), 400
         
         # Reset category to defaults
@@ -569,7 +669,7 @@ def delete_category(category):
             default_values[var_name] = var_info['default']
         
         config.set_category(category, default_values)
-        logger.info(f"Category {category} reset to defaults by {current_user.username}")
+        logger.info(f"Category {category} reset to defaults successfully by {current_user.username}")
         
         return jsonify({
             'success': True,
@@ -577,7 +677,9 @@ def delete_category(category):
         })
     
     except Exception as e:
-        logger.error(f"Error deleting category: {e}")
+        logger.error(f"ADMIN ERROR - Failed to delete category {category} for user {current_user.username}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e)
@@ -589,17 +691,21 @@ def delete_category(category):
 def delete_variable(category, variable):
     """Delete specific configuration variable (reset to default)"""
     try:
+        logger.info(f"Admin {current_user.username} deleting variable: {category}.{variable}")
+        
         if category not in CONFIG_CATEGORIES:
+            logger.warning(f"Invalid category for variable deletion: {category}")
             return jsonify({'success': False, 'error': 'Invalid category'}), 400
         
         if variable not in CONFIG_CATEGORIES[category]['variables']:
+            logger.warning(f"Invalid variable deletion attempt: {category}.{variable}")
             return jsonify({'success': False, 'error': 'Invalid variable'}), 400
         
         # Reset to default value
         default_value = CONFIG_CATEGORIES[category]['variables'][variable]['default']
         config.set(f"{category}.{variable}", default_value)
         
-        logger.info(f"Variable {category}.{variable} reset to default by {current_user.username}")
+        logger.info(f"Variable {category}.{variable} reset to default successfully by {current_user.username}")
         
         return jsonify({
             'success': True,
@@ -607,7 +713,9 @@ def delete_variable(category, variable):
         })
     
     except Exception as e:
-        logger.error(f"Error deleting variable: {e}")
+        logger.error(f"ADMIN ERROR - Failed to delete variable {category}.{variable} for user {current_user.username}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e)
@@ -619,8 +727,9 @@ def delete_variable(category, variable):
 def backup_config():
     """Create configuration backup"""
     try:
+        logger.info(f"Admin {current_user.username} creating configuration backup")
         backup_file = config.backup_config()
-        logger.info(f"Configuration backup created by {current_user.username}: {backup_file}")
+        logger.info(f"Configuration backup created successfully by {current_user.username}: {backup_file}")
         
         return jsonify({
             'success': True,
@@ -629,7 +738,9 @@ def backup_config():
         })
     
     except Exception as e:
-        logger.error(f"Error creating backup: {e}")
+        logger.error(f"ADMIN ERROR - Failed to create backup for user {current_user.username}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e)
@@ -641,14 +752,19 @@ def backup_config():
 def restart_application():
     """Restart application (placeholder - implement based on deployment)"""
     try:
+        logger.info(f"Admin {current_user.username} requesting application restart")
+        
         # This is a placeholder - implement based on your deployment method
-        logger.info(f"Application restart requested by {current_user.username}")
+        logger.warning("Application restart requested - implement based on deployment method")
+        
         return jsonify({
             'success': True,
             'message': 'Restart signal sent. Please manually restart the application.'
         })
     except Exception as e:
-        logger.error(f"Error restarting application: {e}")
+        logger.error(f"ADMIN ERROR - Failed to restart application for user {current_user.username}: {e}")
+        logger.error(f"Exception type: {type(e).__name__}")
+        logger.error(f"Error details: {str(e)}")
         return jsonify({
             'success': False,
             'error': str(e)

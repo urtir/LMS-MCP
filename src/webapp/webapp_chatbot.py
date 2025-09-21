@@ -43,9 +43,19 @@ from src.webapp.admin import admin_bp
 # LM Studio client
 from openai import OpenAI
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure logging with detailed format
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('logs/webapp_chatbot.log')
+    ]
+)
 logger = logging.getLogger(__name__)
+
+# Ensure logs directory exists
+os.makedirs('logs', exist_ok=True)
 
 # Configuration from JSON config
 LM_STUDIO_CONFIG = {
@@ -128,13 +138,27 @@ def get_openai_client():
     return _client_instance
 
 # Initialize singletons
+logger.info("=== INITIALIZING WEBAPP COMPONENTS ===")
+logger.info("Initializing database connection...")
 db = get_database()
+logger.info("Database initialized successfully")
+
+logger.info("Initializing MCP bridge...")
 mcp_bridge = get_mcp_bridge()
+logger.info("MCP bridge initialized successfully")
+
+logger.info("Initializing OpenAI client...")
 client = get_openai_client()
+logger.info(f"OpenAI client initialized: {LM_STUDIO_CONFIG['base_url']}")
+
 MODEL = LM_STUDIO_CONFIG['model']
+logger.info(f"Using model: {MODEL}")
+
+logger.info("=== WEBAPP INITIALIZATION COMPLETE ===")
 
 # Global chat state
 chat_sessions = {}
+logger.info("Chat sessions storage initialized")
 
 class ChatSession:
     """Manage individual chat sessions"""
@@ -508,61 +532,98 @@ def dashboard_data():
 def api_chat():
     """Handle chat messages"""
     try:
+        logger.info("=== CHAT REQUEST RECEIVED ===")
+        logger.info(f"User: {current_user.username} (ID: {current_user.id})")
+        logger.info(f"Request content type: {request.content_type}")
+        logger.info(f"Request data: {request.data}")
+        
         data = request.json
+        logger.info(f"Parsed JSON data: {data}")
+        
         user_message = data.get('message', '')
         session_id = data.get('session_id')
         
+        logger.info(f"User message: '{user_message}'")
+        logger.info(f"Session ID: {session_id}")
+        
         if not user_message:
+            logger.warning("No message provided in request")
             return jsonify({"error": "No message provided"}), 400
         
         # Create new session if none provided
         if not session_id:
+            logger.info("Creating new session...")
             session_id = db.create_session(current_user.id)
+            logger.info(f"Created new session: {session_id}")
         
         # Check if session exists and belongs to current user
+        logger.info(f"Checking session {session_id} for user {current_user.id}")
         session_data = db.get_session(session_id, current_user.id)
         if not session_data:
+            logger.error(f"Session {session_id} not found or access denied for user {current_user.id}")
             return jsonify({"error": "Session not found or access denied"}), 404
+        
+        logger.info("Session validated successfully")
         
         # Get or create chat session object
         if session_id not in chat_sessions:
+            logger.info(f"Creating new chat session object for {session_id}")
             chat_sessions[session_id] = ChatSession(session_id)
             # Initialize tools asynchronously
+            logger.info("Initializing MCP tools...")
             asyncio.run(chat_sessions[session_id].initialize_tools())
+            logger.info("MCP tools initialized successfully")
             
             # Load existing messages from database
+            logger.info("Loading existing messages from database...")
             existing_messages = db.get_messages(session_id)
+            logger.info(f"Found {len(existing_messages)} existing messages")
             for msg in existing_messages:
                 if msg['role'] != 'system':  # Skip system message as it's already added
                     chat_sessions[session_id].add_message(msg['role'], msg['content'])
         
         session = chat_sessions[session_id]
+        logger.info(f"Using session object with {len(session.get_messages())} messages")
         
         # Add user message to session and database
+        logger.info("Adding user message to session and database...")
         session.add_message("user", user_message)
         db.add_message(session_id, "user", user_message)
+        logger.info("User message added successfully")
         
         # Process message with LM Studio
+        logger.info("Processing message with LM Studio...")
         response_data = process_chat_message(session, session_id)
+        logger.info(f"Chat processing complete. Response: {response_data}")
         
         return jsonify(response_data)
         
     except Exception as e:
-        logger.error(f"Chat error: {e}")
+        logger.error(f"CHAT API ERROR: {str(e)}", exc_info=True)
         return jsonify({"error": str(e)}), 500
 
 def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any]:
     """Process chat message with LM Studio and MCP tools (similar to tool-use-example.py)"""
     try:
-        logger.info(f"Processing message for session {session.session_id}")
+        logger.info(f"=== PROCESSING MESSAGE FOR SESSION {session.session_id} ===")
+        logger.info(f"Session has {len(session.get_messages())} messages")
+        logger.info(f"Available MCP tools: {len(session.mcp_tools) if session.mcp_tools else 0}")
         
         # Get LM Studio response with tools
+        logger.info(f"Sending request to LM Studio: {LM_STUDIO_CONFIG['base_url']}")
+        logger.info(f"Model: {MODEL}")
+        
+        messages = session.get_messages()
+        logger.debug(f"Messages to send: {messages}")
+        
         response = client.chat.completions.create(
             model=MODEL,
-            messages=session.get_messages(),
+            messages=messages,
             tools=session.mcp_tools,
             tool_choice="auto"
         )
+        
+        logger.info("LM Studio response received successfully")
         
         assistant_message = response.choices[0].message
         tool_results = []
@@ -584,15 +645,19 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
             })
             
             # Execute each tool call
-            for tool_call in assistant_message.tool_calls:
+            for i, tool_call in enumerate(assistant_message.tool_calls):
                 try:
                     tool_name = tool_call.function.name
                     arguments = json.loads(tool_call.function.arguments)
                     
-                    logger.info(f"Executing tool: {tool_name}")
+                    logger.info(f"Executing tool {i+1}/{len(assistant_message.tool_calls)}: {tool_name}")
+                    logger.debug(f"Tool arguments: {arguments}")
                     
                     # Execute MCP tool
                     result = asyncio.run(mcp_bridge.execute_tool(tool_name, arguments))
+                    logger.info(f"Tool {tool_name} executed successfully")
+                    logger.debug(f"Tool result: {result}")
+                    
                     tool_results.append({
                         "name": tool_name,  # Changed from tool_name to name
                         "arguments": arguments,
@@ -607,7 +672,7 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
                     })
                     
                 except Exception as e:
-                    logger.error(f"Tool execution error for {tool_call.function.name}: {e}")
+                    logger.error(f"Tool execution error for {tool_call.function.name}: {e}", exc_info=True)
                     error_result = {
                         "status": "error",
                         "message": str(e),
@@ -626,16 +691,22 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
                     })
             
             # Get final response after tool execution
+            logger.info("Getting final response from LM Studio after tool execution...")
             final_response = client.chat.completions.create(
                 model=MODEL,
                 messages=session.get_messages()
             )
             
             final_message = final_response.choices[0].message.content
+            logger.info("Final response received from LM Studio")
+            logger.debug(f"Final message: {final_message}")
+            
             session.add_message("assistant", final_message)
             
             # Save assistant message to database with tool usage
+            logger.info("Saving assistant message to database...")
             db.add_message(session_id, "assistant", final_message, tool_results)
+            logger.info("Message saved to database successfully")
             
             return {
                 "response": final_message,
@@ -646,11 +717,16 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
         
         else:
             # No tool calls, regular response
+            logger.info("No tool calls - processing regular response")
             response_text = assistant_message.content
+            logger.debug(f"Response text: {response_text}")
+            
             session.add_message("assistant", response_text)
             
             # Save assistant message to database
+            logger.info("Saving regular response to database...")
             db.add_message(session_id, "assistant", response_text)
+            logger.info("Response saved to database successfully")
             
             return {
                 "response": response_text,
@@ -660,7 +736,7 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
             }
     
     except Exception as e:
-        logger.error(f"Error processing chat message: {e}")
+        logger.error(f"ERROR PROCESSING CHAT MESSAGE: {e}", exc_info=True)
         return {
             "error": f"Failed to process message: {str(e)}",
             "session_id": session.session_id

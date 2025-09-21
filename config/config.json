@@ -2,64 +2,64 @@
   "meta": {
     "version": "1.0",
     "created": "2025-09-21T15:35:17.066149",
-    "last_updated": "2025-09-21T15:35:17.066149",
+    "last_updated": "2025-09-21T17:37:01.632868",
     "description": "LMS MCP Centralized Configuration"
   },
   "security": {
-    "FLASK_SECRET_KEY": "your-secret-key-change-this-in-production",
-    "TELEGRAM_BOT_TOKEN": "YOUR_BOT_TOKEN_HERE",
+    "FLASK_SECRET_KEY": "test-key-12345678901234567890123",
+    "TELEGRAM_BOT_TOKEN": "123456789:ABC-DEF1234ghIkl-zyx57W2v1u123ew11",
     "WAZUH_PASSWORD": "MyS3cr37P450r.*-"
   },
   "network": {
+    "DOCKER_CONTAINER_NAME": "single-node-wazuh.manager-1",
     "LM_STUDIO_BASE_URL": "http://192.168.56.1:1234/v1",
     "WAZUH_API_URL": "https://localhost:55000",
-    "WAZUH_ARCHIVES_PATH": "/var/ossec/logs/archives/archives.json",
-    "DOCKER_CONTAINER_NAME": "single-node-wazuh.manager-1"
+    "WAZUH_ARCHIVES_PATH": "/var/ossec/logs/archives/archives.json"
   },
   "flask": {
-    "FLASK_HOST": "127.0.0.1",
-    "FLASK_PORT": "5000",
-    "FLASK_DEBUG": "false",
+    "DASHBOARD_DEBUG": "false",
     "DASHBOARD_HOST": "127.0.0.1",
     "DASHBOARD_PORT": "5000",
-    "DASHBOARD_DEBUG": "false"
+    "FLASK_DEBUG": "false",
+    "FLASK_HOST": "127.0.0.1",
+    "FLASK_PORT": "5000"
   },
   "database": {
-    "DATABASE_DIR": "./data",
-    "WAZUH_DB_NAME": "wazuh_archives.db",
     "CHAT_DB_NAME": "chat_history.db",
-    "LOG_DIR": "./logs"
+    "DATABASE_DIR": "./data",
+    "LOG_DIR": "./logs",
+    "WAZUH_DB_NAME": "wazuh_archives.db"
   },
   "ai_model": {
+    "AI_MAX_TOKENS": "32000",
+    "AI_TEMPERATURE": "0.8",
     "LM_STUDIO_API_KEY": "lm-studio",
-    "LM_STUDIO_MODEL": "qwen/qwen3-1.7b",
-    "AI_MAX_TOKENS": "2000",
-    "AI_TEMPERATURE": "0.3"
+    "LM_STUDIO_MODEL": "qwen/qwen3-1.7b"
   },
   "performance": {
-    "MAX_LOG_LENGTH": "1000",
-    "MAX_RAG_CONTENT": "3000",
+    "CACHE_BUILD_LIMIT": "10000",
     "DEFAULT_MAX_RESULTS": "100",
-    "CACHE_BUILD_LIMIT": "1000"
+    "MAX_LOG_LENGTH": "10000",
+    "MAX_RAG_CONTENT": "20000"
   },
   "security_thresholds": {
-    "CRITICAL_RULE_LEVEL": "6",
-    "HIGH_RULE_LEVEL": "7",
-    "EMERGENCY_RULE_LEVEL": "8",
     "AGENT_ACTIVE_THRESHOLD": "100",
-    "DEFAULT_DAYS_RANGE": "7"
+    "CRITICAL_RULE_LEVEL": "6",
+    "DEFAULT_DAYS_RANGE": "7",
+    "EMERGENCY_RULE_LEVEL": "8",
+    "HIGH_RULE_LEVEL": "7"
   },
   "wazuh": {
+    "WAZUH_TIMEOUT": "30",
     "WAZUH_USERNAME": "wazuh-wui",
-    "WAZUH_VERIFY_SSL": "false",
-    "WAZUH_TIMEOUT": "30"
+    "WAZUH_VERIFY_SSL": "false"
   },
   "reports": {
     "DAILY_MAX_EVENTS": "50",
-    "THREE_DAY_MAX_EVENTS": "100",
-    "WEEKLY_MAX_EVENTS": "200",
     "MONTHLY_MAX_EVENTS": "500",
+    "PDF_BODY_FONT_SIZE": "12",
     "PDF_TITLE_FONT_SIZE": "24",
-    "PDF_BODY_FONT_SIZE": "12"
+    "THREE_DAY_MAX_EVENTS": "100",
+    "WEEKLY_MAX_EVENTS": "200"
   }
 }
