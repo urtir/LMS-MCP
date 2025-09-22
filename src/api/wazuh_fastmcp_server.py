@@ -247,6 +247,30 @@ Always maintain professional tone and focus on clarity and usefulness of the inf
 def create_user_prompt(raw_json: str, tool_name: str, user_context: str) -> str:
     """Create user prompts with context and raw data."""
     
+    if tool_name == "check_wazuh_log":
+        return f"""Tugas: Analisis LENGKAP log keamanan Wazuh untuk memberikan insight keamanan yang mendalam.
+
+Tool yang dipanggil: {tool_name}
+Konteks permintaan: {user_context}
+
+Data log keamanan dari Wazuh:
+{raw_json}
+
+Instruksi PENTING:
+1. Gunakan SELURUH data dari kolom 'full_log' untuk analisis detail - jangan hanya ringkasan
+2. Analisis pattern serangan, payload, dan indikator kompromi dari full_log
+3. Berikan context keamanan yang mendalam berdasarkan data lengkap
+4. Extract informasi penting seperti IP source, user agent, attack payload dari full_log
+5. Identifikasi tipe serangan spesifik berdasarkan konten full_log
+6. Format dalam bahasa Indonesia yang jelas dan profesional dengan analisis teknis
+
+Format respons yang diinginkan:
+- Ringkasan eksekutif
+- Analisis detail setiap log dengan data full_log
+- Pattern dan indikator serangan
+- Rekomendasi mitigasi spesifik
+- Tingkat risiko dan prioritas penanganan"""
+    
     return f"""Tugas: Format respons Wazuh API menjadi informasi yang mudah dipahami.
 
 Tool yang dipanggil: {tool_name}
@@ -503,18 +527,17 @@ Query:"""
             "top_logs": []
         }
         
-        # Include top 10 most relevant logs for analysis
+        # Include top 10 most relevant logs for analysis with ALL COLUMNS
         for i, log in enumerate(rag_results[:10], 1):
+            # ✅ KIRIM SELURUH DATA LOG - SEMUA KOLOM TANPA PEMOTONGAN!
             log_summary = {
                 "rank": i,
                 "similarity_score": log.get('similarity_score', 0),
-                "timestamp": log.get('timestamp', 'N/A'),
-                "agent_name": log.get('agent_name', 'N/A'),
-                "rule_level": log.get('rule_level', 'N/A'),
-                "rule_description": log.get('rule_description', 'N/A'),
-                "rule_groups": log.get('rule_groups', 'N/A'),
-                "location": log.get('location', 'N/A'),
-                "full_log": log.get('full_log', '')[:300] + "..." if len(log.get('full_log', '')) > 300 else log.get('full_log', '')
+                # Kirim SEMUA kolom database yang tersedia
+                **{k: v for k, v in log.items() if k not in ['similarity_score', 'search_text']},
+                # Pastikan full_log ada dan LENGKAP
+                "full_log_length": len(log.get('full_log', '')),
+                "has_full_log": bool(log.get('full_log', '').strip())
             }
             logs_summary["top_logs"].append(log_summary)
         

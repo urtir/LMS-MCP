@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "created": "2025-09-21T15:35:17.066149",
-    "last_updated": "2025-09-21T22:28:03.912616",
+    "last_updated": "2025-09-22T18:00:24.284018",
     "description": "LMS MCP Centralized Configuration"
   },
   "security": {
@@ -79,7 +79,7 @@
     "WEEKLY_MAX_EVENTS": "200"
   },
   "services": {
-    "WAZUH_REALTIME_ENABLED": "true",
+    "WAZUH_REALTIME_ENABLED": "false",
     "TELEGRAM_BOT_ENABLED": "true",
     "REALTIME_FETCH_INTERVAL": "5",
     "ALERT_CHECK_INTERVAL": "10"
