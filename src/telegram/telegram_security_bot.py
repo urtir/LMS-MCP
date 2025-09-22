@@ -732,76 +732,126 @@ Contact your system administrator for technical support.
             # Create alert message
             alert_message = self._create_alert_message(critical_alerts, high_alerts, medium_alerts)
             
-            # Send to all subscribers
+            # Send to all subscribers with Markdown formatting
             for user_id in self.alert_subscribers.copy():  # Copy to avoid modification during iteration
                 try:
                     await self.application.bot.send_message(
                         chat_id=user_id,
-                        text=alert_message
+                        text=alert_message,
+                        parse_mode='Markdown',  # Enable Markdown formatting for code blocks
+                        disable_web_page_preview=True  # Disable preview for cleaner look
                     )
-                    logger.info(f"✅ Alert sent to user {user_id}")
+                    logger.info(f"✅ Alert sent to user {user_id} with full log details")
                 
                 except Exception as e:
                     logger.error(f"❌ Failed to send alert to user {user_id}: {e}")
                     # Remove user if they blocked the bot
                     if "bot was blocked by the user" in str(e).lower():
                         self.alert_subscribers.discard(user_id)
+                        logger.info(f"🚫 Removed blocked user {user_id} from alert subscribers")
         
         except Exception as e:
             logger.error(f"Error sending alerts to subscribers: {e}")
     
     def _create_alert_message(self, critical_alerts: List[Dict], high_alerts: List[Dict], medium_alerts: List[Dict]) -> str:
-        """Create formatted alert message for rule level 5+"""
+        """Create formatted alert message for rule level 5+ WITH FULL LOG DETAILS"""
         timestamp = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
         
         message_parts = [
-            "🚨 SECURITY ALERT 🚨\n",
-            f"⏰ Time: {timestamp}\n"
+            "🚨 *SECURITY ALERT* 🚨\n",
+            f"⏰ *Time:* {timestamp}\n"
         ]
         
         if critical_alerts:
-            message_parts.append(f"💥 CRITICAL Events (L8+): {len(critical_alerts)}")
-            for alert in critical_alerts[:3]:  # Show max 3 critical
-                desc = alert['rule_description'][:45] + "..." if len(alert['rule_description']) > 45 else alert['rule_description']
-                message_parts.append(
-                    f"• Level {alert['rule_level']} - {desc}"
-                )
-                message_parts.append(f"  Agent: {alert['agent_name']} | Rule: {alert['rule_id']}")
-            if len(critical_alerts) > 3:
-                message_parts.append(f"  ... dan {len(critical_alerts) - 3} lainnya")
+            message_parts.append(f"💥 *CRITICAL Events (L8+):* {len(critical_alerts)}")
+            for i, alert in enumerate(critical_alerts[:2], 1):  # Show max 2 critical with full details
+                desc = alert['rule_description'][:60] + "..." if len(alert['rule_description']) > 60 else alert['rule_description']
+                message_parts.extend([
+                    f"\n*🔥 Critical Alert #{i}:*",
+                    f"• *Level:* {alert['rule_level']} | *Rule:* {alert['rule_id']}",
+                    f"• *Agent:* `{alert['agent_name']}`",
+                    f"• *Location:* `{alert['location'] or 'N/A'}`",
+                    f"• *Description:* {desc}",
+                    f"• *Timestamp:* `{alert['timestamp']}`"
+                ])
+                
+                # Add full_log as code block
+                full_log = alert.get('full_log', '').strip()
+                if full_log:
+                    # Truncate very long logs to prevent message size limits
+                    if len(full_log) > 800:
+                        full_log = full_log[:800] + "...[truncated]"
+                    
+                    message_parts.extend([
+                        f"• *Full Log:*",
+                        f"```",
+                        full_log,
+                        f"```"
+                    ])
+                else:
+                    message_parts.append("• *Full Log:* _(No log data available)_")
+                
+                message_parts.append("")
+            
+            if len(critical_alerts) > 2:
+                message_parts.append(f"  ⚡ _...dan {len(critical_alerts) - 2} critical alerts lainnya_")
             message_parts.append("")
         
         if high_alerts:
-            message_parts.append(f"⚠️ HIGH Events (L6-7): {len(high_alerts)}")
-            for alert in high_alerts[:2]:  # Show max 2 high
-                desc = alert['rule_description'][:45] + "..." if len(alert['rule_description']) > 45 else alert['rule_description']
-                message_parts.append(
-                    f"• Level {alert['rule_level']} - {desc}"
-                )
-                message_parts.append(f"  Agent: {alert['agent_name']} | Rule: {alert['rule_id']}")
-            if len(high_alerts) > 2:
-                message_parts.append(f"  ... dan {len(high_alerts) - 2} lainnya")
+            message_parts.append(f"⚠️ *HIGH Events (L6-7):* {len(high_alerts)}")
+            for i, alert in enumerate(high_alerts[:1], 1):  # Show max 1 high with full details
+                desc = alert['rule_description'][:60] + "..." if len(alert['rule_description']) > 60 else alert['rule_description']
+                message_parts.extend([
+                    f"\n*🔴 High Alert #{i}:*",
+                    f"• *Level:* {alert['rule_level']} | *Rule:* {alert['rule_id']}",
+                    f"• *Agent:* `{alert['agent_name']}`",
+                    f"• *Location:* `{alert['location'] or 'N/A'}`",
+                    f"• *Description:* {desc}",
+                    f"• *Timestamp:* `{alert['timestamp']}`"
+                ])
+                
+                # Add full_log as code block
+                full_log = alert.get('full_log', '').strip()
+                if full_log:
+                    # Truncate very long logs
+                    if len(full_log) > 600:
+                        full_log = full_log[:600] + "...[truncated]"
+                    
+                    message_parts.extend([
+                        f"• *Full Log:*",
+                        f"```",
+                        full_log,
+                        f"```"
+                    ])
+                else:
+                    message_parts.append("• *Full Log:* _(No log data available)_")
+                
+                message_parts.append("")
+                
+            if len(high_alerts) > 1:
+                message_parts.append(f"  ⚡ _...dan {len(high_alerts) - 1} high alerts lainnya_")
             message_parts.append("")
         
         if medium_alerts:
-            message_parts.append(f"🔍 MEDIUM Events (L5): {len(medium_alerts)}")
-            for alert in medium_alerts[:1]:  # Show max 1 medium
-                desc = alert['rule_description'][:45] + "..." if len(alert['rule_description']) > 45 else alert['rule_description']
-                message_parts.append(
-                    f"• Level {alert['rule_level']} - {desc}"
-                )
-                message_parts.append(f"  Agent: {alert['agent_name']} | Rule: {alert['rule_id']}")
-            if len(medium_alerts) > 1:
-                message_parts.append(f"  ... dan {len(medium_alerts) - 1} lainnya")
+            message_parts.append(f"🔍 *MEDIUM Events (L5):* {len(medium_alerts)}")
+            # For medium alerts, show summary only (no full logs to avoid spam)
+            for alert in medium_alerts[:2]:  # Show max 2 medium summary
+                desc = alert['rule_description'][:50] + "..." if len(alert['rule_description']) > 50 else alert['rule_description']
+                message_parts.extend([
+                    f"• *L{alert['rule_level']}* - {desc}",
+                    f"  `{alert['agent_name']}` | Rule: `{alert['rule_id']}`"
+                ])
+            if len(medium_alerts) > 2:
+                message_parts.append(f"  ⚡ _...dan {len(medium_alerts) - 2} medium alerts lainnya_")
             message_parts.append("")
         
         message_parts.extend([
-            "🔍 Action Required:",
+            "🎯 *Action Required:*",
             "• Review events dalam dashboard Wazuh",
             "• Investigasi potential threats", 
             "• Update security measures jika diperlukan",
             "",
-            "💬 Ketik pertanyaan untuk detail analysis!"
+            "💬 _Ketik pertanyaan untuk detail analysis dengan AI!_"
         ])
         
         return "\n".join(message_parts)
