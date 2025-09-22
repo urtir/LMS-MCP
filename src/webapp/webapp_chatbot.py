@@ -692,13 +692,28 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
             
             # Get final response after tool execution
             logger.info("Getting final response from LM Studio after tool execution...")
-            final_response = client.chat.completions.create(
-                model=MODEL,
-                messages=session.get_messages()
-            )
             
-            final_message = final_response.choices[0].message.content
-            logger.info("Final response received from LM Studio")
+            # Check if tool result is already a complete JSON response
+            last_tool_result = tool_results[-1]["result"] if tool_results else None
+            if (last_tool_result and 
+                isinstance(last_tool_result, dict) and 
+                last_tool_result.get("status") == "success" and 
+                "content" in last_tool_result):
+                
+                # Tool returned structured response, use it directly
+                logger.info("Tool returned structured response - using directly without additional LLM call")
+                final_message = last_tool_result["content"]
+                
+            else:
+                # Tool returned simple result, get LLM interpretation
+                logger.info("Tool returned simple result - getting LLM interpretation")
+                final_response = client.chat.completions.create(
+                    model=MODEL,
+                    messages=session.get_messages()
+                )
+                final_message = final_response.choices[0].message.content
+            
+            logger.info("Final response processed")
             logger.debug(f"Final message: {final_message}")
             
             session.add_message("assistant", final_message)

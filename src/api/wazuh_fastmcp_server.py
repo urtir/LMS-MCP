@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Wazuh AI Threat Hunting FastMCP Server
+Wazuh API FastMCP Server
 Author: AI Assistant  
 Version: 2.0.0
-Description: FastMCP server implementing Wazuh AI threat hunting methodology for LM Studio integration
+Description: FastMCP server for Wazuh API operations
 
-This server implements the official Wazuh AI threat hunting approach using:
-- Vector embeddings and semantic search on Wazuh archive logs
-- LangChain retrieval-augmented generation for comprehensive analysis
-- HuggingFace embeddings (all-MiniLM-L6-v2) for log similarity matching
-- FAISS vector store for efficient threat pattern recognition
-
-Reference: https://wazuh.com/blog/leveraging-artificial-intelligence-for-threat-hunting-in-wazuh/
+This server provides comprehensive Wazuh API access including:
+- Agent management (list, add, delete, restart, upgrade)
+- Manager operations (status, configuration, logs)
+- Security & RBAC (users, roles, policies)
+- Groups management
+- Rules and decoders
+- Active response
+- Cluster management
+- System monitoring tools
 """
 
 import asyncio
@@ -41,30 +43,7 @@ from pydantic import BaseModel
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# CAG (Cache-Augmented Generation) imports
-try:
-    import torch
-    from transformers import AutoTokenizer, AutoModelForCausalLM
-    from transformers.cache_utils import DynamicCache
-    CAG_AVAILABLE = True
-    logger.info("CAG (transformers/torch) imports successful")
-except ImportError as e:
-    logger.warning(f"CAG dependencies not available: {e}")
-    CAG_AVAILABLE = False
-
-# Semantic search imports
-try:
-    from sentence_transformers import SentenceTransformer
-    import numpy as np
-    import faiss
-    from sklearn.metrics.pairwise import cosine_similarity
-    SEMANTIC_SEARCH_AVAILABLE = True
-    logger.info("Semantic search imports successful")
-except ImportError as e:
-    logger.warning(f"Semantic search dependencies not available: {e}")
-    SEMANTIC_SEARCH_AVAILABLE = False
-
-# LM Studio client for generation
+# LM Studio client for response formatting
 try:
     from openai import OpenAI
     OPENAI_AVAILABLE = True
@@ -73,24 +52,28 @@ except ImportError as e:
     logger.warning(f"OpenAI client not available: {e}")
     OPENAI_AVAILABLE = False
 
-# Initialize FastMCP server for Wazuh AI threat hunting
-mcp = FastMCP("Wazuh AI Threat Hunting Server")
+# Semantic search dependencies for RAG
+try:
+    from sentence_transformers import SentenceTransformer
+    import numpy as np
+    import faiss
+    SEMANTIC_SEARCH_AVAILABLE = True
+    logger.info("Semantic search dependencies available for RAG")
+except ImportError as e:
+    logger.warning(f"Semantic search dependencies not available: {e}")
+    SEMANTIC_SEARCH_AVAILABLE = False
 
-# Configuration using JSON config - NO FALLBACKS!
+# Initialize FastMCP server for Wazuh API
+mcp = FastMCP("Wazuh API Server")
+
+# Configuration using JSON config
 class WazuhConfig:
     def __init__(self):
-        # NO FALLBACKS - FORCE FROM CONFIG!
         self.base_url = config.get("network.WAZUH_API_URL")
         self.username = config.get("wazuh.WAZUH_USERNAME")
         self.password = config.get("security.WAZUH_PASSWORD")
         self.verify_ssl = config.get("wazuh.WAZUH_VERIFY_SSL").lower() == "true"
         self.timeout = int(config.get("wazuh.WAZUH_TIMEOUT"))
-        self.critical_level = int(config.get("security_thresholds.CRITICAL_RULE_LEVEL"))
-        self.high_level = int(config.get("security_thresholds.HIGH_RULE_LEVEL"))
-        self.medium_level = int(config.get("security_thresholds.MEDIUM_RULE_LEVEL"))
-        self.critical_score = float(config.get("security_thresholds.CRITICAL_SCORE"))
-        self.high_score = float(config.get("security_thresholds.HIGH_SCORE"))
-        self.medium_score = float(config.get("security_thresholds.MEDIUM_SCORE"))
         self._token = None
         self._token_expires = None
         
@@ -100,34 +83,31 @@ class WazuhConfig:
 
 wazuh_config = WazuhConfig()
 
-# LM Studio Configuration for CAG using JSON config - NO FALLBACKS!
+# LM Studio Configuration for response formatting
 class LMStudioConfig:
     def __init__(self):
-        # NO FALLBACKS - FORCE FROM CONFIG!
         self.base_url = config.get('network.LM_STUDIO_BASE_URL')
         self.api_key = config.get('ai_model.LM_STUDIO_API_KEY')
         self.model = config.get('ai_model.LM_STUDIO_MODEL')
         self.max_tokens = int(config.get('ai_model.AI_MAX_TOKENS'))
         self.temperature = float(config.get('ai_model.AI_TEMPERATURE'))
-        self.estimated_tokens_per_log = int(config.get('ai_model.ESTIMATED_TOKENS_PER_LOG'))
-        self.system_prompt_tokens = int(config.get('ai_model.SYSTEM_PROMPT_TOKENS'))
-        self.max_log_limit = int(config.get('ai_model.MAX_LOG_LIMIT'))
-        self.small_batch_size = int(config.get('ai_model.SMALL_BATCH_SIZE'))
-        self.large_batch_size = int(config.get('ai_model.LARGE_BATCH_SIZE'))
-        self.embedding_dimension = int(config.get('ai_model.EMBEDDING_DIMENSION'))
-        self.default_days_range = int(config.get('performance.DEFAULT_DAYS_RANGE'))
-        self.default_search_k = int(config.get('performance.DEFAULT_SEARCH_K'))
-        self.default_hybrid_search_k = int(config.get('performance.DEFAULT_HYBRID_SEARCH_K'))
-        self.tool_days_range = int(config.get('performance.TOOL_DAYS_RANGE'))
-        self.default_tool_max_results = int(config.get('performance.DEFAULT_TOOL_MAX_RESULTS'))
-        self.default_tool_limit = int(config.get('performance.DEFAULT_TOOL_LIMIT'))
-        self.timeout = None
         
         # Validate required config
-        if not all([self.base_url, self.api_key, self.model, self.max_tokens, self.temperature]):
-            raise ValueError("Missing required LM Studio config in JSON!")
+        if not all([self.base_url, self.api_key, self.model]):
+            raise ValueError("Missing required LM Studio config for response formatting!")
 
 lm_studio_config = LMStudioConfig()
+
+# Initialize LM Studio client
+if OPENAI_AVAILABLE:
+    lm_client = OpenAI(
+        base_url=lm_studio_config.base_url,
+        api_key=lm_studio_config.api_key
+    )
+    logger.info(f"LM Studio client initialized: {lm_studio_config.base_url}")
+else:
+    lm_client = None
+    logger.warning("LM Studio client not available - raw responses will be returned")
 
 # HTTP client with SSL configuration
 async def get_http_client() -> httpx.AsyncClient:
@@ -211,6 +191,364 @@ async def make_api_request(
             raise Exception(error_msg)
 
 # =============================================================================
+# LLM POST-PROCESSING SYSTEM
+# =============================================================================
+
+async def format_with_llm(raw_json: str, tool_name: str, user_context: str, ctx: Context) -> str:
+    """
+    Universal LLM formatter for all Wazuh API responses.
+    Converts raw JSON to human-readable, contextual responses.
+    """
+    if not OPENAI_AVAILABLE or not lm_client:
+        await ctx.info("LLM formatting not available - returning raw response")
+        return raw_json
+    
+    try:
+        # Create context-aware prompt based on tool type
+        system_prompt = create_system_prompt(tool_name)
+        user_prompt = create_user_prompt(raw_json, tool_name, user_context)
+        
+        await ctx.info(f"🤖 Processing {tool_name} response with LLM...")
+        
+        response = lm_client.chat.completions.create(
+            model=lm_studio_config.model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            max_tokens=lm_studio_config.max_tokens // 2,  # Use half for formatting
+            temperature=lm_studio_config.temperature
+        )
+        
+        formatted_response = response.choices[0].message.content
+        await ctx.info("✅ LLM formatting completed")
+        return formatted_response
+        
+    except Exception as e:
+        await ctx.error(f"LLM formatting failed: {e}")
+        return f"LLM formatting error: {e}\n\nRaw response:\n{raw_json}"
+
+def create_system_prompt(tool_name: str) -> str:
+    """Create universal system prompt for all tools - NO keyword detection."""
+    
+    return """You are a Wazuh security platform expert. Your task is to format JSON API responses into clear, professional, human-readable information.
+
+Your responsibilities:
+- Convert technical JSON data into easy-to-understand format
+- Present information in Indonesian language
+- Use clear structure with bullet points and formatting
+- Highlight important status information and critical details
+- Provide context and explanations for technical terms
+- Summarize key findings at the end
+- Make the information accessible to both technical and non-technical users
+
+Always maintain professional tone and focus on clarity and usefulness of the information."""
+
+def create_user_prompt(raw_json: str, tool_name: str, user_context: str) -> str:
+    """Create user prompts with context and raw data."""
+    
+    return f"""Tugas: Format respons Wazuh API menjadi informasi yang mudah dipahami.
+
+Tool yang dipanggil: {tool_name}
+Konteks permintaan: {user_context}
+
+Data mentah dari Wazuh API:
+{raw_json}
+
+Instruksi:
+1. Analisis data JSON dan ekstrak informasi penting
+2. Format dalam bahasa Indonesia yang jelas dan profesional
+3. Gunakan bullet points dan struktur yang rapi
+4. Highlight informasi kritis atau yang memerlukan perhatian
+5. Berikan context keamanan jika relevan
+6. Sertakan ringkasan di akhir jika data banyak
+
+Format respons yang diinginkan:
+- Header dengan ringkasan total
+- Detail terstruktur dengan bullet points
+- Highlight status atau kondisi penting
+- Rekomendasi aksi jika diperlukan"""
+
+# =============================================================================
+# WAZUH ARCHIVES RAG SYSTEM
+# =============================================================================
+
+async def wazuh_archives_rag(query: str, days_range: int = 7) -> List[Dict[str, Any]]:
+    """
+    Retrieval-Augmented Generation (RAG) function for Wazuh archives database.
+    
+    Performs semantic search on ALL columns of wazuh_archives database to find
+    the top 15 most relevant security log entries for the given query.
+    
+    Args:
+        query: Search query string
+        days_range: Number of days to look back (default: 7)
+        
+    Returns:
+        List of dictionaries containing top 15 relevant log entries with ALL columns
+    """
+    
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        logger.warning("Semantic search not available - cannot perform RAG")
+        return []
+    
+    try:
+        # Database path
+        current_dir = Path(__file__).parent
+        project_root = current_dir.parent.parent
+        db_path = str(project_root / "data" / "wazuh_archives.db")
+        
+        logger.info(f"🔍 Starting RAG search for query: '{query}' (last {days_range} days)")
+        
+        # Step 1: Fetch ALL rows and columns from database within date range
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row  # Return rows as dictionaries
+        cursor = conn.cursor()
+        
+        # Query to get ALL columns from last N days
+        query_sql = """
+            SELECT * FROM wazuh_archives 
+            WHERE datetime(substr(timestamp, 1, 19)) >= datetime('now', '-{} days')
+            ORDER BY timestamp DESC
+        """.format(days_range)
+        
+        cursor.execute(query_sql)
+        all_logs = []
+        
+        logger.info(f"📊 Fetching logs from database...")
+        
+        for row in cursor.fetchall():
+            log_dict = dict(row)  # Convert row to dictionary with ALL columns
+            all_logs.append(log_dict)
+        
+        conn.close()
+        
+        if not all_logs:
+            logger.warning(f"No logs found in last {days_range} days")
+            return []
+        
+        logger.info(f"📋 Retrieved {len(all_logs)} total logs from database")
+        
+        # Step 2: Prepare text for semantic search
+        # Combine key fields to create searchable text for each log
+        log_texts = []
+        log_mappings = []
+        
+        for i, log in enumerate(all_logs):
+            # Create searchable text from ALL available fields
+            text_parts = []
+            
+            # Add all non-null string values to searchable text
+            for key, value in log.items():
+                if value is not None and str(value).strip():
+                    # Include field name and value for better context
+                    text_parts.append(f"{key}: {str(value)}")
+            
+            # Combine all fields into one searchable text
+            combined_text = " | ".join(text_parts)
+            log_texts.append(combined_text)
+            log_mappings.append(i)  # Map text index to log index
+        
+        if not log_texts:
+            logger.warning("No searchable text found in logs")
+            return []
+        
+        # Step 3: Initialize semantic search model
+        logger.info("🧠 Initializing semantic search model...")
+        model = SentenceTransformer('all-MiniLM-L6-v2')
+        
+        # Step 4: Create embeddings for all log texts
+        logger.info(f"🔢 Creating embeddings for {len(log_texts)} logs...")
+        log_embeddings = model.encode(log_texts)
+        
+        # Step 5: Create query embedding
+        logger.info(f"🎯 Creating query embedding for: '{query}'")
+        query_embedding = model.encode([query])
+        
+        # Step 6: Calculate similarity scores
+        logger.info("📊 Calculating similarity scores...")
+        
+        # Normalize embeddings for cosine similarity
+        log_embeddings_norm = log_embeddings / np.linalg.norm(log_embeddings, axis=1, keepdims=True)
+        query_embedding_norm = query_embedding / np.linalg.norm(query_embedding, axis=1, keepdims=True)
+        
+        # Calculate cosine similarity
+        similarities = np.dot(log_embeddings_norm, query_embedding_norm.T).flatten()
+        
+        # Step 7: Get top 15 most relevant logs
+        top_15_indices = np.argsort(similarities)[-15:][::-1]  # Top 15, descending order
+        
+        # Step 8: Prepare results with similarity scores
+        results = []
+        for idx in top_15_indices:
+            log_index = log_mappings[idx]
+            log_entry = all_logs[log_index].copy()  # Copy to avoid modifying original
+            log_entry['similarity_score'] = float(similarities[idx])
+            log_entry['search_text'] = log_texts[idx][:200] + "..." if len(log_texts[idx]) > 200 else log_texts[idx]
+            results.append(log_entry)
+        
+        logger.info(f"✅ RAG search completed. Found {len(results)} relevant logs")
+        logger.info(f"📈 Similarity scores range: {results[0]['similarity_score']:.3f} to {results[-1]['similarity_score']:.3f}")
+        
+        return results
+        
+    except Exception as e:
+        logger.error(f"❌ Error in RAG search: {e}")
+        return []
+
+# =============================================================================
+# WAZUH LOG ANALYSIS MCP TOOL
+# =============================================================================
+
+@mcp.tool
+async def check_wazuh_log(ctx: Context, user_prompt: str, days_range: int = 7) -> str:
+    """
+    Intelligent Wazuh log analysis using RAG (Retrieval-Augmented Generation).
+    
+    This tool analyzes user requests and searches Wazuh archives for relevant security logs.
+    It uses LLM to generate optimal search queries and provides human-readable analysis.
+    
+    Args:
+        user_prompt: User's security question or analysis request
+        days_range: Number of days to search back (default: 7)
+        
+    Returns:
+        Comprehensive security analysis based on relevant Wazuh logs
+    """
+    
+    if not OPENAI_AVAILABLE or not lm_client:
+        await ctx.error("LLM not available for log analysis")
+        return "❌ LLM service not available for Wazuh log analysis"
+    
+    if not SEMANTIC_SEARCH_AVAILABLE:
+        await ctx.error("Semantic search not available for RAG")
+        return "❌ Semantic search dependencies not available for log analysis"
+    
+    try:
+        await ctx.info(f"🔍 Analyzing user request: '{user_prompt}'")
+        
+        # Step 1: Generate optimal search query using LLM
+        await ctx.info("🧠 Generating search query with LLM...")
+        
+        query_generation_prompt = f"""You are a cybersecurity expert specializing in Wazuh SIEM log analysis. 
+
+Your task is to convert the user's security question into an optimal search query for semantic search on Wazuh security logs.
+
+User's request: "{user_prompt}"
+
+Generate a focused search query that will find the most relevant security logs. Consider:
+- Security events, attacks, threats
+- System activities, authentication, network events  
+- Malware, intrusions, anomalies
+- Specific security terms and indicators
+
+Return ONLY the search query string, nothing else. Make it specific and security-focused.
+
+Examples:
+User: "Are there any SQL injection attacks?" → Query: "SQL injection attack web application vulnerability"
+User: "Check for brute force login attempts" → Query: "brute force login authentication failed attempts"
+User: "Any malware detected recently?" → Query: "malware detection virus trojan malicious file"
+
+Query:"""
+
+        query_response = lm_client.chat.completions.create(
+            model=lm_studio_config.model,
+            messages=[
+                {"role": "user", "content": query_generation_prompt}
+            ],
+            max_tokens=50,  # Short response for query
+            temperature=0.3  # Lower temperature for focused results
+        )
+        
+        generated_query = query_response.choices[0].message.content.strip()
+        await ctx.info(f"✅ Generated search query: '{generated_query}'")
+        
+        # Step 2: Search Wazuh archives using RAG
+        await ctx.info(f"🔎 Searching Wazuh archives (last {days_range} days)...")
+        
+        rag_results = await wazuh_archives_rag(
+            query=generated_query,
+            days_range=days_range
+        )
+        
+        if not rag_results:
+            await ctx.info("No relevant logs found")
+            return f"""🔍 **Analisis Log Wazuh**
+
+**Permintaan:** {user_prompt}
+**Pencarian:** {generated_query}
+**Periode:** {days_range} hari terakhir
+
+❌ **Tidak ada log yang relevan ditemukan**
+
+**Kemungkinan penyebab:**
+- Tidak ada aktivitas terkait dalam periode yang ditentukan
+- Query pencarian terlalu spesifik
+- Sistem sedang normal tanpa ancaman yang terdeteksi
+
+**Rekomendasi:**
+- Coba perluas rentang waktu pencarian
+- Gunakan kata kunci yang lebih umum
+- Periksa konfigurasi Wazuh untuk memastikan log dikumpulkan dengan benar"""
+
+        await ctx.info(f"📊 Found {len(rag_results)} relevant logs")
+        
+        # Step 3: Prepare data for LLM analysis
+        # Create summary of findings for LLM processing
+        logs_summary = {
+            "user_request": user_prompt,
+            "search_query": generated_query, 
+            "days_searched": days_range,
+            "total_logs_found": len(rag_results),
+            "top_logs": []
+        }
+        
+        # Include top 10 most relevant logs for analysis
+        for i, log in enumerate(rag_results[:10], 1):
+            log_summary = {
+                "rank": i,
+                "similarity_score": log.get('similarity_score', 0),
+                "timestamp": log.get('timestamp', 'N/A'),
+                "agent_name": log.get('agent_name', 'N/A'),
+                "rule_level": log.get('rule_level', 'N/A'),
+                "rule_description": log.get('rule_description', 'N/A'),
+                "rule_groups": log.get('rule_groups', 'N/A'),
+                "location": log.get('location', 'N/A'),
+                "full_log": log.get('full_log', '')[:300] + "..." if len(log.get('full_log', '')) > 300 else log.get('full_log', '')
+            }
+            logs_summary["top_logs"].append(log_summary)
+        
+        # Step 4: Generate comprehensive analysis using LLM
+        await ctx.info("🤖 Generating security analysis with LLM...")
+        
+        analysis_data = json.dumps(logs_summary, indent=2, ensure_ascii=False)
+        
+        # Format with LLM for final human-readable output
+        formatted_response = await format_with_llm(
+            raw_json=analysis_data,
+            tool_name="check_wazuh_log",
+            user_context=f"User meminta analisis keamanan: '{user_prompt}'. Ditemukan {len(rag_results)} log relevan dari pencarian '{generated_query}' dalam {days_range} hari terakhir.",
+            ctx=ctx
+        )
+        
+        await ctx.info("✅ Security analysis completed")
+        return formatted_response
+        
+    except Exception as e:
+        await ctx.error(f"Error in Wazuh log analysis: {e}")
+        return f"""❌ **Error dalam Analisis Log Wazuh**
+
+**Permintaan:** {user_prompt}
+**Error:** {str(e)}
+
+**Solusi:**
+- Periksa koneksi ke database Wazuh
+- Pastikan layanan LLM berjalan
+- Coba lagi dalam beberapa saat
+
+**Detail Error:** {type(e).__name__}"""
+
+# =============================================================================
 # API INFO & STATUS
 # =============================================================================
 
@@ -218,747 +556,17 @@ async def make_api_request(
 async def get_api_info(ctx: Context) -> str:
     """Get Wazuh API basic information and status."""
     result = await make_api_request("GET", "/", ctx)
-    return json.dumps(result, indent=2)
-
-# =============================================================================
-# WAZUH AI THREAT HUNTING SYSTEM
-# =============================================================================
-
-class WazuhCAG:
-    """
-    Wazuh Cache-Augmented Generation (CAG) system for fast threat hunting.
+    raw_json = json.dumps(result, indent=2)
     
-    This implementation follows Cache-Augmented Generation methodology:
-    - Preloads Wazuh security logs into LLM context
-    - Stores inference state (Key-Value cache) for instant access
-    - Eliminates retrieval latency by using cached context
-    - Uses LM Studio LLM for generation
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_api_info", 
+        user_context="User meminta informasi dasar dan status API Wazuh",
+        ctx=ctx
+    )
     
-    Reference: Cache-Augmented Generation approach vs traditional RAG
-    """
-    
-    def __init__(self, lm_studio_config, wazuh_config, db_path: str = None):
-        if db_path is None:
-            # Get path relative to project root
-            current_dir = Path(__file__).parent
-            project_root = current_dir.parent.parent
-            db_path = str(project_root / "data" / "wazuh_archives.db")
-        self.db_path = db_path
-        self.cache = None
-        self.cache_dir = "cag_cache"
-        self.origin_len = 0
-        self.knowledge_loaded = False
-        
-        # Store reference to lm_studio_config parameter
-        self.lm_studio_config = lm_studio_config
-        
-        # Initialize wazuh_config - also needed for rule level checks
-        self.wazuh_config = wazuh_config
-        
-        # Initialize semantic search components
-        self.vector_store = None
-        self.embeddings_model = None
-        self.log_embeddings = {}
-        self.semantic_search_enabled = False
-        
-        # Initialize LM Studio client if available
-        if OPENAI_AVAILABLE:
-            self.lm_client = OpenAI(
-                base_url=lm_studio_config.base_url,
-                api_key=lm_studio_config.api_key,
-                timeout=lm_studio_config.timeout
-            )
-            logger.info(f"LM Studio client initialized: {lm_studio_config.base_url}")
-        else:
-            self.lm_client = None
-            logger.warning("OpenAI client not available - CAG generation disabled")
-        
-        # Setup cache directory
-        os.makedirs(self.cache_dir, exist_ok=True)
-        
-        # Initialize semantic search if available
-        self._initialize_semantic_search()
-        
-        self.initialize_security_context()
-    
-    def _initialize_semantic_search(self):
-        """Initialize semantic search components if dependencies are available."""
-        if not SEMANTIC_SEARCH_AVAILABLE:
-            logger.warning("Semantic search dependencies not available - using keyword-based search only")
-            return
-        
-        try:
-            # Initialize sentence transformer model for embeddings
-            self.embeddings_model = SentenceTransformer('all-MiniLM-L6-v2')
-            logger.info("Semantic search model loaded: all-MiniLM-L6-v2")
-            
-            # Initialize FAISS vector store
-            self.dimension = lm_studio_config.embedding_dimension  # all-MiniLM-L6-v2 embedding dimension
-            self.vector_store = faiss.IndexFlatIP(self.dimension)  # Inner product for cosine similarity
-            
-            self.semantic_search_enabled = True
-            logger.info("Semantic search initialized successfully")
-            
-        except Exception as e:
-            logger.error(f"Failed to initialize semantic search: {e}")
-            self.semantic_search_enabled = False
-    
-    def initialize_security_context(self):
-        """Initialize the security context for threat hunting."""
-        self.security_context = """You are a cybersecurity expert specialized in analyzing Wazuh security logs for threat hunting.
-
-Your expertise includes:
-- Identifying attack patterns, brute-force attempts, and suspicious activities
-- Analyzing security events with timestamps, affected systems, and indicators of compromise
-- Interpreting Wazuh rule classifications and security levels
-- Providing actionable security recommendations
-
-Always focus on security-relevant insights from the provided log data. Respond in Indonesian language."""
-    
-    async def get_security_logs_for_context(self, limit: int = None, agent_ids: List[str] = None, days_range: int = None) -> List[Dict[str, Any]]:
-        """Retrieve security logs for building knowledge context - optimized for 64GB RAM system."""
-        if days_range is None:
-            days_range = self.lm_studio_config.default_days_range
-            
-        try:
-            conn = sqlite3.connect(self.db_path)
-            conn.row_factory = sqlite3.Row  # Return rows as dictionaries
-            cursor = conn.cursor()
-            
-            # Build query to SELECT ALL COLUMNS including full_log
-            base_query = """
-                SELECT * FROM wazuh_archives 
-                WHERE full_log IS NOT NULL AND full_log != ''
-                AND timestamp >= datetime('now', '-{} days')
-            """.format(days_range)
-            
-            params = []
-            if agent_ids and len(agent_ids) > 0:
-                # Add agent filtering
-                placeholders = ','.join(['?' for _ in agent_ids])
-                base_query += f" AND agent_name IN ({placeholders})"
-                params.extend(agent_ids)
-            
-            base_query += " ORDER BY rule_level DESC, timestamp DESC"
-            
-            # Apply limit only if specifically requested, otherwise get ALL logs
-            if limit and limit > 0:
-                base_query += " LIMIT ?"
-                params.append(limit)
-            
-            cursor.execute(base_query, params)
-            
-            # Convert all rows to dictionaries with ALL columns
-            results = []
-            for row in cursor.fetchall():
-                log_dict = dict(row)  # Gets ALL columns now including full_log
-                results.append(log_dict)
-            
-            conn.close()
-            logger.info(f"📊 Retrieved {len(results)} security logs with ALL COLUMNS from database (RAM: 64GB optimized)")
-            return results
-            
-        except Exception as e:
-            logger.error(f"Error retrieving security logs: {e}")
-            return []
-    
-    def build_knowledge_prompt(self, security_logs: List[Dict[str, Any]]) -> str:
-        """Build knowledge prompt from security logs for CAG."""
-        if not security_logs:
-            return "No security logs available."
-        
-        # Create structured knowledge base from logs
-        knowledge_sections = []
-        
-        # Group logs by priority
-        critical_logs = [log for log in security_logs if log.get('rule_level', 0) >= self.wazuh_config.critical_level]
-        high_logs = [log for log in security_logs if self.wazuh_config.high_level <= log.get('rule_level', 0) < self.wazuh_config.critical_level]
-        medium_logs = [log for log in security_logs if self.wazuh_config.medium_level <= log.get('rule_level', 0) < self.wazuh_config.high_level]
-        
-        # Add critical events
-        if critical_logs:
-            knowledge_sections.append("=== CRITICAL SECURITY EVENTS (FULL DETAILS) ===")
-            for log in critical_logs[:15]:  # Fewer logs but much more detail
-                # Extract ALL available information including full_log
-                event_parts = []
-                event_parts.append(f"Time: {log.get('timestamp', 'N/A')[:19]}")
-                event_parts.append(f"Agent: {log.get('agent_name', 'N/A')} (ID: {log.get('agent_id', 'N/A')})")
-                event_parts.append(f"Rule: ID={log.get('rule_id', 'N/A')}, Level={log.get('rule_level', 0)}")
-                event_parts.append(f"Desc: {log.get('rule_description', 'N/A')}")
-                event_parts.append(f"Groups: {log.get('rule_groups', 'N/A')}")
-                event_parts.append(f"Location: {log.get('location', 'N/A')}")
-                event_parts.append(f"Decoder: {log.get('decoder_name', 'N/A')}")
-                
-                # MOST IMPORTANT: Include full_log content
-                full_log = log.get('full_log', '')
-                if full_log and len(full_log.strip()) > 0:
-                    event_parts.append(f"FULL_LOG: {full_log[:600]}...")
-                
-                # Include additional structured data if available
-                data = log.get('data', '')
-                if data and len(data.strip()) > 0:
-                    event_parts.append(f"Data: {data[:200]}...")
-                
-                knowledge_sections.append(" | ".join(event_parts))
-        
-        # Add high priority events
-        if high_logs:
-            knowledge_sections.append("\n=== HIGH PRIORITY SECURITY EVENTS ===")
-            for log in high_logs[:25]:
-                # Include full_log in high priority events too
-                full_log_sample = log.get('full_log', 'N/A')[:300] + ("..." if len(log.get('full_log', '')) > 300 else "")
-                event_summary = f"Time: {log.get('timestamp', 'N/A')[:19]}, Agent: {log.get('agent_name', 'N/A')}, Rule: {log.get('rule_id', 'N/A')}/L{log.get('rule_level', 0)}, Desc: {log.get('rule_description', 'N/A')}, FullLog: {full_log_sample}"
-                knowledge_sections.append(event_summary)
-        
-        # Add medium priority events (summary only)
-        if medium_logs:
-            knowledge_sections.append(f"\n=== MEDIUM PRIORITY EVENTS SUMMARY ===")
-            knowledge_sections.append(f"Total medium priority events: {len(medium_logs)}")
-            
-            # Group by rule description with sample full_log content
-            rule_counts = {}
-            sample_full_logs = {}
-            for log in medium_logs:
-                desc = log.get('rule_description', 'Unknown')[:50]
-                rule_counts[desc] = rule_counts.get(desc, 0) + 1
-                # Store sample full_log for this rule type
-                if desc not in sample_full_logs:
-                    sample_full_logs[desc] = log.get('full_log', 'N/A')[:200]
-            
-            for rule_desc, count in sorted(rule_counts.items(), key=lambda x: x[1], reverse=True)[:8]:
-                sample_log = sample_full_logs.get(rule_desc, 'N/A')
-                knowledge_sections.append(f"- {rule_desc}: {count} events | Sample FullLog: {sample_log}...")
-        
-        knowledge_text = "\n".join(knowledge_sections)
-        
-        # Create system prompt with comprehensive knowledge including full_log
-        system_prompt = f"""<|system|>{self.security_context}
-
-COMPREHENSIVE WAZUH SECURITY KNOWLEDGE BASE (ALL COLUMNS INCLUDING FULL_LOG):
-{knowledge_text}
-
-<|user|>
-Based on the comprehensive security logs above (including full_log content and all available data), please answer the following security questions:
-
-"""
-        
-        return system_prompt
-    
-    async def create_knowledge_cache(self, limit: int = None, days_range: int = None):
-        """Create CAG knowledge cache from Wazuh security logs - optimized for 64GB RAM."""
-        if not CAG_AVAILABLE:
-            logger.error("CAG dependencies not available")
-            return False
-        
-        if days_range is None:
-            days_range = self.lm_studio_config.default_days_range
-        
-        # Calculate optimal limit based on LM Studio token capacity
-        # Estimate tokens per log entry, leaving room for system prompt
-        if limit is None:
-            estimated_tokens_per_log = self.lm_studio_config.estimated_tokens_per_log
-            system_prompt_tokens = self.lm_studio_config.system_prompt_tokens
-            max_log_tokens = self.lm_studio_config.max_tokens - system_prompt_tokens
-            optimal_limit = max_log_tokens // estimated_tokens_per_log
-            limit = min(optimal_limit, self.lm_studio_config.max_log_limit)
-            
-        await self.info_log(f"🔄 Building CAG knowledge cache from up to {limit} security logs ({self.lm_studio_config.max_tokens} token optimized)...")
-        
-        # Get security logs without artificial restrictions
-        security_logs = await self.get_security_logs_for_context(limit, days_range=days_range)
-        if not security_logs:
-            logger.warning("No security logs found for CAG")
-            return False
-        
-        await self.info_log(f"📊 Processing {len(security_logs)} security logs for knowledge cache...")
-        
-        # Build knowledge prompt
-        knowledge_prompt = self.build_knowledge_prompt(security_logs)
-        
-        # For CAG, we use LM Studio directly since we don't need local model caching
-        # The knowledge is embedded in the prompt itself
-        self.cached_knowledge_prompt = knowledge_prompt
-        self.knowledge_loaded = True
-        
-        # Build vector embeddings for semantic search if available
-        if self.semantic_search_enabled:
-            await self.info_log("🔄 Building vector embeddings for semantic search...")
-            await self.build_vector_embeddings(force_rebuild=True)
-            await self.info_log("✅ Vector embeddings built successfully")
-        
-        logger.info(f"✅ CAG knowledge cache built with {len(security_logs)} security events")
-        return True
-    
-    async def query_with_cache(self, user_query: str, max_tokens: int = None) -> str:
-        """Query the cached knowledge using LM Studio LLM."""
-        if not self.lm_client:
-            return "LM Studio client not available"
-        
-        if not self.knowledge_loaded:
-            await self.create_knowledge_cache()
-        
-        # Use config max_tokens if not specified
-        if max_tokens is None:
-            max_tokens = lm_studio_config.max_tokens // 4  # Use 1/4 of max for cache queries
-        
-        try:
-            # Combine cached knowledge with user query
-            full_prompt = f"{self.cached_knowledge_prompt}{user_query}\n\nJawaban:"
-            
-            # Generate response using LM Studio
-            response = self.lm_client.chat.completions.create(
-                model=lm_studio_config.model,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": full_prompt
-                    }
-                ],
-                max_tokens=max_tokens,
-                temperature=lm_studio_config.temperature  # NO HARDCODED!
-            )
-            
-            return response.choices[0].message.content
-            
-        except Exception as e:
-            logger.error(f"Error querying CAG cache: {e}")
-            return f"Error generating response: {str(e)}"
-    
-    async def build_vector_embeddings(self, force_rebuild: bool = False, days_range: int = None):
-        """Build vector embeddings for all security logs - optimized for 64GB RAM."""
-        if not self.semantic_search_enabled:
-            logger.warning("Semantic search not available - skipping vector embeddings")
-            return
-        
-        if days_range is None:
-            days_range = self.lm_studio_config.default_days_range
-        
-        embeddings_cache_path = os.path.join(self.cache_dir, "log_embeddings.npz")
-        
-        # Load cached embeddings if available and not forcing rebuild
-        if os.path.exists(embeddings_cache_path) and not force_rebuild:
-            try:
-                cached_data = np.load(embeddings_cache_path, allow_pickle=True)
-                embeddings_array = cached_data['embeddings']
-                log_ids = cached_data['log_ids'].tolist()
-                
-                # Add to FAISS index
-                self.vector_store.add(embeddings_array)
-                self.log_embeddings = {str(log_id): idx for idx, log_id in enumerate(log_ids)}
-                
-                logger.info(f"📊 Loaded {len(log_ids)} cached embeddings from disk")
-                return
-            except Exception as e:
-                logger.warning(f"Failed to load cached embeddings: {e}")
-        
-        # Build embeddings from scratch - use ALL available logs for 64GB RAM
-        try:
-            await self.info_log("🔄 Retrieving ALL security logs for embedding creation (64GB RAM optimized)...")
-            logs = await self.get_security_logs_for_context(limit=None, days_range=days_range)  # NO LIMIT for high-end systems
-            if not logs:
-                logger.warning("No logs found for embedding creation")
-                return
-            
-            await self.info_log(f"📊 Creating embeddings for {len(logs)} security logs...")
-            
-            # Process in batches to manage memory efficiently
-            batch_size = self.lm_studio_config.small_batch_size
-            all_embeddings = []
-            all_log_ids = []
-            
-            # Process ALL logs in batches to manage memory efficiently
-            batch_size = self.lm_studio_config.large_batch_size
-            total_batches = (len(logs) + batch_size - 1) // batch_size
-            
-            await self.info_log(f"🔄 Processing {len(logs)} logs in {total_batches} batches of {batch_size}...")
-            
-            all_embeddings = []
-            all_log_ids = []
-            
-            for batch_idx in range(0, len(logs), batch_size):
-                batch_logs = logs[batch_idx:batch_idx + batch_size]
-                batch_num = (batch_idx // batch_size) + 1
-                
-                await self.info_log(f"🔄 Processing batch {batch_num}/{total_batches} ({len(batch_logs)} logs)...")
-                
-                # Prepare text for embedding
-                log_texts = []
-                log_ids = []
-                
-                for log in batch_logs:
-                    # Combine relevant fields for embedding
-                    text_parts = []
-                    if log.get('rule_description'):
-                        text_parts.append(log['rule_description'])
-                    if log.get('rule_groups'):
-                        text_parts.append(log['rule_groups'])
-                    if log.get('full_log'):
-                        text_parts.append(log['full_log'][:1000])  # Increased log length for better context
-                    
-                    log_text = " | ".join(text_parts)
-                    if log_text.strip():
-                        log_texts.append(log_text)
-                        log_ids.append(log['id'])
-                
-                if not log_texts:
-                    continue
-                
-                # Create embeddings for this batch
-                logger.info(f"Creating embeddings for batch {batch_num}: {len(log_texts)} logs...")
-                batch_embeddings = self.embeddings_model.encode(log_texts, show_progress_bar=True)
-                
-                # Normalize embeddings for cosine similarity
-                batch_embeddings = batch_embeddings / np.linalg.norm(batch_embeddings, axis=1, keepdims=True)
-                
-                all_embeddings.append(batch_embeddings)
-                all_log_ids.extend(log_ids)
-            
-            if not all_embeddings:
-                logger.warning("No valid embeddings created")
-                return
-            
-            # Combine all batch embeddings
-            embeddings = np.vstack(all_embeddings)
-            
-            # Add to FAISS index
-            self.vector_store.add(embeddings.astype(np.float32))
-            
-            # Store mapping
-            self.log_embeddings = {str(log_id): idx for idx, log_id in enumerate(all_log_ids)}
-            
-            # Cache embeddings
-            os.makedirs(self.cache_dir, exist_ok=True)
-            np.savez_compressed(embeddings_cache_path, 
-                              embeddings=embeddings, 
-                              log_ids=np.array(all_log_ids))
-            
-            await self.info_log(f"✅ Built and cached {len(all_log_ids)} vector embeddings (Total: {embeddings.shape[0]} vectors)")
-            
-        except Exception as e:
-            logger.error(f"Error building vector embeddings: {e}")
-    
-    async def semantic_search_logs(self, query: str, k: int = None, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
-        """Perform semantic search on security logs using vector similarity."""
-        if not self.semantic_search_enabled:
-            logger.warning("Semantic search not available")
-            return []
-        
-        if k is None:
-            k = self.lm_studio_config.default_search_k
-            return []
-        
-        try:
-            # Create query embedding
-            query_embedding = self.embeddings_model.encode([query])
-            query_embedding = query_embedding / np.linalg.norm(query_embedding, axis=1, keepdims=True)
-            
-            # Search in vector store
-            scores, indices = self.vector_store.search(query_embedding.astype(np.float32), k * 2)
-            
-            # Get corresponding log IDs
-            reverse_mapping = {idx: log_id for log_id, idx in self.log_embeddings.items()}
-            similar_log_ids = [reverse_mapping.get(idx, None) for idx in indices[0] if idx in reverse_mapping]
-            
-            # Retrieve actual logs
-            if not similar_log_ids:
-                return []
-            
-            conn = sqlite3.connect(self.db_path)
-            conn.row_factory = sqlite3.Row  # Return rows as dictionaries
-            cursor = conn.cursor()
-            
-            # Build query with agent filtering - SELECT ALL COLUMNS
-            placeholders = ','.join(['?' for _ in similar_log_ids])
-            base_query = f"""
-                SELECT * FROM wazuh_archives 
-                WHERE id IN ({placeholders})
-            """
-            
-            params = similar_log_ids[:]
-            if agent_ids and len(agent_ids) > 0:
-                agent_placeholders = ','.join(['?' for _ in agent_ids])
-                base_query += f" AND agent_name IN ({agent_placeholders})"
-                params.extend(agent_ids)
-            
-            cursor.execute(base_query, params)
-            
-            results = []
-            
-            for row in cursor.fetchall():
-                if len(results) >= k:
-                    break
-                    
-                log_dict = dict(row)  # Gets ALL columns now
-                # Add semantic similarity score
-                similarity_idx = similar_log_ids.index(log_dict['id']) if log_dict['id'] in similar_log_ids else 0
-                similarity_score = float(scores[0][similarity_idx]) if similarity_idx < len(scores[0]) else 0.0
-                
-                log_dict.update({
-                    "similarity_score": similarity_score,
-                    "search_type": "semantic",
-                    "threat_indicators": self.extract_threat_indicators(log_dict)
-                })
-                results.append(log_dict)
-            
-            conn.close()
-            return results[:k]
-            
-        except Exception as e:
-            logger.error(f"Error in semantic search: {e}")
-            return []
-    
-    async def search(self, query: str, k: int = None, agent_ids: List[str] = None) -> List[Dict[str, Any]]:
-        """
-        Pure semantic search untuk hasil yang optimal - TANPA keyword optimization.
-        
-        Hanya menggunakan:
-        1. Semantic vector search untuk log retrieval yang tepat
-        2. CAG cached knowledge untuk context
-        """
-        if k is None:
-            k = self.lm_studio_config.default_hybrid_search_k
-            
-        try:
-            # Generate response using cached knowledge
-            cag_response = await self.query_with_cache(query)
-            if not cag_response:
-                cag_response = "No CAG response generated"
-            
-            # HANYA semantic search - TIDAK ADA keyword fallback
-            results = []
-            if self.semantic_search_enabled:
-                results = await self.semantic_search_logs(query, k, agent_ids)
-                logger.info(f"Semantic search found {len(results)} results")
-            else:
-                logger.warning("Semantic search not available")
-                return []
-            
-            # Enhance results dengan CAG analysis saja
-            for log in results:
-                safe_cag_response = cag_response or "No analysis available"
-                log.update({
-                    "threat_priority": self.determine_threat_priority(log, log.get("similarity_score", 0.5)),
-                    "threat_category": "semantic_analyzed",
-                    "cag_response": safe_cag_response[:200] + "..." if len(safe_cag_response) > 200 else safe_cag_response
-                })
-            
-            # Sort by semantic similarity score
-            results.sort(key=lambda x: x.get("similarity_score", 0), reverse=True)
-            
-            return results[:k]
-            
-        except Exception as e:
-            logger.error(f"Error in semantic search: {e}")
-            raise e
-    
-    def determine_threat_priority(self, log: Dict[str, Any], relevance_score: float) -> str:
-        """Determine threat priority based on rule level and relevance."""
-        rule_level = log.get('rule_level', 0)
-        
-        if rule_level >= self.wazuh_config.critical_level or relevance_score >= self.wazuh_config.critical_score:
-            return "CRITICAL"
-        elif rule_level >= self.wazuh_config.high_level or relevance_score >= self.wazuh_config.high_score:
-            return "HIGH"
-        elif rule_level >= self.wazuh_config.medium_level or relevance_score >= self.wazuh_config.medium_score:
-            return "MEDIUM"
-        else:
-            return "LOW"
-    
-    def extract_threat_indicators(self, log: Dict[str, Any]) -> List[str]:
-        """Extract threat indicators from log entry."""
-        indicators = []
-        
-        rule_groups = log.get('rule_groups', '')
-        if rule_groups:
-            if 'authentication' in rule_groups:
-                indicators.append("Authentication Event")
-            if 'attack' in rule_groups:
-                indicators.append("Attack Pattern")
-            if 'web' in rule_groups:
-                indicators.append("Web Activity")
-            if 'malware' in rule_groups:
-                indicators.append("Malware Related")
-            if 'network' in rule_groups:
-                indicators.append("Network Activity")
-        
-        if not indicators:
-            indicators.append("Security Event")
-        
-        return indicators
-    
-    async def info_log(self, message: str):
-        """Helper method for logging info messages."""
-        logger.info(message)
-
-# Initialize Wazuh CAG (Cache-Augmented Generation) system
-cag_system = WazuhCAG(lm_studio_config, wazuh_config)
-
-# Auto-initialize CAG cache with security logs on server startup
-async def initialize_cag_system():
-    """Initialize CAG system with security logs for fast threat hunting."""
-    try:
-        if CAG_AVAILABLE or OPENAI_AVAILABLE:
-            print("🔄 Initializing Wazuh CAG (Cache-Augmented Generation) with security logs...")
-            success = await cag_system.create_knowledge_cache(limit=1000)
-            if success:
-                print("✅ Wazuh CAG system ready for fast threat hunting!")
-            else:
-                print("⚠️ CAG initialization completed with warnings")
-        else:
-            print("⚠️ CAG dependencies not available - basic mode enabled")
-    except Exception as e:
-        print(f"❌ Failed to initialize CAG system: {e}")
-
-# Initialize on module load
-if CAG_AVAILABLE or OPENAI_AVAILABLE:
-    import asyncio
-    try:
-        # Check if there's an event loop running
-        loop = asyncio.get_event_loop()
-        if loop.is_running():
-            # Schedule initialization for later
-            loop.create_task(initialize_cag_system())
-        else:
-            # Run initialization directly
-            asyncio.run(initialize_cag_system())
-    except:
-        # Fallback - will initialize on first use
-        pass
-
-# =============================================================================
-# WAZUH AI THREAT HUNTING MCP TOOL
-# =============================================================================
-
-@mcp.tool
-async def check_wazuh_log(
-    ctx: Context,
-    query: str,
-    max_results: int = None,
-    days_range: int = None,
-    rebuild_cache: bool = False
-) -> str:
-    """
-    Wazuh AI Threat Hunting dengan LLM Processing
-    
-    Langkah 1: LLM mengolah pertanyaan user dan membuat query RAG
-    Langkah 2: RAG mengambil logs yang relevan 
-    Langkah 3: LLM menganalisis logs dan memberikan jawaban
-    
-    Args:
-        query: Pertanyaan user dalam bahasa natural
-        max_results: Maksimal logs yang diambil (default: 15)
-        days_range: Range hari untuk pencarian (uses config default)
-        rebuild_cache: Rebuild cache (tidak digunakan)
-    
-    Returns:
-        Analisis komprehensif dari LLM berdasarkan logs yang relevan
-    """
-    if days_range is None:
-        days_range = lm_studio_config.tool_days_range
-    if max_results is None:
-        max_results = lm_studio_config.default_tool_max_results
-        
-    try:
-        await ctx.info(f"🔍 Memproses pertanyaan: {query}")
-        
-        # LANGKAH 1: LLM mengolah pertanyaan user dan membuat query untuk RAG
-        query_processing_prompt = f"""
-Saya adalah sistem AI threat hunting untuk Wazuh security logs. 
-
-PERTANYAAN USER: "{query}"
-
-Tugas saya: Buat search query yang optimal untuk mencari logs Wazuh yang relevan.
-
-Pertimbangkan:
-- Keywords kunci dari pertanyaan
-- Jenis ancaman/serangan yang dicari
-- Entity penting (IP, agent, rule, dll)
-- Konteks keamanan yang relevan
-
-Berikan search query yang fokus dan efektif:
-"""
-        
-        # Generate optimized search query using LLM
-        query_response = cag_system.lm_client.chat.completions.create(
-            model=lm_studio_config.model,  # Use config for model
-            messages=[
-                {"role": "system", "content": "You are a cybersecurity expert. Create optimal search queries for Wazuh log analysis."},
-                {"role": "user", "content": query_processing_prompt}
-            ],
-            max_tokens=lm_studio_config.max_tokens // 160,  # Use config-based calculation (32000/160 = 200)
-            temperature=lm_studio_config.temperature  # NO HARDCODED!
-        )
-        
-        processed_query = query_response.choices[0].message.content.strip()
-        await ctx.info(f"🔍 Query RAG yang dihasilkan: {processed_query}")
-        
-        # LANGKAH 2: RAG search menggunakan processed query
-        relevant_logs = await cag_system.search(
-            query=processed_query,
-            k=max_results
-        )
-        
-        if not relevant_logs:
-            return "Tidak ditemukan logs yang relevan untuk pertanyaan Anda"
-        
-        # LANGKAH 3: Dump SEMUA data tanpa truncation (32K token capacity)
-        raw_data_prompt = f"""
-PERTANYAAN USER: {query}
-PROCESSED QUERY: {processed_query}
-
-RAW WAZUH DATABASE LOGS ({len(relevant_logs)} RECORDS - ALL COLUMNS FULL DATA):
-==============================================================================
-
-"""
-        
-        for i, log in enumerate(relevant_logs, 1):
-            raw_data_prompt += f"LOG #{i} (Relevance Score: {log.get('similarity_score', log.get('threat_score', 0)):.3f}):\n"
-            
-            # DUMP SEMUA KOLOM TANPA TRUNCATION - FULL DATA
-            for key, value in log.items():
-                str_value = str(value) if value is not None else "N/A"
-                raw_data_prompt += f"{key}: {str_value}\n"
-            raw_data_prompt += "---\n"
-        
-        raw_data_prompt += f"""
-
-INSTRUKSI ANALISIS:
-Berdasarkan {len(relevant_logs)} logs Wazuh di atas, jawab pertanyaan user: "{query}"
-
-Analisis yang komprehensif dengan:
-- Ekstraksi semua informasi relevan dari SEMUA field
-- Identifikasi pola serangan dan indikator ancaman
-- Analisis timeline dan correlation events
-- IP addresses, payloads, attack vectors dari field manapun
-- Rekomendasi keamanan berdasarkan temuan
-
-Berikan analisis detail dengan contoh spesifik dari data mentah.
-"""
-        
-        await ctx.info(f"📤 Mengirim {len(relevant_logs)} logs ke LLM untuk analisis final")
-        
-        # LANGKAH 4: LLM analisis final
-        final_analysis = cag_system.lm_client.chat.completions.create(
-            model=lm_studio_config.model,  # Use config for model
-            messages=[
-                {"role": "system", "content": "Anda adalah analis keamanan cyber expert. Analisis logs Wazuh secara menyeluruh dan berikan jawaban komprehensif dalam bahasa Indonesia."},
-                {"role": "user", "content": raw_data_prompt}
-            ],
-            max_tokens=lm_studio_config.max_tokens,  # Use config for max_tokens!
-            temperature=lm_studio_config.temperature  # NO HARDCODED!
-        )
-        
-        return final_analysis.choices[0].message.content
-
-    except Exception as e:
-        error_msg = f"Error dalam analisis Wazuh: {str(e)}"
-        await ctx.error(error_msg)
-        return json.dumps({
-            "status": "error",
-            "error": error_msg,
-            "query": query,
-            "analysis_period": f"past {days_range} days"
-        }, indent=2)
+    return formatted_response
 
 # =============================================================================
 # AGENT MANAGEMENT TOOLS
@@ -1005,7 +613,25 @@ async def list_agents(
         params["agents_list"] = agent_ids.split(",")
     
     result = await make_api_request("GET", "/agents", ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Create context for LLM
+    filter_context = []
+    if status: filter_context.append(f"status: {status}")
+    if os_platform: filter_context.append(f"platform: {os_platform}")
+    if search: filter_context.append(f"search: {search}")
+    
+    context = f"User meminta daftar Wazuh agents dengan filter: {', '.join(filter_context) if filter_context else 'tanpa filter'}"
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="list_agents",
+        user_context=context,
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def add_agent(
@@ -1036,7 +662,17 @@ async def add_agent(
         params["force"] = force
     
     result = await make_api_request("POST", "/agents", ctx, params=params, data=data)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="add_agent",
+        user_context=f"User menambahkan agent baru dengan nama '{name}'" + (f" dan IP {ip}" if ip else ""),
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def delete_agents(
@@ -1063,25 +699,65 @@ async def delete_agents(
         params["status"] = status
     
     result = await make_api_request("DELETE", "/agents", ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="delete_agents",
+        user_context="User menghapus agents dari sistem",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_agent_info(ctx: Context, agent_id: str) -> str:
     """Get detailed information about a specific agent."""
     result = await make_api_request("GET", f"/agents/{agent_id}", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_agent_info",
+        user_context=f"User meminta informasi detail agent ID {agent_id}",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_agent_key(ctx: Context, agent_id: str) -> str:
     """Get the key for a specific agent (used for agent registration)."""
     result = await make_api_request("GET", f"/agents/{agent_id}/key", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_agent_key",
+        user_context=f"User meminta key untuk agent ID {agent_id}",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def restart_agent(ctx: Context, agent_id: str) -> str:
     """Restart a specific Wazuh agent."""
     result = await make_api_request("PUT", f"/agents/{agent_id}/restart", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="restart_agent",
+        user_context=f"User restart agent ID {agent_id}",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def restart_multiple_agents(ctx: Context, agent_ids: str) -> str:
@@ -1093,7 +769,17 @@ async def restart_multiple_agents(ctx: Context, agent_ids: str) -> str:
     """
     params = {"agents_list": agent_ids.split(",")}
     result = await make_api_request("PUT", "/agents/restart", ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="restart_multiple_agents",
+        user_context=f"User restart multiple agents: {agent_ids}",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def upgrade_agents(
@@ -1118,7 +804,17 @@ async def upgrade_agents(
         params["force"] = force
     
     result = await make_api_request("PUT", "/agents/upgrade", ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="upgrade_agents",
+        user_context=f"User upgrade agents: {agent_ids}" + (f" ke versi {upgrade_version}" if upgrade_version else ""),
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_agent_config(ctx: Context, agent_id: str, component: str, configuration: str) -> str:
@@ -1132,13 +828,33 @@ async def get_agent_config(ctx: Context, agent_id: str, component: str, configur
     """
     endpoint = f"/agents/{agent_id}/config/{component}/{configuration}"
     result = await make_api_request("GET", endpoint, ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_agent_config",
+        user_context=f"User meminta konfigurasi agent {agent_id} untuk komponen {component}",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_agent_stats(ctx: Context, agent_id: str) -> str:
     """Get daemon statistics from a specific agent."""
     result = await make_api_request("GET", f"/agents/{agent_id}/daemons/stats", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_agent_stats",
+        user_context=f"User meminta statistik daemon agent {agent_id}",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 # =============================================================================
 # MANAGER OPERATIONS
@@ -1148,13 +864,33 @@ async def get_agent_stats(ctx: Context, agent_id: str) -> str:
 async def get_manager_status(ctx: Context) -> str:
     """Get the status of all Wazuh manager daemons."""
     result = await make_api_request("GET", "/manager/status", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_manager_status",
+        user_context=f"User called get_manager_status function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_manager_info(ctx: Context) -> str:
     """Get basic information about the Wazuh manager."""
     result = await make_api_request("GET", "/manager/info", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_manager_info",
+        user_context=f"User called get_manager_info function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_manager_configuration(
@@ -1180,7 +916,17 @@ async def get_manager_configuration(
         params["raw"] = "true"
     
     result = await make_api_request("GET", "/manager/configuration", ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_manager_configuration",
+        user_context="User meminta konfigurasi Wazuh manager",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_manager_daemon_stats(ctx: Context, daemons: Optional[str] = None) -> str:
@@ -1195,7 +941,17 @@ async def get_manager_daemon_stats(ctx: Context, daemons: Optional[str] = None) 
         params["daemons_list"] = daemons.split(",")
     
     result = await make_api_request("GET", "/manager/daemons/stats", ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_manager_daemon_stats",
+        user_context="User meminta statistik daemon manager",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_manager_stats(ctx: Context, date: Optional[str] = None) -> str:
@@ -1211,7 +967,17 @@ async def get_manager_stats(ctx: Context, date: Optional[str] = None) -> str:
         params["date"] = date
     
     result = await make_api_request("GET", endpoint, ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_manager_stats",
+        user_context="User meminta statistik manager",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_manager_logs(
@@ -1242,25 +1008,65 @@ async def get_manager_logs(
         params["search"] = search
     
     result = await make_api_request("GET", "/manager/logs", ctx, params=params)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_manager_logs",
+        user_context="User meminta log entries manager",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_manager_logs_summary(ctx: Context) -> str:
     """Get a summary of manager logs by level and tag."""
     result = await make_api_request("GET", "/manager/logs/summary", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_manager_logs_summary",
+        user_context=f"User called get_manager_logs_summary function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def restart_manager(ctx: Context) -> str:
     """Restart the Wazuh manager."""
     result = await make_api_request("PUT", "/manager/restart", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="restart_manager",
+        user_context=f"User called restart_manager function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def validate_configuration(ctx: Context) -> str:
     """Validate the current Wazuh configuration."""
     result = await make_api_request("GET", "/manager/configuration/validation", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="validate_configuration",
+        user_context=f"User called validate_configuration function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 # =============================================================================
 # ACTIVE RESPONSE
@@ -1289,7 +1095,17 @@ async def run_active_response(
     params = {"agents_list": agent_ids.split(",")}
     
     result = await make_api_request("PUT", "/active-response", ctx, params=params, data=data)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="run_active_response",
+        user_context=f"User menjalankan active response command '{command}' pada agents {agent_ids}",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 # =============================================================================
 # CLUSTER MANAGEMENT
@@ -1299,7 +1115,17 @@ async def run_active_response(
 async def get_cluster_status(ctx: Context) -> str:
     """Get the current cluster status."""
     result = await make_api_request("GET", "/cluster/status", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_cluster_status",
+        user_context=f"User called get_cluster_status function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_cluster_nodes(
@@ -1340,7 +1166,17 @@ async def get_cluster_nodes(
 async def get_current_user(ctx: Context) -> str:
     """Get information about the current authenticated user."""
     result = await make_api_request("GET", "/security/users/me", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_current_user",
+        user_context=f"User called get_current_user function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def list_security_users(
@@ -1396,7 +1232,17 @@ async def list_security_policies(
 async def get_security_config(ctx: Context) -> str:
     """Get current security configuration."""
     result = await make_api_request("GET", "/security/config", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_security_config",
+        user_context=f"User called get_security_config function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 # =============================================================================
 # GROUPS MANAGEMENT
@@ -1521,7 +1367,17 @@ async def list_rules(
 async def get_rule_groups(ctx: Context) -> str:
     """Get all available rule groups."""
     result = await make_api_request("GET", "/rules/groups", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_rule_groups",
+        user_context=f"User called get_rule_groups function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_rules_files(
@@ -1902,7 +1758,17 @@ async def run_logtest(
 async def get_agents_overview(ctx: Context) -> str:
     """Get comprehensive overview of all agents."""
     result = await make_api_request("GET", "/overview/agents", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_agents_overview",
+        user_context=f"User called get_agents_overview function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 # =============================================================================
 # TASKS MANAGEMENT
@@ -1947,7 +1813,17 @@ async def get_tasks_status(
 async def get_mitre_metadata(ctx: Context) -> str:
     """Get MITRE ATT&CK metadata information."""
     result = await make_api_request("GET", "/mitre/metadata", ctx)
-    return json.dumps(result, indent=2)
+    raw_json = json.dumps(result, indent=2)
+    
+    # Format with LLM
+    formatted_response = await format_with_llm(
+        raw_json=raw_json,
+        tool_name="get_mitre_metadata",
+        user_context=f"User called get_mitre_metadata function",
+        ctx=ctx
+    )
+    
+    return formatted_response
 
 @mcp.tool
 async def get_mitre_techniques(
