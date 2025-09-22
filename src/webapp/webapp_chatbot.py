@@ -361,6 +361,12 @@ def index():
     """Serve landing page"""
     return render_template('landing.html')
 
+@app.route('/test-tool')
+def test_tool():
+    """Test page for tool responses"""
+    with open('test_tool_response.html', 'r', encoding='utf-8') as f:
+        return f.read()
+
 @app.route('/api/dashboard-data')
 @login_required
 def dashboard_data():
@@ -703,6 +709,7 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
                 # Tool returned structured response, use it directly
                 logger.info("Tool returned structured response - using directly without additional LLM call")
                 final_message = last_tool_result["content"]
+                logger.info(f"Final message from tool: {final_message[:200]}...")
                 
             else:
                 # Tool returned simple result, get LLM interpretation
@@ -712,9 +719,15 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
                     messages=session.get_messages()
                 )
                 final_message = final_response.choices[0].message.content
+                logger.info(f"Final message from LLM: {final_message[:200]}...")
             
             logger.info("Final response processed")
-            logger.debug(f"Final message: {final_message}")
+            logger.debug(f"Final message length: {len(final_message) if final_message else 0}")
+            
+            # Ensure final_message is valid
+            if not final_message or final_message.strip() == "":
+                logger.warning("Final message is empty or None - using fallback")
+                final_message = "Tool executed successfully but no response content available."
             
             session.add_message("assistant", final_message)
             
@@ -723,12 +736,19 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
             db.add_message(session_id, "assistant", final_message, tool_results)
             logger.info("Message saved to database successfully")
             
-            return {
+            # Prepare response data
+            response_data = {
                 "response": final_message,
                 "tool_calls": tool_results,
                 "thinking": None,  # Add thinking support
                 "session_id": session.session_id
             }
+            
+            logger.info(f"Returning response data - response length: {len(final_message) if final_message else 0}")
+            logger.info(f"Tool calls count: {len(tool_results)}")
+            logger.debug(f"Response data: {response_data}")
+            
+            return response_data
         
         else:
             # No tool calls, regular response

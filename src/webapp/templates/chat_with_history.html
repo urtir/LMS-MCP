@@ -652,7 +652,9 @@
                 console.log('Data type:', typeof data);
                 console.log('Has error:', !!data.error);
                 console.log('Has response:', !!data.response);
-                console.log('Response content:', data.response);
+                console.log('Response content type:', typeof data.response);
+                console.log('Response content length:', data.response ? data.response.length : 'null');
+                console.log('Response preview:', data.response ? data.response.substring(0, 100) + '...' : 'null');
                 console.log('Tool calls:', data.tool_calls);
                 console.log('======================');
                 
@@ -665,8 +667,9 @@
                 if (data.error) {
                     console.log('Displaying error message:', data.error);
                     displayMessage('assistant', `Error: ${data.error}`, [], null, null, false, true);
-                } else {
-                    console.log('Displaying assistant response:', data.response);
+                } else if (data.response) {
+                    console.log('Displaying assistant response...');
+                    console.log('Response to display:', data.response);
                     displayMessage('assistant', data.response, data.tool_calls, data.thinking);
                     
                     // Update session in sidebar if this was a new session
@@ -675,6 +678,10 @@
                         loadSessions();
                         loadStats();
                     }
+                } else {
+                    console.warn('No response content to display!');
+                    console.log('Full data object:', JSON.stringify(data, null, 2));
+                    displayMessage('assistant', 'Tool executed but no response content available.', data.tool_calls || [], data.thinking);
                 }
                 
                 scrollToBottom();
