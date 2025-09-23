@@ -11573,3 +11573,7 @@ ERROR:src.telegram.telegram_report_generator:Error getting security events: 'Non
 ERROR:src.telegram.telegram_report_generator:Error generating three_daily report: 'NoneType' object is not subscriptable
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
