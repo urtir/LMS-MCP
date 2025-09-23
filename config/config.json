@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "created": "2025-09-21T15:35:17.066149",
-    "last_updated": "2025-09-23T08:19:10.079264",
+    "last_updated": "2025-09-23T11:37:52.996523",
     "description": "LMS MCP Centralized Configuration"
   },
   "security": {
@@ -77,6 +77,63 @@
     "PDF_TITLE_FONT_SIZE": "24",
     "THREE_DAY_MAX_EVENTS": "100",
     "WEEKLY_MAX_EVENTS": "200"
+  },
+  "pdf_reports": {
+    "PDF_HEADER_FONT_SIZE": "18",
+    "PDF_PAGE_SIZE": "A4",
+    "PDF_MARGIN_TOP": "72",
+    "PDF_MARGIN_BOTTOM": "72",
+    "PDF_MARGIN_LEFT": "72",
+    "PDF_MARGIN_RIGHT": "72",
+    "MAX_ALERTS_PER_REPORT": "100",
+    "CHART_COLORS": "#FF6B6B,#4ECDC4,#45B7D1,#96CEB4,#FFEAA7",
+    "EXPORT_FORMATS": "PDF,HTML",
+    "REPORT_TYPES": {
+      "daily": {
+        "priority_levels": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "read_all_events": true
+      },
+      "three_daily": {
+        "priority_levels": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "read_all_events": true
+      },
+      "weekly": {
+        "priority_levels": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "read_all_events": true
+      },
+      "monthly": {
+        "priority_levels": [
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ],
+        "read_all_events": true
+      }
+    }
   },
   "ml_models": {
     "SENTENCE_TRANSFORMER_MODEL": "all-MiniLM-L6-v2",

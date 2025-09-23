@@ -8351,3 +8351,991 @@ Traceback (most recent call last):
   File "C:\Users\risqu\Desktop\LMS MCP\src\utils\telegram_config.py", line 49, in __init__
     'header_font_size': int(config_manager.get('pdf_reports.PDF_HEADER_FONT_SIZE')),
 TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 65, in <module>
+    from src.utils.telegram_config import TelegramBotConfig
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\__init__.py", line 6, in <module>
+    from .telegram_config import TelegramBotConfig
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\telegram_config.py", line 83, in <module>
+    telegram_config = TelegramBotConfig()
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\telegram_config.py", line 49, in __init__
+    'header_font_size': int(config_manager.get('pdf_reports.PDF_HEADER_FONT_SIZE')),
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 10:41:21.390199 to 2025-09-23 10:41:21.390199
+ERROR:src.telegram.telegram_report_generator:Error getting security events: type object 'TelegramBotConfig' has no attribute 'REPORT_TYPES'
+ERROR:src.telegram.telegram_report_generator:Error getting security statistics: no such column: rule_groups
+ERROR:src.telegram.telegram_report_generator:Error getting security statistics: no such column: rule_groups
+ERROR:src.telegram.telegram_report_generator:Error generating daily report: type object 'TelegramBotConfig' has no attribute 'REPORT_TYPES'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 409 Conflict"
+ERROR:telegram.ext.Updater:Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 1288, in main
+    loop = asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 122, in network_retry_loop
+    await do_action()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 115, in do_action
+    action_cb_task.result()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 676, in get_updates
+    updates = await super().get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 4780, in get_updates
+    await self._post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 409 Conflict"
+ERROR:telegram.ext.Updater:Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 1288, in main
+    loop = asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 122, in network_retry_loop
+    await do_action()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 115, in do_action
+    action_cb_task.result()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 676, in get_updates
+    updates = await super().get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 4780, in get_updates
+    await self._post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 409 Conflict"
+ERROR:telegram.ext.Updater:Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 1288, in main
+    loop = asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 122, in network_retry_loop
+    await do_action()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 115, in do_action
+    action_cb_task.result()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 676, in get_updates
+    updates = await super().get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 4780, in get_updates
+    await self._post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 409 Conflict"
+ERROR:telegram.ext.Updater:Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 1288, in main
+    loop = asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 122, in network_retry_loop
+    await do_action()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 115, in do_action
+    action_cb_task.result()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 676, in get_updates
+    updates = await super().get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 4780, in get_updates
+    await self._post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 409 Conflict"
+ERROR:telegram.ext.Updater:Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 1288, in main
+    loop = asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 122, in network_retry_loop
+    await do_action()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 115, in do_action
+    action_cb_task.result()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 676, in get_updates
+    updates = await super().get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 4780, in get_updates
+    await self._post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+ by other getUpdates request; make sure that only one bot instance is running
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 409 Conflict"
+ERROR:telegram.ext.Updater:Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 1288, in main
+    loop = asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 122, in network_retry_loop
+    await do_action()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 115, in do_action
+    action_cb_task.result()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 676, in get_updates
+    updates = await super().get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 4780, in get_updates
+    await self._post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 10:49:31.684790 to 2025-09-23 10:49:31.684790
+ERROR:src.telegram.telegram_report_generator:Error getting security events: type object 'TelegramBotConfig' has no attribute 'REPORT_TYPES'
+ERROR:src.telegram.telegram_report_generator:Error generating daily report: type object 'TelegramBotConfig' has no attribute 'REPORT_TYPES'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 10:51:39.821883 to 2025-09-23 10:51:39.821883
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+ERROR:src.telegram.telegram_report_generator:Error generating AI analysis: type object 'TelegramBotConfig' has no attribute 'LM_STUDIO_CONFIG'
+INFO:src.telegram.telegram_report_generator:✅ daily report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for daily report
+ERROR:src.telegram.telegram_pdf_generator:Error generating PDF report: 'margin'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ daily report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 10:53:33.380131 to 2025-09-23 10:53:33.380131
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+ERROR:src.telegram.telegram_report_generator:Error generating AI analysis: type object 'TelegramBotConfig' has no attribute 'LM_STUDIO_CONFIG'
+INFO:src.telegram.telegram_report_generator:✅ daily report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for daily report
+ERROR:src.telegram.telegram_pdf_generator:Error generating PDF report: 'margin'
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ daily report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 10:54:14.519906 to 2025-09-23 10:54:14.519906
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+ERROR:src.telegram.telegram_report_generator:Error generating AI analysis: 'max_tokens'
+INFO:src.telegram.telegram_report_generator:✅ daily report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for daily report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ daily report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 10:58:11.826147 to 2025-09-23 10:58:11.826147
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ daily report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for daily report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ daily report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 11:03:00.493483 to 2025-09-23 11:03:00.493483
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ daily report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for daily report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ daily report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-22 11:06:57.839407 to 2025-09-23 11:06:57.839407
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ daily report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for daily report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ daily report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating 3day report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating three_daily report for period 2025-09-20 00:00:00 to 2025-09-23 11:31:52.650892
+INFO:src.telegram.telegram_report_generator:Found 6 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ three_daily report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for three_daily report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ 3day report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating weekly report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating weekly report for period 2025-09-22 00:00:00 to 2025-09-23 11:34:32.890502
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ weekly report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for weekly report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ weekly report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-23 00:00:00 to 2025-09-23 11:38:40.222034
+INFO:src.telegram.telegram_report_generator:Found 0 total events, grouped into 0 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ daily report generated successfully with 0 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for daily report
+ERROR:src.telegram.telegram_pdf_generator:Error generating PDF report: unsupported format string passed to NoneType.__format__
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ daily report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating weekly report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating weekly report for period 2025-09-22 00:00:00 to 2025-09-23 11:41:19.290129
+INFO:src.telegram.telegram_report_generator:Found 47 total events, grouped into 6 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ weekly report generated successfully with 6 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for weekly report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ weekly report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"

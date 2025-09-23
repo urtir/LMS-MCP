@@ -34,6 +34,7 @@ class TelegramBotConfig:
             'api_key': config_manager.get('ai_model.LM_STUDIO_API_KEY'),
             'model': config_manager.get('ai_model.LM_STUDIO_MODEL'),
             'temperature': float(config_manager.get('ai_model.AI_TEMPERATURE')),
+            'max_tokens': int(config_manager.get('ai_model.AI_MAX_TOKENS')),
             'timeout': None
         }
         
@@ -67,6 +68,9 @@ class TelegramBotConfig:
             'chart_colors': config_manager.get('pdf_reports.CHART_COLORS').split(','),
             'export_formats': config_manager.get('pdf_reports.EXPORT_FORMATS').split(',')
         }
+        
+        # Report Types Configuration - Using JSON config
+        self.REPORT_TYPES = config_manager.get('pdf_reports.REPORT_TYPES')
         
         # Bot Commands Configuration
         self.BOT_COMMANDS = [

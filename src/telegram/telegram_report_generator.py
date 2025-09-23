@@ -79,44 +79,82 @@ class SecurityReportGenerator:
                                  report_type: str = 'daily') -> List[Dict[str, Any]]:
         """Get security events from Wazuh database for specified time range"""
         try:
-            config = TelegramBotConfig.REPORT_TYPES[report_type]
+            config = self.config.REPORT_TYPES[report_type]
             priority_levels = config['priority_levels']
-            max_events = config['max_events']
+            read_all_events = config.get('read_all_events', False)
             
             with self._get_db_connection() as conn:
-                # Build query for priority events
+                # Build query for priority events - TANPA LIMIT, BACA SEMUA!
                 time_filter, time_params = self._get_time_range_sql(start_time, end_time)
                 level_placeholders = ','.join(['?'] * len(priority_levels))
                 
                 query = f"""
                     SELECT 
-                        id, timestamp, agent_id, agent_name, manager,
-                        rule_id, rule_level, rule_description, rule_groups,
-                        location, decoder_name, data, full_log,
+                        id, timestamp, agent_id, agent_name, manager_name,
+                        rule_id, rule_level, rule_description, rule_mitre_tactic,
+                        location, decoder_name, full_log,
                         json_data, created_at
                     FROM wazuh_archives 
                     WHERE {time_filter}
                     AND rule_level IN ({level_placeholders})
                     ORDER BY rule_level DESC, timestamp DESC
-                    LIMIT ?
                 """
                 
-                params = time_params + priority_levels + [max_events]
+                # HAPUS max_events dari parameter - BACA SEMUA EVENTS!
+                params = time_params + priority_levels
                 cursor = conn.execute(query, params)
                 
-                events = []
+                # Kumpulkan SEMUA events dan kelompokkan berdasarkan rule_id
+                all_events = []
+                events_by_rule = {}
+                
                 for row in cursor.fetchall():
                     event = dict(row)
-                    # Parse JSON data if available
-                    if event['json_data']:
-                        try:
-                            event['parsed_json'] = json.loads(event['json_data'])
-                        except json.JSONDecodeError:
-                            event['parsed_json'] = {}
-                    events.append(event)
+                    # JANGAN PARSE! Simpan JSON data asli untuk LLM
+                    all_events.append(event)
+                    
+                    # Kelompokkan berdasarkan rule_id
+                    rule_id = event['rule_id']
+                    if rule_id not in events_by_rule:
+                        events_by_rule[rule_id] = {
+                            'count': 0,
+                            'representative_event': event,  # Event pertama sebagai perwakilan + RAW JSON DATA
+                            'rule_description': event['rule_description'],
+                            'rule_level': event['rule_level'],
+                            'latest_timestamp': event['timestamp'],
+                            'earliest_timestamp': event['timestamp']
+                        }
+                    
+                    events_by_rule[rule_id]['count'] += 1
+                    # Update timestamp range
+                    if event['timestamp'] > events_by_rule[rule_id]['latest_timestamp']:
+                        events_by_rule[rule_id]['latest_timestamp'] = event['timestamp']
+                    if event['timestamp'] < events_by_rule[rule_id]['earliest_timestamp']:
+                        events_by_rule[rule_id]['earliest_timestamp'] = event['timestamp']
                 
-                logger.info(f"Retrieved {len(events)} security events for {report_type} report")
-                return events
+                # Convert ke format yang mudah dianalisis LLM
+                grouped_events = []
+                for rule_id, group_data in events_by_rule.items():
+                    grouped_event = {
+                        'rule_id': rule_id,
+                        'count': group_data['count'],
+                        'rule_description': group_data['rule_description'],
+                        'rule_level': group_data['rule_level'],
+                        'latest_occurrence': group_data['latest_timestamp'],
+                        'earliest_occurrence': group_data['earliest_timestamp'],
+                        'representative_event': group_data['representative_event'],  # FULL DATA + RAW JSON_DATA
+                        'summary': f"Rule {rule_id}: {group_data['rule_description']} (Level {group_data['rule_level']}) - {group_data['count']} occurrences",
+                        # PASTIKAN json_data RAW tersedia untuk LLM
+                        'raw_json_sample': group_data['representative_event'].get('json_data', ''),
+                        'full_log_sample': group_data['representative_event'].get('full_log', '')
+                    }
+                    grouped_events.append(grouped_event)
+                
+                # Sort berdasarkan rule level dan count
+                grouped_events.sort(key=lambda x: (x['rule_level'], x['count']), reverse=True)
+                
+                logger.info(f"Found {len(all_events)} total events, grouped into {len(grouped_events)} rule types")
+                return grouped_events
                 
         except Exception as e:
             logger.error(f"Error getting security events: {e}")
@@ -198,28 +236,29 @@ class SecurityReportGenerator:
                 cursor = conn.execute(severity_query, time_params)
                 severity_dist = {str(row['rule_level']): row['count'] for row in cursor.fetchall()}
                 
-                # Top rule groups
-                groups_query = f"""
-                    SELECT rule_groups, COUNT(*) as count
+                # Top MITRE tactics (instead of rule groups)
+                tactics_query = f"""
+                    SELECT rule_mitre_tactic, COUNT(*) as count
                     FROM wazuh_archives 
                     WHERE {time_filter}
-                    AND rule_groups IS NOT NULL
-                    GROUP BY rule_groups
+                    AND rule_mitre_tactic IS NOT NULL
+                    AND rule_mitre_tactic != ''
+                    GROUP BY rule_mitre_tactic
                     ORDER BY count DESC
                     LIMIT 10
                 """
                 
-                cursor = conn.execute(groups_query, time_params)
-                top_rule_groups = [dict(row) for row in cursor.fetchall()]
+                cursor = conn.execute(tactics_query, time_params)
+                top_mitre_tactics = [dict(row) for row in cursor.fetchall()]
                 
                 return {
                     'summary': stats,
                     'severity_distribution': severity_dist,
-                    'top_rule_groups': top_rule_groups,
-                    'critical_events': int(severity_dist.get('7', 0)),
-                    'high_events': int(severity_dist.get('6', 0)),
-                    'medium_events': int(severity_dist.get('3', 0) + severity_dist.get('2', 0)),
-                    'low_events': int(severity_dist.get('1', 0) + severity_dist.get('0', 0))
+                    'top_mitre_tactics': top_mitre_tactics,
+                    'critical_events': int(severity_dist.get('10', 0) + severity_dist.get('9', 0)),
+                    'high_events': int(severity_dist.get('8', 0) + severity_dist.get('7', 0)),
+                    'medium_events': int(severity_dist.get('6', 0) + severity_dist.get('5', 0)),
+                    'low_events': int(severity_dist.get('4', 0) + severity_dist.get('3', 0) + severity_dist.get('2', 0) + severity_dist.get('1', 0))
                 }
                 
         except Exception as e:
@@ -277,26 +316,35 @@ class SecurityReportGenerator:
                 messages=[
                     {
                         "role": "system",
-                        "content": """You are a cybersecurity analyst specializing in Wazuh SIEM data analysis. 
+                        "content": """You are a cybersecurity expert analyzing security events from Wazuh SIEM.
                         Analyze the provided security data and generate comprehensive insights for security teams.
                         
+                        **CRITICAL: Analyze the Raw JSON Data thoroughly** for each security event to extract:
+                        - Attack payload details
+                        - Source IP addresses and geolocation
+                        - Attack vectors and techniques
+                        - Indicators of Compromise (IoCs)
+                        - Attack signatures and patterns
+                        
                         Focus on:
-                        1. Critical security events and their implications
-                        2. Threat patterns and attack indicators
-                        3. Risk assessment and prioritization
+                        1. Critical security events and their implications from JSON data analysis
+                        2. Threat patterns and attack indicators found in raw logs
+                        3. Risk assessment based on actual attack payloads
                         4. Actionable recommendations for security teams
-                        5. Trends and anomalies in the data
+                        5. Trends and anomalies in the attack patterns
+                        6. Extract specific attack details from JSON data (URLs, IPs, payloads, etc.)
                         
                         Provide analysis in Indonesian language for better understanding by the team.
-                        Be precise, actionable, and focus on security implications."""
+                        Be precise, actionable, and focus on security implications.
+                        **Use the Raw JSON data to provide specific technical details.**"""
                     },
                     {
                         "role": "user",
                         "content": analysis_context
                     }
                 ],
-                temperature=TelegramBotConfig.LM_STUDIO_CONFIG['temperature'],
-                max_tokens=TelegramBotConfig.LM_STUDIO_CONFIG['max_tokens']
+                temperature=self.config.LM_STUDIO_CONFIG['temperature'],
+                max_tokens=self.config.LM_STUDIO_CONFIG['max_tokens']
             )
             
             ai_analysis = analysis_response.choices[0].message.content
@@ -337,13 +385,36 @@ RINGKASAN STATISTIK:
 - Critical Events (Level 7): {report_data.get('statistics', {}).get('critical_events', 0)}
 - High Events (Level 6): {report_data.get('statistics', {}).get('high_events', 0)}
 
-TOP SECURITY EVENTS:
+ALL SECURITY EVENTS (GROUPED BY RULE ID):
 """
         
-        # Add sample events for context
-        events = report_data.get('security_events', [])[:10]
+        # TAMPILKAN SEMUA EVENTS - JANGAN DIBATASI!
+        events = report_data.get('security_events', [])  # HAPUS [:10] - TAMPILKAN SEMUA!
         for i, event in enumerate(events, 1):
-            context += f"\n{i}. [{event.get('rule_level', 'N/A')}] {event.get('rule_description', 'N/A')} - Agent: {event.get('agent_name', 'Unknown')}"
+            rep_event = event.get('representative_event', {})
+            agent_name = rep_event.get('agent_name', 'Unknown')
+            agent_id = rep_event.get('agent_id', 'N/A')
+            location = rep_event.get('location', 'N/A')
+            timestamp = rep_event.get('timestamp', 'N/A')
+            
+            context += f"\n{i}. [Level {event.get('rule_level', 'N/A')}] Rule {event.get('rule_id', 'N/A')}: {event.get('rule_description', 'N/A')}"
+            context += f"\n   - Agent: {agent_name} (ID: {agent_id})"
+            context += f"\n   - Location: {location}"
+            context += f"\n   - Count: {event.get('count', 1)} occurrences"
+            context += f"\n   - Latest: {event.get('latest_occurrence', timestamp)}"
+            
+            # TAMBAHKAN RAW JSON DATA LENGKAP UNTUK ANALISIS MENDALAM - JANGAN DIPOTONG!
+            raw_json = event.get('raw_json_sample', '')
+            if raw_json:
+                # Kirim JSON lengkap ke AI untuk analisis mendalam
+                context += f"\n   - Raw JSON Data: {raw_json}"
+            
+            full_log = event.get('full_log_sample', '')
+            if full_log:
+                # Kirim full log lengkap ke AI 
+                context += f"\n   - Full Log: {full_log}"
+            
+            context += "\n"
         
         # Add trend analysis if available
         if 'trends' in report_data:
@@ -427,30 +498,34 @@ TOP SECURITY EVENTS:
     
     # Report generation methods for different types
     async def generate_daily_report(self) -> Dict[str, Any]:
-        """Generate daily security report"""
+        """Generate daily security report - dari jam 00:00:00 hari ini sampai sekarang"""
         end_time = datetime.now()
-        start_time = end_time - timedelta(days=1)
+        # Start dari jam 00:00:00 hari ini
+        start_time = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
         
         return await self._generate_base_report('daily', start_time, end_time)
     
     async def generate_three_daily_report(self) -> Dict[str, Any]:
-        """Generate 3-day security trend report"""
+        """Generate 3-day security trend report - 3 hari terakhir lengkap + hari ini"""
         end_time = datetime.now()
-        start_time = end_time - timedelta(days=3)
+        # 3 hari yang lalu jam 00:00 sampai sekarang
+        start_time = (datetime.now() - timedelta(days=3)).replace(hour=0, minute=0, second=0, microsecond=0)
         
         return await self._generate_base_report('three_daily', start_time, end_time)
     
     async def generate_weekly_report(self) -> Dict[str, Any]:
-        """Generate weekly security summary report"""
+        """Generate weekly security summary report - minggu ini (Senin-sekarang)"""
         end_time = datetime.now()
-        start_time = end_time - timedelta(weeks=1)
+        # Hari Senin minggu ini jam 00:00
+        days_since_monday = end_time.weekday()  # Monday = 0
+        start_time = (end_time - timedelta(days=days_since_monday)).replace(hour=0, minute=0, second=0, microsecond=0)
         
         return await self._generate_base_report('weekly', start_time, end_time)
     
     async def generate_monthly_report(self) -> Dict[str, Any]:
-        """Generate monthly security assessment report"""
+        """Generate monthly security assessment report - bulan ini (tanggal 1-sekarang)"""
         end_time = datetime.now()
-        # First day of current month
+        # Tanggal 1 bulan ini jam 00:00
         start_time = end_time.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         
         return await self._generate_base_report('monthly', start_time, end_time)
@@ -470,7 +545,7 @@ TOP SECURITY EVENTS:
             # Compile base report data
             report_data = {
                 'report_type': report_type,
-                'report_config': TelegramBotConfig.REPORT_TYPES[report_type],
+                'report_config': self.config.REPORT_TYPES[report_type],
                 'period': f"{start_time.strftime('%Y-%m-%d %H:%M')} - {end_time.strftime('%Y-%m-%d %H:%M')}",
                 'period_start': start_time.isoformat(),
                 'period_end': end_time.isoformat(),

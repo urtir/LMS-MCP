@@ -130,10 +130,10 @@ class PDFReportGenerator:
             doc = SimpleDocTemplate(
                 buffer, 
                 pagesize=A4,
-                rightMargin=self.config['margin'],
-                leftMargin=self.config['margin'],
-                topMargin=self.config['margin'],
-                bottomMargin=self.config['margin']
+                rightMargin=self.config['margins']['right'],
+                leftMargin=self.config['margins']['left'],
+                topMargin=self.config['margins']['top'],
+                bottomMargin=self.config['margins']['bottom']
             )
             
             story = []
@@ -186,6 +186,11 @@ class PDFReportGenerator:
         # Add risk level indicator
         ai_analysis = report_data.get('ai_analysis', {})
         risk_level = ai_analysis.get('risk_level', 'Unknown')
+        
+        # Handle None or empty risk_level
+        if risk_level is None or risk_level == '':
+            risk_level = 'Unknown'
+        
         risk_color = self._get_risk_color(risk_level)
         
         story.append(Spacer(1, 40))
@@ -197,7 +202,7 @@ class PDFReportGenerator:
             fontSize=18,
             fontName='Helvetica-Bold'
         )
-        story.append(Paragraph(f"🚨 Risk Level: {risk_level}", risk_style))
+        story.append(Paragraph(f"🚨 Risk Level: {risk_level or 'Unknown'}", risk_style))
         
         story.append(PageBreak())
     
@@ -300,19 +305,22 @@ class PDFReportGenerator:
             story.append(Paragraph("Tidak ada security events dalam periode ini.", self.styles['Normal']))
             return
         
-        story.append(Paragraph(f"Top {min(len(events), 20)} Security Events (berdasarkan prioritas):", 
+        story.append(Paragraph(f"All Security Events - {len(events)} Grouped Rules (berdasarkan prioritas):", 
                              self.styles['SubsectionHeader']))
         
-        # Create events table with proper column widths
+        # Create events table with KOLOM JUMLAH
         events_data = [
-            ['Waktu', 'Level', 'Rule ID', 'Description', 'Agent', 'Location']
+            ['Waktu', 'Level', 'Rule ID', 'Description', 'Agent', 'Jumlah', 'Location']
         ]
         
-        # Define optimal column widths for A4 page (total ~500 points)
-        col_widths = [70, 35, 50, 180, 90, 75]  # Total: 500
+        # Define optimal column widths for A4 page dengan kolom jumlah
+        col_widths = [60, 30, 45, 150, 75, 40, 70]  # Total: 470
         
-        for event in events[:20]:  # Top 20 events
-            timestamp = event.get('timestamp', '')
+        for event in events:  # TAMPILKAN SEMUA EVENTS - HAPUS [:20]!
+            # GUNAKAN DATA DARI REPRESENTATIVE_EVENT
+            rep_event = event.get('representative_event', {})
+            
+            timestamp = rep_event.get('timestamp', event.get('latest_occurrence', ''))
             if timestamp:
                 try:
                     dt = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
@@ -320,13 +328,17 @@ class PDFReportGenerator:
                 except:
                     timestamp = timestamp[:16]  # Fallback
                     
+            # KOLOM JUMLAH TERPISAH
+            count = event.get('count', 1)
+            
             events_data.append([
                 timestamp,
                 str(event.get('rule_level', 'N/A')),
                 str(event.get('rule_id', 'N/A')),
-                self._truncate_text(self._clean_text_for_pdf(event.get('rule_description', 'N/A')), 45),
-                self._truncate_text(self._clean_text_for_pdf(event.get('agent_name', 'N/A')), 18),
-                self._truncate_text(self._clean_text_for_pdf(event.get('location', 'N/A')), 22)
+                self._truncate_text(self._clean_text_for_pdf(event.get('rule_description', 'N/A')), 35),
+                self._truncate_text(self._clean_text_for_pdf(rep_event.get('agent_name', 'N/A')), 15),
+                str(count),  # KOLOM JUMLAH DEDICATED
+                self._truncate_text(self._clean_text_for_pdf(rep_event.get('location', 'N/A')), 18)
             ])
         
         events_table = Table(events_data, colWidths=col_widths, repeatRows=1)

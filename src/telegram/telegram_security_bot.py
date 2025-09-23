@@ -528,10 +528,10 @@ Pilih menu di bawah untuk memulai:
 /alert_status - Check alert system status
 
 **Report Types:**
-• **Daily Report** - Last 24 hours security events
-• **3-Day Report** - 3-day trend analysis
-• **Weekly Report** - Weekly security summary
-• **Monthly Report** - Comprehensive monthly assessment
+• **Daily Report** - Today's security events (00:00 to now)
+• **3-Day Report** - Last 3 days + today (calendar days)
+• **Weekly Report** - This week events (Monday to now)
+• **Monthly Report** - This month events (1st to now)
 
 **🚨 Realtime Alert System:**
 • Monitors critical events (Rule Level 5+)

@@ -477,23 +477,23 @@ async def check_wazuh_log(ctx: Context, user_prompt: str, days_range: int = 7) -
         # Step 1: Generate optimal search query using LLM
         await ctx.info("🧠 Generating search query with LLM...")
         
-        query_generation_prompt = f"""CRITICAL: Return ONLY 3-5 security keywords. NO explanation, NO reasoning, NO extra text.
+        query_generation_prompt = f"""Generate ONLY security search keywords from this user request. Return EXACTLY one line with 3-5 keywords.
 
-User: "{user_prompt}"
+User request: "{user_prompt}"
 
 Examples:
-"SQL injection" → SQL injection vulnerability
-"brute force" → brute force authentication
-"malware" → malware virus detection
+Input: "SQL injection attack" → Output: SQL injection vulnerability attack
+Input: "brute force login" → Output: brute force authentication login
+Input: "malware detected" → Output: malware virus detection
 
-Keywords:"""
+Output only keywords (no quotes, no explanations):"""
 
         query_response = lm_client.chat.completions.create(
             model=lm_studio_config.model,
             messages=[
                 {"role": "user", "content": query_generation_prompt}
             ],
-            max_tokens=lm_studio_config.max_tokens,  # Use FULL token limit - jangan di limit!
+            max_tokens=50,  # Limit tokens to prevent long responses
             temperature=0.1  # Very low temperature for consistent results
         )
         
@@ -502,22 +502,51 @@ Keywords:"""
         # Remove any quotes or extra formatting
         generated_query = generated_query.replace('"', '').replace("'", '').strip()
         
-        # Additional cleanup - remove thinking process
-        if "tackle this" in generated_query.lower() or "lets" in generated_query.lower():
-            # LLM is thinking instead of giving keywords - extract first line
-            lines = generated_query.split('\n')
+        # Enhanced cleanup - handle thinking tags and multi-line responses
+        if '<think>' in generated_query or '</' in generated_query:
+            # Remove thinking tags
+            import re
+            generated_query = re.sub(r'<think>.*?</think>', '', generated_query, flags=re.DOTALL)
+            generated_query = generated_query.strip()
+        
+        # If multi-line response, take the best line
+        if '\n' in generated_query:
+            lines = [line.strip() for line in generated_query.split('\n') if line.strip()]
+            # Find line that looks like keywords (3-10 words, no common phrases)
             for line in lines:
-                line = line.strip()
-                if line and len(line.split()) <= 10 and not line.lower().startswith(("okay", "let", "the user")):
+                words = line.split()
+                if (3 <= len(words) <= 10 and 
+                    not line.lower().startswith(("okay", "let", "the user", "output", "keywords")) and
+                    not any(phrase in line.lower() for phrase in ["tackle this", "lets", "i would", "here are"])):
                     generated_query = line
                     break
             else:
-                # Fallback - use user's original words
-                generated_query = "SQL injection vulnerability web attack"
+                # Use first reasonable line as fallback
+                generated_query = lines[0] if lines else "security log analysis"
         
-        # Validate query is not empty and not too long
-        if not generated_query or len(generated_query) < 3 or len(generated_query) > 50:
-            raise ValueError(f"Generated query invalid: '{generated_query[:100]}...'")
+        # Additional cleanup for common LLM artifacts
+        generated_query = generated_query.replace("Output:", "").replace("Keywords:", "").strip()
+        
+        # Fallback for specific user input
+        if not generated_query or len(generated_query) < 3:
+            if "sql injection" in user_prompt.lower():
+                generated_query = "SQL injection vulnerability attack"
+            elif "brute force" in user_prompt.lower():
+                generated_query = "brute force authentication login"
+            elif "malware" in user_prompt.lower():
+                generated_query = "malware virus detection"
+            else:
+                generated_query = "security vulnerability attack"
+        
+        # Validate query is reasonable length
+        if len(generated_query) > 100:
+            # Truncate to first reasonable part
+            words = generated_query.split()[:8]  # Take first 8 words max
+            generated_query = " ".join(words)
+        
+        # Final validation
+        if not generated_query or len(generated_query) < 3:
+            raise ValueError(f"Generated query invalid: '{generated_query}'")
             
         await ctx.info(f"✅ Generated search query: '{generated_query}'")
         
