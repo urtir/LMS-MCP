@@ -8325,3 +8325,29 @@ INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8J
 INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-22 13:41:30 UTC)" (scheduled at 2025-09-22 13:41:20.855674+00:00)
 INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-22 13:41:30 UTC)" executed successfully
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 65, in <module>
+    from src.utils.telegram_config import TelegramBotConfig
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\__init__.py", line 6, in <module>
+    from .telegram_config import TelegramBotConfig
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\telegram_config.py", line 83, in <module>
+    telegram_config = TelegramBotConfig()
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\telegram_config.py", line 49, in __init__
+    'header_font_size': int(config_manager.get('pdf_reports.PDF_HEADER_FONT_SIZE')),
+TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'

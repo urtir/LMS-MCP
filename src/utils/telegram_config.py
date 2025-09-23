@@ -25,50 +25,47 @@ class TelegramBotConfig:
     """Configuration class for Telegram Bot"""
     
     def __init__(self):
-        # Bot Token from JSON config
-        self.BOT_TOKEN = config_manager.get('security.TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
+        # Bot Token from JSON config - NO FALLBACKS!
+        self.BOT_TOKEN = config_manager.get('security.TELEGRAM_BOT_TOKEN')
         
-        # LM Studio Configuration
+        # LM Studio Configuration - NO FALLBACKS!
         self.LM_STUDIO_CONFIG = {
-            'base_url': config_manager.get('ai_model.LM_STUDIO_BASE_URL', 'http://192.168.56.1:1234/v1'),
-            'api_key': config_manager.get('ai_model.LM_STUDIO_API_KEY', 'lm-studio'),
-            'model': config_manager.get('ai_model.LM_STUDIO_MODEL', 'qwen/qwen3-1.7b'),
-            'temperature': float(config_manager.get('ai_model.AI_TEMPERATURE', '0.8')),
-            'timeout': None  # No timeout
+            'base_url': config_manager.get('network.LM_STUDIO_BASE_URL'),
+            'api_key': config_manager.get('ai_model.LM_STUDIO_API_KEY'),
+            'model': config_manager.get('ai_model.LM_STUDIO_MODEL'),
+            'temperature': float(config_manager.get('ai_model.AI_TEMPERATURE')),
+            'timeout': None
         }
         
-        # Database Configuration
-        current_dir = Path(__file__).parent
-        project_root = current_dir.parent.parent
-        
+        # Database Configuration - Using JSON config
         self.DATABASE_CONFIG = {
-            'chat_db': str(project_root / 'data' / 'chat_history.db'),
-            'wazuh_db': str(project_root / 'data' / 'wazuh_archives.db')
+            'chat_db': f"{config_manager.get('database.DATABASE_DIR')}/{config_manager.get('database.CHAT_DB_NAME')}",
+            'wazuh_db': f"{config_manager.get('database.DATABASE_DIR')}/{config_manager.get('database.WAZUH_DB_NAME')}"
         }
         
-        # PDF Configuration
+        # PDF Configuration - Using JSON config - NO FALLBACKS!
         self.PDF_CONFIG = {
-            'title_font_size': 18,
-            'header_font_size': 14,
-            'body_font_size': 10,
-            'page_size': 'A4',
+            'title_font_size': int(config_manager.get('reports.PDF_TITLE_FONT_SIZE')),
+            'header_font_size': int(config_manager.get('pdf_reports.PDF_HEADER_FONT_SIZE')),
+            'body_font_size': int(config_manager.get('reports.PDF_BODY_FONT_SIZE')),
+            'page_size': config_manager.get('pdf_reports.PDF_PAGE_SIZE'),
             'margins': {
-                'top': 72,
-                'bottom': 72,
-                'left': 72,
-                'right': 72
+                'top': int(config_manager.get('pdf_reports.PDF_MARGIN_TOP')),
+                'bottom': int(config_manager.get('pdf_reports.PDF_MARGIN_BOTTOM')),
+                'left': int(config_manager.get('pdf_reports.PDF_MARGIN_LEFT')),
+                'right': int(config_manager.get('pdf_reports.PDF_MARGIN_RIGHT'))
             }
         }
         
-        # Authorized Users (can be loaded from database or config file)
+        # Authorized Users (loaded from config)
         self.AUTHORIZED_USERS = set()
         
-        # Report Configuration
+        # Report Configuration - Using JSON config - NO FALLBACKS!
         self.REPORT_CONFIG = {
-            'max_alerts_per_report': 1000,
-            'default_time_range_hours': 24,
-            'chart_colors': ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'],
-            'export_formats': ['pdf', 'json', 'csv']
+            'max_alerts_per_report': int(config_manager.get('pdf_reports.MAX_ALERTS_PER_REPORT')),
+            'default_time_range_hours': int(config_manager.get('performance.DEFAULT_DAYS_RANGE')) * 24,
+            'chart_colors': config_manager.get('pdf_reports.CHART_COLORS').split(','),
+            'export_formats': config_manager.get('pdf_reports.EXPORT_FORMATS').split(',')
         }
         
         # Bot Commands Configuration

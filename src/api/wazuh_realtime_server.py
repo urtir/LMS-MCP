@@ -24,9 +24,9 @@ sys.path.append(str(project_root))
 from config.config_manager import ConfigManager
 config = ConfigManager()
 
-# Configure logging
-LOG_DIR = config.get('database.LOG_DIR', './logs')
-WAZUH_REALTIME_LOG = config.get('logs.WAZUH_REALTIME_LOG', 'wazuh_realtime.log')
+# Configure logging - NO FALLBACKS!
+LOG_DIR = config.get('database.LOG_DIR')
+WAZUH_REALTIME_LOG = config.get('logs.WAZUH_REALTIME_LOG', 'wazuh_realtime.log')  # This can have fallback as it's just filename
 log_path = os.path.join(LOG_DIR, WAZUH_REALTIME_LOG)
 
 # Ensure absolute path
@@ -48,11 +48,11 @@ class WazuhSQLiteDatabase:
     
     def __init__(self, db_path: str = None):
         if db_path is None:
-            # Get path relative to project root using environment variables
+            # Get path relative to project root using config - NO FALLBACKS!
             current_dir = Path(__file__).parent
             project_root = current_dir.parent.parent
-            database_dir = config.get('database.DATABASE_DIR', 'data')
-            wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+            database_dir = config.get('database.DATABASE_DIR')
+            wazuh_db_name = config.get('database.WAZUH_DB_NAME')
             db_path = str(project_root / database_dir / wazuh_db_name)
         self.db_path = db_path
         self.connection = None

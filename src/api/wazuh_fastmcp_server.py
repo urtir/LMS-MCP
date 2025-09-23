@@ -216,7 +216,7 @@ async def format_with_llm(raw_json: str, tool_name: str, user_context: str, ctx:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            max_tokens=lm_studio_config.max_tokens // 2,  # Use half for formatting
+            max_tokens=lm_studio_config.max_tokens,  # Use FULL token limit - jangan di limit!
             temperature=lm_studio_config.temperature
         )
         
@@ -313,14 +313,22 @@ async def wazuh_archives_rag(query: str, days_range: int = 7) -> List[Dict[str, 
     """
     
     if not SEMANTIC_SEARCH_AVAILABLE:
-        logger.warning("Semantic search not available - cannot perform RAG")
-        return []
+        error_msg = "Semantic search not available - cannot perform RAG"
+        logger.error(error_msg)
+        raise RuntimeError(error_msg)
     
     try:
-        # Database path
-        current_dir = Path(__file__).parent
-        project_root = current_dir.parent.parent
-        db_path = str(project_root / "data" / "wazuh_archives.db")
+        # Database path from config - NO FALLBACKS!
+        database_dir = config.get('database.DATABASE_DIR')
+        wazuh_db_name = config.get('database.WAZUH_DB_NAME')
+        
+        # Build absolute path
+        if not os.path.isabs(database_dir):
+            current_dir = Path(__file__).parent
+            project_root = current_dir.parent.parent
+            db_path = str(project_root / database_dir / wazuh_db_name)
+        else:
+            db_path = os.path.join(database_dir, wazuh_db_name)
         
         logger.info(f"🔍 Starting RAG search for query: '{query}' (last {days_range} days)")
         
@@ -348,8 +356,9 @@ async def wazuh_archives_rag(query: str, days_range: int = 7) -> List[Dict[str, 
         conn.close()
         
         if not all_logs:
-            logger.warning(f"No logs found in last {days_range} days")
-            return []
+            error_msg = f"No logs found in database for last {days_range} days - database is empty or time range too narrow"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
         
         logger.info(f"📋 Retrieved {len(all_logs)} total logs from database")
         
@@ -374,16 +383,28 @@ async def wazuh_archives_rag(query: str, days_range: int = 7) -> List[Dict[str, 
             log_mappings.append(i)  # Map text index to log index
         
         if not log_texts:
-            logger.warning("No searchable text found in logs")
-            return []
+            error_msg = "No searchable text found in logs - all log entries are empty or corrupt"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
         
-        # Step 3: Initialize semantic search model
+        # Step 3: Initialize semantic search model (using config - NO FALLBACKS!)
         logger.info("🧠 Initializing semantic search model...")
-        model = SentenceTransformer('all-MiniLM-L6-v2')
+        model_name = config.get('ml_models.SENTENCE_TRANSFORMER_MODEL')
+        model = SentenceTransformer(model_name)
         
-        # Step 4: Create embeddings for all log texts
+        # Step 4: Create embeddings for all log texts with optimized batching
         logger.info(f"🔢 Creating embeddings for {len(log_texts)} logs...")
-        log_embeddings = model.encode(log_texts)
+        
+        # Use larger batch size for GPU optimization
+        batch_size = int(config.get('ai_model.LARGE_BATCH_SIZE', '64'))  # Bigger batches for GPU
+        logger.info(f"⚡ Using batch size: {batch_size} for GPU acceleration")
+        
+        log_embeddings = model.encode(
+            log_texts, 
+            batch_size=batch_size,
+            show_progress_bar=True,
+            convert_to_numpy=True
+        )
         
         # Step 5: Create query embedding
         logger.info(f"🎯 Creating query embedding for: '{query}'")
@@ -441,12 +462,14 @@ async def check_wazuh_log(ctx: Context, user_prompt: str, days_range: int = 7) -
     """
     
     if not OPENAI_AVAILABLE or not lm_client:
-        await ctx.error("LLM not available for log analysis")
-        return "❌ LLM service not available for Wazuh log analysis"
+        error_msg = "❌ LLM not available - cannot generate search queries or analyze results"
+        await ctx.error(error_msg)
+        raise RuntimeError(error_msg)
     
     if not SEMANTIC_SEARCH_AVAILABLE:
-        await ctx.error("Semantic search not available for RAG")
-        return "❌ Semantic search dependencies not available for log analysis"
+        error_msg = "❌ Semantic search dependencies not available - cannot perform RAG"
+        await ctx.error(error_msg)
+        raise RuntimeError(error_msg)
     
     try:
         await ctx.info(f"🔍 Analyzing user request: '{user_prompt}'")
@@ -454,37 +477,48 @@ async def check_wazuh_log(ctx: Context, user_prompt: str, days_range: int = 7) -
         # Step 1: Generate optimal search query using LLM
         await ctx.info("🧠 Generating search query with LLM...")
         
-        query_generation_prompt = f"""You are a cybersecurity expert specializing in Wazuh SIEM log analysis. 
+        query_generation_prompt = f"""CRITICAL: Return ONLY 3-5 security keywords. NO explanation, NO reasoning, NO extra text.
 
-Your task is to convert the user's security question into an optimal search query for semantic search on Wazuh security logs.
-
-User's request: "{user_prompt}"
-
-Generate a focused search query that will find the most relevant security logs. Consider:
-- Security events, attacks, threats
-- System activities, authentication, network events  
-- Malware, intrusions, anomalies
-- Specific security terms and indicators
-
-Return ONLY the search query string, nothing else. Make it specific and security-focused.
+User: "{user_prompt}"
 
 Examples:
-User: "Are there any SQL injection attacks?" → Query: "SQL injection attack web application vulnerability"
-User: "Check for brute force login attempts" → Query: "brute force login authentication failed attempts"
-User: "Any malware detected recently?" → Query: "malware detection virus trojan malicious file"
+"SQL injection" → SQL injection vulnerability
+"brute force" → brute force authentication
+"malware" → malware virus detection
 
-Query:"""
+Keywords:"""
 
         query_response = lm_client.chat.completions.create(
             model=lm_studio_config.model,
             messages=[
                 {"role": "user", "content": query_generation_prompt}
             ],
-            max_tokens=50,  # Short response for query
-            temperature=0.3  # Lower temperature for focused results
+            max_tokens=lm_studio_config.max_tokens,  # Use FULL token limit - jangan di limit!
+            temperature=0.1  # Very low temperature for consistent results
         )
         
         generated_query = query_response.choices[0].message.content.strip()
+        
+        # Remove any quotes or extra formatting
+        generated_query = generated_query.replace('"', '').replace("'", '').strip()
+        
+        # Additional cleanup - remove thinking process
+        if "tackle this" in generated_query.lower() or "lets" in generated_query.lower():
+            # LLM is thinking instead of giving keywords - extract first line
+            lines = generated_query.split('\n')
+            for line in lines:
+                line = line.strip()
+                if line and len(line.split()) <= 10 and not line.lower().startswith(("okay", "let", "the user")):
+                    generated_query = line
+                    break
+            else:
+                # Fallback - use user's original words
+                generated_query = "SQL injection vulnerability web attack"
+        
+        # Validate query is not empty and not too long
+        if not generated_query or len(generated_query) < 3 or len(generated_query) > 50:
+            raise ValueError(f"Generated query invalid: '{generated_query[:100]}...'")
+            
         await ctx.info(f"✅ Generated search query: '{generated_query}'")
         
         # Step 2: Search Wazuh archives using RAG
@@ -496,24 +530,27 @@ Query:"""
         )
         
         if not rag_results:
-            await ctx.info("No relevant logs found")
-            return f"""🔍 **Analisis Log Wazuh**
+            # NO FALLBACK - Clear error message
+            error_msg = f"""❌ **RAG Search Failed - No Results Found**
 
-**Permintaan:** {user_prompt}
-**Pencarian:** {generated_query}
-**Periode:** {days_range} hari terakhir
+**Query:** {generated_query}
+**Days searched:** {days_range}
+**Database:** Wazuh archives
+**Error:** No semantic matches found in database
 
-❌ **Tidak ada log yang relevan ditemukan**
+**Possible causes:**
+1. Database is empty or has no logs in the time period
+2. Search query doesn't match any log content
+3. Database connection issues
 
-**Kemungkinan penyebab:**
-- Tidak ada aktivitas terkait dalam periode yang ditentukan
-- Query pencarian terlalu spesifik
-- Sistem sedang normal tanpa ancaman yang terdeteksi
+**Debug info:**
+- Generated query: '{generated_query}'
+- User prompt: '{user_prompt}'
 
-**Rekomendasi:**
-- Coba perluas rentang waktu pencarian
-- Gunakan kata kunci yang lebih umum
-- Periksa konfigurasi Wazuh untuk memastikan log dikumpulkan dengan benar"""
+System will NOT provide fallback responses."""
+
+            await ctx.error("RAG search returned no results")
+            return error_msg
 
         await ctx.info(f"📊 Found {len(rag_results)} relevant logs")
         

@@ -20,9 +20,9 @@ config = ConfigManager()
 class ChatDatabase:
     def __init__(self, db_path: str = None):
         if db_path is None:
-            # Use JSON configuration for database settings
-            database_dir = config.get('database.DATABASE_DIR', './data') 
-            chat_db_name = config.get('database.CHAT_DB_NAME', 'chat_history.db')
+            # Use JSON configuration for database settings - NO FALLBACKS!
+            database_dir = config.get('database.DATABASE_DIR') 
+            chat_db_name = config.get('database.CHAT_DB_NAME')
             db_path = os.path.join(database_dir, chat_db_name)
             
             # Ensure absolute path

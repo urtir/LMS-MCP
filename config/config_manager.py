@@ -57,10 +57,7 @@ class ConfigManager:
             "flask": {
                 "FLASK_HOST": "127.0.0.1",
                 "FLASK_PORT": "5000",
-                "FLASK_DEBUG": "false",
-                "DASHBOARD_HOST": "127.0.0.1",
-                "DASHBOARD_PORT": "5000",
-                "DASHBOARD_DEBUG": "false"
+                "FLASK_DEBUG": "false"
             },
             "database": {
                 "DATABASE_DIR": "./data",
@@ -99,6 +96,55 @@ class ConfigManager:
                 "MONTHLY_MAX_EVENTS": "500",
                 "PDF_TITLE_FONT_SIZE": "24",
                 "PDF_BODY_FONT_SIZE": "12"
+            },
+            "ml_models": {
+                "SENTENCE_TRANSFORMER_MODEL": "all-MiniLM-L6-v2",
+                "ML_DEVICE": "cuda",
+                "EMBEDDING_CACHE_SIZE": "1000"
+            },
+            "fastmcp": {
+                "FASTMCP_MODULE": "src.api.wazuh_fastmcp_server",
+                "FASTMCP_HOST": "localhost",
+                "FASTMCP_PORT": "3000",
+                "FASTMCP_TIMEOUT": "30"
+            },
+            "alerts": {
+                "ENABLE_REALTIME_ALERTS": "true",
+                "ALERT_COOLDOWN_SECONDS": "300",
+                "MAX_ALERTS_PER_HOUR": "20",
+                "ENABLE_ADMIN_COMMANDS": "true",
+                "ENABLE_USER_COMMANDS": "true",
+                "COMMAND_TIMEOUT_SECONDS": "30",
+                "MAX_CONCURRENT_COMMANDS": "5"
+            },
+            "pdf_reports": {
+                "PDF_MAX_EVENTS_PER_PAGE": "50",
+                "PDF_INCLUDE_CHARTS": "true",
+                "PDF_WATERMARK_TEXT": "LMS MCP Security Report",
+                "PDF_COMPRESSION_LEVEL": "6",
+                "PDF_HEADER_FONT_SIZE": "14",
+                "PDF_PAGE_SIZE": "A4",
+                "PDF_MARGIN_TOP": "72",
+                "PDF_MARGIN_BOTTOM": "72",
+                "PDF_MARGIN_LEFT": "72",
+                "PDF_MARGIN_RIGHT": "72",
+                "CHART_COLORS": "#FF6B6B,#4ECDC4,#45B7D1,#96CEB4,#FFEAA7",
+                "EXPORT_FORMATS": "pdf,json,csv",
+                "MAX_ALERTS_PER_REPORT": "1000"
+            },
+            "telegram_reports": {
+                "DAILY_REPORT_TIME": "08:00",
+                "DAILY_REPORT_ENABLED": "true",
+                "DAILY_REPORT_RECIPIENTS": "admin,security_team",
+                "THREE_DAILY_REPORT_TIME": "20:00",
+                "THREE_DAILY_REPORT_ENABLED": "true",
+                "THREE_DAILY_REPORT_RECIPIENTS": "admin,security_team",
+                "WEEKLY_REPORT_TIME": "09:00",
+                "WEEKLY_REPORT_ENABLED": "true",
+                "WEEKLY_REPORT_RECIPIENTS": "admin,security_team,management",
+                "MONTHLY_REPORT_TIME": "10:00",
+                "MONTHLY_REPORT_ENABLED": "true",
+                "MONTHLY_REPORT_RECIPIENTS": "admin,security_team,management"
             }
         }
     

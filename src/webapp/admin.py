@@ -182,25 +182,6 @@ CONFIG_CATEGORIES = {
         "name": "🐍 Flask Configuration",
         "description": "Flask application server settings",
         "variables": {
-            "DASHBOARD_DEBUG": {
-                "type": "boolean",
-                "default": "false",
-                "description": "Enable dashboard debug mode",
-                "required": False
-            },
-            "DASHBOARD_HOST": {
-                "type": "text", 
-                "default": "127.0.0.1",
-                "description": "Dashboard server host address",
-                "required": False
-            },
-            "DASHBOARD_PORT": {
-                "type": "number",
-                "default": "5000",
-                "description": "Dashboard server port number", 
-                "required": False,
-                "validation": {"min": 1024, "max": 65535}
-            },
             "FLASK_DEBUG": {
                 "type": "boolean",
                 "default": "false",
@@ -574,6 +555,292 @@ CONFIG_CATEGORIES = {
                 "description": "Telegram alert monitoring interval in seconds",
                 "required": False,
                 "validation": {"min": 5, "max": 300}
+            }
+        }
+    },
+    "ml_models": {
+        "name": "🧠 Machine Learning Models",
+        "description": "AI and ML model configuration settings",
+        "variables": {
+            "SENTENCE_TRANSFORMER_MODEL": {
+                "type": "text",
+                "default": "all-MiniLM-L6-v2",
+                "description": "SentenceTransformer model for embeddings",
+                "required": True
+            },
+            "ML_DEVICE": {
+                "type": "select",
+                "default": "cuda",
+                "description": "Device for ML computations (cuda/cpu/auto)",
+                "required": False,
+                "options": ["cuda", "cpu", "auto"]
+            },
+            "EMBEDDING_CACHE_SIZE": {
+                "type": "number",
+                "default": "1000",
+                "description": "Maximum number of cached embeddings",
+                "required": False,
+                "validation": {"min": 100, "max": 10000}
+            }
+        }
+    },
+    "fastmcp": {
+        "name": "🚀 FastMCP Server",
+        "description": "FastMCP server configuration and endpoints",
+        "variables": {
+            "FASTMCP_MODULE": {
+                "type": "text",
+                "default": "src.api.wazuh_fastmcp_server",
+                "description": "FastMCP server module path",
+                "required": True
+            },
+            "FASTMCP_HOST": {
+                "type": "text",
+                "default": "localhost",
+                "description": "FastMCP server host address",
+                "required": True,
+                "validation": {"pattern": r"^(\d{1,3}\.){3}\d{1,3}$|^localhost$|^0\.0\.0\.0$"}
+            },
+            "FASTMCP_PORT": {
+                "type": "number",
+                "default": "3000",
+                "description": "FastMCP server port number",
+                "required": True,
+                "validation": {"min": 1024, "max": 65535}
+            },
+            "FASTMCP_TIMEOUT": {
+                "type": "number",
+                "default": "30",
+                "description": "FastMCP request timeout in seconds",
+                "required": False,
+                "validation": {"min": 5, "max": 300}
+            }
+        }
+    },
+    "alerts": {
+        "name": "🔔 Alert System",
+        "description": "Alert and notification configuration",
+        "variables": {
+            "ENABLE_REALTIME_ALERTS": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Enable real-time security alerts",
+                "required": False
+            },
+            "ALERT_COOLDOWN_SECONDS": {
+                "type": "number",
+                "default": "300",
+                "description": "Cooldown period between same alerts (seconds)",
+                "required": False,
+                "validation": {"min": 60, "max": 3600}
+            },
+            "MAX_ALERTS_PER_HOUR": {
+                "type": "number",
+                "default": "20",
+                "description": "Maximum alerts per hour to prevent spam",
+                "required": False,
+                "validation": {"min": 1, "max": 100}
+            },
+            "ENABLE_ADMIN_COMMANDS": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Enable administrative commands",
+                "required": False
+            },
+            "ENABLE_USER_COMMANDS": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Enable user-level commands",
+                "required": False
+            },
+            "COMMAND_TIMEOUT_SECONDS": {
+                "type": "number",
+                "default": "30",
+                "description": "Command execution timeout (seconds)",
+                "required": False,
+                "validation": {"min": 5, "max": 300}
+            },
+            "MAX_CONCURRENT_COMMANDS": {
+                "type": "number",
+                "default": "5",
+                "description": "Maximum concurrent command executions",
+                "required": False,
+                "validation": {"min": 1, "max": 20}
+            }
+        }
+    },
+    "telegram_reports": {
+        "name": "📋 Telegram Report Schedule",
+        "description": "Automated report scheduling for Telegram bot",
+        "variables": {
+            "DAILY_REPORT_TIME": {
+                "type": "text",
+                "default": "08:00",
+                "description": "Daily report time (HH:MM format)",
+                "required": False,
+                "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
+            },
+            "DAILY_REPORT_ENABLED": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Enable daily reports",
+                "required": False
+            },
+            "DAILY_REPORT_RECIPIENTS": {
+                "type": "text",
+                "default": "admin,security_team",
+                "description": "Daily report recipients (comma-separated)",
+                "required": False
+            },
+            "THREE_DAILY_REPORT_TIME": {
+                "type": "text",
+                "default": "20:00",
+                "description": "Three-day report time (HH:MM format)",
+                "required": False,
+                "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
+            },
+            "THREE_DAILY_REPORT_ENABLED": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Enable three-day reports",
+                "required": False
+            },
+            "THREE_DAILY_REPORT_RECIPIENTS": {
+                "type": "text",
+                "default": "admin,security_team",
+                "description": "Three-day report recipients (comma-separated)",
+                "required": False
+            },
+            "WEEKLY_REPORT_TIME": {
+                "type": "text",
+                "default": "09:00",
+                "description": "Weekly report time (HH:MM format)",
+                "required": False,
+                "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
+            },
+            "WEEKLY_REPORT_ENABLED": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Enable weekly reports",
+                "required": False
+            },
+            "WEEKLY_REPORT_RECIPIENTS": {
+                "type": "text",
+                "default": "admin,security_team,management",
+                "description": "Weekly report recipients (comma-separated)",
+                "required": False
+            },
+            "MONTHLY_REPORT_TIME": {
+                "type": "text",
+                "default": "10:00",
+                "description": "Monthly report time (HH:MM format)",
+                "required": False,
+                "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
+            },
+            "MONTHLY_REPORT_ENABLED": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Enable monthly reports",
+                "required": False
+            },
+            "MONTHLY_REPORT_RECIPIENTS": {
+                "type": "text",
+                "default": "admin,security_team,management",
+                "description": "Monthly report recipients (comma-separated)",
+                "required": False
+            }
+        }
+    },
+    "pdf_reports": {
+        "name": "📄 PDF Report Settings",
+        "description": "PDF report generation and formatting",
+        "variables": {
+            "PDF_MAX_EVENTS_PER_PAGE": {
+                "type": "number",
+                "default": "50",
+                "description": "Maximum events per PDF page",
+                "required": False,
+                "validation": {"min": 10, "max": 200}
+            },
+            "PDF_INCLUDE_CHARTS": {
+                "type": "boolean",
+                "default": "true",
+                "description": "Include charts and graphs in PDF reports",
+                "required": False
+            },
+            "PDF_WATERMARK_TEXT": {
+                "type": "text",
+                "default": "LMS MCP Security Report",
+                "description": "Watermark text for PDF reports",
+                "required": False
+            },
+            "PDF_COMPRESSION_LEVEL": {
+                "type": "number",
+                "default": "6",
+                "description": "PDF compression level (0-9, higher = smaller file)",
+                "required": False,
+                "validation": {"min": 0, "max": 9}
+            },
+            "PDF_HEADER_FONT_SIZE": {
+                "type": "number",
+                "default": "14",
+                "description": "PDF header font size",
+                "required": False,
+                "validation": {"min": 8, "max": 24}
+            },
+            "PDF_PAGE_SIZE": {
+                "type": "select",
+                "default": "A4",
+                "description": "PDF page size format",
+                "required": False,
+                "options": ["A4", "Letter", "Legal", "A3", "A5"]
+            },
+            "PDF_MARGIN_TOP": {
+                "type": "number",
+                "default": "72",
+                "description": "PDF top margin (points)",
+                "required": False,
+                "validation": {"min": 36, "max": 144}
+            },
+            "PDF_MARGIN_BOTTOM": {
+                "type": "number",
+                "default": "72",
+                "description": "PDF bottom margin (points)",
+                "required": False,
+                "validation": {"min": 36, "max": 144}
+            },
+            "PDF_MARGIN_LEFT": {
+                "type": "number",
+                "default": "72",
+                "description": "PDF left margin (points)",
+                "required": False,
+                "validation": {"min": 36, "max": 144}
+            },
+            "PDF_MARGIN_RIGHT": {
+                "type": "number",
+                "default": "72",
+                "description": "PDF right margin (points)",
+                "required": False,
+                "validation": {"min": 36, "max": 144}
+            },
+            "CHART_COLORS": {
+                "type": "text",
+                "default": "#FF6B6B,#4ECDC4,#45B7D1,#96CEB4,#FFEAA7",
+                "description": "Chart colors (comma-separated hex codes)",
+                "required": False
+            },
+            "EXPORT_FORMATS": {
+                "type": "text",
+                "default": "pdf,json,csv",
+                "description": "Supported export formats (comma-separated)",
+                "required": False
+            },
+            "MAX_ALERTS_PER_REPORT": {
+                "type": "number",
+                "default": "1000",
+                "description": "Maximum alerts per report",
+                "required": False,
+                "validation": {"min": 100, "max": 10000}
             }
         }
     }
@@ -960,8 +1227,8 @@ def get_service_status():
 @login_required
 @admin_required
 def index():
-    """Admin dashboard"""
-    logger.info(f"Admin dashboard accessed by user: {current_user.username}")
+    """Admin configuration panel"""
+    logger.info(f"Admin panel accessed by user: {current_user.username}")
     return render_template('admin.html')
 
 @admin_bp.route('/api/config')

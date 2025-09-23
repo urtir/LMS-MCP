@@ -221,9 +221,9 @@ def main():
     parser.add_argument("--agents", action="store_true", help="Show agent statistics")
     parser.add_argument("--rules", action="store_true", help="Show rule statistics")
     parser.add_argument("--export", type=str, help="Export to CSV file")
-    # Default database path using environment variables
-    database_dir = config.get('database.DATABASE_DIR', './data')
-    wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+    # Default database path using config - NO FALLBACKS!
+    database_dir = config.get('database.DATABASE_DIR')
+    wazuh_db_name = config.get('database.WAZUH_DB_NAME')
     default_db_path = os.path.join(database_dir, wazuh_db_name)
     if not os.path.isabs(default_db_path):
         default_db_path = str(Path(__file__).parent.parent.parent / default_db_path)

@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0",
     "created": "2025-09-21T15:35:17.066149",
-    "last_updated": "2025-09-22T18:46:08.585060",
+    "last_updated": "2025-09-23T08:19:10.079264",
     "description": "LMS MCP Centralized Configuration"
   },
   "security": {
@@ -38,8 +38,8 @@
     "ESTIMATED_TOKENS_PER_LOG": "100",
     "SYSTEM_PROMPT_TOKENS": "2000",
     "MAX_LOG_LIMIT": "25000",
-    "SMALL_BATCH_SIZE": "5000",
-    "LARGE_BATCH_SIZE": "10000",
+    "SMALL_BATCH_SIZE": "32",
+    "LARGE_BATCH_SIZE": "128",
     "EMBEDDING_DIMENSION": "384"
   },
   "performance": {
@@ -77,6 +77,11 @@
     "PDF_TITLE_FONT_SIZE": "24",
     "THREE_DAY_MAX_EVENTS": "100",
     "WEEKLY_MAX_EVENTS": "200"
+  },
+  "ml_models": {
+    "SENTENCE_TRANSFORMER_MODEL": "all-MiniLM-L6-v2",
+    "ML_DEVICE": "cuda",
+    "EMBEDDING_CACHE_SIZE": "1000"
   },
   "services": {
     "WAZUH_REALTIME_ENABLED": "true",

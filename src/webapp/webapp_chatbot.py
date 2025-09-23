@@ -349,13 +349,15 @@ def chat():
     response.headers['Expires'] = '0'
     return response
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    """Dashboard page - requires login"""
-    return render_template('dashboard.html', user=current_user)
+@app.route('/logout')
+@login_required  
+def logout():
+    """Logout"""
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('main.landing'))
 
-# Existing routes (dashboard data, etc.)
+# Existing routes (data endpoints, etc.)
 @app.route('/')
 def index():
     """Serve landing page"""
@@ -367,10 +369,10 @@ def test_tool():
     with open('test_tool_response.html', 'r', encoding='utf-8') as f:
         return f.read()
 
-@app.route('/api/dashboard-data')
+@app.route('/api/security-data')
 @login_required
-def dashboard_data():
-    """API endpoint for dashboard data"""
+def security_data():
+    """API endpoint for security data"""
     try:
         import sqlite3
         from datetime import datetime, timedelta
@@ -530,7 +532,7 @@ def dashboard_data():
         return jsonify(response_data)
         
     except Exception as e:
-        logger.error(f"Error fetching dashboard data: {e}")
+        logger.error(f"Error fetching security data: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/chat', methods=['POST'])
