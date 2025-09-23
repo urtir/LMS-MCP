@@ -47,3 +47,5 @@ logs/wazuh_realtime.log
 data/chat_history.db
 logs/telegram_bot.log
 logs/wazuh_realtime.log
+logs/wazuh_realtime.log
+data/chat_history.db
