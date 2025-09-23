@@ -11577,3 +11577,1087 @@ INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8J
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating 3day report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating three_daily report for period 2025-09-20 00:00:00 to 2025-09-23 14:51:06.668800
+INFO:src.telegram.telegram_report_generator:Found 80 total events, grouped into 11 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ three_daily report generated successfully with 11 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for three_daily report
+WARNING:src.telegram.telegram_pdf_generator:Markdown formatting failed, using plain text: 
+paragraph text '<para><think><br/>Okay, let\'s tackle this security analysis based on the provided Wazuh logs. First, I need to go through each event and extract the key details. <br/><br/>Starting with the first event: Rule 510 is a Level 7 event about a trojaned file \'/usr/bin/chsh\' detected. The payload here seems to be a Trojan, which could be a backdoor or a exploit. The source IP is 10.12.46.43, and the geolocation isn\'t specified, but it\'s from an internal agent. The attack vector here is likely through a file modification, possibly using a script or a known exploit.<br/><br/>Next, Rule 30411 is a ModSecurity rejection. It\'s a Level 7 event, indicating a potential intrusion attempt. The IP 10.12.47.58 is being blocked for an anomaly score. This could be part of a larger attack pattern, maybe using web application vulnerabilities.<br/><br/>Rule 31105 is a Level 6 XSS attempt. The URL is "/DVWA/vulnerabilities/xss<i>r/?name=%3Cscript%3Ealert%281%29%3C%2Fscript%3E". This shows an attack on a web application, possibly exploiting a cross-site scripting vulnerability to execute arbitrary code. The source IP is 10.12.47.58.<br/><br/>Rule 31164 is another Level 6 event, this time for SQL injection. The URL is "/DVWA/vulnerabilities/sqli/?id=%27+OR+1%3D1+--+&Submit=Submit". This suggests an attacker is trying to exploit a vulnerable web application\'s SQL injection vulnerability. The IP is the same as before.<br/><br/>Rule 60104 is a Windows audit failure event. There are 26 occurrences, with the latest at 2025-09-22T12:47:20. This could indicate that there were multiple failed authentication attempts or unauthorized access attempts to system files. The IP here is -H4X-, which might be a compromised machine.<br/><br/>Rule 750 is about a Registry Key integrity check, with 10 occurrences. The latest was on 2025-09-21T13:50:47. This could be part of a persistent attack where the attacker modifies system files to gain persistence or exfiltrate data.<br/><br/>Rule 61109 is a name resolution timeout for t-ring-fdv2.msedge.net. The IP is -H4X-, and this might be part of an attempt to connect to a malicious service or exploit a DNS vulnerability.<br/><br/>Rule 594 is another Registry Key integrity change, with the latest on 2025-09-21T13:50:48. This could indicate that the attacker is modifying system configurations to gain access or exfiltrate data.<br/><br/>Rule 598 is a Registry Key entry added, which might be part of setting up malware or backdoors.<br/><br/>Rule 751 is a deletion of a Registry Value, which could be an attempt to remove security measures or exfiltrate data.<br/><br/>Rule 752 is adding a Registry Value for msedge</i>cleanup, which might be related to malware that runs at boot or in the background.<br/><br/>Looking at the trends: There are multiple attacks on web applications (XSS and SQLi), registry modifications, and potential persistent threats. The Windows audit failures suggest possible unauthorized access attempts. The high number of registry changes could indicate a persistent attack strategy.<br/><br/>Risk assessment: These events suggest that there\'s an ongoing threat from an internal or external attacker exploiting vulnerabilities in web applications, modifying system files to gain persistence, and possibly exfiltrating data. The presence of multiple attacks on the same IP (10.12.47.58) and different registry changes indicates a possible compromise.<br/><br/>Recommendations: Implement more stringent access controls for the -H4X- machine, patch web applications for known vulnerabilities, monitor for unusual registry modifications, enforce regular security updates, and conduct penetration testing to identify weaknesses. Also, investigate the source IP 10.12.47.58 for any unauthorized activity.<br/><br/>Trends: The attacks are targeting common web vulnerabilities (XSS, SQLi) and modifying system files, suggesting a possible malware infection or advanced persistent threat. The high number of registry changes could indicate that the attacker is trying to maintain access over time.<br/></think><br/><br/><b><b>Analisis Keamanan Berdasarkan Data Wazuh SIEM</b> </b><br/>Berdasarkan data yang dianalisis dari log Wazuh, terdapat beberapa kejadian amana yang menunjukkan aktivitas penyadapan, penerapan teknik serangan, dan modifikasi sistem. Berikut analisis mendalamnya:<br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><u><b>1. Penyadapan File dan Keterlibatan Sistem (Level 7 & 6)</b> </u></b><br/>\u2022 <b>Event 510</b>: <br/> - <b>Penyadapan File</b>: Ditemukan file <font name="Courier">/usr/bin/chsh</font> yang terinfeksi Trojan, mungkin untuk mengakses akun sistem atau mengekstraksi data. <br/> - <b>Indikator Komponen (IoC)</b>: Signature <font name="Courier">bash|file\\\\.h|proc\\\\.h|/dev/ttyo|/dev/[A-Z]|/dev/[a-s,uvxz]</font>. <br/> - <b>Taktik</b>: Penerapan teknik <i>File and Directory Discovery</i> untuk mengidentifikasi target. <br/><br/>\u2022 <b>Event 31105 & 31164</b>: <br/> - <b>XSS dan SQLi</b>: Dua kejadian XSS (level 6) dan SQL injection (level 6) terjadi pada aplikasi web DVWA, menunjukkan aktivitas serangan untuk mengakses data sistem atau mencuri informasi. <br/> - <b>IoC</b>: URL seperti <font name="Courier">DVWA/vulnerabilities/xss<i>r/</font> dan <font name="Courier">sqli/?id=%27+OR+1%3D1+--+&Submit=Submit</font>. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><u><b>2. Aktivitas Pemodifikasi Sistem (Registry & DNS)</b> </u></b><br/>\u2022 <b>Event 60104</b>: <br/> - <b>Audit Failure</b>: 26 kejadian terkait modifikasi sistem, mungkin untuk mengakses hak akses atau memperkuat akses yang tidak sah. <br/> - <b>IoC</b>: Kode <font name="Courier">risqu</font> (user) dan logon ID <font name="Courier">0x589b5</font>. <br/><br/>\u2022 <b>Event 750 & 594</b>: <br/> - <b>Modifikasi Registry</b>: Tiga jenis perubahan registry (md5, sha1, sha256) terjadi pada kunci sistem, mungkin untuk memperkuat akses atau mengubah konfigurasi sistem. <br/> - <b>IoC</b>: Perubahan nilai <font name="Courier">SpecialPollTimeRemaining</font> dan kunci <font name="Courier">HKEY</i>LOCAL<i>MACHINE\\Software\\Microsoft\\Active Setup</font>. <br/><br/>\u2022 <b>Event 61109 & 752</b>: <br/> - <b>DNS Timeout & Registry Entry Added</b>: Kedua kejadian ini menunjukkan aktivitas untuk mengakses server atau memperkuat kontrol sistem. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><u><b>3. Taktik Serangan dan Indikator Aktivitas</b> </u></b><br/>\u2022 <b>Taktik Utama</b>: <br/> - <i>Execution</i> (XSS, SQLi) untuk mencuri data. <br/> - <i>Defense Evasion</i> (Registry modifikasi, DNS timeout) untuk menghindari deteksi. <br/> - <i>Impact</i> (Registry perubahan, audit failure) untuk memperkuat akses atau mengubah konfigurasi sistem. <br/><br/>\u2022 <b>Technique</b>: <br/> - <i>JavaScript</i> (XSS), <i>Process Injection</i> (SQLi), <i>Modify Registry</i> (Registry perubahan). <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><u><b>4. Risiko dan Analisis Kenaikan</b> </u></b><br/>\u2022 <b>Risiko Utama</b>: <br/> - Penyadapan file sistem, modifikasi registry untuk memperkuat akses atau mengubah konfigurasi. <br/> - Serangan web aplikasi (XSS/SQLi) menunjukkan risiko pencurian data atau penerapan kelemahan di aplikasi. <br/><br/>\u2022 <b>Trend</b>: <br/> - Kenaikan jumlah event sekitar 0% dalam periode, tetapi aktivitas serang terus berlangsung. <br/> - Peningkatan perubahan registry dan audit failure menunjukkan bahwa ada aktivitas yang mencoba memperkuat akses sistem secara permanen. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><u><b>5. Rekomendasi Keamanan</b> </u></b><br/>1. <b>Pemantauan Khusus</b>: <br/> - Investigasi IP <font name="Courier">-H4X-</font> (potensial komputer yang terinfeksi) untuk aktivitas unauthorized access. <br/> - Analisis log registry dan DNS untuk mengidentifikasi pola serangan. <br/><br/>2. <b>Patch Aplikasi Web</b>: <br/> - Pastikan aplikasi DVWA (e.g., DVWA/xss</i>r, sqli) terpatched untuk kelemahan yang diketahui. <br/><br/>3. <b>Penguatan Registri</b>: <br/> - Aktifkan pengawasan pada kunci registry seperti <font name="Courier">HKEY<i>LOCAL</i>MACHINE\\Software\\Microsoft\\Active Setup</font> dan periksa perubahan tanpa izin. <br/><br/>4. <b>Penetration Testing</b>: <br/> - Lakukan uji keamanan untuk menemukan kelemahan di aplikasi web dan sistem registry. <br/><br/>5. <b>Pengaturan Akses Sistem</b>: <br/> - Pastikan hak akses pada server dan registry tidak terlalu lemah, terutama untuk user <font name="Courier">S-1-5-21-3425421738-...</font> (dikaitkan dengan event 60104). <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><u><b>6. Tren dan Pola Serangan</b> </u></b><br/>\u2022 <b>Pola yang Terdeteksi</b>: <br/> - Penyadapan file sistem, serangan web (XSS/SQLi), dan modifikasi registry untuk memperkuat akses atau mengubah konfigurasi. <br/> - Aktivitas terkait IP <font name="Courier">10.12.47.58</font> (dikaitkan dengan XSS/SQLi) dan IP <font name="Courier">-H4X-</font> (potensial komputer yang terinfeksi). <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>Kesimpulan</b> </b><br/>Terdapat aktivitas serangan berkelanjutan di sistem, dengan fokus pada penyadapan file, penyerang web aplikasi, dan modifikasi registry. Perlu adanya tindakan pencegahan seperti patch aplikasi, pemantauan IP kritis, dan pengawasan registry untuk menghindari kejadian serangan lebih lanjut.</para>' caused exception Parse error: saw </font> instead of expected </i>
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ 3day report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating 3day report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating three_daily report for period 2025-09-20 00:00:00 to 2025-09-23 14:57:52.658489
+ERROR:src.telegram.telegram_report_generator:Error getting security events: 'NoneType' object is not subscriptable
+ERROR:src.telegram.telegram_report_generator:Error generating three_daily report: 'NoneType' object is not subscriptable
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-23 00:00:00 to 2025-09-23 15:01:41.700069
+ERROR:src.telegram.telegram_report_generator:Error getting security events: 'NoneType' object is not subscriptable
+ERROR:src.telegram.telegram_report_generator:Error generating daily report: 'NoneType' object is not subscriptable
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.api.mcp_tool_bridge:Loading tools from FastMCP server...
+INFO:__main__:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:__main__:Semantic search dependencies available for RAG
+INFO:__main__:LM Studio client initialized: http://192.168.56.1:1234/v1
+
+
++- FastMCP 2.0 --------------------------------------------------------------+
+|                                                                            |
+|        _ __ ___ ______           __  __  _____________    ____    ____     |
+|       _ __ ___ / ____/___ ______/ /_/  |/  / ____/ __ \  |___ \  / __ \    |
+|      _ __ ___ / /_  / __ `/ ___/ __/ /|_/ / /   / /_/ /  ___/ / / / / /    |
+|     _ __ ___ / __/ / /_/ (__  ) /_/ /  / / /___/ ____/  /  __/_/ /_/ /     |
+|    _ __ ___ /_/    \__,_/____/\__/_/  /_/\____/_/      /_____(_)____/      |
+|                                                                            |
+|                                                                            |
+|                                                                            |
+|    \U0001f5a5\ufe0f  Server name:     Wazuh API Server                                    |
+|    \U0001f4e6 Transport:       STDIO                                               |
+|                                                                            |
+|    \U0001f4da Docs:            https://gofastmcp.com                               |
+|    \U0001f680 Deploy:          https://fastmcp.cloud                               |
+|                                                                            |
+|    \U0001f3ce\ufe0f  FastMCP version: 2.11.3                                              |
+|    \U0001f91d MCP version:     1.13.0                                              |
+|                                                                            |
++----------------------------------------------------------------------------+
+
+
+[09/23/25 15:01:54] INFO     Starting MCP server 'Wazuh API      server.py:1445
+                             Server' with transport 'stdio'                    
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+INFO:src.api.mcp_tool_bridge:Found 58 tools from FastMCP server
+INFO:src.api.mcp_tool_bridge:Converted 58 tools to OpenAI format
+INFO:src.webapp.webapp_chatbot:Loaded 58 MCP tools for session e9a2a00e-e7c5-4365-a284-dfe4a3380283
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendChatAction "HTTP/1.1 200 OK"
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION e9a2a00e-e7c5-4365-a284-dfe4a3380283 ===
+INFO:__main__:Using MODIFIED async-compatible system for Telegram bot
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION e9a2a00e-e7c5-4365-a284-dfe4a3380283 ===
+INFO:__main__:Session has 2 messages
+INFO:__main__:Available MCP tools: 58
+INFO:__main__:Sending request to LM Studio: http://192.168.56.1:1234/v1
+INFO:__main__:Model: qwen/qwen3-1.7b
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:LM Studio response received successfully
+INFO:__main__:Processing 1 tool calls
+INFO:__main__:Executing tool 1/1: check_wazuh_log
+INFO:src.api.mcp_tool_bridge:Executing tool: check_wazuh_log with args: {'user_prompt': 'apa ada riwayat serangan xss', 'days_range': 7}
+INFO:__main__:OpenAI client for LM Studio available
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:__main__:Semantic search dependencies available for RAG
+INFO:__main__:LM Studio client initialized: http://192.168.56.1:1234/v1
+
+
++- FastMCP 2.0 --------------------------------------------------------------+
+|                                                                            |
+|        _ __ ___ ______           __  __  _____________    ____    ____     |
+|       _ __ ___ / ____/___ ______/ /_/  |/  / ____/ __ \  |___ \  / __ \    |
+|      _ __ ___ / /_  / __ `/ ___/ __/ /|_/ / /   / /_/ /  ___/ / / / / /    |
+|     _ __ ___ / __/ / /_/ (__  ) /_/ /  / / /___/ ____/  /  __/_/ /_/ /     |
+|    _ __ ___ /_/    \__,_/____/\__/_/  /_/\____/_/      /_____(_)____/      |
+|                                                                            |
+|                                                                            |
+|                                                                            |
+|    \U0001f5a5\ufe0f  Server name:     Wazuh API Server                                    |
+|    \U0001f4e6 Transport:       STDIO                                               |
+|                                                                            |
+|    \U0001f4da Docs:            https://gofastmcp.com                               |
+|    \U0001f680 Deploy:          https://fastmcp.cloud                               |
+|                                                                            |
+|    \U0001f3ce\ufe0f  FastMCP version: 2.11.3                                              |
+|    \U0001f91d MCP version:     1.13.0                                              |
+|                                                                            |
++----------------------------------------------------------------------------+
+
+
+[09/23/25 15:02:03] INFO     Starting MCP server 'Wazuh API      server.py:1445
+                             Server' with transport 'stdio'                    
+INFO:src.api.mcp_tool_bridge:Connected to MCP server, executing tool: check_wazuh_log
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+[09/23/25 15:02:03] INFO     Server log: 🔍 Analyzing user        logging.py:40
+                             request: 'apa ada riwayat serangan                
+                             xss'                                              
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+[09/23/25 15:02:04] INFO     Server log: 🧠 Generating search     logging.py:40
+                             query with LLM...                                 
+INFO:__main__:\U0001f50d Starting RAG search for query: 'xss vulnerability attack history' (last 7 days)
+                    INFO     Server log: ✅ Generated search      logging.py:40
+                             query: 'xss vulnerability attack                  
+                             history'                                          
+INFO:__main__:\U0001f4ca Fetching logs from database...
+INFO:__main__:\U0001f4cb Retrieved 4429 total logs from database
+INFO:__main__:\U0001f9e0 Initializing semantic search model...
+INFO:sentence_transformers.SentenceTransformer:Use pytorch device_name: cuda:0
+INFO:sentence_transformers.SentenceTransformer:Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+INFO:__main__:\U0001f522 Creating embeddings for 4429 logs...
+INFO:__main__:\u26a1 Using batch size: 5000 for GPU acceleration
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+Batches: 100%|##########| 1/1 [02:11<00:00, 131.57s/it]Batches: 100%|##########| 1/1 [02:11<00:00, 131.57s/it]
+INFO:__main__:\U0001f3af Creating query embedding for: 'xss vulnerability attack history'
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|##########| 1/1 [00:00<00:00, 81.11it/s]
+INFO:__main__:\U0001f4ca Calculating similarity scores...
+INFO:__main__:\u2705 RAG search completed. Found 15 relevant logs
+INFO:__main__:\U0001f4c8 Similarity scores range: 0.459 to 0.332
+[09/23/25 15:04:20] INFO     Server log: 🔎 Searching Wazuh       logging.py:40
+                             archives (last 7 days)...                         
+                    INFO     Server log: 📊 Found 15 relevant     logging.py:40
+                             logs                                              
+                    INFO     Server log: 🤖 Generating security   logging.py:40
+                             analysis with LLM...                              
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+[09/23/25 15:05:09] INFO     Server log: 🤖 Processing            logging.py:40
+                             check_wazuh_log response with LLM...              
+                    INFO     Server log: ✅ LLM formatting        logging.py:40
+                             completed                                         
+                    INFO     Server log: ✅ Security analysis     logging.py:40
+                             completed                                         
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+INFO:src.api.mcp_tool_bridge:Tool check_wazuh_log executed successfully
+INFO:__main__:Tool check_wazuh_log executed successfully
+INFO:__main__:Tool content preview: <think>
+Okay, let's tackle this security analysis for the Wazuh logs. The user is looking for XSS attacks in the last 7 days. There are 15 relevant logs found.
+
+First, I need to parse all the logs and...
+INFO:__main__:Getting final response from LM Studio after tool execution...
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:Final response received from LM Studio
+INFO:__main__:Message cleaned from think tags. Original length: 4110, Cleaned length: 3179
+INFO:__main__:Saving assistant message to database...
+INFO:__main__:Message saved to database successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:Response sent successfully to Telegram
+INFO:__main__:Chat processing complete. Response length: 3179 characters
+INFO:__main__:✅ Question answered for user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating 3day report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating three_daily report for period 2025-09-20 00:00:00 to 2025-09-23 15:07:07.621710
+ERROR:src.telegram.telegram_report_generator:Error getting security events: 'NoneType' object is not subscriptable
+ERROR:src.telegram.telegram_report_generator:Error generating three_daily report: 'NoneType' object is not subscriptable
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating daily report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating daily report for period 2025-09-23 00:00:00 to 2025-09-23 15:51:22.016417
+ERROR:src.telegram.telegram_report_generator:Error getting security events: 'NoneType' object is not subscriptable
+ERROR:src.telegram.telegram_report_generator:Error generating daily report: 'NoneType' object is not subscriptable
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating 3day report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating three_daily report for period 2025-09-20 00:00:00 to 2025-09-23 16:06:50.920514
+INFO:src.telegram.telegram_report_generator:Found 17 total events, grouped into 4 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ three_daily report generated successfully with 4 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for three_daily report
+WARNING:src.telegram.telegram_pdf_generator:Markdown formatting failed, using plain text: 
+paragraph text '<para><think><br/>Okay, let me try to work through this analysis step by step. The user provided a set of security events from Wazuh SIEM for a specific period and wants a detailed analysis in Indonesian.<br/><br/>First, I need to go through each event listed. There are 4 main events with levels 7 and 6. Let\'s start with the first one: Rule 510, Level 7. The event is about detecting a Trojaned version of /usr/bin/chsh. The raw JSON includes details like the timestamp, agent info, and the specific signature used. The attack vector here seems to be a malicious file modification, possibly trying to escalate privileges or exfiltrate data. The signature mentions things like bash, file.h, etc., which are common in malware detection.<br/><br/>Next, Rule 30411 is ModSecurity rejecting a query. The log shows an attempt to access a vulnerable Apache site, specifically DVWA\'s SQLi vulnerability. This is a classic XSS or SQL injection attack. The IP address involved here is 10.12.47.58, which might be a malicious actor trying to exploit the web application.<br/><br/>Then there are two events related to XSS and SQLi attempts. Both have Level 6, indicating they\'re significant but not critical. The first is an XSS attempt with a script tag, which is a common attack vector. The second is a SQL injection using a semicolon and a comment to bypass the filter. These both use the same IP address (10.12.47.58) and are coming from the same source.<br/><br/>Looking at the trends: total events are stable (0% change), but there\'s a lot of activity in the access logs, especially around the 22nd. The high events are 6, which is slightly below the critical level, so maybe not critical, but still important.<br/><br/>Now, I need to extract specific details like IPs, URLs, payloads, etc. From Rule 510, the IP is 10.12.46.43, and the file is /usr/bin/chsh. The payload here is a Trojaned version of that file. For the XSS attempt, the URL is /DVWA/vulnerabilities/xss<i>r/?name=... with a script tag. The SQLi attempt uses a specific injection pattern like %27+OR+1%3D1+--.<br/><br/>Indicators of Compromise (IoCs) would include the IP addresses used, the malicious file path, and the URLs pointing to vulnerable applications. Attack vectors here are file modification, web application exploitation, and SQL injection.<br/><br/>Threat patterns: The main threats are XSS, SQLi, and possible privilege escalation through file modification. The use of ModSecurity and Wazuh\'s rules suggests that the attackers are trying to exploit common vulnerabilities in web apps.<br/><br/>Risk assessment: Since there are multiple attacks, especially XSS and SQLi, which can lead to data breaches or unauthorized access. The presence of a Trojaned file might indicate more sophisticated attacks, possibly looking to escalate privileges.<br/><br/>Actionable recommendations: Monitor the IP addresses closely, apply patches for the vulnerabilities exploited (like DVWA), configure Wazuh rules to detect similar patterns, and limit access to the vulnerable applications. Also, ensure that all systems are updated and that there\'s proper logging and alerting in place.<br/><br/>Trends: The activity is consistent but not showing a clear uptick or downtick. However, the frequency of attacks suggests ongoing threats.<br/><br/>I need to make sure I\'m covering all aspects the user asked for: attack payload details, source IPs/geolocation, vectors, IoCs, attack signatures, critical events, threat patterns, risk assessment, actionables, trends, and specific details from JSON data. Also, present it in Indonesian as per the request.<br/></think><br/><br/><b>Analisis Keamanan Berdasarkan Data Wazuh SIEM (2025-09-20 00:00 - 2025-09-23 16:06)</b> <br/><i>Penulis: [Nama Penulis]</i> <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>1. Ringkasan Kritis</b> </b><br/>\u2022 <b>Total Event:</b> 2007 (stabil) <br/>\u2022 <b>Agent Aktif:</b> 3 dari 3 (CLIENT-KALI-LINUX, IP 10.12.46.43 dan 10.12.46.10) <br/>\u2022 <b>Event Critikal (Level 7):</b> 0 (tidak ada) <br/>\u2022 <b>Event High (Level 6):</b> 6 (terdeteksi serangan berbahaya, seperti XSS dan SQLi) <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>2. Analisis Event Kritis & Tingkat Risiko</b> </b><br/><b><u><b>Event 1: Rule 510 \u2013 Deteksi Trojan File</b> </u></b><br/>\u2022 <b>Detail:</b> <br/> - <b>Target:</b> File <font name="Courier">/usr/bin/chsh</font> (diketahui sebagai file sistem yang berpotensi digunakan untuk privilege escalation atau exfiltrasi data). <br/> - <b>Signature:</b> <font name="Courier">bash|file\\\\.h|proc\\\\.h|/dev/ttyo|/dev/[A-Z]|/dev/[a-s,uvxz]</font> (mengidentifikasi file Trojan). <br/> - <b>IP Sumber:</b> <font name="Courier">10.12.46.43</font> (agent CLIENT-KALI-LINUX). <br/>\u2022 <b>Vector:</b> File modification (trojaned) untuk mengakses sistem atau menyebarkan malware. <br/>\u2022 <b>IoC:</b> <br/> - IP sumber: <font name="Courier">10.12.46.43</font> <br/> - URL target: <font name="Courier">/DVWA/vulnerabilities/xss</i>r/?name=%3Cscript%3Ealert%281%29%3C%2Fscript%3E</font> (XSS). <br/>\u2022 <b>Risk:</b> Tinggi karena berpotensi mengakses sistem atau memperbarui perangkat lunak. <br/><br/><b><u><b>Event 2: Rule 30411 \u2013 ModSecurity Reject Query</b> </u></b><br/>\u2022 <b>Detail:</b> <br/> - <b>Target:</b> URL <font name="Courier">/DVWA/vulnerabilities/sqli/</font> (vuln DVWA untuk SQLi). <br/> - <b>IP Sumber:</b> <font name="Courier">10.12.47.58</font> (diketahui sebagai IP serangan). <br/> - <b>Signature:</b> ModSecurity mencegah akses ke URL tersebut dengan kode 403 dan skor anomaali tinggi (8/10). <br/>\u2022 <b>Vector:</b> Exploit publik-facing application (SQLi) untuk mengakses data. <br/>\u2022 <b>IoC:</b> <br/> - IP sumber: <font name="Courier">10.12.47.58</font> <br/> - URL target: <font name="Courier">/DVWA/vulnerabilities/sqli/?id=%27+OR+1%3D1+--+&Submit=Submit</font> (SQLi dengan teknik "comment" untuk bypass filter). <br/>\u2022 <b>Risk:</b> Rendah, tetapi berpotensi mengakses data sensitif. <br/><br/><b><u><b>Event 3: Rule 31105 \u2013 XSS Attempt</b> </u></b><br/>\u2022 <b>Detail:</b> <br/> - <b>Target:</b> URL <font name="Courier">/DVWA/vulnerabilities/xss<i>r/?name=...</font> (XSS dengan script tag). <br/> - <b>IP Sumber:</b> <font name="Courier">10.12.47.58</font>. <br/>\u2022 <b>Vector:</b> JavaScript untuk menampilkan alert atau mengakses data. <br/>\u2022 <b>IoC:</b> <br/> - IP sumber: <font name="Courier">10.12.47.58</font> <br/> - URL target: <font name="Courier">/DVWA/vulnerabilities/xss</i>r/?name=%3Cscript%3Ealert%281%29%3C%2Fscript%3E</font>. <br/>\u2022 <b>Risk:</b> Rendah, tetapi berpotensi menyebarkan malware atau mengakses data. <br/><br/><b><u><b>Event 4: Rule 31164 \u2013 SQLi Attempt</b> </u></b><br/>\u2022 <b>Detail:</b> <br/> - <b>Target:</b> URL <font name="Courier">/DVWA/vulnerabilities/sqli/?id=...</font> (SQLi dengan teknik "comment"). <br/> - <b>IP Sumber:</b> <font name="Courier">10.12.47.58</font>. <br/>\u2022 <b>Vector:</b> Exploit Public-Facing Application untuk mengakses database. <br/>\u2022 <b>IoC:</b> <br/> - IP sumber: <font name="Courier">10.12.47.58</font> <br/> - URL target: <font name="Courier">/DVWA/vulnerabilities/sqli/?id=%27+OR+1%3D1+--+&Submit=Submit</font>. <br/>\u2022 <b>Risk:</b> Tinggi karena bisa mengakses database sistem atau meluas ke infrastruktur lain. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>3. Pola Serangan & Indikator Kompiromasi (IoC)</b> </b><br/>\u2022 <b>Pola Utama:</b> <br/> - <b>XSS & SQLi</b> (menggunakan DVWA sebagai target). <br/> - <b>File Modification</b> (trojaned <font name="Courier">/usr/bin/chsh</font> untuk privilege escalation). <br/>\u2022 <b>IoC Kunci:</b> <br/> - IP sumber: <font name="Courier">10.12.47.58</font> (ditemukan dalam 4 event) <br/> - URL target: <font name="Courier">/DVWA/vulnerabilities/...</font> (vuln DVWA) <br/> - Signature ModSecurity: <font name="Courier">GE matched 5</font> (anomaali tinggi). <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>4. Analisis Rendah & Risiko</b> </b><br/>\u2022 <b>Event High (Level 6):</b> 6 event yang terdeteksi, tetapi tidak mencapai level critikal. <br/>\u2022 <b>Risiko:</b> <br/> - XSS dan SQLi berpotensi mengakses data sensitif atau menyebarkan malware. <br/> - File modification bisa memperluas akses ke sistem. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>5. Rekomendasi Keamanan</b> </b><br/>1. <b>Monitor IP Sumber:</b> <br/> - Periksa IP <font name="Courier">10.12.47.58</font> secara berkala dan blokir jika terdeteksi sebagai sumber serangan. <br/>2. <b>Patch Vulnerability DVWA:</b> <br/> - Pastikan aplikasi DVWA (vuln SQLi/XSS) diperbarui ke versi terbaru untuk menghindari exploit. <br/>3. <b>Aktifkan Rule Wazuh:</b> <br/> - Pastikan semua rule detection (misal: ModSecurity, RootCheck, XSS) aktif dan terupdate. <br/>4. <b>Limit Akses Web:</b> <br/> - Batasi akses ke URL <font name="Courier">/DVWA/vulnerabilities/...</font> dan gunakan authenikasi tambahan. <br/>5. <b>Analisis File System:</b> <br/> - Pastikan file <font name="Courier">/usr/bin/chsh</font> tidak digunakan secara berlebihan atau tercemar. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>6. Trend & Anomaly</b> </b><br/>\u2022 <b>Trend Total Event:</b> Stabil (0% perubahan). <br/>\u2022 <b>Anomaly:</b> <br/> - Serangan dari IP <font name="Courier">10.12.47.58</font> terus muncul di beberapa event (XSS, SQLi, ModSecurity reject). <br/> - Tidak ada peningkatan jumlah event sepanjang periode. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>7. Kesimpulan</b> </b><br/>Serangan berpotensi tinggi dari IP <font name="Courier">10.12.47.58</font> menggunakan XSS dan SQLi untuk mengakses data atau menyebarkan malware. Kombinasi file modification, modSecurity reject, dan vuln DVWA menunjukkan bahwa serangan ini mencoba memperluas akses ke sistem. <b>Rekomendasi</b> adalah aktifkan monitoring IP, patch aplikasi vuln, dan eksekusi rule Wazuh untuk mencegah penyebaran malware. <br/><br/>--- <br/><br/><i>Analisis ini dirancang untuk memberikan umpan balik jelas kepada tim keamanan dan memandu tindakan proaktif terhadap ancaman yang terdeteksi.</i></para>' caused exception Parse error: saw </i> instead of expected </font>
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ 3day report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating weekly report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating weekly report for period 2025-09-22 00:00:00 to 2025-09-23 16:16:51.314202
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ weekly report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for weekly report
+WARNING:src.telegram.telegram_pdf_generator:Markdown formatting failed, using plain text: 
+paragraph text '<para><think><br/>Okay, let\'s start by understanding the user\'s request. They provided a weekly security report with detailed events and want a comprehensive analysis. The key points are the number of events, critical alerts, and specific incident details.<br/><br/>First, I need to parse the data. There are two main events: Rule 510 and Rule 30411. Both are Level 7, which is serious. However, there are no Critical or High events. The total events are 1766, but the trend shows a 632.8% increase from the previous week. That\'s a significant jump, so I should note that as a major concern.<br/><br/>Looking at Rule 510, it\'s about detecting a Trojaned file \'/usr/bin/chsh\'. The full log mentions a signature related to shell execution and device access. This is a classic attack vector, maybe using LYNX or other tools. The IP address here is 10.12.46.43, which might be the attacker\'s IP. I should check if this is a known malicious IP.<br/><br/>Rule 30411 is ModSecurity rejecting an Apache request. The log shows a high anomaly score (8), which is a red flag. The source IP is 10.12.47.58, which might be another attacker or part of the same network. The URI is a SQL injection vulnerability, which could be exploited for data breaches.<br/><br/>The trend analysis shows an increase in events, so I need to highlight that as a growing threat. Both incidents are Level 7, but they\'re separate. The user might want to know if these are related or separate attacks.<br/><br/>For IoCs, the IP addresses and URLs from both events should be listed. The file path \'/usr/bin/chsh\' is a suspicious file, and the ModSecurity log shows a high score. Also, the signature used in Rule 510 seems to be generic, which might not be specific enough, but it\'s still a concern.<br/><br/>Risk assessment: Both incidents are high severity, with potential for data breaches or system compromise. The increase in events suggests a possible ongoing attack. Impact could be significant if the files are exploited.<br/><br/>Recommendations should include monitoring these IPs, isolating the affected systems, patching vulnerabilities, and reviewing intrusion detection rules. Also, maybe educating the team on recognizing similar attacks.<br/><br/>I need to make sure the analysis is structured, with clear sections for executive summary, detailed events, IoCs, risk evaluation, and recommendations. Avoid markdown, use bullet points as per the user\'s format. Check for any missing data or inconsistencies, like the IP in Rule 30411 not being mentioned in Rule 510. Also, note that both incidents are from the same agent, which might indicate a coordinated attack.<br/><br/>Finally, ensure the recommendations are actionable and prioritize based on urgency. Since there\'s no critical events, focus on mitigating the current threats.<br/></think><br/><br/><b><b>RINGKASAN EKSEKUTIF</b> </b><br/>Periode: 2025-09-22 00:00 \u2013 2025-09-23 16:16 <br/>\u2022 <b>Total Events</b>: 1.766 (tren naik 632,8%) <br/>\u2022 <b>Event Level 7</b>: 2 (Rule 510 & Rule 30411) <br/>\u2022 <b>Trend</b>: Tren peningkatan signifikan dalam jumlah kejadian, menunjukkan potensi serangan berkelanjutan. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>ANALISIS DETAIL SECURITY EVENTS</b> </b><br/><br/><b><u><b>Event 1: Rule 510 \u2013 Host-based anomaly detection (Level 7)</b> </u></b><br/>\u2022 <b>Agent</b>: CLIENT-KALI-LINUX (ID: 006) <br/>\u2022 <b>IP Address</b>: <font name="Courier">10.12.46.43</font> <br/>\u2022 <b>URL/Path</b>: <font name="Courier">/usr/bin/chsh</font> (file sistem yang dianggap tidak aman) <br/>\u2022 <b>Signature</b>: <font name="Courier">bash|file\\\\.h|proc\\\\.h|/dev/ttyo|/dev/[A-Z]|/dev/[a-s,uvxz]</font> (mencerminkan aktivitas shell injection dan akses device) <br/>\u2022 <b>Full Log</b>: Serangan terkait Trojaned file <font name="Courier">/usr/bin/chsh</font> ditemukan. <br/><br/><b>Attack Vector</b>: <br/>\u2022 <b>Technique</b>: Shell Injection / File Disclosure (terkait dengan penerapan <font name="Courier">bash</font> dan akses ke device seperti <font name="Courier">/dev/ttyo</font>). <br/>\u2022 <b>Target</b>: Sistem Linux (diketahui dari IP <font name="Courier">10.12.46.43</font>) <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><u><b>Event 2: Rule 30411 \u2013 ModSecurity rejection (Level 7)</b> </u></b><br/>\u2022 <b>Agent</b>: CLIENT-KALI-LINUX (ID: 006) <br/>\u2022 <b>IP Address</b>: <font name="Courier">10.12.47.58</font> (sumber aktivitas ModSecurity) <br/>\u2022 <b>URI</b>: <font name="Courier">/DVWA/vulnerabilities/sqli/</font> (vuln SQL Injection) <br/>\u2022 <b>Signature</b>: <font name="Courier">GE matched 5 at TX:blocking<i>inbound</i>anomaly<i>score</font> (score ancaman tinggi, 8). <br/><br/><b>Attack Vector</b>: <br/>\u2022 <b>Technique</b>: File & Directory Discovery (terkait dengan penerapan rule ModSecurity untuk mendeteksi aktivitas mencuri data). <br/>\u2022 <b>Target</b>: Server Apache di <font name="Courier">10.12.46.43</font> (IP agent) <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>INDICATORS OF COMPROMISE (IoCs)</b> </b><br/>1. <b>IP Addresses Mencurigakan</b>:<br/> - <font name="Courier">10.12.46.43</font> (agent yang terlibat dalam serangan). <br/> - <font name="Courier">10.12.47.58</font> (sumber aktivitas ModSecurity, mungkin IP penyerang). <br/><br/>2. <b>URL/Path Mencurigakan</b>:<br/> - <font name="Courier">/usr/bin/chsh</font> (file sistem berisiko untuk exploit). <br/> - <font name="Courier">/DVWA/vulnerabilities/sqli/</font> (vuln SQL Injection yang bisa digunakan untuk mencuri data). <br/><br/>3. <b>Signature Khusus</b>:<br/> - <font name="Courier">bash|file\\\\.h|proc\\\\.h|/dev/ttyo...</font> (mencerminkan aktivitas shell injection). <br/> - <font name="Courier">GE matched 5 at TX:blocking</i>inbound<i>anomaly</i>score</font> (score ancaman tinggi, mengindikasikan serangan berkelanjutan). <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>PENILAIAN RISIKO</b> </b><br/>\u2022 <b>Level Risiko</b>: Tinggi (Level 7) <br/>\u2022 <b>Dampak Potensial</b>:<br/> - Kebocoran data melalui SQL Injection atau exploit file sistem. <br/> - Pemutusan akses ke server Apache jika serangan berhasil. <br/>\u2022 <b>Tren</b>: Tren peningkatan jumlah event menunjukkan bahwa serangan sedang berlangsung dan mungkin terus berkembang. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>REKOMENDASI TINDAKAN</b> </b><br/>1. <b>Isolasi Sistem Terinfeksi</b>:<br/> - Blokir IP <font name="Courier">10.12.46.43</font> dan <font name="Courier">10.12.47.58</font> dari akses ke server Apache. <br/> - Pastikan sistem Linux terkunci dan tidak mengizinkan eksekusi script berisiko (misal: <font name="Courier">/usr/bin/chsh</font>). <br/><br/>2. <b>Pembaruan Vulnerability</b>:<br/> - Lakukan pengecekan vuln SQL Injection di <font name="Courier">/DVWA/vulnerabilities/sqli/</font> (dari IP <font name="Courier">10.12.46.43</font>). <br/> - Pastikan sistem terkunci untuk akses ke file system critical seperti <font name="Courier">/usr/bin/chsh</font>. <br/><br/>3. <b>Pemantauan & Pemrosesan IoC</b>:<br/> - Aktifkan pemantauan terhadap IP <font name="Courier">10.12.46.43</font> dan <font name="Courier">10.12.47.58</font> menggunakan Wazuh atau SIEM (misal: Splunk/ELK). <br/> - Gunakan signature khusus dari Rule 510 untuk mendeteksi serangan yang terus-menerus. <br/><br/>4. <b>Review Rules ModSecurity</b>:<br/> - Pastikan rules ModSecurity tidak mengabaikan aktivitas pencarian file (misal: <font name="Courier">FILE and Directory Discovery</font>) untuk meminimalkan kebocoran data. <br/><br/>5. <b>Edukasi Tim Keamanan</b>:<br/> - Latih tim untuk mengevaluasi signifikasi score ancaman tinggi (8) dan mengidentifikasi serangan yang melibatkan file sistem. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>KESIMPULAN</b> </b><br/>Serangan berkelanjutan tercatat dalam periode ini, dengan dua kejadian Level 7 yang mungkin terkait satu atau lebih penyamaran IP. Diperlukan tindakan kritis untuk memutus akses dan mengidentifikasi sumber serangan. Prioritas utama adalah pengecekan vuln sistem, pemantauan IoC, serta pembatasan akses ke server Apache.</para>' caused exception Parse error: saw </font> instead of expected </i>
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ weekly report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating weekly report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating weekly report for period 2025-09-22 00:00:00 to 2025-09-23 16:29:35.115087
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ weekly report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+ERROR:__main__:Error generating weekly report: Timed out
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating weekly report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating weekly report for period 2025-09-22 00:00:00 to 2025-09-23 16:33:16.975154
+INFO:src.telegram.telegram_report_generator:Found 5 total events, grouped into 2 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ weekly report generated successfully with 2 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for weekly report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ weekly report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating monthly report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating monthly report for period 2025-09-01 00:00:00 to 2025-09-23 16:34:13.439483
+INFO:src.telegram.telegram_report_generator:Found 17 total events, grouped into 4 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ monthly report generated successfully with 4 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for monthly report
+WARNING:src.telegram.telegram_pdf_generator:Markdown formatting failed, using plain text: 
+paragraph text '<para><b><b>RINGKASAN EKSEKUTIF</b> </b><br/>Dalam periode 2025-09-01 hingga 2025-09-23, terdapat 2007 event keamanan yang dihasilkan oleh 3 agent aktif. Terdapat 6 event dengan tingkat level 6 (High) dan tidak ada event kritis (level 7). Event utama berupa: <br/>1. <b>Pencurian file sistem</b> melalui ancaman host-based anomaly detection (Rule 510). <br/>2. <b>Pengujian keamanan web</b> dengan XSS dan SQL injection (Rules 31105 dan 31164). <br/>3. <b>Penggunaan ModSecurity untuk memblokir aktivitas berbahaya</b> (Rule 30411). <br/><br/>Kondisi keamanan menunjukkan adanya risiko serius terhadap aplikasi web yang tersusupi oleh exploit, serta potensi akses tidak sah melalui file sistem.<br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>ANALISIS DETAIL SECURITY EVENTS</b></b><br/><br/><b><u><b>1. Event Rule 510: Host-based anomaly detection</b> </u></b><br/>\u2022 <b>Agent</b>: CLIENT-KALI-LINUX (IP: 10.12.46.43) <br/>\u2022 <b>Location</b>: rootcheck <br/>\u2022 <b>Aktivitas</b>: Deteksi file <font name="Courier">/usr/bin/chsh</font> yang dituduh Trojaned. Signature used: <font name="Courier">bash|file.h|proc.h|/dev/ttyo|/dev/[A-Z]|/dev/[a-s,uvxz]</font>. <br/>\u2022 <b>Pengaruh</b>: Pencurian file sistem atau upaya mengakses hak root melalui aktivitas anomali di level host. <br/><br/><b><u><b>2. Event Rule 30411: ModSecurity Rejection</b> </u></b><br/>\u2022 <b>Agent</b>: CLIENT-KALI-LINUX (IP: 10.12.46.43) <br/>\u2022 <b>Location</b>: /var/log/apache2/error.log <br/>\u2022 <b>Aktivitas</b>: Pemrosesan permintaan dari IP <font name="Courier">10.12.47.58</font> yang diteruskan ke endpoint <font name="Courier">/DVWA/vulnerabilities/sqli/</font>. <br/>\u2022 <b>Pengaruh</b>: Tanda-tanda aktivitas penelusuran file atau akses berbahaya melalui ModSecurity, mungkin untuk memperkaya skenario exploit. <br/><br/><b><u><b>3. Event Rule 31105: XSS (Cross-Site Scripting)</b> </u></b><br/>\u2022 <b>Agent</b>: CLIENT-KALI-LINUX (IP: 10.12.46.10) <br/>\u2022 <b>Location</b>: /var/log/apache2/access.log <br/>\u2022 <b>Aktivitas</b>: Penggunaan URL <font name="Courier">/DVWA/vulnerabilities/xss<i>r/?name=%3Cscript%3Ealert(1)%3C%2Fscript%3E</font> dengan respon 403. <br/>\u2022 <b>Pengaruh</b>: Pencurian data atau memicu alert di perangkat lunak web (misalnya, untuk mengukur kelemahan input sanitasi). <br/><br/><b><u><b>4. Event Rule 31164: SQL Injection</b> </u></b><br/>\u2022 <b>Agent</b>: CLIENT-KALI-LINUX (IP: 10.12.46.10) <br/>\u2022 <b>Location</b>: /var/log/apache2/access.log <br/>\u2022 <b>Aktivitas</b>: Pemrosesan permintaan ke <font name="Courier">/DVWA/vulnerabilities/sqli/?id=%27+OR+1%3D1+--+</font> dengan respon 403. <br/>\u2022 <b>Pengaruh</b>: Upaya memasukkan perintah SQL untuk mengakses data atau menyebarkan malware melalui aplikasi web yang terlindungi.<br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>INDICATORS OF COMPROMISE (IoCs)</b> </b><br/>1. <b>IP Addresses</b> <br/> - <font name="Courier">10.12.46.43</font> (CLIENT-KALI-LINUX) <br/> - <font name="Courier">10.12.47.58</font> (pemanggil IP yang berpotensi terlibat dalam aktivitas serangan) <br/><br/>2. <b>URLs & File Paths</b> <br/> - <font name="Courier">/usr/bin/chsh</font> (file sistem yang dituduh Trojaned) <br/> - <font name="Courier">/DVWA/vulnerabilities/xss</i>r/</font>, <font name="Courier">/DVWA/vulnerabilities/sqli/</font> (endpoints terkena penelusuran) <br/><br/>3. <b>Signature Attack</b> <br/> - <font name="Courier">bash|file.h|proc.h|/dev/ttyo|/dev/[A-Z]|/dev/[a-s,uvxz]</font> (signature untuk deteksi file Trojaned). <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>PENILAIAN RISIKO</b> </b><br/>\u2022 <b>Tingkat Risiko</b>: Tinggi (Level 6) karena: <br/> - <b>Tidak ada event kritis</b>, tetapi ada aktivitas berbahaya yang memperkuat risiko keamanan. <br/> - <b>Aktivitas XSS dan SQL injection</b> menunjukkan penyebaran malware atau akses tidak sah. <br/>\u2022 <b>Dampak Bisnis</b>: <br/> - Pemutakhiran aplikasi web (DVWA) untuk menghadapi ancaman exploit. <br/> - Perbaikan konfigurasi ModSecurity dan input validation pada aplikasi web. <br/><br/>\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501<br/><br/><b><b>REKOMENDASI TINDAKAN</b> </b><br/>\u2022 <b>Aksi 1</b>: <br/> - Lakukan pembaruan koneksi ke aplikasi web (DVWA) untuk mengatasi kelemahan XSS dan SQL injection. Gunakan framework yang memadai seperti OWASP ZAP atau Burp Suite untuk menganalisis perangkat lunak. <br/> - Pastikan input user dienkripsi dan diperiksa secara terstruktur. <br/><br/>\u2022 <b>Aksi 2</b>: <br/> - Lakukan pengecekan konfigurasi ModSecurity dan rootcheck. Pastikan bahwa file sistem seperti <font name="Courier">/usr/bin/chsh</font> tidak tersedia untuk akses unauthenticated atau berpotensi digunakan sebagai alat exploit. <br/> - Aktifkan log keamanan dan gunakan tools seperti ELK Stack atau Splunk untuk mengintegrasikan data ke dalam analisis lebih lanjut. <br/><br/>\u2022 <b>Aksi 3</b>: <br/> - Identifikasi IP <font name="Courier">10.12.47.58</font> dan lakukan pengecekan aktivitasnya secara mendetail. Jika terbukti sebagai sumber daya eksternal, implementasikan perbatasan akses (network segmentation) dan monitoring khusus untuk IP tersebut. <br/> - Lakukan investigasi lebih lanjut pada file <font name="Courier">/usr/bin/chsh</font> melalui audit system untuk mengetahui apakah terdapat upaya penyebaran malware atau kelemahan sistem.</para>' caused exception Parse error: saw </font> instead of expected </i>
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ monthly report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:Generating monthly report for user 1033102340
+INFO:src.telegram.telegram_report_generator:Generating monthly report for period 2025-09-01 00:00:00 to 2025-09-23 16:35:19.102199
+INFO:src.telegram.telegram_report_generator:Found 17 total events, grouped into 4 rule types
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_report_generator:✅ monthly report generated successfully with 4 events
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:src.telegram.telegram_pdf_generator:Generating PDF report for monthly report
+INFO:src.telegram.telegram_pdf_generator:✅ PDF report generated successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendDocument "HTTP/1.1 200 OK"
+INFO:__main__:✅ monthly report sent successfully to user 1033102340
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"

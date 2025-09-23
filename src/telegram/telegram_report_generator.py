@@ -26,8 +26,8 @@ sys.path.insert(0, str(project_root / 'src'))
 from src.database import ChatDatabase
 from src.api import FastMCPBridge
 
-# Import internal telegram config
-from src.utils.telegram_config import TelegramBotConfig
+# Import telegram config from config directory (NOT src.utils!)
+from config.telegram_bot_config import TelegramBotConfig
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,17 @@ class SecurityReportGenerator:
                                  report_type: str = 'daily') -> List[Dict[str, Any]]:
         """Get security events from Wazuh database for specified time range"""
         try:
-            config = self.config.REPORT_TYPES[report_type]
+            # Safe access to config with fallback
+            if not hasattr(self.config, 'REPORT_TYPES') or report_type not in self.config.REPORT_TYPES:
+                logger.warning(f"Report type '{report_type}' not found in config, using defaults")
+                config = {
+                    'priority_levels': [7, 8, 9, 10],  # Default to high/critical
+                    'read_all_events': False,
+                    'max_events': 100
+                }
+            else:
+                config = self.config.REPORT_TYPES[report_type]
+                
             priority_levels = config['priority_levels']
             read_all_events = config.get('read_all_events', False)
             
@@ -109,28 +119,38 @@ class SecurityReportGenerator:
                 events_by_rule = {}
                 
                 for row in cursor.fetchall():
+                    if row is None:
+                        continue
+                        
                     event = dict(row)
+                    if not event or not event.get('rule_id'):
+                        continue
+                        
                     # JANGAN PARSE! Simpan JSON data asli untuk LLM
                     all_events.append(event)
                     
                     # Kelompokkan berdasarkan rule_id
-                    rule_id = event['rule_id']
+                    rule_id = event.get('rule_id')
+                    if not rule_id:
+                        continue
+                        
                     if rule_id not in events_by_rule:
                         events_by_rule[rule_id] = {
                             'count': 0,
                             'representative_event': event,  # Event pertama sebagai perwakilan + RAW JSON DATA
-                            'rule_description': event['rule_description'],
-                            'rule_level': event['rule_level'],
-                            'latest_timestamp': event['timestamp'],
-                            'earliest_timestamp': event['timestamp']
+                            'rule_description': event.get('rule_description', 'Unknown'),
+                            'rule_level': event.get('rule_level', 0),
+                            'latest_timestamp': event.get('timestamp', ''),
+                            'earliest_timestamp': event.get('timestamp', '')
                         }
                     
                     events_by_rule[rule_id]['count'] += 1
-                    # Update timestamp range
-                    if event['timestamp'] > events_by_rule[rule_id]['latest_timestamp']:
-                        events_by_rule[rule_id]['latest_timestamp'] = event['timestamp']
-                    if event['timestamp'] < events_by_rule[rule_id]['earliest_timestamp']:
-                        events_by_rule[rule_id]['earliest_timestamp'] = event['timestamp']
+                    # Update timestamp range - safely
+                    event_timestamp = event.get('timestamp', '')
+                    if event_timestamp and event_timestamp > events_by_rule[rule_id].get('latest_timestamp', ''):
+                        events_by_rule[rule_id]['latest_timestamp'] = event_timestamp
+                    if event_timestamp and event_timestamp < events_by_rule[rule_id].get('earliest_timestamp', ''):
+                        events_by_rule[rule_id]['earliest_timestamp'] = event_timestamp
                 
                 # Convert ke format yang mudah dianalisis LLM
                 grouped_events = []
@@ -222,7 +242,16 @@ class SecurityReportGenerator:
                 """
                 
                 cursor = conn.execute(stats_query, time_params)
-                stats = dict(cursor.fetchone())
+                stats_row = cursor.fetchone()
+                stats = dict(stats_row) if stats_row else {
+                    'total_events': 0,
+                    'unique_agents': 0, 
+                    'unique_rules': 0,
+                    'avg_severity': 0,
+                    'max_severity': 0,
+                    'period_start': start_time.isoformat(),
+                    'period_end': end_time.isoformat()
+                }
                 
                 # Severity distribution
                 severity_query = f"""
@@ -316,27 +345,41 @@ class SecurityReportGenerator:
                 messages=[
                     {
                         "role": "system",
-                        "content": """You are a cybersecurity expert analyzing security events from Wazuh SIEM.
-                        Analyze the provided security data and generate comprehensive insights for security teams.
+                        "content": """Anda adalah analis keamanan siber ahli yang menganalisis data keamanan dari Wazuh SIEM.
+                        Berikan analisis yang komprehensif dan profesional dalam bahasa Indonesia.
                         
-                        **CRITICAL: Analyze the Raw JSON Data thoroughly** for each security event to extract:
-                        - Attack payload details
-                        - Source IP addresses and geolocation
-                        - Attack vectors and techniques
-                        - Indicators of Compromise (IoCs)
-                        - Attack signatures and patterns
+                        **INSTRUKSI PENTING:**
+                        1. Anda boleh menggunakan <think>...</think> untuk proses berpikir internal
+                        2. Setelah <think> selesai, berikan analisis yang JELAS dan TERSTRUKTUR  
+                        3. Fokus pada data konkret dari events yang diberikan
+                        4. Berikan rekomendasi yang actionable dan spesifik
                         
-                        Focus on:
-                        1. Critical security events and their implications from JSON data analysis
-                        2. Threat patterns and attack indicators found in raw logs
-                        3. Risk assessment based on actual attack payloads
-                        4. Actionable recommendations for security teams
-                        5. Trends and anomalies in the attack patterns
-                        6. Extract specific attack details from JSON data (URLs, IPs, payloads, etc.)
+                        **FORMAT ANALISIS:**
                         
-                        Provide analysis in Indonesian language for better understanding by the team.
-                        Be precise, actionable, and focus on security implications.
-                        **Use the Raw JSON data to provide specific technical details.**"""
+                        **RINGKASAN EKSEKUTIF**
+                        - Berikan ringkasan singkat kondisi keamanan saat ini
+                        
+                        **ANALISIS DETAIL SECURITY EVENTS**
+                        - Analisis setiap event dengan detail technical
+                        - Extract IP addresses, URLs, payloads dari JSON data
+                        - Identifikasi attack vectors dan techniques
+                        
+                        **INDICATORS OF COMPROMISE (IoCs)**
+                        - Daftar IP addresses yang mencurigakan
+                        - URLs dan file paths yang terkompromasi
+                        - Attack signatures yang terdeteksi
+                        
+                        **PENILAIAN RISIKO**
+                        - Evaluasi tingkat risiko berdasarkan severity dan impact
+                        - Identifikasi potensi dampak bisnis
+                        
+                        **REKOMENDASI TINDAKAN**
+                        Berikan dalam format bullet points:
+                        • Aksi 1: Detail spesifik yang harus dilakukan
+                        • Aksi 2: Detail spesifik yang harus dilakukan
+                        • Aksi 3: Detail spesifik yang harus dilakukan
+                        
+                        Pastikan analisis professional, faktual, dan mudah dipahami oleh tim keamanan."""
                     },
                     {
                         "role": "user",
@@ -349,10 +392,13 @@ class SecurityReportGenerator:
             
             ai_analysis = analysis_response.choices[0].message.content
             
+            # Remove thinking tags BEFORE any further processing
+            ai_analysis = self._remove_thinking_tags(ai_analysis)
+            
             # Calculate risk score based on data
             risk_score = self._calculate_risk_score(report_data)
             
-            # Extract priority actions from AI analysis
+            # Extract priority actions from AI analysis (now cleaned)
             priority_actions = self._extract_priority_actions(ai_analysis)
             
             return {
@@ -476,25 +522,76 @@ ALL SECURITY EVENTS (GROUPED BY RULE ID):
     
     def _extract_priority_actions(self, ai_analysis: str) -> List[str]:
         """Extract priority actions from AI analysis"""
-        # Simple extraction based on common patterns
+        # First remove think tags
+        clean_analysis = self._remove_thinking_tags(ai_analysis)
+        
         actions = []
-        lines = ai_analysis.split('\n')
+        lines = clean_analysis.split('\n')
+        
+        # Look for recommendations or action sections
+        in_recommendation_section = False
         
         for line in lines:
             line = line.strip()
-            if any(keyword in line.lower() for keyword in ['tindakan', 'action', 'rekomendasi', 'segera', 'prioritas']):
-                if len(line) > 10 and len(line) < 200:  # Reasonable length
+            
+            # Skip empty lines
+            if not line:
+                continue
+            
+            # Check if we're entering a recommendations section
+            if any(keyword in line.lower() for keyword in ['rekomendasi', 'tindakan', 'action', 'langkah']):
+                if len(line) < 100:  # This is likely a header
+                    in_recommendation_section = True
+                    continue
+            
+            # If in recommendations section, look for bullet points or numbered items
+            if in_recommendation_section:
+                # Look for bullet points or numbered lists
+                if line.startswith(('•', '-', '*', '1.', '2.', '3.', '4.', '5.')):
+                    # Clean and extract the action
+                    clean_action = line
+                    for prefix in ['•', '-', '*', '1.', '2.', '3.', '4.', '5.']:
+                        clean_action = clean_action.lstrip(prefix).strip()
+                    
+                    if len(clean_action) > 20 and len(clean_action) < 300:  # Reasonable length
+                        actions.append(clean_action)
+                        
+                # Stop if we hit another section header
+                elif line.startswith('**') or line.startswith('#'):
+                    break
+            
+            # Also look for direct action items anywhere in text
+            elif any(keyword in line.lower() for keyword in ['monitor', 'blokir', 'pastikan', 'periksa', 'aktifkan', 'isolasi']):
+                if len(line) > 20 and len(line) < 300:
                     actions.append(line)
         
-        # Default actions if none found
-        if not actions:
+        # Default actions if none found or too few
+        if len(actions) < 2:
             actions = [
                 'Monitor sistem secara berkala',
                 'Review log keamanan critical events',
-                'Pastikan semua agent dalam kondisi aktif'
+                'Pastikan semua agent dalam kondisi aktif',
+                'Blokir IP addresses yang mencurigakan',
+                'Update security measures jika diperlukan'
             ]
         
         return actions[:5]  # Top 5 actions
+    
+    def _remove_thinking_tags(self, text: str) -> str:
+        """Remove thinking tags and any content within them from AI analysis"""
+        import re
+        
+        # Remove <think>...</think> blocks completely
+        clean_text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
+        
+        # Also remove any standalone <think> or </think> tags
+        clean_text = re.sub(r'</?think>', '', clean_text, flags=re.IGNORECASE)
+        
+        # Clean up extra whitespace and newlines
+        clean_text = re.sub(r'\n\s*\n\s*\n', '\n\n', clean_text)  # Remove excessive newlines
+        clean_text = clean_text.strip()
+        
+        return clean_text
     
     # Report generation methods for different types
     async def generate_daily_report(self) -> Dict[str, Any]:
@@ -535,17 +632,23 @@ ALL SECURITY EVENTS (GROUPED BY RULE ID):
         try:
             logger.info(f"Generating {report_type} report for period {start_time} to {end_time}")
             
-            # Gather all data
-            security_events = await self.get_security_events(start_time, end_time, report_type)
-            agent_status = await self.get_agent_status_summary(start_time, end_time)
-            statistics = await self.get_security_statistics(start_time, end_time)
+            # Gather all data - ensure all methods return safe defaults
+            security_events = await self.get_security_events(start_time, end_time, report_type) or []
+            agent_status = await self.get_agent_status_summary(start_time, end_time) or {}
+            statistics = await self.get_security_statistics(start_time, end_time) or {}
             trends = await self.analyze_security_trends(start_time, end_time, 
-                                                      compare_previous=(report_type != 'daily'))
+                                                      compare_previous=(report_type != 'daily')) or {}
             
             # Compile base report data
+            report_config = getattr(self.config, 'REPORT_TYPES', {}).get(report_type, {
+                'name': f'{report_type.title()} Report',
+                'emoji': '📊',
+                'description': f'Security report for {report_type}'
+            })
+            
             report_data = {
                 'report_type': report_type,
-                'report_config': self.config.REPORT_TYPES[report_type],
+                'report_config': report_config,
                 'period': f"{start_time.strftime('%Y-%m-%d %H:%M')} - {end_time.strftime('%Y-%m-%d %H:%M')}",
                 'period_start': start_time.isoformat(),
                 'period_end': end_time.isoformat(),

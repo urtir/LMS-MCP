@@ -53,101 +53,109 @@ class TelegramBotConfig:
     
     # Report Types Configuration using JSON config
     REPORT_TYPES = {
-        'daily_summary': {
+        'daily': {
             'name': '📊 Daily Summary Report',
             'description': 'Summary of last 24 hours security events',
-            'function': 'get_daily_summary',
-            'max_events': int(config.get('reports.DAILY_MAX_EVENTS'))
+            'emoji': '📊',
+            'priority_levels': [7, 8, 9, 10],  # Critical and High
+            'read_all_events': False,
+            'max_events': int(config.get('reports.DAILY_MAX_EVENTS', '100'))
         },
-        'agent_activity': {
-            'name': '👥 Agent Activity Report', 
-            'description': 'Activity summary of Wazuh agents',
-            'function': 'get_agent_activity',
-            'max_events': int(config.get('reports.THREE_DAY_MAX_EVENTS'))
+        'three_daily': {
+            'name': '� 3-Day Trend Report', 
+            'description': 'Security trends over last 3 days',
+            'emoji': '📈',
+            'priority_levels': [6, 7, 8, 9, 10],  # Medium and above
+            'read_all_events': True,
+            'max_events': int(config.get('reports.THREE_DAY_MAX_EVENTS', '300'))
         },
-        'threat_trends': {
-            'name': '🔥 Threat Trends (7 Days)',
-            'description': 'Trending security threats over 7 days',
-            'function': 'get_threat_trends',
-            'max_events': int(config.get('reports.WEEKLY_MAX_EVENTS'))
+        'weekly': {
+            'name': '� Weekly Summary Report',
+            'description': 'Weekly security overview',
+            'emoji': '📅',
+            'priority_levels': [7, 8, 9, 10],  # Critical and High
+            'read_all_events': False,
+            'max_events': int(config.get('reports.WEEKLY_MAX_EVENTS', '500'))
         },
-        'monthly_overview': {
+        'monthly': {
             'name': '📈 Monthly Security Overview',
-            'description': 'Comprehensive monthly security overview', 
-            'function': 'get_monthly_overview',
-            'max_events': int(config.get('reports.MONTHLY_MAX_EVENTS'))
+            'description': 'Comprehensive monthly security overview',
+            'emoji': '📈',
+            'priority_levels': [6, 7, 8, 9, 10],  # Medium and above
+            'read_all_events': True,
+            'max_events': int(config.get('reports.MONTHLY_MAX_EVENTS', '1000'))
         }
     }
 
-# LM Studio Configuration using JSON config - NO FALLBACKS!
-LM_STUDIO_CONFIG = {
-    'base_url': config.get('network.LM_STUDIO_BASE_URL'),
-    'api_key': config.get('ai_model.LM_STUDIO_API_KEY'),
-    'model': config.get('ai_model.LM_STUDIO_MODEL'),
-    'max_tokens': int(config.get('ai_model.AI_MAX_TOKENS')),
-    'temperature': float(config.get('ai_model.AI_TEMPERATURE'))
-}
+    # LM Studio Configuration using JSON config - NO FALLBACKS!
+    LM_STUDIO_CONFIG = {
+        'base_url': config.get('network.LM_STUDIO_BASE_URL'),
+        'api_key': config.get('ai_model.LM_STUDIO_API_KEY'),
+        'model': config.get('ai_model.LM_STUDIO_MODEL'),
+        'max_tokens': int(config.get('ai_model.AI_MAX_TOKENS')),
+        'temperature': float(config.get('ai_model.AI_TEMPERATURE'))
+    }
 
-# Database Configuration using JSON config - NO FALLBACKS!
-DATABASE_CONFIG = {
-    'wazuh_db': f"{config.get('database.DATABASE_DIR')}/{config.get('database.WAZUH_DB_NAME')}",
-    'chat_db': f"{config.get('database.DATABASE_DIR')}/{config.get('database.CHAT_DB_NAME')}"
-}
+    # Database Configuration using JSON config - NO FALLBACKS!
+    DATABASE_CONFIG = {
+        'wazuh_db': f"{config.get('database.DATABASE_DIR')}/{config.get('database.WAZUH_DB_NAME')}",
+        'chat_db': f"{config.get('database.DATABASE_DIR')}/{config.get('database.CHAT_DB_NAME')}"
+    }
 
-# Model Configuration using JSON config - NO FALLBACKS!
-MODEL_CONFIG = {
-    'model_name': config.get('ml_models.SENTENCE_TRANSFORMER_MODEL'),
-    'device': config.get('ml_models.ML_DEVICE'),
-    'cache_size': int(config.get('ml_models.EMBEDDING_CACHE_SIZE'))
-}
+    # Model Configuration using JSON config - NO FALLBACKS!
+    MODEL_CONFIG = {
+        'model_name': config.get('ml_models.SENTENCE_TRANSFORMER_MODEL'),
+        'device': config.get('ml_models.ML_DEVICE'),
+        'cache_size': int(config.get('ml_models.EMBEDDING_CACHE_SIZE'))
+    }
 
-# FastMCP Server Configuration using JSON config - NO FALLBACKS!
-FASTMCP_SERVER = {
-    'module': config.get('fastmcp.FASTMCP_MODULE'),
-    'host': config.get('fastmcp.FASTMCP_HOST'),
-    'port': int(config.get('fastmcp.FASTMCP_PORT')),
-    'timeout': int(config.get('fastmcp.FASTMCP_TIMEOUT'))
-}
+    # FastMCP Server Configuration using JSON config - NO FALLBACKS!
+    FASTMCP_SERVER = {
+        'module': config.get('fastmcp.FASTMCP_MODULE'),
+        'host': config.get('fastmcp.FASTMCP_HOST'),
+        'port': int(config.get('fastmcp.FASTMCP_PORT')),
+        'timeout': int(config.get('fastmcp.FASTMCP_TIMEOUT'))
+    }
 
-# Performance Configuration using JSON config - NO FALLBACKS!
-PERFORMANCE_CONFIG = {
-    'max_log_length': int(config.get('performance.MAX_LOG_LENGTH')),
-    'max_rag_content': int(config.get('performance.MAX_RAG_CONTENT')),
-    'default_max_results': int(config.get('performance.DEFAULT_MAX_RESULTS')),
-    'cache_build_limit': int(config.get('performance.CACHE_BUILD_LIMIT'))
-}
+    # Performance Configuration using JSON config - NO FALLBACKS!
+    PERFORMANCE_CONFIG = {
+        'max_log_length': int(config.get('performance.MAX_LOG_LENGTH')),
+        'max_rag_content': int(config.get('performance.MAX_RAG_CONTENT')),
+        'default_max_results': int(config.get('performance.DEFAULT_MAX_RESULTS')),
+        'cache_build_limit': int(config.get('performance.CACHE_BUILD_LIMIT'))
+    }
 
-# Security Thresholds using JSON config - NO FALLBACKS!
-SECURITY_THRESHOLDS = {
-    'critical_rule_level': int(config.get('security_thresholds.CRITICAL_RULE_LEVEL')),
-    'high_rule_level': int(config.get('security_thresholds.HIGH_RULE_LEVEL')),
-    'emergency_rule_level': int(config.get('security_thresholds.EMERGENCY_RULE_LEVEL')),
-    'agent_active_threshold': int(config.get('security_thresholds.AGENT_ACTIVE_THRESHOLD')),
-    'default_days_range': int(config.get('security_thresholds.DEFAULT_DAYS_RANGE'))
-}
+    # Security Thresholds using JSON config - NO FALLBACKS!
+    SECURITY_THRESHOLDS = {
+        'critical_rule_level': int(config.get('security_thresholds.CRITICAL_RULE_LEVEL')),
+        'high_rule_level': int(config.get('security_thresholds.HIGH_RULE_LEVEL')),
+        'emergency_rule_level': int(config.get('security_thresholds.EMERGENCY_RULE_LEVEL')),
+        'agent_active_threshold': int(config.get('security_thresholds.AGENT_ACTIVE_THRESHOLD')),
+        'default_days_range': int(config.get('security_thresholds.DEFAULT_DAYS_RANGE'))
+    }
 
-# PDF Report Configuration using JSON config - NO FALLBACKS!
-PDF_CONFIG = {
-    'title_font_size': int(config.get('reports.PDF_TITLE_FONT_SIZE')),
-    'body_font_size': int(config.get('reports.PDF_BODY_FONT_SIZE')),
-    'max_events_per_page': int(config.get('pdf_reports.PDF_MAX_EVENTS_PER_PAGE')),
-    'include_charts': config.get('pdf_reports.PDF_INCLUDE_CHARTS').lower() == 'true',
-    'watermark': config.get('pdf_reports.PDF_WATERMARK_TEXT'),
-    'compression_level': int(config.get('pdf_reports.PDF_COMPRESSION_LEVEL'))
-}
+    # PDF Report Configuration using JSON config - NO FALLBACKS!
+    PDF_CONFIG = {
+        'title_font_size': int(config.get('reports.PDF_TITLE_FONT_SIZE')),
+        'body_font_size': int(config.get('reports.PDF_BODY_FONT_SIZE')),
+        'max_events_per_page': int(config.get('pdf_reports.PDF_MAX_EVENTS_PER_PAGE')),
+        'include_charts': config.get('pdf_reports.PDF_INCLUDE_CHARTS').lower() == 'true',
+        'watermark': config.get('pdf_reports.PDF_WATERMARK_TEXT'),
+        'compression_level': int(config.get('pdf_reports.PDF_COMPRESSION_LEVEL'))
+    }
 
-# Alert Configuration using JSON config - NO FALLBACKS!
-ALERT_CONFIG = {
-    'enable_realtime': config.get('alerts.ENABLE_REALTIME_ALERTS').lower() == 'true',
-    'critical_alert_chat_ids': [],  # Will be populated at runtime
-    'alert_cooldown': int(config.get('alerts.ALERT_COOLDOWN_SECONDS')),
-    'max_alerts_per_hour': int(config.get('alerts.MAX_ALERTS_PER_HOUR'))
-}
+    # Alert Configuration using JSON config - NO FALLBACKS!
+    ALERT_CONFIG = {
+        'enable_realtime': config.get('alerts.ENABLE_REALTIME_ALERTS').lower() == 'true',
+        'critical_alert_chat_ids': [],  # Will be populated at runtime
+        'alert_cooldown': int(config.get('alerts.ALERT_COOLDOWN_SECONDS')),
+        'max_alerts_per_hour': int(config.get('alerts.MAX_ALERTS_PER_HOUR'))
+    }
 
-# Command Configuration using JSON config - NO FALLBACKS!
-COMMAND_CONFIG = {
-    'enable_admin_commands': config.get('alerts.ENABLE_ADMIN_COMMANDS').lower() == 'true',
-    'enable_user_commands': config.get('alerts.ENABLE_USER_COMMANDS').lower() == 'true',
-    'command_timeout': int(config.get('alerts.COMMAND_TIMEOUT_SECONDS')),
-    'max_concurrent_commands': int(config.get('alerts.MAX_CONCURRENT_COMMANDS'))
-}
+    # Command Configuration using JSON config - NO FALLBACKS!
+    COMMAND_CONFIG = {
+        'enable_admin_commands': config.get('alerts.ENABLE_ADMIN_COMMANDS').lower() == 'true',
+        'enable_user_commands': config.get('alerts.ENABLE_USER_COMMANDS').lower() == 'true',
+        'command_timeout': int(config.get('alerts.COMMAND_TIMEOUT_SECONDS')),
+        'max_concurrent_commands': int(config.get('alerts.MAX_CONCURRENT_COMMANDS'))
+    }

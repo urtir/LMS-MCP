@@ -746,6 +746,22 @@ class PDFReportGenerator:
         
         return text
     
+    def _remove_thinking_tags(self, text: str) -> str:
+        """Remove thinking tags and any content within them from AI analysis"""
+        import re
+        
+        # Remove <think>...</think> blocks completely
+        clean_text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
+        
+        # Also remove any standalone <think> or </think> tags
+        clean_text = re.sub(r'</?think>', '', clean_text, flags=re.IGNORECASE)
+        
+        # Clean up extra whitespace and newlines
+        clean_text = re.sub(r'\n\s*\n\s*\n', '\n\n', clean_text)  # Remove excessive newlines
+        clean_text = clean_text.strip()
+        
+        return clean_text
+    
     def _clean_text_for_pdf(self, text: str, preserve_html: bool = False) -> str:
         """Clean text for safe PDF rendering"""
         if not text:

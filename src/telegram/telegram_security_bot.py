@@ -268,19 +268,36 @@ Pilih menu di bawah untuk memulai:
             # Send text summary
             await query.edit_message_text(summary_text, parse_mode='Markdown')
             
-            # Generate and send PDF
-            pdf_buffer = await self.pdf_generator.generate_pdf_report(report_data)
-            pdf_buffer.seek(0)
-            
-            filename = f"security_report_{report_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
-            
-            await context.bot.send_document(
-                chat_id=query.message.chat_id,
-                document=pdf_buffer,
-                filename=filename,
-                caption=f"📄 Detailed {report_name.title()} Security Report",
-                reply_to_message_id=query.message.message_id
-            )
+            # Generate and send PDF without timeout
+            try:
+                # Show PDF generation message
+                await context.bot.send_message(
+                    chat_id=query.message.chat_id,
+                    text="📄 Generating PDF report... This may take a moment.",
+                    reply_to_message_id=query.message.message_id
+                )
+                
+                pdf_buffer = await self.pdf_generator.generate_pdf_report(report_data)
+                pdf_buffer.seek(0)
+                
+                filename = f"security_report_{report_name}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+                
+                await context.bot.send_document(
+                    chat_id=query.message.chat_id,
+                    document=pdf_buffer,
+                    filename=filename,
+                    caption=f"📄 Detailed {report_name.title()} Security Report",
+                    reply_to_message_id=query.message.message_id
+                )
+                
+            except Exception as pdf_error:
+                await context.bot.send_message(
+                    chat_id=query.message.chat_id,
+                    text=f"⚠️ PDF generation failed: {str(pdf_error)}. Text summary above is still available.",
+                    reply_to_message_id=query.message.message_id
+                )
+                logger.error(f"PDF generation failed for {report_name} report: {pdf_error}")
+                return  # Return here but don't fail the whole operation
             
             logger.info(f"✅ {report_name} report sent successfully to user {update.effective_user.id}")
             
@@ -962,8 +979,14 @@ Commands:
                 logger.error("❌ Failed to initialize bot")
                 return
             
-            # Create application
-            self.application = Application.builder().token(self.token).build()
+            # Create application without timeout
+            self.application = (Application.builder()
+                              .token(self.token)
+                              .read_timeout(None)  # No read timeout
+                              .write_timeout(None)  # No write timeout
+                              .connect_timeout(None)  # No connect timeout
+                              .pool_timeout(None)  # No pool timeout
+                              .build())
             
             # Add handlers
             self.application.add_handler(CommandHandler("start", self.start_command))

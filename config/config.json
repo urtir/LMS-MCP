@@ -1,9 +1,9 @@
 {
   "meta": {
-    "version": "1.0",
     "created": "2025-09-21T15:35:17.066149",
-    "last_updated": "2025-09-23T11:56:05.879415",
-    "description": "LMS MCP Centralized Configuration"
+    "description": "LMS MCP Centralized Configuration",
+    "last_updated": "2025-09-23T16:34:47.439045",
+    "version": "1.0"
   },
   "security": {
     "FLASK_SECRET_KEY": "test-key-12345678901234567890123",
@@ -17,9 +17,6 @@
     "WAZUH_ARCHIVES_PATH": "/var/ossec/logs/archives/archives.json"
   },
   "flask": {
-    "DASHBOARD_DEBUG": "false",
-    "DASHBOARD_HOST": "127.0.0.1",
-    "DASHBOARD_PORT": "5000",
     "FLASK_DEBUG": "false",
     "FLASK_HOST": "127.0.0.1",
     "FLASK_PORT": "5000"
@@ -33,36 +30,36 @@
   "ai_model": {
     "AI_MAX_TOKENS": "32768",
     "AI_TEMPERATURE": "0.8",
+    "EMBEDDING_DIMENSION": "384",
+    "ESTIMATED_TOKENS_PER_LOG": "100",
+    "LARGE_BATCH_SIZE": "10000",
     "LM_STUDIO_API_KEY": "lm-studio",
     "LM_STUDIO_MODEL": "qwen/qwen3-1.7b",
-    "ESTIMATED_TOKENS_PER_LOG": "100",
-    "SYSTEM_PROMPT_TOKENS": "2000",
     "MAX_LOG_LIMIT": "25000",
-    "SMALL_BATCH_SIZE": "32",
-    "LARGE_BATCH_SIZE": "128",
-    "EMBEDDING_DIMENSION": "384"
+    "SMALL_BATCH_SIZE": "3000",
+    "SYSTEM_PROMPT_TOKENS": "2000"
   },
   "performance": {
     "CACHE_BUILD_LIMIT": "10000",
+    "DEFAULT_DAYS_RANGE": "30",
+    "DEFAULT_HYBRID_SEARCH_K": "20",
     "DEFAULT_MAX_RESULTS": "100",
+    "DEFAULT_SEARCH_K": "10",
+    "DEFAULT_TOOL_LIMIT": "100",
+    "DEFAULT_TOOL_MAX_RESULTS": "15",
     "MAX_LOG_LENGTH": "10000",
     "MAX_RAG_CONTENT": "20000",
-    "DEFAULT_DAYS_RANGE": "30",
-    "DEFAULT_SEARCH_K": "10",
-    "DEFAULT_HYBRID_SEARCH_K": "20",
-    "TOOL_DAYS_RANGE": "7",
-    "DEFAULT_TOOL_MAX_RESULTS": "15",
-    "DEFAULT_TOOL_LIMIT": "100"
+    "TOOL_DAYS_RANGE": "7"
   },
   "security_thresholds": {
     "AGENT_ACTIVE_THRESHOLD": "100",
     "CRITICAL_RULE_LEVEL": "10",
+    "CRITICAL_SCORE": "0.8",
     "DEFAULT_DAYS_RANGE": "7",
     "EMERGENCY_RULE_LEVEL": "8",
     "HIGH_RULE_LEVEL": "7",
-    "MEDIUM_RULE_LEVEL": "4",
-    "CRITICAL_SCORE": "0.8",
     "HIGH_SCORE": "0.6",
+    "MEDIUM_RULE_LEVEL": "4",
     "MEDIUM_SCORE": "0.4"
   },
   "wazuh": {
@@ -79,71 +76,58 @@
     "WEEKLY_MAX_EVENTS": "200"
   },
   "pdf_reports": {
+    "CHART_COLORS": "#FF6B6B,#4ECDC4,#45B7D1,#96CEB4,#FFEAA7",
+    "EXPORT_FORMATS": "PDF,HTML",
+    "MAX_ALERTS_PER_REPORT": "100",
+    "PDF_COMPRESSION_LEVEL": "6",
     "PDF_HEADER_FONT_SIZE": "18",
-    "PDF_PAGE_SIZE": "A4",
-    "PDF_MARGIN_TOP": "72",
+    "PDF_INCLUDE_CHARTS": "true",
     "PDF_MARGIN_BOTTOM": "72",
     "PDF_MARGIN_LEFT": "72",
     "PDF_MARGIN_RIGHT": "72",
-    "MAX_ALERTS_PER_REPORT": "100",
-    "CHART_COLORS": "#FF6B6B,#4ECDC4,#45B7D1,#96CEB4,#FFEAA7",
-    "EXPORT_FORMATS": "PDF,HTML",
-    "REPORT_TYPES": {
-      "daily": {
-        "priority_levels": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10
-        ],
-        "read_all_events": true
-      },
-      "three_daily": {
-        "priority_levels": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10
-        ],
-        "read_all_events": true
-      },
-      "weekly": {
-        "priority_levels": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10
-        ],
-        "read_all_events": true
-      },
-      "monthly": {
-        "priority_levels": [
-          5,
-          6,
-          7,
-          8,
-          9,
-          10
-        ],
-        "read_all_events": true
-      }
-    }
+    "PDF_MARGIN_TOP": "72",
+    "PDF_MAX_EVENTS_PER_PAGE": "50",
+    "PDF_PAGE_SIZE": "A4",
+    "PDF_WATERMARK_TEXT": "LMS MCP Security Report"
   },
   "ml_models": {
-    "SENTENCE_TRANSFORMER_MODEL": "all-MiniLM-L6-v2",
+    "EMBEDDING_CACHE_SIZE": "1000",
     "ML_DEVICE": "cuda",
-    "EMBEDDING_CACHE_SIZE": "1000"
+    "SENTENCE_TRANSFORMER_MODEL": "all-MiniLM-L6-v2"
   },
   "services": {
-    "WAZUH_REALTIME_ENABLED": "true",
-    "TELEGRAM_BOT_ENABLED": "true",
+    "ALERT_CHECK_INTERVAL": "10",
     "REALTIME_FETCH_INTERVAL": "5",
-    "ALERT_CHECK_INTERVAL": "10"
+    "TELEGRAM_BOT_ENABLED": "true",
+    "WAZUH_REALTIME_ENABLED": "true"
+  },
+  "alerts": {
+    "ALERT_COOLDOWN_SECONDS": "300",
+    "COMMAND_TIMEOUT_SECONDS": "30",
+    "ENABLE_ADMIN_COMMANDS": "true",
+    "ENABLE_REALTIME_ALERTS": "true",
+    "ENABLE_USER_COMMANDS": "true",
+    "MAX_ALERTS_PER_HOUR": "20",
+    "MAX_CONCURRENT_COMMANDS": "5"
+  },
+  "fastmcp": {
+    "FASTMCP_HOST": "localhost",
+    "FASTMCP_MODULE": "src.api.wazuh_fastmcp_server",
+    "FASTMCP_PORT": "3000",
+    "FASTMCP_TIMEOUT": "30"
+  },
+  "telegram_reports": {
+    "DAILY_REPORT_ENABLED": "true",
+    "DAILY_REPORT_RECIPIENTS": "admin,security_team",
+    "DAILY_REPORT_TIME": "08:00",
+    "MONTHLY_REPORT_ENABLED": "true",
+    "MONTHLY_REPORT_RECIPIENTS": "admin,security_team,management",
+    "MONTHLY_REPORT_TIME": "10:00",
+    "THREE_DAILY_REPORT_ENABLED": "true",
+    "THREE_DAILY_REPORT_RECIPIENTS": "admin,security_team",
+    "THREE_DAILY_REPORT_TIME": "20:00",
+    "WEEKLY_REPORT_ENABLED": "true",
+    "WEEKLY_REPORT_RECIPIENTS": "admin,security_team,management",
+    "WEEKLY_REPORT_TIME": "09:00"
   }
 }

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wazuh Security Chat</title>
     <style>
+        /* Global font family */
+        body, html, * {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
         /* Target all br tags in message content */
         #messages br {
             display: block;
@@ -40,6 +45,7 @@
         .sidebar {
             background-color: hsl(var(--sidebar-background));
             color: hsl(var(--sidebar-foreground));
+            transition: width 0.3s ease, opacity 0.3s ease;
         }
         
         .sidebar[data-state="closed"] {
@@ -48,6 +54,50 @@
             opacity: 0;
             pointer-events: none;
             border-right: none;
+        }
+        
+        .sidebar[data-state="open"] {
+            width: 16rem !important;
+            min-width: 16rem !important;
+            opacity: 1;
+            pointer-events: auto;
+            border-right: 1px solid hsl(var(--border));
+        }
+
+        /* Collapse/Expand styles for tool content */
+        .tool-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .tool-content.collapsed {
+            display: none !important;
+            height: 0;
+            opacity: 0;
+        }
+        
+        .thinking-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .thinking-content.collapsed {
+            display: none !important;
+            height: 0;
+            opacity: 0;
+        }
+
+        /* Toggle button animations */
+        .sidebar-trigger i {
+            transition: transform 0.2s ease;
+        }
+        
+        .collapse-toggle i {
+            transition: transform 0.2s ease;
+        }
+        
+        .collapse-toggle[aria-expanded="false"] i {
+            transform: rotate(-90deg);
         }
         
         .sidebar[data-state="open"] {
@@ -137,7 +187,7 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body class="bg-background text-foreground h-screen flex overflow-hidden">
@@ -296,6 +346,15 @@
             const input = document.getElementById('messageInput');
             input.addEventListener('input', function() {
                 document.getElementById('sendButton').disabled = this.value.trim() === '';
+            });
+            
+            // Setup keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Ctrl+B or Cmd+B to toggle sidebar
+                if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+                    e.preventDefault();
+                    toggleSidebar();
+                }
             });
             
             // Initialize icons
@@ -1067,6 +1126,104 @@ ${thinking}
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
             };
+        }
+
+        // Sidebar Toggle Functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarProvider = document.querySelector('.sidebar-provider');
+            const mainContent = document.querySelector('.sidebar-inset');
+            const toggleButton = document.querySelector('.sidebar-trigger');
+            const toggleIcon = toggleButton.querySelector('i');
+            
+            if (sidebarVisible) {
+                // Close sidebar
+                sidebar.setAttribute('data-state', 'closed');
+                sidebar.style.width = '0';
+                sidebar.style.minWidth = '0';
+                sidebar.style.opacity = '0';
+                sidebar.style.pointerEvents = 'none';
+                sidebar.style.borderRight = 'none';
+                
+                // Update main content
+                if (mainContent) {
+                    mainContent.style.marginLeft = '0';
+                }
+                
+                // Update toggle button icon
+                toggleIcon.setAttribute('data-lucide', 'panel-left-open');
+                toggleButton.title = 'Open Sidebar';
+                sidebarVisible = false;
+            } else {
+                // Open sidebar
+                sidebar.setAttribute('data-state', 'open');
+                sidebar.style.width = '16rem';
+                sidebar.style.minWidth = '16rem';
+                sidebar.style.opacity = '1';
+                sidebar.style.pointerEvents = 'auto';
+                sidebar.style.borderRight = '1px solid hsl(var(--border))';
+                
+                // Update main content
+                if (mainContent) {
+                    mainContent.style.marginLeft = '16rem';
+                }
+                
+                // Update toggle button icon
+                toggleIcon.setAttribute('data-lucide', 'panel-left-close');
+                toggleButton.title = 'Close Sidebar';
+                sidebarVisible = true;
+            }
+            
+            // Refresh icons
+            lucide.createIcons();
+        }
+
+        // Tool content collapse/expand functions
+        function toggleToolContent(toolId) {
+            const content = document.getElementById('tool-content-' + toolId);
+            const button = document.querySelector(`[onclick="toggleToolContent('${toolId}')"]`);
+            const icon = button.querySelector('i');
+            
+            if (content.classList.contains('collapsed')) {
+                // Expand
+                content.classList.remove('collapsed');
+                content.style.display = 'block';
+                icon.setAttribute('data-lucide', 'chevron-down');
+                button.title = 'Collapse';
+            } else {
+                // Collapse
+                content.classList.add('collapsed');
+                content.style.display = 'none';
+                icon.setAttribute('data-lucide', 'chevron-right');
+                button.title = 'Expand';
+            }
+            
+            // Refresh icons
+            lucide.createIcons();
+        }
+
+        // Thinking process collapse/expand functions
+        function toggleThinkingContent(thinkingId) {
+            const content = document.getElementById('thinking-content-' + thinkingId);
+            const button = document.querySelector(`[onclick="toggleThinkingContent('${thinkingId}')"]`);
+            const icon = button.querySelector('i');
+            
+            if (content.classList.contains('collapsed')) {
+                // Expand
+                content.classList.remove('collapsed');
+                content.style.display = 'block';
+                icon.setAttribute('data-lucide', 'chevron-down');
+                button.title = 'Collapse';
+            } else {
+                // Collapse
+                content.classList.add('collapsed');
+                content.style.display = 'none';
+                icon.setAttribute('data-lucide', 'chevron-right');
+                button.title = 'Expand';
+            }
+            
+            // Refresh icons
+            lucide.createIcons();
         }
 
         // User menu functions
