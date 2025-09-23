@@ -41,3 +41,4 @@ node_modules/
 htmlcov/
 .coverage
 .pytest_cache/
+data/chat_history.db

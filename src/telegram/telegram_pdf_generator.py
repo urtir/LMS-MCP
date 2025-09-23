@@ -158,14 +158,28 @@ class PDFReportGenerator:
             
         except Exception as e:
             logger.error(f"Error generating PDF report: {e}")
-            # Return empty buffer with error message
+            # Return simple error PDF without complex formatting
             buffer = io.BytesIO()
             error_doc = SimpleDocTemplate(buffer, pagesize=A4)
+            
+            # Create simple error message without special characters
+            error_msg = str(e).replace('<', '').replace('>', '').replace('&', 'and')[:200]
+            
             error_story = [
-                Paragraph("Error Generating Report", self.styles['Title']),
-                Paragraph(f"An error occurred: {str(e)}", self.styles['Normal'])
+                Paragraph("PDF Generation Error", self.styles['Title']),
+                Paragraph(f"An error occurred while generating the report.", self.styles['Normal']),
+                Paragraph(f"Error details: {error_msg}", self.styles['Normal']),
+                Paragraph("Please contact system administrator for assistance.", self.styles['Normal'])
             ]
-            error_doc.build(error_story)
+            
+            try:
+                error_doc.build(error_story)
+            except Exception as inner_e:
+                # If even the error PDF fails, create minimal content
+                logger.error(f"Error creating error PDF: {inner_e}")
+                error_story = [Paragraph("PDF Error - Contact Administrator", self.styles['Normal'])]
+                error_doc.build(error_story)
+            
             buffer.seek(0)
             return buffer
     
@@ -461,9 +475,31 @@ class PDFReportGenerator:
         # Remove thinking tags completely
         ai_text = self._remove_thinking_tags(ai_text)
         
-        # Format markdown text for PDF
-        formatted_analysis = self._format_markdown_for_pdf(ai_text)
-        story.append(Paragraph(formatted_analysis, self.styles['Normal']))
+        # Safely format for PDF with fallback to plain text
+        try:
+            # Try to format markdown first
+            formatted_analysis = self._format_markdown_for_pdf(ai_text)
+            
+            # Test if the formatted text can be parsed safely
+            # Create a test paragraph to validate HTML
+            test_para = Paragraph(f"<para>{formatted_analysis}</para>", self.styles['Normal'])
+            
+            # If we get here, the HTML is valid
+            story.append(Paragraph(f"<para>{formatted_analysis}</para>", self.styles['Normal']))
+            
+        except Exception as format_error:
+            logger.warning(f"Markdown formatting failed, using plain text: {format_error}")
+            
+            # Fallback: use plain text with basic formatting
+            plain_text = self._clean_text_for_pdf(ai_text, preserve_html=False)
+            
+            # Add basic structure to plain text
+            plain_text = plain_text.replace('\n\n', '<br/><br/>')
+            plain_text = plain_text.replace('\n', '<br/>')
+            
+            # Ensure it's wrapped in para tags
+            story.append(Paragraph(f"<para>{plain_text}</para>", self.styles['Normal']))
+        
         story.append(Spacer(1, 15))
         
         # Priority actions
@@ -658,22 +694,35 @@ class PDFReportGenerator:
         """Format markdown text for PDF display"""
         import re
         
+        # Handle None or empty text
+        if not text:
+            return ""
+        
         # Convert markdown headers to HTML-like formatting (from largest to smallest)
+        text = re.sub(r'^##### (.*?)$', r'<i><u>\1</u></i>', text, flags=re.MULTILINE)  # Level 5 - Italic + Underline
         text = re.sub(r'^#### (.*?)$', r'<b><u>\1</u></b>', text, flags=re.MULTILINE)  # Level 4 - Bold + Underline
         text = re.sub(r'^### (.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)          # Level 3 - Bold
         text = re.sub(r'^## (.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)           # Level 2 - Bold  
         text = re.sub(r'^# (.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)            # Level 1 - Bold
         
-        # Convert horizontal rules (---) to visual separator
+        # Handle repeated characters (decorative lines)
+        # Convert long repeated I's to visual separator
+        text = re.sub(r'^I{10,}$', r'<br/>▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌<br/>', text, flags=re.MULTILINE)
+        
+        # Convert other repeated characters to decorative separators
+        text = re.sub(r'^([=\-_#\*])\1{10,}$', r'<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>', text, flags=re.MULTILINE)
+        
+        # Convert horizontal rules (---) to visual separator  
         text = re.sub(r'^---+$', r'<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>', text, flags=re.MULTILINE)
         
-        # Convert markdown bold
+        # Convert markdown bold (handle multiple asterisks)
+        text = re.sub(r'\*{2,}(.*?)\*{2,}', r'<b>\1</b>', text)  # Multiple asterisks
         text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
         text = re.sub(r'__(.*?)__', r'<b>\1</b>', text)
         
         # Convert markdown italic  
-        text = re.sub(r'\*(.*?)\*', r'<i>\1</i>', text)
-        text = re.sub(r'_(.*?)_', r'<i>\1</i>', text)
+        text = re.sub(r'(?<!\*)\*([^\*]+)\*(?!\*)', r'<i>\1</i>', text)  # Single asterisk (not part of double)
+        text = re.sub(r'(?<!_)_([^_]+)_(?!_)', r'<i>\1</i>', text)       # Single underscore (not part of double)
         
         # Convert bullet points
         text = re.sub(r'^[\-\*\+] (.*?)$', r'• \1', text, flags=re.MULTILINE)
@@ -684,6 +733,10 @@ class PDFReportGenerator:
         # Convert code blocks (basic support)
         text = re.sub(r'`([^`]+)`', r'<font name="Courier">\1</font>', text)
         
+        # Handle special markdown patterns
+        # Convert standalone ** as emphasis marker
+        text = re.sub(r'^\*\*\s*$', r'<b>※</b>', text, flags=re.MULTILINE)
+        
         # Replace newlines with HTML breaks
         text = text.replace('\n', '<br/>')
         
@@ -693,22 +746,32 @@ class PDFReportGenerator:
         
         return text
     
-    def _clean_text_for_pdf(self, text: str) -> str:
+    def _clean_text_for_pdf(self, text: str, preserve_html: bool = False) -> str:
         """Clean text for safe PDF rendering"""
         if not text:
             return ""
-            
-        # Remove or escape problematic characters
-        text = str(text).replace('&', '&amp;')
-        text = text.replace('<', '&lt;').replace('>', '&gt;')
-        text = text.replace('"', '&quot;').replace("'", '&apos;')
+        
+        # Convert to string first
+        text = str(text)
+        
+        if not preserve_html:
+            # Remove or escape problematic characters for plain text
+            text = text.replace('&', '&amp;')
+            text = text.replace('<', '&lt;').replace('>', '&gt;')
+            text = text.replace('"', '&quot;').replace("'", '&apos;')
+        else:
+            # For HTML/markdown formatted text, only escape problematic characters that aren't part of HTML tags
+            import re
+            # Escape & that are not part of HTML entities
+            text = re.sub(r'&(?![a-zA-Z0-9#]+;)', '&amp;', text)
         
         # Remove non-printable characters
         import re
         text = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]', '', text)
         
-        # Normalize whitespace
-        text = re.sub(r'\s+', ' ', text)
-        text = text.strip()
+        if not preserve_html:
+            # Normalize whitespace for plain text
+            text = re.sub(r'\s+', ' ', text)
+            text = text.strip()
         
         return text
