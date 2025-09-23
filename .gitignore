@@ -42,3 +42,5 @@ htmlcov/
 .coverage
 .pytest_cache/
 data/chat_history.db
+logs/telegram_bot.log
+logs/wazuh_realtime.log
