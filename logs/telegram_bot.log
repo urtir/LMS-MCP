@@ -9752,3 +9752,226 @@ INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8J
 INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:00:31 UTC)" (scheduled at 2025-09-23 05:00:21.389893+00:00)
 INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:00:31 UTC)" executed successfully
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:00:41 UTC)" (scheduled at 2025-09-23 05:00:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:00:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:00:51 UTC)" (scheduled at 2025-09-23 05:00:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:00:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:01 UTC)" (scheduled at 2025-09-23 05:00:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:11 UTC)" (scheduled at 2025-09-23 05:01:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:21 UTC)" (scheduled at 2025-09-23 05:01:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:31 UTC)" (scheduled at 2025-09-23 05:01:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:41 UTC)" (scheduled at 2025-09-23 05:01:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:51 UTC)" (scheduled at 2025-09-23 05:01:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:01:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:01 UTC)" (scheduled at 2025-09-23 05:01:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:11 UTC)" (scheduled at 2025-09-23 05:02:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:21 UTC)" (scheduled at 2025-09-23 05:02:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:31 UTC)" (scheduled at 2025-09-23 05:02:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:41 UTC)" (scheduled at 2025-09-23 05:02:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:51 UTC)" (scheduled at 2025-09-23 05:02:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:02:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:01 UTC)" (scheduled at 2025-09-23 05:02:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:11 UTC)" (scheduled at 2025-09-23 05:03:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:21 UTC)" (scheduled at 2025-09-23 05:03:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:31 UTC)" (scheduled at 2025-09-23 05:03:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:41 UTC)" (scheduled at 2025-09-23 05:03:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:51 UTC)" (scheduled at 2025-09-23 05:03:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:03:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:01 UTC)" (scheduled at 2025-09-23 05:03:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:11 UTC)" (scheduled at 2025-09-23 05:04:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:21 UTC)" (scheduled at 2025-09-23 05:04:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:31 UTC)" (scheduled at 2025-09-23 05:04:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:41 UTC)" (scheduled at 2025-09-23 05:04:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:51 UTC)" (scheduled at 2025-09-23 05:04:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:04:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:01 UTC)" (scheduled at 2025-09-23 05:04:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:11 UTC)" (scheduled at 2025-09-23 05:05:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:21 UTC)" (scheduled at 2025-09-23 05:05:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:31 UTC)" (scheduled at 2025-09-23 05:05:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:41 UTC)" (scheduled at 2025-09-23 05:05:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:51 UTC)" (scheduled at 2025-09-23 05:05:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:05:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:01 UTC)" (scheduled at 2025-09-23 05:05:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:11 UTC)" (scheduled at 2025-09-23 05:06:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:21 UTC)" (scheduled at 2025-09-23 05:06:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:31 UTC)" (scheduled at 2025-09-23 05:06:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:41 UTC)" (scheduled at 2025-09-23 05:06:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:51 UTC)" (scheduled at 2025-09-23 05:06:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:06:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:01 UTC)" (scheduled at 2025-09-23 05:06:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:11 UTC)" (scheduled at 2025-09-23 05:07:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:21 UTC)" (scheduled at 2025-09-23 05:07:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:31 UTC)" (scheduled at 2025-09-23 05:07:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:41 UTC)" (scheduled at 2025-09-23 05:07:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:51 UTC)" (scheduled at 2025-09-23 05:07:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:07:51 UTC)" executed successfully
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:01 UTC)" (scheduled at 2025-09-23 05:07:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:11 UTC)" (scheduled at 2025-09-23 05:08:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:21 UTC)" (scheduled at 2025-09-23 05:08:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:31 UTC)" (scheduled at 2025-09-23 05:08:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:41 UTC)" (scheduled at 2025-09-23 05:08:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:51 UTC)" (scheduled at 2025-09-23 05:08:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:08:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:01 UTC)" (scheduled at 2025-09-23 05:08:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:11 UTC)" (scheduled at 2025-09-23 05:09:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:21 UTC)" (scheduled at 2025-09-23 05:09:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:31 UTC)" (scheduled at 2025-09-23 05:09:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:41 UTC)" (scheduled at 2025-09-23 05:09:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:51 UTC)" (scheduled at 2025-09-23 05:09:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:09:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:01 UTC)" (scheduled at 2025-09-23 05:09:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:11 UTC)" (scheduled at 2025-09-23 05:10:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:21 UTC)" (scheduled at 2025-09-23 05:10:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:31 UTC)" (scheduled at 2025-09-23 05:10:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:41 UTC)" (scheduled at 2025-09-23 05:10:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:51 UTC)" (scheduled at 2025-09-23 05:10:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:10:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:01 UTC)" (scheduled at 2025-09-23 05:10:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:11 UTC)" (scheduled at 2025-09-23 05:11:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:21 UTC)" (scheduled at 2025-09-23 05:11:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:31 UTC)" (scheduled at 2025-09-23 05:11:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:41 UTC)" (scheduled at 2025-09-23 05:11:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:51 UTC)" (scheduled at 2025-09-23 05:11:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:11:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:01 UTC)" (scheduled at 2025-09-23 05:11:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:01 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:11 UTC)" (scheduled at 2025-09-23 05:12:01.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:11 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:21 UTC)" (scheduled at 2025-09-23 05:12:11.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:21 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:31 UTC)" (scheduled at 2025-09-23 05:12:21.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:31 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:41 UTC)" (scheduled at 2025-09-23 05:12:31.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:41 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:51 UTC)" (scheduled at 2025-09-23 05:12:41.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:12:51 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:13:01 UTC)" (scheduled at 2025-09-23 05:12:51.389893+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 05:13:01 UTC)" executed successfully
