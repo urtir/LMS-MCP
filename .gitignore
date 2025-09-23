@@ -1,0 +1,43 @@
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Database files that shouldn't be tracked
+*.db-shm
+*.db-wal
+
+# Large files
+data/*.backup
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env
+.venv
+env/
+venv/
+
+# Logs
+*.log
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Coverage reports
+htmlcov/
+.coverage
+.pytest_cache/
