@@ -12910,3 +12910,533 @@ INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8J
 INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 09:53:32 UTC)" (scheduled at 2025-09-23 09:53:22.559871+00:00)
 INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-23 09:53:32 UTC)" executed successfully
 INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 65, in <module>
+    from src.utils.telegram_config import TelegramBotConfig
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\__init__.py", line 6, in <module>
+    from .telegram_config import TelegramBotConfig
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\telegram_config.py", line 87, in <module>
+    telegram_config = TelegramBotConfig()
+  File "C:\Users\risqu\Desktop\LMS MCP\src\utils\telegram_config.py", line 73, in __init__
+    self.REPORT_TYPES = config_manager.get('pdf_reports.REPORT_TYPES')
+  File "C:\Users\risqu\Desktop\LMS MCP\config\config_manager.py", line 83, in get
+    raise e
+  File "C:\Users\risqu\Desktop\LMS MCP\config\config_manager.py", line 75, in get
+    raise ValueError(f"Configuration key '{key}' not found! Please add it to config.json")
+ValueError: Configuration key 'pdf_reports.REPORT_TYPES' not found! Please add it to config.json
+INFO:src.api.wazuh_fastmcp_server:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:src.api.wazuh_fastmcp_server:Semantic search dependencies available for RAG
+INFO:src.api.wazuh_fastmcp_server:LM Studio client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.admin:Admin module loaded - comprehensive error logging enabled
+INFO:src.webapp.webapp_chatbot:=== INITIALIZING WEBAPP COMPONENTS ===
+INFO:src.webapp.webapp_chatbot:Initializing database connection...
+INFO:src.webapp.webapp_chatbot:Database initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing MCP bridge...
+INFO:src.webapp.webapp_chatbot:MCP bridge initialized successfully
+INFO:src.webapp.webapp_chatbot:Initializing OpenAI client...
+INFO:src.webapp.webapp_chatbot:OpenAI client initialized: http://192.168.56.1:1234/v1
+INFO:src.webapp.webapp_chatbot:Using model: qwen/qwen3-1.7b
+INFO:src.webapp.webapp_chatbot:=== WEBAPP INITIALIZATION COMPLETE ===
+INFO:src.webapp.webapp_chatbot:Chat sessions storage initialized
+INFO:__main__:🚀 Starting Telegram Security Bot...
+INFO:__main__:🚀 Initializing Telegram Security Bot...
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.telegram.telegram_report_generator:✅ MCP Bridge initialized for report generator
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:__main__:✅ Telegram Security Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/setMyCommands "HTTP/1.1 200 OK"
+INFO:__main__:✅ Bot initialized successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:__main__:Bot Username: @wazoeh_bot
+INFO:__main__:🔄 Starting polling...
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getMe "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:telegram.ext.Application:Application started
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/deleteWebhook "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/answerCallbackQuery "HTTP/1.1 200 OK"
+INFO:apscheduler.scheduler:Added job "realtime_alert_monitoring" to job store "default"
+INFO:__main__:🚨 AGGRESSIVE realtime alert monitoring started (10s interval, rule level 5+, LATEST 5 ROWS ONLY)
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/editMessageText "HTTP/1.1 200 OK"
+INFO:__main__:User 1033102340 enabled realtime alerts
+INFO:__main__:🚨 Started realtime alert monitoring
+INFO:__main__:🔄 Realtime alert monitoring started
+INFO:__main__:🚨 Found 5 NEW UNIQUE events (rule level 5+, duplicates filtered)
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:✅ Alert sent to user 1033102340 with full log details
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:08 UTC)" (scheduled at 2025-09-24 02:35:58.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:08 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:18 UTC)" (scheduled at 2025-09-24 02:36:08.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:18 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:28 UTC)" (scheduled at 2025-09-24 02:36:18.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:28 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:__main__:🚨 Found 2 NEW UNIQUE events (rule level 5+, duplicates filtered)
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:✅ Alert sent to user 1033102340 with full log details
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:38 UTC)" (scheduled at 2025-09-24 02:36:28.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:38 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:48 UTC)" (scheduled at 2025-09-24 02:36:38.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:48 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:58 UTC)" (scheduled at 2025-09-24 02:36:48.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:36:58 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.api.mcp_tool_bridge:Connecting to FastMCP server...
+INFO:src.api.mcp_tool_bridge:FastMCP client created successfully
+INFO:src.api.mcp_tool_bridge:Loading tools from FastMCP server...
+INFO:__main__:OpenAI client for LM Studio available
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:08 UTC)" (scheduled at 2025-09-24 02:36:58.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:08 UTC)" executed successfully
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:__main__:Semantic search dependencies available for RAG
+INFO:__main__:LM Studio client initialized: http://192.168.56.1:1234/v1
+
+
++- FastMCP 2.0 --------------------------------------------------------------+
+|                                                                            |
+|        _ __ ___ ______           __  __  _____________    ____    ____     |
+|       _ __ ___ / ____/___ ______/ /_/  |/  / ____/ __ \  |___ \  / __ \    |
+|      _ __ ___ / /_  / __ `/ ___/ __/ /|_/ / /   / /_/ /  ___/ / / / / /    |
+|     _ __ ___ / __/ / /_/ (__  ) /_/ /  / / /___/ ____/  /  __/_/ /_/ /     |
+|    _ __ ___ /_/    \__,_/____/\__/_/  /_/\____/_/      /_____(_)____/      |
+|                                                                            |
+|                                                                            |
+|                                                                            |
+|    \U0001f5a5\ufe0f  Server name:     Wazuh API Server                                    |
+|    \U0001f4e6 Transport:       STDIO                                               |
+|                                                                            |
+|    \U0001f4da Docs:            https://gofastmcp.com                               |
+|    \U0001f680 Deploy:          https://fastmcp.cloud                               |
+|                                                                            |
+|    \U0001f3ce\ufe0f  FastMCP version: 2.11.3                                              |
+|    \U0001f91d MCP version:     1.13.0                                              |
+|                                                                            |
++----------------------------------------------------------------------------+
+
+
+[09/24/25 09:37:02] INFO     Starting MCP server 'Wazuh API      server.py:1445
+                             Server' with transport 'stdio'                    
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+INFO:src.api.mcp_tool_bridge:Found 58 tools from FastMCP server
+INFO:src.api.mcp_tool_bridge:Converted 58 tools to OpenAI format
+INFO:src.webapp.webapp_chatbot:Loaded 58 MCP tools for session 86cb8b7d-5179-4c56-9142-330a0f1c4bb2
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendChatAction "HTTP/1.1 200 OK"
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Using MODIFIED async-compatible system for Telegram bot
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Session has 2 messages
+INFO:__main__:Available MCP tools: 58
+INFO:__main__:Sending request to LM Studio: http://192.168.56.1:1234/v1
+INFO:__main__:Model: qwen/qwen3-1.7b
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:LM Studio response received successfully
+INFO:__main__:Processing 1 tool calls
+INFO:__main__:Executing tool 1/1: list_agents
+INFO:src.api.mcp_tool_bridge:Executing tool: list_agents with args: {}
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+WARNING:apscheduler.executors.default:Run time of job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:18 UTC)" was missed by 0:00:01.891702
+INFO:__main__:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:__main__:Semantic search dependencies available for RAG
+INFO:__main__:LM Studio client initialized: http://192.168.56.1:1234/v1
+
+
++- FastMCP 2.0 --------------------------------------------------------------+
+|                                                                            |
+|        _ __ ___ ______           __  __  _____________    ____    ____     |
+|       _ __ ___ / ____/___ ______/ /_/  |/  / ____/ __ \  |___ \  / __ \    |
+|      _ __ ___ / /_  / __ `/ ___/ __/ /|_/ / /   / /_/ /  ___/ / / / / /    |
+|     _ __ ___ / __/ / /_/ (__  ) /_/ /  / / /___/ ____/  /  __/_/ /_/ /     |
+|    _ __ ___ /_/    \__,_/____/\__/_/  /_/\____/_/      /_____(_)____/      |
+|                                                                            |
+|                                                                            |
+|                                                                            |
+|    \U0001f5a5\ufe0f  Server name:     Wazuh API Server                                    |
+|    \U0001f4e6 Transport:       STDIO                                               |
+|                                                                            |
+|    \U0001f4da Docs:            https://gofastmcp.com                               |
+|    \U0001f680 Deploy:          https://fastmcp.cloud                               |
+|                                                                            |
+|    \U0001f3ce\ufe0f  FastMCP version: 2.11.3                                              |
+|    \U0001f91d MCP version:     1.13.0                                              |
+|                                                                            |
++----------------------------------------------------------------------------+
+
+
+[09/24/25 09:37:15] INFO     Starting MCP server 'Wazuh API      server.py:1445
+                             Server' with transport 'stdio'                    
+INFO:src.api.mcp_tool_bridge:Connected to MCP server, executing tool: list_agents
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+[09/24/25 09:37:15] INFO     Server log: Getting new Wazuh API    logging.py:40
+                             authentication token...                           
+INFO:httpx:HTTP Request: POST https://localhost:55000/security/user/authenticate "HTTP/1.1 200 OK"
+                    INFO     Server log: Successfully             logging.py:40
+                             authenticated with Wazuh API                      
+                    INFO     Server log: Making GET request to    logging.py:40
+                             /agents                                           
+INFO:httpx:HTTP Request: GET https://localhost:55000/agents?limit=100&offset=0 "HTTP/1.1 200 OK"
+                    INFO     Server log: Request successful: 200  logging.py:40
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+INFO:src.api.mcp_tool_bridge:Tool list_agents executed successfully
+INFO:__main__:Tool list_agents executed successfully
+INFO:__main__:Tool content preview: {
+  "data": {
+    "affected_items": [
+      {
+        "os": {
+          "arch": "x86_64",
+          "major": "2023",
+          "name": "Amazon Linux",
+          "platform": "amzn",
+          "uname": ...
+INFO:__main__:Getting final response from LM Studio after tool execution...
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:Final response received from LM Studio
+INFO:__main__:Message cleaned from think tags. Original length: 3321, Cleaned length: 1804
+INFO:__main__:Saving assistant message to database...
+INFO:__main__:Message saved to database successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+WARNING:apscheduler.executors.default:Run time of job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:28 UTC)" was missed by 0:00:07.030702
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:Response sent successfully to Telegram
+INFO:__main__:Chat processing complete. Response length: 1804 characters
+INFO:__main__:✅ Question answered for user 1033102340
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:38 UTC)" (scheduled at 2025-09-24 02:37:28.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:38 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.webapp.webapp_chatbot:Tools already loaded for session 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 (58 tools)
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:48 UTC)" (scheduled at 2025-09-24 02:37:38.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:48 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendChatAction "HTTP/1.1 200 OK"
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Using MODIFIED async-compatible system for Telegram bot
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Session has 6 messages
+INFO:__main__:Available MCP tools: 58
+INFO:__main__:Sending request to LM Studio: http://192.168.56.1:1234/v1
+INFO:__main__:Model: qwen/qwen3-1.7b
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:LM Studio response received successfully
+INFO:__main__:Processing 1 tool calls
+INFO:__main__:Executing tool 1/1: restart_agent
+INFO:src.api.mcp_tool_bridge:Executing tool: restart_agent with args: {'agent_id': '005'}
+INFO:__main__:OpenAI client for LM Studio available
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:58 UTC)" (scheduled at 2025-09-24 02:37:48.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:37:58 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:__main__:Semantic search dependencies available for RAG
+INFO:__main__:LM Studio client initialized: http://192.168.56.1:1234/v1
+
+
++- FastMCP 2.0 --------------------------------------------------------------+
+|                                                                            |
+|        _ __ ___ ______           __  __  _____________    ____    ____     |
+|       _ __ ___ / ____/___ ______/ /_/  |/  / ____/ __ \  |___ \  / __ \    |
+|      _ __ ___ / /_  / __ `/ ___/ __/ /|_/ / /   / /_/ /  ___/ / / / / /    |
+|     _ __ ___ / __/ / /_/ (__  ) /_/ /  / / /___/ ____/  /  __/_/ /_/ /     |
+|    _ __ ___ /_/    \__,_/____/\__/_/  /_/\____/_/      /_____(_)____/      |
+|                                                                            |
+|                                                                            |
+|                                                                            |
+|    \U0001f5a5\ufe0f  Server name:     Wazuh API Server                                    |
+|    \U0001f4e6 Transport:       STDIO                                               |
+|                                                                            |
+|    \U0001f4da Docs:            https://gofastmcp.com                               |
+|    \U0001f680 Deploy:          https://fastmcp.cloud                               |
+|                                                                            |
+|    \U0001f3ce\ufe0f  FastMCP version: 2.11.3                                              |
+|    \U0001f91d MCP version:     1.13.0                                              |
+|                                                                            |
++----------------------------------------------------------------------------+
+
+
+[09/24/25 09:37:52] INFO     Starting MCP server 'Wazuh API      server.py:1445
+                             Server' with transport 'stdio'                    
+INFO:src.api.mcp_tool_bridge:Connected to MCP server, executing tool: restart_agent
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+[09/24/25 09:37:52] INFO     Server log: Getting new Wazuh API    logging.py:40
+                             authentication token...                           
+INFO:httpx:HTTP Request: POST https://localhost:55000/security/user/authenticate "HTTP/1.1 200 OK"
+                    INFO     Server log: Successfully             logging.py:40
+                             authenticated with Wazuh API                      
+                    INFO     Server log: Making PUT request to    logging.py:40
+                             /agents/005/restart                               
+INFO:httpx:HTTP Request: PUT https://localhost:55000/agents/005/restart "HTTP/1.1 200 OK"
+                    INFO     Server log: Request successful: 200  logging.py:40
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+INFO:src.api.mcp_tool_bridge:Tool restart_agent executed successfully
+INFO:__main__:Tool restart_agent executed successfully
+INFO:__main__:Tool content preview: {
+  "data": {
+    "affected_items": [
+      "005"
+    ],
+    "total_affected_items": 1,
+    "total_failed_items": 0,
+    "failed_items": []
+  },
+  "message": "Restart command was sent to all agents",
+...
+INFO:__main__:Getting final response from LM Studio after tool execution...
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:Final response received from LM Studio
+INFO:__main__:Message cleaned from think tags. Original length: 1302, Cleaned length: 572
+INFO:__main__:Saving assistant message to database...
+INFO:__main__:Message saved to database successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:Response sent successfully to Telegram
+INFO:__main__:Chat processing complete. Response length: 572 characters
+INFO:__main__:✅ Question answered for user 1033102340
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:08 UTC)" (scheduled at 2025-09-24 02:37:58.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:08 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:18 UTC)" (scheduled at 2025-09-24 02:38:08.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:18 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:28 UTC)" (scheduled at 2025-09-24 02:38:18.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:28 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:38 UTC)" (scheduled at 2025-09-24 02:38:28.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:38 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:48 UTC)" (scheduled at 2025-09-24 02:38:38.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:48 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:58 UTC)" (scheduled at 2025-09-24 02:38:48.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:38:58 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.webapp.webapp_chatbot:Tools already loaded for session 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 (58 tools)
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:39:08 UTC)" (scheduled at 2025-09-24 02:38:58.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:39:08 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendChatAction "HTTP/1.1 200 OK"
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Using MODIFIED async-compatible system for Telegram bot
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Session has 10 messages
+INFO:__main__:Available MCP tools: 58
+INFO:__main__:Sending request to LM Studio: http://192.168.56.1:1234/v1
+INFO:__main__:Model: qwen/qwen3-1.7b
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:LM Studio response received successfully
+INFO:__main__:Processing 1 tool calls
+INFO:__main__:Executing tool 1/1: check_wazuh_log
+INFO:src.api.mcp_tool_bridge:Executing tool: check_wazuh_log with args: {'user_prompt': 'check for SQL injection attacks', 'days_range': 7}
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+WARNING:apscheduler.executors.default:Run time of job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:39:18 UTC)" was missed by 0:00:01.666241
+INFO:__main__:OpenAI client for LM Studio available
+INFO:faiss.loader:Loading faiss with AVX2 support.
+INFO:faiss.loader:Successfully loaded faiss with AVX2 support.
+INFO:__main__:Semantic search dependencies available for RAG
+INFO:__main__:LM Studio client initialized: http://192.168.56.1:1234/v1
+
+
++- FastMCP 2.0 --------------------------------------------------------------+
+|                                                                            |
+|        _ __ ___ ______           __  __  _____________    ____    ____     |
+|       _ __ ___ / ____/___ ______/ /_/  |/  / ____/ __ \  |___ \  / __ \    |
+|      _ __ ___ / /_  / __ `/ ___/ __/ /|_/ / /   / /_/ /  ___/ / / / / /    |
+|     _ __ ___ / __/ / /_/ (__  ) /_/ /  / / /___/ ____/  /  __/_/ /_/ /     |
+|    _ __ ___ /_/    \__,_/____/\__/_/  /_/\____/_/      /_____(_)____/      |
+|                                                                            |
+|                                                                            |
+|                                                                            |
+|    \U0001f5a5\ufe0f  Server name:     Wazuh API Server                                    |
+|    \U0001f4e6 Transport:       STDIO                                               |
+|                                                                            |
+|    \U0001f4da Docs:            https://gofastmcp.com                               |
+|    \U0001f680 Deploy:          https://fastmcp.cloud                               |
+|                                                                            |
+|    \U0001f3ce\ufe0f  FastMCP version: 2.11.3                                              |
+|    \U0001f91d MCP version:     1.13.0                                              |
+|                                                                            |
++----------------------------------------------------------------------------+
+
+
+[09/24/25 09:39:15] INFO     Starting MCP server 'Wazuh API      server.py:1445
+                             Server' with transport 'stdio'                    
+INFO:src.api.mcp_tool_bridge:Connected to MCP server, executing tool: check_wazuh_log
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+[09/24/25 09:39:15] INFO     Server log: 🔍 Analyzing user        logging.py:40
+                             request: 'check for SQL injection                 
+                             attacks'                                          
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:\U0001f50d Starting RAG search for query: '<think>
+
+</think>
+
+sql injection vulnerability check' (last 7 days)
+INFO:__main__:\U0001f4ca Fetching logs from database...
+                    INFO     Server log: 🧠 Generating search     logging.py:40
+                             query with LLM...                                 
+INFO:__main__:\U0001f4cb Retrieved 5471 total logs from database
+INFO:__main__:\U0001f9e0 Initializing semantic search model...
+INFO:sentence_transformers.SentenceTransformer:Use pytorch device_name: cuda:0
+INFO:sentence_transformers.SentenceTransformer:Load pretrained SentenceTransformer: all-MiniLM-L6-v2
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:39:28 UTC)" (scheduled at 2025-09-24 02:39:18.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:39:28 UTC)" executed successfully
+INFO:__main__:\U0001f522 Creating embeddings for 5471 logs...
+INFO:__main__:\u26a1 Using batch size: 64 for GPU acceleration
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/86 [00:00<?, ?it/s]Batches:   1%|1         | 1/86 [00:00<00:35,  2.39it/s]Batches:   2%|2         | 2/86 [00:00<00:26,  3.20it/s]Batches:   3%|3         | 3/86 [00:00<00:20,  4.01it/s]Batches:   5%|4         | 4/86 [00:00<00:17,  4.65it/s]Batches:   6%|5         | 5/86 [00:01<00:15,  5.28it/s]Batches:   7%|6         | 6/86 [00:01<00:13,  5.77it/s]Batches:   8%|8         | 7/86 [00:01<00:13,  6.04it/s]Batches:   9%|9         | 8/86 [00:01<00:12,  6.36it/s]Batches:  10%|#         | 9/86 [00:01<00:11,  6.49it/s]Batches:  12%|#1        | 10/86 [00:01<00:11,  6.58it/s]Batches:  13%|#2        | 11/86 [00:02<00:11,  6.65it/s]Batches:  14%|#3        | 12/86 [00:02<00:10,  6.78it/s]Batches:  15%|#5        | 13/86 [00:02<00:10,  6.83it/s]Batches:  16%|#6        | 14/86 [00:02<00:10,  6.81it/s]Batches:  17%|#7        | 15/86 [00:02<00:10,  6.79it/s]Batches:  19%|#8        | 16/86 [00:02<00:10,  6.64it/s]Batches:  20%|#9        | 17/86 [00:02<00:10,  6.75it/s]Batches:  21%|##        | 18/86 [00:03<00:09,  6.98it/s]Batches:  22%|##2       | 19/86 [00:03<00:10,  6.12it/s]Batches:  23%|##3       | 20/86 [00:03<00:10,  6.43it/s]Batches:  24%|##4       | 21/86 [00:03<00:09,  7.00it/s]Batches:  26%|##5       | 22/86 [00:03<00:08,  7.59it/s]Batches:  27%|##6       | 23/86 [00:03<00:07,  7.93it/s]Batches:  28%|##7       | 24/86 [00:03<00:07,  8.21it/s]Batches:  29%|##9       | 25/86 [00:03<00:07,  8.37it/s]Batches:  30%|###       | 26/86 [00:04<00:07,  8.41it/s]Batches:  31%|###1      | 27/86 [00:04<00:06,  8.47it/s]Batches:  33%|###2      | 28/86 [00:04<00:06,  8.51it/s]Batches:  34%|###3      | 29/86 [00:04<00:06,  8.53it/s]Batches:  35%|###4      | 30/86 [00:04<00:06,  8.46it/s]Batches:  36%|###6      | 31/86 [00:04<00:06,  8.45it/s]Batches:  37%|###7      | 32/86 [00:04<00:06,  8.35it/s]Batches:  38%|###8      | 33/86 [00:04<00:06,  8.29it/s]Batches:  40%|###9      | 34/86 [00:04<00:06,  8.41it/s]Batches:  41%|####      | 35/86 [00:05<00:06,  8.47it/s]Batches:  42%|####1     | 36/86 [00:05<00:05,  8.47it/s]Batches:  43%|####3     | 37/86 [00:05<00:05,  8.42it/s]Batches:  44%|####4     | 38/86 [00:05<00:05,  8.53it/s]Batches:  45%|####5     | 39/86 [00:05<00:05,  8.50it/s]Batches:  47%|####6     | 40/86 [00:05<00:05,  8.54it/s]Batches:  48%|####7     | 41/86 [00:05<00:05,  8.59it/s]Batches:  49%|####8     | 42/86 [00:05<00:05,  8.56it/s]Batches:  50%|#####     | 43/86 [00:06<00:05,  8.47it/s]Batches:  51%|#####1    | 44/86 [00:06<00:04,  8.60it/s]Batches:  52%|#####2    | 45/86 [00:06<00:04,  8.62it/s]Batches:  53%|#####3    | 46/86 [00:06<00:04,  8.66it/s]Batches:  55%|#####4    | 47/86 [00:06<00:04,  8.84it/s]Batches:  56%|#####5    | 48/86 [00:06<00:04,  8.91it/s]Batches:  57%|#####6    | 49/86 [00:06<00:04,  8.96it/s]Batches:  58%|#####8    | 50/86 [00:06<00:03,  9.04it/s]Batches:  59%|#####9    | 51/86 [00:06<00:03,  8.96it/s]Batches:  60%|######    | 52/86 [00:07<00:03,  9.06it/s]Batches:  62%|######1   | 53/86 [00:07<00:03,  9.15it/s]Batches:  63%|######2   | 54/86 [00:07<00:03,  9.20it/s]Batches:  64%|######3   | 55/86 [00:07<00:03,  9.23it/s]Batches:  65%|######5   | 56/86 [00:07<00:03,  9.16it/s]Batches:  66%|######6   | 57/86 [00:07<00:03,  9.13it/s]Batches:  67%|######7   | 58/86 [00:07<00:03,  9.22it/s]Batches:  69%|######8   | 59/86 [00:07<00:02,  9.15it/s]INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:39:38 UTC)" (scheduled at 2025-09-24 02:39:28.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:39:38 UTC)" executed successfully
+Batches:  70%|######9   | 60/86 [00:07<00:03,  7.86it/s]Batches:  71%|#######   | 61/86 [00:08<00:03,  8.01it/s]Batches:  72%|#######2  | 62/86 [00:08<00:02,  8.37it/s]Batches:  73%|#######3  | 63/86 [00:08<00:02,  8.53it/s]Batches:  74%|#######4  | 64/86 [00:08<00:02,  8.72it/s]Batches:  76%|#######5  | 65/86 [00:08<00:02,  8.75it/s]Batches:  77%|#######6  | 66/86 [00:08<00:02,  8.75it/s]Batches:  78%|#######7  | 67/86 [00:08<00:02,  8.80it/s]Batches:  79%|#######9  | 68/86 [00:08<00:02,  8.76it/s]Batches:  80%|########  | 69/86 [00:09<00:01,  8.58it/s]Batches:  81%|########1 | 70/86 [00:09<00:01,  8.75it/s]Batches:  83%|########2 | 71/86 [00:09<00:01,  8.83it/s]Batches:  84%|########3 | 72/86 [00:09<00:01,  9.00it/s]Batches:  85%|########4 | 73/86 [00:09<00:01,  8.96it/s]Batches:  86%|########6 | 74/86 [00:09<00:01,  9.14it/s]Batches:  87%|########7 | 75/86 [00:09<00:01,  9.16it/s]Batches:  88%|########8 | 76/86 [00:09<00:01,  9.38it/s]INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+Batches:  91%|######### | 78/86 [00:09<00:00,  9.92it/s]Batches:  93%|#########3| 80/86 [00:10<00:00, 10.28it/s]Batches:  95%|#########5| 82/86 [00:10<00:00, 10.53it/s]Batches:  98%|#########7| 84/86 [00:10<00:00, 10.64it/s]Batches: 100%|##########| 86/86 [00:10<00:00, 11.73it/s]Batches: 100%|##########| 86/86 [00:10<00:00,  8.09it/s]
+INFO:__main__:\U0001f3af Creating query embedding for: '<think>
+
+</think>
+
+sql injection vulnerability check'
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|##########| 1/1 [00:00<00:00, 63.17it/s]
+INFO:__main__:\U0001f4ca Calculating similarity scores...
+INFO:__main__:\u2705 RAG search completed. Found 15 relevant logs
+INFO:__main__:\U0001f4c8 Similarity scores range: 0.398 to 0.366
+[09/24/25 09:39:31] INFO     Server log: 🔎 Searching Wazuh       logging.py:40
+                             archives (last 7 days)...                         
+                    INFO     Server log: 📊 Found 15 relevant     logging.py:40
+                             logs                                              
+                    INFO     Server log: ✅ RAG search completed  logging.py:40
+                             - returning raw data                              
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+INFO:src.api.mcp_tool_bridge:Tool check_wazuh_log executed successfully
+INFO:__main__:Tool check_wazuh_log executed successfully
+INFO:__main__:Tool content preview: {
+  "user_request": "check for SQL injection attacks",
+  "search_query": "<think>\n\n</think>\n\nsql injection vulnerability check",
+  "days_searched": 7,
+  "total_logs_found": 15,
+  "top_logs": [
+   ...
+INFO:__main__:Getting final response from LM Studio after tool execution...
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:Final response received from LM Studio
+INFO:__main__:Message cleaned from think tags. Original length: 3452, Cleaned length: 1945
+INFO:__main__:Saving assistant message to database...
+INFO:__main__:Message saved to database successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+WARNING:apscheduler.executors.default:Run time of job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:40:08 UTC)" was missed by 0:00:03.155434
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:Response sent successfully to Telegram
+INFO:__main__:Chat processing complete. Response length: 1945 characters
+INFO:__main__:✅ Question answered for user 1033102340
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:40:18 UTC)" (scheduled at 2025-09-24 02:40:08.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:40:18 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:40:28 UTC)" (scheduled at 2025-09-24 02:40:18.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:40:28 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:40:38 UTC)" (scheduled at 2025-09-24 02:40:28.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:40:38 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:src.webapp.webapp_chatbot:Tools already loaded for session 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 (58 tools)
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendChatAction "HTTP/1.1 200 OK"
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Using MODIFIED async-compatible system for Telegram bot
+INFO:__main__:=== PROCESSING MESSAGE FOR SESSION 86cb8b7d-5179-4c56-9142-330a0f1c4bb2 ===
+INFO:__main__:Session has 14 messages
+INFO:__main__:Available MCP tools: 58
+INFO:__main__:Sending request to LM Studio: http://192.168.56.1:1234/v1
+INFO:__main__:Model: qwen/qwen3-1.7b
+INFO:httpx:HTTP Request: POST http://192.168.56.1:1234/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:__main__:LM Studio response received successfully
+INFO:__main__:No tool calls - processing regular response
+INFO:__main__:Saving regular response to database...
+INFO:__main__:Response saved to database successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+WARNING:apscheduler.executors.default:Run time of job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:18 UTC)" was missed by 0:00:07.050432
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:Response sent successfully to Telegram
+INFO:__main__:Chat processing complete. Response length: 1834 characters
+INFO:__main__:✅ Question answered for user 1033102340
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:28 UTC)" (scheduled at 2025-09-24 02:41:18.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:28 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:38 UTC)" (scheduled at 2025-09-24 02:41:28.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:38 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:48 UTC)" (scheduled at 2025-09-24 02:41:38.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:48 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 409 Conflict"
+ERROR:telegram.ext.Updater:Exception happened while polling for updates.
+Traceback (most recent call last):
+  File "C:\Users\risqu\Desktop\LMS MCP\src\telegram\telegram_security_bot.py", line 1311, in main
+    loop = asyncio.get_running_loop()
+RuntimeError: no running event loop
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 122, in network_retry_loop
+    await do_action()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_utils\networkloop.py", line 115, in do_action
+    action_cb_task.result()
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_updater.py", line 340, in polling_action_cb
+    updates = await self.bot.get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 676, in get_updates
+    updates = await super().get_updates(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 4780, in get_updates
+    await self._post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 703, in _post
+    return await self._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\ext\_extbot.py", line 372, in _do_post
+    return await super()._do_post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\_bot.py", line 732, in _do_post
+    result = await request.post(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 198, in post
+    result = await self._request_wrapper(
+  File "C:\Users\risqu\AppData\Local\Programs\Python\Python310\lib\site-packages\telegram\request\_baserequest.py", line 375, in _request_wrapper
+    raise exception
+telegram.error.Conflict: Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:58 UTC)" (scheduled at 2025-09-24 02:41:48.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:41:58 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:08 UTC)" (scheduled at 2025-09-24 02:41:58.768022+00:00)
+INFO:__main__:🚨 Found 1 NEW UNIQUE events (rule level 5+, duplicates filtered)
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/sendMessage "HTTP/1.1 200 OK"
+INFO:__main__:✅ Alert sent to user 1033102340 with full log details
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:08 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:18 UTC)" (scheduled at 2025-09-24 02:42:08.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:18 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:28 UTC)" (scheduled at 2025-09-24 02:42:18.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:28 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:38 UTC)" (scheduled at 2025-09-24 02:42:28.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:38 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"
+INFO:apscheduler.executors.default:Running job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:48 UTC)" (scheduled at 2025-09-24 02:42:38.768022+00:00)
+INFO:apscheduler.executors.default:Job "realtime_alert_monitoring (trigger: interval[0:00:10], next run at: 2025-09-24 02:42:48 UTC)" executed successfully
+INFO:httpx:HTTP Request: POST https://api.telegram.org/bot8289779353:AAG5TLJJP8JjwUJzQXMILAOG-7ufQA9ueM8/getUpdates "HTTP/1.1 200 OK"

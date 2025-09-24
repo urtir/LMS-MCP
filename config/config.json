@@ -2,7 +2,7 @@
   "meta": {
     "created": "2025-09-21T15:35:17.066149",
     "description": "LMS MCP Centralized Configuration",
-    "last_updated": "2025-09-24T09:09:34.761368",
+    "last_updated": "2025-09-24T09:35:42.787445",
     "version": "1.0"
   },
   "security": {
@@ -88,7 +88,8 @@
     "PDF_MARGIN_TOP": "72",
     "PDF_MAX_EVENTS_PER_PAGE": "50",
     "PDF_PAGE_SIZE": "A4",
-    "PDF_WATERMARK_TEXT": "LMS MCP Security Report"
+    "PDF_WATERMARK_TEXT": "LMS MCP Security Report",
+    "REPORT_TYPES": "daily,weekly,monthly,3day"
   },
   "ml_models": {
     "EMBEDDING_CACHE_SIZE": "1000",
