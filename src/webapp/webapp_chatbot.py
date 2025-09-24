@@ -701,27 +701,29 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
             # Get final response after tool execution
             logger.info("Getting final response from LM Studio after tool execution...")
             
-            # Check if tool result is already a complete JSON response
-            last_tool_result = tool_results[-1]["result"] if tool_results else None
-            if (last_tool_result and 
-                isinstance(last_tool_result, dict) and 
-                last_tool_result.get("status") == "success" and 
-                "content" in last_tool_result):
-                
-                # Tool returned structured response, use it directly
-                logger.info("Tool returned structured response - using directly without additional LLM call")
-                final_message = last_tool_result["content"]
-                logger.info(f"Final message from tool: {final_message[:200]}...")
-                
-            else:
-                # Tool returned simple result, get LLM interpretation
-                logger.info("Tool returned simple result - getting LLM interpretation")
-                final_response = client.chat.completions.create(
-                    model=MODEL,
-                    messages=session.get_messages()
-                )
-                final_message = final_response.choices[0].message.content
-                logger.info(f"Final message from LLM: {final_message[:200]}...")
+            # ALWAYS get LLM interpretation/formatting of tool results
+            # This ensures natural language response instead of raw tool output
+            logger.info("Getting LLM formatted response based on tool results")
+            final_response = client.chat.completions.create(
+                model=MODEL,
+                messages=session.get_messages()
+            )
+            full_response = final_response.choices[0].message.content
+            
+            # SEPARATE THINKING FROM FINAL RESPONSE
+            thinking = None
+            final_message = full_response
+            
+            # Extract thinking tags
+            import re
+            thinking_match = re.search(r'<think>(.*?)</think>', full_response, re.DOTALL | re.IGNORECASE)
+            if thinking_match:
+                thinking = thinking_match.group(1).strip()
+                # Remove thinking tags from final response
+                final_message = re.sub(r'<think>.*?</think>', '', full_response, flags=re.DOTALL | re.IGNORECASE).strip()
+            
+            logger.info(f"Final message from LLM: {final_message[:200] if final_message else 'None'}...")
+            logger.info(f"Thinking extracted: {len(thinking) if thinking else 0} characters")
             
             logger.info("Final response processed")
             logger.debug(f"Final message length: {len(final_message) if final_message else 0}")
@@ -742,7 +744,7 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
             response_data = {
                 "response": final_message,
                 "tool_calls": tool_results,
-                "thinking": None,  # Add thinking support
+                "thinking": thinking,  # NOW PROPERLY SEPARATED!
                 "session_id": session.session_id
             }
             
@@ -755,20 +757,35 @@ def process_chat_message(session: ChatSession, session_id: str) -> Dict[str, Any
         else:
             # No tool calls, regular response
             logger.info("No tool calls - processing regular response")
-            response_text = assistant_message.content
-            logger.debug(f"Response text: {response_text}")
+            full_response = assistant_message.content
+            logger.debug(f"Full response text: {full_response}")
             
-            session.add_message("assistant", response_text)
+            # SEPARATE THINKING FROM FINAL RESPONSE (even for non-tool responses)
+            thinking = None
+            final_message = full_response
+            
+            # Extract thinking tags
+            import re
+            thinking_match = re.search(r'<think>(.*?)</think>', full_response, re.DOTALL | re.IGNORECASE)
+            if thinking_match:
+                thinking = thinking_match.group(1).strip()
+                # Remove thinking tags from final response
+                final_message = re.sub(r'<think>.*?</think>', '', full_response, flags=re.DOTALL | re.IGNORECASE).strip()
+            
+            logger.info(f"Thinking extracted: {len(thinking) if thinking else 0} characters")
+            logger.info(f"Final message: {len(final_message) if final_message else 0} characters")
+            
+            session.add_message("assistant", final_message)
             
             # Save assistant message to database
             logger.info("Saving regular response to database...")
-            db.add_message(session_id, "assistant", response_text)
+            db.add_message(session_id, "assistant", final_message)
             logger.info("Response saved to database successfully")
             
             return {
-                "response": response_text,
+                "response": final_message,
                 "tool_calls": [],
-                "thinking": None,  # Add thinking support
+                "thinking": thinking,  # NOW PROPERLY SEPARATED!
                 "session_id": session.session_id
             }
     

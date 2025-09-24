@@ -26,7 +26,7 @@ config = ConfigManager()
 
 # Configure logging - NO FALLBACKS!
 LOG_DIR = config.get('database.LOG_DIR')
-WAZUH_REALTIME_LOG = config.get('logs.WAZUH_REALTIME_LOG', 'wazuh_realtime.log')  # This can have fallback as it's just filename
+WAZUH_REALTIME_LOG = config.get('logs.WAZUH_REALTIME_LOG')
 log_path = os.path.join(LOG_DIR, WAZUH_REALTIME_LOG)
 
 # Ensure absolute path
@@ -318,8 +318,8 @@ class WazuhDockerClient:
     def __init__(self):
         self.docker_client = None
         self.wazuh_container = None
-        self.container_name = config.get('network.DOCKER_CONTAINER_NAME', "single-node-wazuh.manager-1")
-        self.archives_path = config.get('network.WAZUH_ARCHIVES_PATH', "/var/ossec/logs/archives/archives.json")
+        self.container_name = config.get('network.DOCKER_CONTAINER_NAME')
+        self.archives_path = config.get('network.WAZUH_ARCHIVES_PATH')
         # Remove file position tracking - we'll use tail for newest records only
         
         self.connect_docker()
@@ -551,8 +551,8 @@ class WazuhRealtimeServer:
 
 def main():
     """Main entry point."""
-    container_name = config.get('network.DOCKER_CONTAINER_NAME', "single-node-wazuh.manager-1")
-    archives_path = config.get('network.WAZUH_ARCHIVES_PATH', "/var/ossec/logs/archives/archives.json")
+    container_name = config.get('network.DOCKER_CONTAINER_NAME')
+    archives_path = config.get('network.WAZUH_ARCHIVES_PATH')
     
     print("="*60)
     print("WAZUH REAL-TIME DATA FETCHER TO SQLITE3")
@@ -562,8 +562,8 @@ def main():
     # Calculate database path using environment variables
     current_dir = Path(__file__).parent
     project_root = current_dir.parent.parent
-    database_dir = config.get('database.DATABASE_DIR', 'data')
-    wazuh_db_name = config.get('database.WAZUH_DB_NAME', 'wazuh_archives.db')
+    database_dir = config.get('database.DATABASE_DIR')
+    wazuh_db_name = config.get('database.WAZUH_DB_NAME')
     db_path = project_root / database_dir / wazuh_db_name
     print(f"Database: {db_path}")
     print("="*60)

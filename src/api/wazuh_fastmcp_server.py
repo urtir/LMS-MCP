@@ -451,14 +451,14 @@ async def check_wazuh_log(ctx: Context, user_prompt: str, days_range: int = 7) -
     Intelligent Wazuh log analysis using RAG (Retrieval-Augmented Generation).
     
     This tool analyzes user requests and searches Wazuh archives for relevant security logs.
-    It uses LLM to generate optimal search queries and provides human-readable analysis.
+    It uses LLM to generate optimal search queries and returns raw data for webapp formatting.
     
     Args:
         user_prompt: User's security question or analysis request
         days_range: Number of days to search back (default: 7)
         
     Returns:
-        Comprehensive security analysis based on relevant Wazuh logs
+        Raw JSON data containing search results and log analysis (webapp will format with LLM)
     """
     
     if not OPENAI_AVAILABLE or not lm_client:
@@ -477,7 +477,7 @@ async def check_wazuh_log(ctx: Context, user_prompt: str, days_range: int = 7) -
         # Step 1: Generate optimal search query using LLM
         await ctx.info("🧠 Generating search query with LLM...")
         
-        query_generation_prompt = f"""Generate ONLY security search keywords from this user request. Return EXACTLY one line with 3-5 keywords.
+        query_generation_prompt = f"""/no_think Generate ONLY ONE SENTENCE security search keywords from this user request. Return EXACTLY one line with 3-5 words.
 
 User request: "{user_prompt}"
 
@@ -498,57 +498,6 @@ Output only keywords (no quotes, no explanations):"""
         )
         
         generated_query = query_response.choices[0].message.content.strip()
-        
-        # Remove any quotes or extra formatting
-        generated_query = generated_query.replace('"', '').replace("'", '').strip()
-        
-        # Enhanced cleanup - handle thinking tags and multi-line responses
-        if '<think>' in generated_query or '</' in generated_query:
-            # Remove thinking tags
-            import re
-            generated_query = re.sub(r'<think>.*?</think>', '', generated_query, flags=re.DOTALL)
-            generated_query = generated_query.strip()
-        
-        # If multi-line response, take the best line
-        if '\n' in generated_query:
-            lines = [line.strip() for line in generated_query.split('\n') if line.strip()]
-            # Find line that looks like keywords (3-10 words, no common phrases)
-            for line in lines:
-                words = line.split()
-                if (3 <= len(words) <= 10 and 
-                    not line.lower().startswith(("okay", "let", "the user", "output", "keywords")) and
-                    not any(phrase in line.lower() for phrase in ["tackle this", "lets", "i would", "here are"])):
-                    generated_query = line
-                    break
-            else:
-                # Use first reasonable line as fallback
-                generated_query = lines[0] if lines else "security log analysis"
-        
-        # Additional cleanup for common LLM artifacts
-        generated_query = generated_query.replace("Output:", "").replace("Keywords:", "").strip()
-        
-        # Fallback for specific user input
-        if not generated_query or len(generated_query) < 3:
-            if "sql injection" in user_prompt.lower():
-                generated_query = "SQL injection vulnerability attack"
-            elif "brute force" in user_prompt.lower():
-                generated_query = "brute force authentication login"
-            elif "malware" in user_prompt.lower():
-                generated_query = "malware virus detection"
-            else:
-                generated_query = "security vulnerability attack"
-        
-        # Validate query is reasonable length
-        if len(generated_query) > 100:
-            # Truncate to first reasonable part
-            words = generated_query.split()[:8]  # Take first 8 words max
-            generated_query = " ".join(words)
-        
-        # Final validation
-        if not generated_query or len(generated_query) < 3:
-            raise ValueError(f"Generated query invalid: '{generated_query}'")
-            
-        await ctx.info(f"✅ Generated search query: '{generated_query}'")
         
         # Step 2: Search Wazuh archives using RAG
         await ctx.info(f"🔎 Searching Wazuh archives (last {days_range} days)...")
@@ -607,35 +556,23 @@ System will NOT provide fallback responses."""
             }
             logs_summary["top_logs"].append(log_summary)
         
-        # Step 4: Generate comprehensive analysis using LLM
-        await ctx.info("🤖 Generating security analysis with LLM...")
+        # Step 4: Return raw data for webapp to format
+        await ctx.info("✅ RAG search completed - returning raw data")
         
-        analysis_data = json.dumps(logs_summary, indent=2, ensure_ascii=False)
-        
-        # Format with LLM for final human-readable output
-        formatted_response = await format_with_llm(
-            raw_json=analysis_data,
-            tool_name="check_wazuh_log",
-            user_context=f"User meminta analisis keamanan: '{user_prompt}'. Ditemukan {len(rag_results)} log relevan dari pencarian '{generated_query}' dalam {days_range} hari terakhir.",
-            ctx=ctx
-        )
-        
-        await ctx.info("✅ Security analysis completed")
-        return formatted_response
+        # Return raw JSON data like other tools
+        return json.dumps(logs_summary, indent=2, ensure_ascii=False)
         
     except Exception as e:
         await ctx.error(f"Error in Wazuh log analysis: {e}")
-        return f"""❌ **Error dalam Analisis Log Wazuh**
-
-**Permintaan:** {user_prompt}
-**Error:** {str(e)}
-
-**Solusi:**
-- Periksa koneksi ke database Wazuh
-- Pastikan layanan LLM berjalan
-- Coba lagi dalam beberapa saat
-
-**Detail Error:** {type(e).__name__}"""
+        # Return error in JSON format for consistency
+        error_data = {
+            "error": "Wazuh log analysis failed",
+            "message": str(e),
+            "user_request": user_prompt,
+            "error_type": type(e).__name__,
+            "status": "failed"
+        }
+        return json.dumps(error_data, indent=2)
 
 # =============================================================================
 # API INFO & STATUS
@@ -645,17 +582,7 @@ System will NOT provide fallback responses."""
 async def get_api_info(ctx: Context) -> str:
     """Get Wazuh API basic information and status."""
     result = await make_api_request("GET", "/", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_api_info", 
-        user_context="User meminta informasi dasar dan status API Wazuh",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 # =============================================================================
 # AGENT MANAGEMENT TOOLS
@@ -702,25 +629,7 @@ async def list_agents(
         params["agents_list"] = agent_ids.split(",")
     
     result = await make_api_request("GET", "/agents", ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Create context for LLM
-    filter_context = []
-    if status: filter_context.append(f"status: {status}")
-    if os_platform: filter_context.append(f"platform: {os_platform}")
-    if search: filter_context.append(f"search: {search}")
-    
-    context = f"User meminta daftar Wazuh agents dengan filter: {', '.join(filter_context) if filter_context else 'tanpa filter'}"
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="list_agents",
-        user_context=context,
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def add_agent(
@@ -751,17 +660,7 @@ async def add_agent(
         params["force"] = force
     
     result = await make_api_request("POST", "/agents", ctx, params=params, data=data)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="add_agent",
-        user_context=f"User menambahkan agent baru dengan nama '{name}'" + (f" dan IP {ip}" if ip else ""),
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def delete_agents(
@@ -788,65 +687,31 @@ async def delete_agents(
         params["status"] = status
     
     result = await make_api_request("DELETE", "/agents", ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="delete_agents",
-        user_context="User menghapus agents dari sistem",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_agent_info(ctx: Context, agent_id: str) -> str:
     """Get detailed information about a specific agent."""
     result = await make_api_request("GET", f"/agents/{agent_id}", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_agent_info",
-        user_context=f"User meminta informasi detail agent ID {agent_id}",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_agent_key(ctx: Context, agent_id: str) -> str:
     """Get the key for a specific agent (used for agent registration)."""
     result = await make_api_request("GET", f"/agents/{agent_id}/key", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_agent_key",
-        user_context=f"User meminta key untuk agent ID {agent_id}",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def restart_agent(ctx: Context, agent_id: str) -> str:
-    """Restart a specific Wazuh agent."""
+    """
+    Restart a specific Wazuh agent using direct API call.
+    This is the standard way to restart agents.
+    
+    Args:
+        agent_id: ID of the agent to restart (e.g., '006', '001')
+    """
     result = await make_api_request("PUT", f"/agents/{agent_id}/restart", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="restart_agent",
-        user_context=f"User restart agent ID {agent_id}",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def restart_multiple_agents(ctx: Context, agent_ids: str) -> str:
@@ -858,17 +723,7 @@ async def restart_multiple_agents(ctx: Context, agent_ids: str) -> str:
     """
     params = {"agents_list": agent_ids.split(",")}
     result = await make_api_request("PUT", "/agents/restart", ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="restart_multiple_agents",
-        user_context=f"User restart multiple agents: {agent_ids}",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def upgrade_agents(
@@ -893,17 +748,7 @@ async def upgrade_agents(
         params["force"] = force
     
     result = await make_api_request("PUT", "/agents/upgrade", ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="upgrade_agents",
-        user_context=f"User upgrade agents: {agent_ids}" + (f" ke versi {upgrade_version}" if upgrade_version else ""),
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_agent_config(ctx: Context, agent_id: str, component: str, configuration: str) -> str:
@@ -917,33 +762,13 @@ async def get_agent_config(ctx: Context, agent_id: str, component: str, configur
     """
     endpoint = f"/agents/{agent_id}/config/{component}/{configuration}"
     result = await make_api_request("GET", endpoint, ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_agent_config",
-        user_context=f"User meminta konfigurasi agent {agent_id} untuk komponen {component}",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_agent_stats(ctx: Context, agent_id: str) -> str:
     """Get daemon statistics from a specific agent."""
     result = await make_api_request("GET", f"/agents/{agent_id}/daemons/stats", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_agent_stats",
-        user_context=f"User meminta statistik daemon agent {agent_id}",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 # =============================================================================
 # MANAGER OPERATIONS
@@ -953,33 +778,13 @@ async def get_agent_stats(ctx: Context, agent_id: str) -> str:
 async def get_manager_status(ctx: Context) -> str:
     """Get the status of all Wazuh manager daemons."""
     result = await make_api_request("GET", "/manager/status", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_manager_status",
-        user_context=f"User called get_manager_status function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_manager_info(ctx: Context) -> str:
     """Get basic information about the Wazuh manager."""
     result = await make_api_request("GET", "/manager/info", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_manager_info",
-        user_context=f"User called get_manager_info function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_manager_configuration(
@@ -1005,17 +810,7 @@ async def get_manager_configuration(
         params["raw"] = "true"
     
     result = await make_api_request("GET", "/manager/configuration", ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_manager_configuration",
-        user_context="User meminta konfigurasi Wazuh manager",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_manager_daemon_stats(ctx: Context, daemons: Optional[str] = None) -> str:
@@ -1030,17 +825,7 @@ async def get_manager_daemon_stats(ctx: Context, daemons: Optional[str] = None) 
         params["daemons_list"] = daemons.split(",")
     
     result = await make_api_request("GET", "/manager/daemons/stats", ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_manager_daemon_stats",
-        user_context="User meminta statistik daemon manager",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_manager_stats(ctx: Context, date: Optional[str] = None) -> str:
@@ -1056,17 +841,7 @@ async def get_manager_stats(ctx: Context, date: Optional[str] = None) -> str:
         params["date"] = date
     
     result = await make_api_request("GET", endpoint, ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_manager_stats",
-        user_context="User meminta statistik manager",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_manager_logs(
@@ -1097,65 +872,25 @@ async def get_manager_logs(
         params["search"] = search
     
     result = await make_api_request("GET", "/manager/logs", ctx, params=params)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_manager_logs",
-        user_context="User meminta log entries manager",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_manager_logs_summary(ctx: Context) -> str:
     """Get a summary of manager logs by level and tag."""
     result = await make_api_request("GET", "/manager/logs/summary", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_manager_logs_summary",
-        user_context=f"User called get_manager_logs_summary function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def restart_manager(ctx: Context) -> str:
     """Restart the Wazuh manager."""
     result = await make_api_request("PUT", "/manager/restart", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="restart_manager",
-        user_context=f"User called restart_manager function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def validate_configuration(ctx: Context) -> str:
     """Validate the current Wazuh configuration."""
     result = await make_api_request("GET", "/manager/configuration/validation", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="validate_configuration",
-        user_context=f"User called validate_configuration function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 # =============================================================================
 # ACTIVE RESPONSE
@@ -1169,12 +904,15 @@ async def run_active_response(
     arguments: Optional[str] = None
 ) -> str:
     """
-    Execute active response command on agents.
+    Execute active response commands on agents (ADVANCED - use restart_agent for simple restart).
+    This is for complex commands like firewall rules, not simple agent restart.
     
     Args:
         agent_ids: Comma-separated list of agent IDs
-        command: Command to execute (e.g., 'restart-wazuh', 'firewall-drop')
+        command: Active response command (e.g., 'firewall-drop', 'disable-account') 
         arguments: Command arguments (optional)
+        
+    Note: For simple agent restart, use 'restart_agent' tool instead.
     """
     data = {"command": command}
     
@@ -1184,17 +922,7 @@ async def run_active_response(
     params = {"agents_list": agent_ids.split(",")}
     
     result = await make_api_request("PUT", "/active-response", ctx, params=params, data=data)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="run_active_response",
-        user_context=f"User menjalankan active response command '{command}' pada agents {agent_ids}",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 # =============================================================================
 # CLUSTER MANAGEMENT
@@ -1204,17 +932,7 @@ async def run_active_response(
 async def get_cluster_status(ctx: Context) -> str:
     """Get the current cluster status."""
     result = await make_api_request("GET", "/cluster/status", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_cluster_status",
-        user_context=f"User called get_cluster_status function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_cluster_nodes(
@@ -1255,17 +973,7 @@ async def get_cluster_nodes(
 async def get_current_user(ctx: Context) -> str:
     """Get information about the current authenticated user."""
     result = await make_api_request("GET", "/security/users/me", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_current_user",
-        user_context=f"User called get_current_user function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def list_security_users(
@@ -1321,17 +1029,7 @@ async def list_security_policies(
 async def get_security_config(ctx: Context) -> str:
     """Get current security configuration."""
     result = await make_api_request("GET", "/security/config", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_security_config",
-        user_context=f"User called get_security_config function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 # =============================================================================
 # GROUPS MANAGEMENT
@@ -1456,17 +1154,7 @@ async def list_rules(
 async def get_rule_groups(ctx: Context) -> str:
     """Get all available rule groups."""
     result = await make_api_request("GET", "/rules/groups", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_rule_groups",
-        user_context=f"User called get_rule_groups function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_rules_files(
@@ -1847,17 +1535,7 @@ async def run_logtest(
 async def get_agents_overview(ctx: Context) -> str:
     """Get comprehensive overview of all agents."""
     result = await make_api_request("GET", "/overview/agents", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_agents_overview",
-        user_context=f"User called get_agents_overview function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 # =============================================================================
 # TASKS MANAGEMENT
@@ -1902,17 +1580,7 @@ async def get_tasks_status(
 async def get_mitre_metadata(ctx: Context) -> str:
     """Get MITRE ATT&CK metadata information."""
     result = await make_api_request("GET", "/mitre/metadata", ctx)
-    raw_json = json.dumps(result, indent=2)
-    
-    # Format with LLM
-    formatted_response = await format_with_llm(
-        raw_json=raw_json,
-        tool_name="get_mitre_metadata",
-        user_context=f"User called get_mitre_metadata function",
-        ctx=ctx
-    )
-    
-    return formatted_response
+    return json.dumps(result, indent=2)
 
 @mcp.tool
 async def get_mitre_techniques(

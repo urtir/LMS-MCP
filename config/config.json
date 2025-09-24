@@ -2,7 +2,7 @@
   "meta": {
     "created": "2025-09-21T15:35:17.066149",
     "description": "LMS MCP Centralized Configuration",
-    "last_updated": "2025-09-23T16:34:47.439045",
+    "last_updated": "2025-09-24T09:09:34.761368",
     "version": "1.0"
   },
   "security": {
@@ -32,11 +32,11 @@
     "AI_TEMPERATURE": "0.8",
     "EMBEDDING_DIMENSION": "384",
     "ESTIMATED_TOKENS_PER_LOG": "100",
-    "LARGE_BATCH_SIZE": "10000",
+    "LARGE_BATCH_SIZE": "64",
     "LM_STUDIO_API_KEY": "lm-studio",
     "LM_STUDIO_MODEL": "qwen/qwen3-1.7b",
     "MAX_LOG_LIMIT": "25000",
-    "SMALL_BATCH_SIZE": "3000",
+    "SMALL_BATCH_SIZE": "16",
     "SYSTEM_PROMPT_TOKENS": "2000"
   },
   "performance": {
@@ -129,5 +129,11 @@
     "WEEKLY_REPORT_ENABLED": "true",
     "WEEKLY_REPORT_RECIPIENTS": "admin,security_team,management",
     "WEEKLY_REPORT_TIME": "09:00"
+  },
+  "logs": {
+    "WAZUH_REALTIME_LOG": "wazuh_realtime.log",
+    "WEBAPP_CHATBOT_LOG": "webapp_chatbot.log",
+    "TELEGRAM_BOT_LOG": "telegram_bot.log",
+    "ADMIN_LOG": "admin.log"
   }
 }

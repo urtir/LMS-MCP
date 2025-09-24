@@ -25,6 +25,14 @@ sys.path.append(str(Path(__file__).parent.parent.parent))
 from config.config_manager import ConfigManager
 config = ConfigManager()
 
+def get_current_config_values():
+    """Get current values from config.json - NO DEFAULTS!"""
+    try:
+        return config.get_all()
+    except Exception as e:
+        logger.error(f"Failed to read config.json: {e}")
+        return {}
+
 # Configure logging dengan detail level
 logging.basicConfig(
     level=logging.INFO,
@@ -92,28 +100,24 @@ CONFIG_CATEGORIES = {
         "variables": {
             "version": {
                 "type": "text",
-                "default": "1.0",
                 "description": "System version number",
                 "required": False,
                 "readonly": True
             },
             "created": {
-                "type": "text", 
-                "default": "2025-09-21T15:35:17.066149",
+                "type": "text",
                 "description": "System creation timestamp",
                 "required": False,
                 "readonly": True
             },
             "last_updated": {
-                "type": "text",
-                "default": "2025-09-21T21:26:01.288209", 
+                "type": "text", 
                 "description": "Last configuration update timestamp",
                 "required": False,
                 "readonly": True
             },
             "description": {
                 "type": "text",
-                "default": "LMS MCP Centralized Configuration",
                 "description": "System description",
                 "required": False
             }
@@ -125,21 +129,18 @@ CONFIG_CATEGORIES = {
         "variables": {
             "FLASK_SECRET_KEY": {
                 "type": "password",
-                "default": "test-key-12345678901234567890123",
                 "description": "Flask session secret key - MUST be changed in production",
                 "required": True,
                 "validation": {"min_length": 32}
             },
             "TELEGRAM_BOT_TOKEN": {
-                "type": "password", 
-                "default": "YOUR_BOT_TOKEN_HERE",
+                "type": "password",
                 "description": "Telegram bot authentication token",
                 "required": True,
                 "validation": {"pattern": r"^\d+:[A-Za-z0-9_-]+$"}
             },
             "WAZUH_PASSWORD": {
                 "type": "password",
-                "default": "MyS3cr37P450r.*-",
                 "description": "Wazuh API authentication password",
                 "required": True,
                 "validation": {"min_length": 8}
@@ -151,28 +152,24 @@ CONFIG_CATEGORIES = {
         "description": "Network endpoints and connection settings",
         "variables": {
             "DOCKER_CONTAINER_NAME": {
-                "type": "text",
-                "default": "single-node-wazuh.manager-1", 
+                "type": "text", 
                 "description": "Docker container name for Wazuh Manager",
                 "required": True
             },
             "LM_STUDIO_BASE_URL": {
                 "type": "url",
-                "default": "http://192.168.56.1:1234/v1",
                 "description": "LM Studio API endpoint URL",
                 "required": True,
                 "validation": {"pattern": r"^https?://.*"}
             },
             "WAZUH_API_URL": {
-                "type": "url", 
-                "default": "https://localhost:55000",
+                "type": "url",
                 "description": "Wazuh Manager API URL",
                 "required": True,
                 "validation": {"pattern": r"^https?://.*"}
             },
             "WAZUH_ARCHIVES_PATH": {
                 "type": "text",
-                "default": "/var/ossec/logs/archives/archives.json",
                 "description": "Path to Wazuh archives JSON file",
                 "required": True
             }
@@ -184,20 +181,17 @@ CONFIG_CATEGORIES = {
         "variables": {
             "FLASK_DEBUG": {
                 "type": "boolean",
-                "default": "false",
                 "description": "Enable Flask debug mode (disable in production)",
                 "required": False
             },
             "FLASK_HOST": {
                 "type": "text",
-                "default": "127.0.0.1",
                 "description": "Flask server host address",
                 "required": True,
                 "validation": {"pattern": r"^(\d{1,3}\.){3}\d{1,3}$|^localhost$|^0\.0\.0\.0$"}
             },
             "FLASK_PORT": {
                 "type": "number",
-                "default": "5000",
                 "description": "Flask server port number",
                 "required": True,
                 "validation": {"min": 1024, "max": 65535}
@@ -209,26 +203,22 @@ CONFIG_CATEGORIES = {
         "description": "Database paths and connection settings", 
         "variables": {
             "CHAT_DB_NAME": {
-                "type": "text", 
-                "default": "chat_history.db",
+                "type": "text",
                 "description": "Chat history database filename",
                 "required": True
             },
             "DATABASE_DIR": {
                 "type": "text",
-                "default": "./data",
                 "description": "Directory path for database files",
                 "required": True
             },
             "LOG_DIR": {
                 "type": "text",
-                "default": "./logs",
                 "description": "Directory path for log files",
                 "required": False
             },
             "WAZUH_DB_NAME": {
                 "type": "text",
-                "default": "wazuh_archives.db",
                 "description": "Wazuh database filename",
                 "required": True
             }
@@ -240,68 +230,58 @@ CONFIG_CATEGORIES = {
         "variables": {
             "AI_MAX_TOKENS": {
                 "type": "number",
-                "default": "32768",
                 "description": "Maximum tokens for AI responses",
                 "required": False,
-                "validation": {"min": 100, "max": 100000}
+                "validation": {"min": 100, "max": 10000000000}
             },
             "AI_TEMPERATURE": {
                 "type": "number",
-                "default": "0.8",
                 "description": "AI model temperature (0.0-2.0)",
                 "required": False,
                 "validation": {"min": 0.0, "max": 2.0, "step": 0.1}
             },
             "LM_STUDIO_API_KEY": {
-                "type": "text",
-                "default": "lm-studio", 
+                "type": "text", 
                 "description": "LM Studio API authentication key",
                 "required": True
             },
             "LM_STUDIO_MODEL": {
                 "type": "text",
-                "default": "qwen/qwen3-1.7b",
                 "description": "LM Studio model identifier",
                 "required": True
             },
             "ESTIMATED_TOKENS_PER_LOG": {
                 "type": "number",
-                "default": "100",
                 "description": "Estimated tokens per log entry for calculations",
                 "required": False,
                 "validation": {"min": 50, "max": 500}
             },
             "SYSTEM_PROMPT_TOKENS": {
                 "type": "number",
-                "default": "2000",
                 "description": "Reserved tokens for system prompt",
                 "required": False,
                 "validation": {"min": 500, "max": 5000}
             },
             "MAX_LOG_LIMIT": {
                 "type": "number",
-                "default": "25000",
                 "description": "Maximum log entries for processing",
                 "required": False,
                 "validation": {"min": 1000, "max": 100000}
             },
             "SMALL_BATCH_SIZE": {
                 "type": "number",
-                "default": "5000",
                 "description": "Small batch size for memory management",
                 "required": False,
-                "validation": {"min": 1000, "max": 10000}
+                "validation": {"min": 0, "max": 10000}
             },
             "LARGE_BATCH_SIZE": {
                 "type": "number",
-                "default": "10000",
                 "description": "Large batch size for 64GB RAM systems",
                 "required": False,
-                "validation": {"min": 5000, "max": 50000}
+                "validation": {"min": 0, "max": 50000}
             },
             "EMBEDDING_DIMENSION": {
                 "type": "number",
-                "default": "384",
                 "description": "Vector embedding dimension size",
                 "required": False,
                 "validation": {"min": 128, "max": 1536}
@@ -313,71 +293,61 @@ CONFIG_CATEGORIES = {
         "description": "Performance limits and optimization settings",
         "variables": {
             "CACHE_BUILD_LIMIT": {
-                "type": "number",
-                "default": "10000", 
+                "type": "number", 
                 "description": "Maximum records for cache building",
                 "required": False,
                 "validation": {"min": 100, "max": 50000}
             },
             "DEFAULT_MAX_RESULTS": {
                 "type": "number",
-                "default": "100",
                 "description": "Default maximum search results",
                 "required": False,
                 "validation": {"min": 10, "max": 1000}
             },
             "MAX_LOG_LENGTH": {
                 "type": "number",
-                "default": "10000",
                 "description": "Maximum log text length for processing",
                 "required": False,
                 "validation": {"min": 100, "max": 50000}
             },
             "MAX_RAG_CONTENT": {
                 "type": "number",
-                "default": "20000",
                 "description": "Maximum RAG content length",
                 "required": False,
                 "validation": {"min": 500, "max": 100000}
             },
             "DEFAULT_DAYS_RANGE": {
                 "type": "number",
-                "default": "30",
                 "description": "Default time range for data queries",
                 "required": False,
                 "validation": {"min": 1, "max": 365}
             },
             "DEFAULT_SEARCH_K": {
                 "type": "number",
-                "default": "10",
                 "description": "Default number of semantic search results",
                 "required": False,
                 "validation": {"min": 5, "max": 100}
             },
             "DEFAULT_HYBRID_SEARCH_K": {
                 "type": "number",
-                "default": "20",
                 "description": "Default number of hybrid search results",
                 "required": False,
                 "validation": {"min": 10, "max": 200}
             },
             "TOOL_DAYS_RANGE": {
                 "type": "number",
-                "default": "7",
                 "description": "Default days range for tool operations",
                 "required": False,
                 "validation": {"min": 1, "max": 90}
             },
             "DEFAULT_TOOL_MAX_RESULTS": {
                 "type": "number",
-                "default": "15",
                 "description": "Default maximum results for tool operations",
                 "required": False,
                 "validation": {"min": 5, "max": 100}
             },
             "DEFAULT_TOOL_LIMIT": {
                 "type": "number",
-                "default": "100",
                 "description": "Default limit for tool data processing",
                 "required": False,
                 "validation": {"min": 10, "max": 1000}
@@ -390,63 +360,54 @@ CONFIG_CATEGORIES = {
         "variables": {
             "AGENT_ACTIVE_THRESHOLD": {
                 "type": "number",
-                "default": "100",
                 "description": "Minimum alerts to consider agent active",
                 "required": False,
                 "validation": {"min": 1, "max": 10000}
             },
             "CRITICAL_RULE_LEVEL": {
                 "type": "number",
-                "default": "10",
                 "description": "Minimum rule level considered critical",
                 "required": False,
                 "validation": {"min": 1, "max": 15}
             },
             "DEFAULT_DAYS_RANGE": {
                 "type": "number",
-                "default": "7",
                 "description": "Default time range in days for security queries",
                 "required": False, 
                 "validation": {"min": 1, "max": 365}
             },
             "EMERGENCY_RULE_LEVEL": {
                 "type": "number",
-                "default": "8",
                 "description": "Minimum rule level considered emergency",
                 "required": False,
                 "validation": {"min": 1, "max": 15}
             },
             "HIGH_RULE_LEVEL": {
-                "type": "number",
-                "default": "7", 
+                "type": "number", 
                 "description": "Minimum rule level considered high priority",
                 "required": False,
                 "validation": {"min": 1, "max": 15}
             },
             "MEDIUM_RULE_LEVEL": {
                 "type": "number",
-                "default": "4",
                 "description": "Minimum rule level considered medium priority",
                 "required": False,
                 "validation": {"min": 1, "max": 15}
             },
             "CRITICAL_SCORE": {
                 "type": "number",
-                "default": "0.8",
                 "description": "Relevance score threshold for critical alerts",
                 "required": False,
                 "validation": {"min": 0.0, "max": 1.0, "step": 0.1}
             },
             "HIGH_SCORE": {
                 "type": "number",
-                "default": "0.6",
                 "description": "Relevance score threshold for high priority alerts",
                 "required": False,
                 "validation": {"min": 0.0, "max": 1.0, "step": 0.1}
             },
             "MEDIUM_SCORE": {
                 "type": "number",
-                "default": "0.4",
                 "description": "Relevance score threshold for medium priority alerts",
                 "required": False,
                 "validation": {"min": 0.0, "max": 1.0, "step": 0.1}
@@ -459,20 +420,17 @@ CONFIG_CATEGORIES = {
         "variables": {
             "WAZUH_TIMEOUT": {
                 "type": "number",
-                "default": "30",
                 "description": "Wazuh API request timeout in seconds",
                 "required": False,
                 "validation": {"min": 5, "max": 300}
             },
             "WAZUH_USERNAME": {
                 "type": "text",
-                "default": "wazuh-wui",
                 "description": "Wazuh API username",
                 "required": True
             },
             "WAZUH_VERIFY_SSL": {
-                "type": "boolean", 
-                "default": "false",
+                "type": "boolean",
                 "description": "Verify SSL certificates for Wazuh API",
                 "required": False
             }
@@ -484,42 +442,36 @@ CONFIG_CATEGORIES = {
         "variables": {
             "DAILY_MAX_EVENTS": {
                 "type": "number",
-                "default": "50",
                 "description": "Maximum events in daily reports",
                 "required": False,
                 "validation": {"min": 10, "max": 1000}
             },
             "MONTHLY_MAX_EVENTS": {
                 "type": "number",
-                "default": "500",
                 "description": "Maximum events in monthly reports",
                 "required": False,
                 "validation": {"min": 100, "max": 5000}
             },
             "PDF_BODY_FONT_SIZE": {
                 "type": "number",
-                "default": "12",
                 "description": "PDF report body font size",
                 "required": False,
                 "validation": {"min": 8, "max": 24}
             },
             "PDF_TITLE_FONT_SIZE": {
                 "type": "number",
-                "default": "24",
                 "description": "PDF report title font size",
                 "required": False,
                 "validation": {"min": 12, "max": 48}
             },
             "THREE_DAY_MAX_EVENTS": {
                 "type": "number",
-                "default": "100",
                 "description": "Maximum events in 3-day trend reports",
                 "required": False,
                 "validation": {"min": 25, "max": 1500}
             },
             "WEEKLY_MAX_EVENTS": {
                 "type": "number",
-                "default": "200",
                 "description": "Maximum events in weekly reports", 
                 "required": False,
                 "validation": {"min": 50, "max": 2000}
@@ -532,26 +484,22 @@ CONFIG_CATEGORIES = {
         "variables": {
             "WAZUH_REALTIME_ENABLED": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable Wazuh realtime database fetching service",
                 "required": False
             },
             "TELEGRAM_BOT_ENABLED": {
-                "type": "boolean", 
-                "default": "true",
+                "type": "boolean",
                 "description": "Enable Telegram security bot service",
                 "required": False
             },
             "REALTIME_FETCH_INTERVAL": {
                 "type": "number",
-                "default": "5",
                 "description": "Wazuh realtime fetching interval in seconds",
                 "required": False,
                 "validation": {"min": 1, "max": 60}
             },
             "ALERT_CHECK_INTERVAL": {
-                "type": "number",
-                "default": "10", 
+                "type": "number", 
                 "description": "Telegram alert monitoring interval in seconds",
                 "required": False,
                 "validation": {"min": 5, "max": 300}
@@ -564,20 +512,17 @@ CONFIG_CATEGORIES = {
         "variables": {
             "SENTENCE_TRANSFORMER_MODEL": {
                 "type": "text",
-                "default": "all-MiniLM-L6-v2",
                 "description": "SentenceTransformer model for embeddings",
                 "required": True
             },
             "ML_DEVICE": {
                 "type": "select",
-                "default": "cuda",
                 "description": "Device for ML computations (cuda/cpu/auto)",
                 "required": False,
                 "options": ["cuda", "cpu", "auto"]
             },
             "EMBEDDING_CACHE_SIZE": {
                 "type": "number",
-                "default": "1000",
                 "description": "Maximum number of cached embeddings",
                 "required": False,
                 "validation": {"min": 100, "max": 10000}
@@ -590,27 +535,23 @@ CONFIG_CATEGORIES = {
         "variables": {
             "FASTMCP_MODULE": {
                 "type": "text",
-                "default": "src.api.wazuh_fastmcp_server",
                 "description": "FastMCP server module path",
                 "required": True
             },
             "FASTMCP_HOST": {
                 "type": "text",
-                "default": "localhost",
                 "description": "FastMCP server host address",
                 "required": True,
                 "validation": {"pattern": r"^(\d{1,3}\.){3}\d{1,3}$|^localhost$|^0\.0\.0\.0$"}
             },
             "FASTMCP_PORT": {
                 "type": "number",
-                "default": "3000",
                 "description": "FastMCP server port number",
                 "required": True,
                 "validation": {"min": 1024, "max": 65535}
             },
             "FASTMCP_TIMEOUT": {
                 "type": "number",
-                "default": "30",
                 "description": "FastMCP request timeout in seconds",
                 "required": False,
                 "validation": {"min": 5, "max": 300}
@@ -623,46 +564,39 @@ CONFIG_CATEGORIES = {
         "variables": {
             "ENABLE_REALTIME_ALERTS": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable real-time security alerts",
                 "required": False
             },
             "ALERT_COOLDOWN_SECONDS": {
                 "type": "number",
-                "default": "300",
                 "description": "Cooldown period between same alerts (seconds)",
                 "required": False,
                 "validation": {"min": 60, "max": 3600}
             },
             "MAX_ALERTS_PER_HOUR": {
                 "type": "number",
-                "default": "20",
                 "description": "Maximum alerts per hour to prevent spam",
                 "required": False,
                 "validation": {"min": 1, "max": 100}
             },
             "ENABLE_ADMIN_COMMANDS": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable administrative commands",
                 "required": False
             },
             "ENABLE_USER_COMMANDS": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable user-level commands",
                 "required": False
             },
             "COMMAND_TIMEOUT_SECONDS": {
                 "type": "number",
-                "default": "30",
                 "description": "Command execution timeout (seconds)",
                 "required": False,
                 "validation": {"min": 5, "max": 300}
             },
             "MAX_CONCURRENT_COMMANDS": {
                 "type": "number",
-                "default": "5",
                 "description": "Maximum concurrent command executions",
                 "required": False,
                 "validation": {"min": 1, "max": 20}
@@ -675,77 +609,65 @@ CONFIG_CATEGORIES = {
         "variables": {
             "DAILY_REPORT_TIME": {
                 "type": "text",
-                "default": "08:00",
                 "description": "Daily report time (HH:MM format)",
                 "required": False,
                 "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
             },
             "DAILY_REPORT_ENABLED": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable daily reports",
                 "required": False
             },
             "DAILY_REPORT_RECIPIENTS": {
                 "type": "text",
-                "default": "admin,security_team",
                 "description": "Daily report recipients (comma-separated)",
                 "required": False
             },
             "THREE_DAILY_REPORT_TIME": {
                 "type": "text",
-                "default": "20:00",
                 "description": "Three-day report time (HH:MM format)",
                 "required": False,
                 "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
             },
             "THREE_DAILY_REPORT_ENABLED": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable three-day reports",
                 "required": False
             },
             "THREE_DAILY_REPORT_RECIPIENTS": {
                 "type": "text",
-                "default": "admin,security_team",
                 "description": "Three-day report recipients (comma-separated)",
                 "required": False
             },
             "WEEKLY_REPORT_TIME": {
                 "type": "text",
-                "default": "09:00",
                 "description": "Weekly report time (HH:MM format)",
                 "required": False,
                 "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
             },
             "WEEKLY_REPORT_ENABLED": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable weekly reports",
                 "required": False
             },
             "WEEKLY_REPORT_RECIPIENTS": {
                 "type": "text",
-                "default": "admin,security_team,management",
                 "description": "Weekly report recipients (comma-separated)",
                 "required": False
             },
             "MONTHLY_REPORT_TIME": {
                 "type": "text",
-                "default": "10:00",
                 "description": "Monthly report time (HH:MM format)",
                 "required": False,
                 "validation": {"pattern": r"^([01]?[0-9]|2[0-3]):[0-5][0-9]$"}
             },
             "MONTHLY_REPORT_ENABLED": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Enable monthly reports",
                 "required": False
             },
             "MONTHLY_REPORT_RECIPIENTS": {
                 "type": "text",
-                "default": "admin,security_team,management",
                 "description": "Monthly report recipients (comma-separated)",
                 "required": False
             }
@@ -757,87 +679,74 @@ CONFIG_CATEGORIES = {
         "variables": {
             "PDF_MAX_EVENTS_PER_PAGE": {
                 "type": "number",
-                "default": "50",
                 "description": "Maximum events per PDF page",
                 "required": False,
                 "validation": {"min": 10, "max": 200}
             },
             "PDF_INCLUDE_CHARTS": {
                 "type": "boolean",
-                "default": "true",
                 "description": "Include charts and graphs in PDF reports",
                 "required": False
             },
             "PDF_WATERMARK_TEXT": {
                 "type": "text",
-                "default": "LMS MCP Security Report",
                 "description": "Watermark text for PDF reports",
                 "required": False
             },
             "PDF_COMPRESSION_LEVEL": {
                 "type": "number",
-                "default": "6",
                 "description": "PDF compression level (0-9, higher = smaller file)",
                 "required": False,
                 "validation": {"min": 0, "max": 9}
             },
             "PDF_HEADER_FONT_SIZE": {
                 "type": "number",
-                "default": "14",
                 "description": "PDF header font size",
                 "required": False,
                 "validation": {"min": 8, "max": 24}
             },
             "PDF_PAGE_SIZE": {
                 "type": "select",
-                "default": "A4",
                 "description": "PDF page size format",
                 "required": False,
                 "options": ["A4", "Letter", "Legal", "A3", "A5"]
             },
             "PDF_MARGIN_TOP": {
                 "type": "number",
-                "default": "72",
                 "description": "PDF top margin (points)",
                 "required": False,
                 "validation": {"min": 36, "max": 144}
             },
             "PDF_MARGIN_BOTTOM": {
                 "type": "number",
-                "default": "72",
                 "description": "PDF bottom margin (points)",
                 "required": False,
                 "validation": {"min": 36, "max": 144}
             },
             "PDF_MARGIN_LEFT": {
                 "type": "number",
-                "default": "72",
                 "description": "PDF left margin (points)",
                 "required": False,
                 "validation": {"min": 36, "max": 144}
             },
             "PDF_MARGIN_RIGHT": {
                 "type": "number",
-                "default": "72",
                 "description": "PDF right margin (points)",
                 "required": False,
                 "validation": {"min": 36, "max": 144}
             },
             "CHART_COLORS": {
                 "type": "text",
-                "default": "#FF6B6B,#4ECDC4,#45B7D1,#96CEB4,#FFEAA7",
                 "description": "Chart colors (comma-separated hex codes)",
                 "required": False
             },
             "EXPORT_FORMATS": {
                 "type": "text",
-                "default": "pdf,json,csv",
                 "description": "Supported export formats (comma-separated)",
                 "required": False
             },
             "MAX_ALERTS_PER_REPORT": {
                 "type": "number",
-                "default": "1000",
                 "description": "Maximum alerts per report",
                 "required": False,
                 "validation": {"min": 100, "max": 10000}
@@ -1238,7 +1147,8 @@ def get_config():
     """Get current configuration"""
     try:
         logger.info(f"Admin {current_user.username} requesting configuration")
-        current_config = load_current_config()
+        # Get current config values from config.json - NO DEFAULTS!
+        current_config = get_current_config_values()
         
         # Structure the response with categories
         result = {}
@@ -1250,13 +1160,17 @@ def get_config():
                 'variables': {}
             }
             
-            # Get current values from JSON config
+            # Get current values from JSON config - REQUIRE ALL VALUES
             category_data = current_config.get(category_id, {})
             
             for var_name, var_info in category['variables'].items():
+                current_value = category_data.get(var_name)
+                if current_value is None:
+                    logger.error(f"MISSING CONFIG: {category_id}.{var_name}")
+                
                 result[category_id]['variables'][var_name] = {
-                    **var_info,
-                    'current_value': category_data.get(var_name, var_info['default'])
+                    **{k: v for k, v in var_info.items() if k != 'default'},  # Remove default key
+                    'current_value': current_value if current_value is not None else f"MISSING: {category_id}.{var_name}"
                 }
         
         logger.info("Configuration retrieved successfully")
@@ -1424,37 +1338,9 @@ def delete_category(category):
 @login_required
 @admin_required
 def delete_variable(category, variable):
-    """Delete specific configuration variable (reset to default)"""
-    try:
-        logger.info(f"Admin {current_user.username} deleting variable: {category}.{variable}")
-        
-        if category not in CONFIG_CATEGORIES:
-            logger.warning(f"Invalid category for variable deletion: {category}")
-            return jsonify({'success': False, 'error': 'Invalid category'}), 400
-        
-        if variable not in CONFIG_CATEGORIES[category]['variables']:
-            logger.warning(f"Invalid variable deletion attempt: {category}.{variable}")
-            return jsonify({'success': False, 'error': 'Invalid variable'}), 400
-        
-        # Reset to default value
-        default_value = CONFIG_CATEGORIES[category]['variables'][variable]['default']
-        config.set(f"{category}.{variable}", default_value)
-        
-        logger.info(f"Variable {category}.{variable} reset to default successfully by {current_user.username}")
-        
-        return jsonify({
-            'success': True,
-            'message': f'Variable {variable} reset to default'
-        })
-    
-    except Exception as e:
-        logger.error(f"ADMIN ERROR - Failed to delete variable {category}.{variable} for user {current_user.username}: {e}")
-        logger.error(f"Exception type: {type(e).__name__}")
-        logger.error(f"Error details: {str(e)}")
-        return jsonify({
-            'success': False,
-            'error': str(e)
-        }), 500
+    """Delete specific configuration variable - DISABLED (NO DEFAULTS)"""
+    logger.warning(f"Admin {current_user.username} attempted to delete variable: {category}.{variable} - DENIED")
+    return jsonify({'success': False, 'error': 'Variable deletion disabled - no default values exist'}), 400
 
 @admin_bp.route('/api/backup', methods=['POST'])
 @login_required
