@@ -69,8 +69,11 @@ class SecurityReportGenerator:
         return conn
     
     def _get_time_range_sql(self, start_time: datetime, end_time: datetime) -> Tuple[str, List]:
-        """Generate SQL time range filter"""
-        return "timestamp BETWEEN ? AND ?", [
+        """Generate SQL time range filter compatible with ISO timestamps."""
+        # Stored timestamps look like 2025-11-02T04:09:04.730+0000
+        # Normalise to "YYYY-MM-DD HH:MM:SS" for comparison
+        time_expr = "datetime(replace(substr(timestamp, 1, 19), 'T', ' ')) BETWEEN ? AND ?"
+        return time_expr, [
             start_time.strftime('%Y-%m-%d %H:%M:%S'),
             end_time.strftime('%Y-%m-%d %H:%M:%S')
         ]

@@ -57,15 +57,15 @@ class TelegramBotConfig:
             'name': '📊 Daily Summary Report',
             'description': 'Summary of last 24 hours security events',
             'emoji': '📊',
-            'priority_levels': [7, 8, 9, 10],  # Critical and High
+            'priority_levels': list(range(5, 17)),  # Rule levels 5-16
             'read_all_events': False,
             'max_events': int(config.get('reports.DAILY_MAX_EVENTS', '100'))
         },
         'three_daily': {
-            'name': '� 3-Day Trend Report', 
+            'name': '� 3-Day Trend Report',
             'description': 'Security trends over last 3 days',
             'emoji': '📈',
-            'priority_levels': [6, 7, 8, 9, 10],  # Medium and above
+            'priority_levels': list(range(5, 17)),  # Rule levels 5-16
             'read_all_events': True,
             'max_events': int(config.get('reports.THREE_DAY_MAX_EVENTS', '300'))
         },
@@ -73,7 +73,7 @@ class TelegramBotConfig:
             'name': '� Weekly Summary Report',
             'description': 'Weekly security overview',
             'emoji': '📅',
-            'priority_levels': [7, 8, 9, 10],  # Critical and High
+            'priority_levels': list(range(5, 17)),  # Rule levels 5-16
             'read_all_events': False,
             'max_events': int(config.get('reports.WEEKLY_MAX_EVENTS', '500'))
         },
@@ -81,7 +81,7 @@ class TelegramBotConfig:
             'name': '📈 Monthly Security Overview',
             'description': 'Comprehensive monthly security overview',
             'emoji': '📈',
-            'priority_levels': [6, 7, 8, 9, 10],  # Medium and above
+            'priority_levels': list(range(5, 17)),  # Rule levels 5-16
             'read_all_events': True,
             'max_events': int(config.get('reports.MONTHLY_MAX_EVENTS', '1000'))
         }

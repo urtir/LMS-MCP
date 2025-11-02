@@ -14,7 +14,7 @@ import sys
 import matplotlib.pyplot as plt
 import pandas as pd
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4, letter
+from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
@@ -23,7 +23,16 @@ from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.charts.piecharts import Pie
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 import base64
+
+# Design constants
+BASE_UNIT = 8  # Core spacing/font step size
+TITLE_FONT_SIZE = BASE_UNIT * 4  # 32pt
+SECTION_FONT_SIZE = BASE_UNIT * 3  # 24pt
+SUBSECTION_FONT_SIZE = BASE_UNIT * 2  # 16pt
+BODY_FONT_SIZE = BASE_UNIT * 1.5  # 12pt for readability while aligned to 8-based hierarchy
 
 # Add parent directories to path for importing project modules
 current_dir = Path(__file__).parent
@@ -39,86 +48,195 @@ class PDFReportGenerator:
     """Generate professional PDF security reports"""
     
     def __init__(self):
-        self.styles = getSampleStyleSheet()
         self.telegram_config = TelegramBotConfig()
         self.config = self.telegram_config.PDF_CONFIG
+        self.styles = getSampleStyleSheet()
+        self.fonts = {}
+        self.palette = {
+            'text_primary': colors.HexColor('#1F2933'),
+            'text_muted': colors.HexColor('#475569'),
+            'accent': colors.HexColor('#4338CA'),
+            'accent_soft': colors.HexColor('#EEF2FF'),
+            'accent_dark': colors.HexColor('#312E81'),
+            'success': colors.HexColor('#047857'),
+            'warning': colors.HexColor('#D97706'),
+            'danger': colors.HexColor('#B91C1C'),
+            'background_muted': colors.HexColor('#F5F7FA')
+        }
+        self._register_fonts()
         self._setup_custom_styles()
+    
+    def _spacer(self, units: float = 1) -> Spacer:
+        """Return a spacer using the design base unit."""
+        return Spacer(1, BASE_UNIT * units)
+    
+    def _register_fonts(self):
+        """Register Poppins font family for consistent typography."""
+        fonts_dir = Path(self.config.get('font_dir', project_root / 'assets' / 'fonts'))
+        font_map = {
+            'Regular': fonts_dir / 'Poppins-Regular.ttf',
+            'Medium': fonts_dir / 'Poppins-Medium.ttf',
+            'Semibold': fonts_dir / 'Poppins-SemiBold.ttf',
+            'Bold': fonts_dir / 'Poppins-Bold.ttf',
+        }
+        missing = [name for name, path in font_map.items() if not path.is_file()]
+        if missing:
+            raise FileNotFoundError(
+                "Missing Poppins font files: " + ', '.join(missing) +
+                f". Place the TTF files in '{fonts_dir}' or update 'font_dir' in PDF_CONFIG."
+            )
+        for name, path in font_map.items():
+            pdfmetrics.registerFont(TTFont(f"Poppins-{name}", str(path)))
+        pdfmetrics.registerFontFamily(
+            'Poppins',
+            normal='Poppins-Regular',
+            bold='Poppins-Bold',
+            italic='Poppins-Regular',
+            boldItalic='Poppins-Semibold'
+        )
+        self.fonts = {
+            'regular': 'Poppins-Regular',
+            'medium': 'Poppins-Medium',
+            'semibold': 'Poppins-Semibold',
+            'bold': 'Poppins-Bold'
+        }
         
     def _setup_custom_styles(self):
         """Setup custom PDF styles for security reports"""
-        
-        # Custom title style
+        normal_style = self.styles['Normal']
+        normal_style.fontName = self.fonts['regular']
+        normal_style.fontSize = BODY_FONT_SIZE
+        normal_style.leading = BODY_FONT_SIZE + (BASE_UNIT // 2)
+        normal_style.textColor = self.palette['text_primary']
+        normal_style.spaceAfter = BASE_UNIT
+
+        self.styles.add(ParagraphStyle(
+            name='BodyMuted',
+            parent=normal_style,
+            textColor=self.palette['text_muted']
+        ))
+
         self.styles.add(ParagraphStyle(
             name='CustomTitle',
-            parent=self.styles['Title'],
-            fontSize=self.config['title_font_size'],
-            textColor=colors.darkblue,
-            spaceAfter=30,
+            parent=normal_style,
+            fontName=self.fonts['bold'],
+            fontSize=TITLE_FONT_SIZE,
+            leading=TITLE_FONT_SIZE + BASE_UNIT,
+            textColor=self.palette['accent_dark'],
             alignment=TA_CENTER,
-            fontName='Helvetica-Bold'
+            spaceBefore=BASE_UNIT * 6,
+            spaceAfter=BASE_UNIT * 4
         ))
-        
-        # Section header style
+
+        self.styles.add(ParagraphStyle(
+            name='IntroHeading',
+            parent=normal_style,
+            fontName=self.fonts['semibold'],
+            fontSize=SUBSECTION_FONT_SIZE,
+            leading=SUBSECTION_FONT_SIZE + BASE_UNIT,
+            alignment=TA_CENTER,
+            textColor=self.palette['accent'],
+            spaceBefore=BASE_UNIT,
+            spaceAfter=BASE_UNIT
+        ))
+
+        self.styles.add(ParagraphStyle(
+            name='IntroText',
+            parent=normal_style,
+            fontName=self.fonts['regular'],
+            alignment=TA_CENTER,
+            textColor=self.palette['text_muted'],
+            leading=BODY_FONT_SIZE + BASE_UNIT,
+            spaceAfter=BASE_UNIT * 3
+        ))
+
         self.styles.add(ParagraphStyle(
             name='SectionHeader',
-            parent=self.styles['Heading2'],
-            fontSize=self.config['header_font_size'],
-            textColor=colors.darkred,
-            spaceBefore=20,
-            spaceAfter=12,
-            fontName='Helvetica-Bold',
-            borderWidth=1,
-            borderColor=colors.darkred,
-            borderPadding=5
+            parent=normal_style,
+            fontName=self.fonts['semibold'],
+            fontSize=SECTION_FONT_SIZE,
+            leading=SECTION_FONT_SIZE + BASE_UNIT,
+            textColor=self.palette['accent'],
+            backColor=self.palette['accent_soft'],
+            spaceBefore=BASE_UNIT * 3,
+            spaceAfter=BASE_UNIT * 2,
+            leftIndent=0,
+            borderPadding=BASE_UNIT,
+            borderColor=self.palette['accent_soft'],
+            borderWidth=0
         ))
-        
-        # Subsection header style
+
         self.styles.add(ParagraphStyle(
             name='SubsectionHeader',
-            parent=self.styles['Heading3'],
-            fontSize=14,
-            textColor=colors.darkgreen,
-            spaceBefore=15,
-            spaceAfter=8,
-            fontName='Helvetica-Bold'
+            parent=normal_style,
+            fontName=self.fonts['medium'],
+            fontSize=SUBSECTION_FONT_SIZE,
+            leading=SUBSECTION_FONT_SIZE + (BASE_UNIT // 2),
+            textColor=self.palette['text_primary'],
+            spaceBefore=BASE_UNIT * 2,
+            spaceAfter=BASE_UNIT
         ))
-        
-        # Alert style for critical information
-        self.styles.add(ParagraphStyle(
-            name='AlertStyle',
-            parent=self.styles['Normal'],
-            fontSize=self.config['body_font_size'],
-            textColor=colors.darkred,
-            backgroundColor=colors.lightyellow,
-            borderWidth=1,
-            borderColor=colors.red,
-            borderPadding=10,
-            spaceAfter=10
-        ))
-        
-        # Summary box style
+
         self.styles.add(ParagraphStyle(
             name='SummaryBox',
-            parent=self.styles['Normal'],
-            fontSize=self.config['body_font_size'],
-            backgroundColor=colors.lightblue,
+            parent=normal_style,
+            fontName=self.fonts['medium'],
+            backColor=self.palette['background_muted'],
+            textColor=self.palette['text_primary'],
+            borderColor=self.palette['accent_soft'],
             borderWidth=1,
-            borderColor=colors.blue,
-            borderPadding=10,
-            spaceAfter=15
+            borderPadding=BASE_UNIT * 2,
+            spaceBefore=BASE_UNIT,
+            spaceAfter=BASE_UNIT * 2
         ))
-        
-        # Code/log style
+
+        self.styles.add(ParagraphStyle(
+            name='AlertStyle',
+            parent=normal_style,
+            fontName=self.fonts['semibold'],
+            textColor=self.palette['danger'],
+            backColor=colors.HexColor('#FEF2F2'),
+            borderColor=self.palette['danger'],
+            borderWidth=1,
+            borderPadding=BASE_UNIT * 2,
+            spaceBefore=BASE_UNIT,
+            spaceAfter=BASE_UNIT * 2
+        ))
+
         self.styles.add(ParagraphStyle(
             name='CodeStyle',
-            parent=self.styles['Code'],
-            fontSize=10,
+            parent=normal_style,
             fontName='Courier',
-            backgroundColor=colors.lightgrey,
-            borderWidth=1,
-            borderColor=colors.grey,
-            borderPadding=5,
-            spaceAfter=10
+            fontSize=BODY_FONT_SIZE - 2,
+            leading=(BODY_FONT_SIZE - 2) + (BASE_UNIT // 2),
+            backColor=colors.HexColor('#0F172A'),
+            textColor=colors.whitesmoke,
+            borderPadding=BASE_UNIT,
+            spaceBefore=BASE_UNIT,
+            spaceAfter=BASE_UNIT * 2
+        ))
+
+        self.styles.add(ParagraphStyle(
+            name='TableHeader',
+            parent=normal_style,
+            fontName=self.fonts['semibold'],
+            fontSize=BODY_FONT_SIZE - 1,
+            leading=BODY_FONT_SIZE + (BASE_UNIT // 2),
+            alignment=TA_CENTER,
+            textColor=colors.white,
+            spaceBefore=0,
+            spaceAfter=0
+        ))
+
+        self.styles.add(ParagraphStyle(
+            name='TableCell',
+            parent=normal_style,
+            fontName=self.fonts['regular'],
+            fontSize=BODY_FONT_SIZE - 2,
+            leading=(BODY_FONT_SIZE - 2) + (BASE_UNIT // 2),
+            textColor=self.palette['text_primary'],
+            spaceBefore=0,
+            spaceAfter=BASE_UNIT // 2
         ))
     
     async def generate_pdf_report(self, report_data: Dict[str, Any]) -> io.BytesIO:
@@ -186,38 +304,44 @@ class PDFReportGenerator:
     def _add_title_page(self, story: List, report_data: Dict[str, Any]):
         """Add title page to report"""
         config = report_data.get('report_config', {})
-        
-        story.append(Spacer(1, 100))
         story.append(Paragraph(
-            f"{config.get('emoji', '📊')} {config.get('name', 'Security Report')}", 
+            f"{config.get('emoji', '📊')} {config.get('name', 'Security Report')}",
             self.styles['CustomTitle']
         ))
-        
-        story.append(Spacer(1, 30))
-        story.append(Paragraph(f"Periode: {report_data.get('period', 'Unknown')}", self.styles['Heading3']))
-        story.append(Paragraph(f"Generated: {datetime.now().strftime('%d %B %Y, %H:%M:%S WIB')}", self.styles['Normal']))
-        
-        # Add risk level indicator
-        ai_analysis = report_data.get('ai_analysis', {})
-        risk_level = ai_analysis.get('risk_level', 'Unknown')
-        
-        # Handle None or empty risk_level
-        if risk_level is None or risk_level == '':
-            risk_level = 'Unknown'
-        
-        risk_color = self._get_risk_color(risk_level)
-        
-        story.append(Spacer(1, 40))
-        risk_style = ParagraphStyle(
-            'RiskLevel',
-            parent=self.styles['Heading2'],
-            textColor=risk_color,
-            alignment=TA_CENTER,
-            fontSize=18,
-            fontName='Helvetica-Bold'
+
+        story.append(Paragraph("AISOC MCP Security Operations Center", self.styles['IntroHeading']))
+
+        intro_text = (
+            "AISOC MCP menghadirkan rangkuman situasi keamanan terbaru dalam satu laporan ringkas. "
+            "Gunakan temuan dan rekomendasi di dalamnya sebagai panduan tindakan cepat untuk menjaga kelangsungan operasional Anda."
         )
-        story.append(Paragraph(f"🚨 Risk Level: {risk_level or 'Unknown'}", risk_style))
-        
+        story.append(Paragraph(intro_text, self.styles['IntroText']))
+
+        meta_text = (
+            f"<b>Periode:</b> {report_data.get('period', 'Unknown')}<br/>"
+            f"<b>Generated:</b> {datetime.now().strftime('%d %B %Y, %H:%M:%S WIB')}"
+        )
+        story.append(Paragraph(meta_text, self.styles['BodyMuted']))
+
+        ai_analysis = report_data.get('ai_analysis', {})
+        risk_level = ai_analysis.get('risk_level') or 'Unknown'
+        risk_color = self._get_risk_color(risk_level)
+        risk_backdrop = colors.Color(risk_color.red, risk_color.green, risk_color.blue, alpha=0.12)
+
+        risk_style = ParagraphStyle(
+            'RiskBadge',
+            parent=self.styles['SubsectionHeader'],
+            alignment=TA_CENTER,
+            fontName=self.fonts['semibold'],
+            textColor=risk_color if risk_level not in {'Critical', 'High'} else colors.white,
+            backColor=risk_color if risk_level in {'Critical', 'High'} else risk_backdrop,
+            borderPadding=BASE_UNIT * 2,
+            leading=SUBSECTION_FONT_SIZE + BASE_UNIT,
+            spaceBefore=BASE_UNIT * 4,
+            spaceAfter=BASE_UNIT * 4
+        )
+        story.append(Paragraph(f"Risk Level: {risk_level}", risk_style))
+
         story.append(PageBreak())
     
     def _add_executive_summary(self, story: List, report_data: Dict[str, Any]):
@@ -227,23 +351,40 @@ class PDFReportGenerator:
         statistics = report_data.get('statistics', {})
         summary_stats = statistics.get('summary', {})
         ai_analysis = report_data.get('ai_analysis', {})
+
+        total_events = self._safe_int(summary_stats.get('total_events'))
+        critical_events = self._safe_int(statistics.get('critical_events'))
+        high_events = self._safe_int(statistics.get('high_events'))
+        agent_status = report_data.get('agent_status', {})
+        active_agents = self._safe_int(agent_status.get('active_agents'))
+        total_agents = self._safe_int(agent_status.get('total_agents'))
+        risk_level = ai_analysis.get('risk_level') or 'Unknown'
+        risk_score_raw = ai_analysis.get('risk_score')
+
+        if risk_score_raw in (None, '', 'N/A'):
+            risk_score_display = 'N/A'
+        else:
+            try:
+                risk_score_display = f"{float(risk_score_raw):.1f}"
+            except (TypeError, ValueError):
+                risk_score_display = str(risk_score_raw)
         
         # Key metrics summary
         summary_text = f"""
         <b>Ringkasan Periode {report_data.get('period', 'Unknown')}:</b><br/><br/>
         
-        • <b>Total Security Events:</b> {summary_stats.get('total_events', 0):,} events<br/>
-        • <b>Critical Events (Level 7):</b> {statistics.get('critical_events', 0)} events<br/>
-        • <b>High Priority Events (Level 6):</b> {statistics.get('high_events', 0)} events<br/>
-        • <b>Active Agents:</b> {report_data.get('agent_status', {}).get('active_agents', 0)} dari {report_data.get('agent_status', {}).get('total_agents', 0)} agents<br/>
-        • <b>Risk Score:</b> {ai_analysis.get('risk_score', 'N/A')}/10<br/>
-        • <b>Risk Level:</b> {ai_analysis.get('risk_level', 'Unknown')}<br/><br/>
+        • <b>Total Security Events:</b> {total_events:,} events<br/>
+        • <b>Critical Events (Level 7):</b> {critical_events} events<br/>
+        • <b>High Priority Events (Level 6):</b> {high_events} events<br/>
+        • <b>Active Agents:</b> {active_agents} dari {total_agents} agents<br/>
+        • <b>Risk Score:</b> {risk_score_display}/10<br/>
+        • <b>Risk Level:</b> {risk_level}<br/><br/>
         
-        <b>Status Keamanan:</b> {self._get_security_status_text(ai_analysis.get('risk_level', 'Unknown'))}
+        <b>Status Keamanan:</b> {self._get_security_status_text(risk_level)}
         """
         
         story.append(Paragraph(summary_text, self.styles['SummaryBox']))
-        story.append(Spacer(1, 20))
+        story.append(self._spacer(3))
     
     def _add_security_metrics(self, story: List, report_data: Dict[str, Any]):
         """Add security metrics section with charts"""
@@ -260,41 +401,51 @@ class PDFReportGenerator:
         col_widths = [140, 80, 280]  # Total: 500
         
         summary = statistics.get('summary', {})
+        total_events = self._safe_int(summary.get('total_events'))
+        unique_agents = self._safe_int(summary.get('unique_agents'))
+        unique_rules = self._safe_int(summary.get('unique_rules'))
+        avg_severity = self._safe_float(summary.get('avg_severity'))
+        max_severity = self._safe_int(summary.get('max_severity'))
+        critical_events = self._safe_int(statistics.get('critical_events'))
+        high_events = self._safe_int(statistics.get('high_events'))
+        medium_events = self._safe_int(statistics.get('medium_events'))
+        low_events = self._safe_int(statistics.get('low_events'))
         metrics_data.extend([
-            ['Total Events', f"{summary.get('total_events', 0):,}", 'Total security events in period'],
-            ['Unique Agents', f"{summary.get('unique_agents', 0)}", 'Number of different agents reporting'],
-            ['Unique Rules', f"{summary.get('unique_rules', 0)}", 'Number of different security rules triggered'],
-            ['Average Severity', f"{summary.get('avg_severity', 0):.1f}", 'Average severity level of events'],
-            ['Max Severity', f"{summary.get('max_severity', 0)}", 'Highest severity level detected'],
-            ['Critical Events', f"{statistics.get('critical_events', 0)}", 'Level 7 - Immediate attention required'],
-            ['High Events', f"{statistics.get('high_events', 0)}", 'Level 6 - High priority events'],
-            ['Medium Events', f"{statistics.get('medium_events', 0)}", 'Level 2-3 - Medium priority events'],
-            ['Low Events', f"{statistics.get('low_events', 0)}", 'Level 0-1 - Low priority events']
+            ['Total Events', f"{total_events:,}", 'Total security events in period'],
+            ['Unique Agents', f"{unique_agents}", 'Number of different agents reporting'],
+            ['Unique Rules', f"{unique_rules}", 'Number of different security rules triggered'],
+            ['Average Severity', f"{avg_severity:.1f}", 'Average severity level of events'],
+            ['Max Severity', f"{max_severity}", 'Highest severity level detected'],
+            ['Critical Events', f"{critical_events}", 'Level 7 - Immediate attention required'],
+            ['High Events', f"{high_events}", 'Level 6 - High priority events'],
+            ['Medium Events', f"{medium_events}", 'Level 2-3 - Medium priority events'],
+            ['Low Events', f"{low_events}", 'Level 0-1 - Low priority events']
         ])
         
         metrics_table = Table(metrics_data, colWidths=col_widths, repeatRows=1)
         metrics_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (1, -1), 'CENTER'),  # Center first two columns
-            ('ALIGN', (2, 0), (2, -1), 'LEFT'),    # Left align description column
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 10),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 10),
-            ('TOPPADDING', (0, 0), (-1, 0), 10),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-            ('FONTSIZE', (0, 1), (-1, -1), 9),
-            ('LEFTPADDING', (0, 0), (-1, -1), 6),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-            ('TOPPADDING', (0, 1), (-1, -1), 6),
-            ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
+            ('BACKGROUND', (0, 0), (-1, 0), self.palette['accent']),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTNAME', (0, 0), (-1, 0), self.fonts['semibold']),
+            ('FONTSIZE', (0, 0), (-1, 0), BODY_FONT_SIZE),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), BASE_UNIT * 2),
+            ('TOPPADDING', (0, 0), (-1, 0), BASE_UNIT * 2),
+            ('ALIGN', (0, 0), (1, -1), 'CENTER'),
+            ('ALIGN', (2, 0), (2, -1), 'LEFT'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#F8FAFC')),
+            ('TEXTCOLOR', (0, 1), (-1, -1), self.palette['text_primary']),
+            ('FONTNAME', (0, 1), (-1, -1), self.fonts['regular']),
+            ('FONTSIZE', (0, 1), (-1, -1), BODY_FONT_SIZE - 1),
+            ('LEFTPADDING', (0, 0), (-1, -1), BASE_UNIT * 1.5),
+            ('RIGHTPADDING', (0, 0), (-1, -1), BASE_UNIT * 1.5),
+            ('TOPPADDING', (0, 1), (-1, -1), BASE_UNIT * 1.5),
+            ('BOTTOMPADDING', (0, 1), (-1, -1), BASE_UNIT * 1.5),
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#E2E8F0')),
         ]))
         
         story.append(metrics_table)
-        story.append(Spacer(1, 20))
+        story.append(self._spacer(3))
         
         # Add severity distribution chart info
         severity_dist = statistics.get('severity_distribution', {})
@@ -307,7 +458,7 @@ class PDFReportGenerator:
                 dist_text += f"• Level {level} ({level_name}): {count} events<br/>"
             
             story.append(Paragraph(dist_text, self.styles['Normal']))
-            story.append(Spacer(1, 15))
+            story.append(self._spacer(2))
     
     def _add_security_events_analysis(self, story: List, report_data: Dict[str, Any]):
         """Add security events analysis section"""
@@ -322,15 +473,19 @@ class PDFReportGenerator:
         story.append(Paragraph(f"All Security Events - {len(events)} Grouped Rules (berdasarkan prioritas):", 
                              self.styles['SubsectionHeader']))
         
-        # Create events table with KOLOM JUMLAH
-        events_data = [
-            ['Waktu', 'Level', 'Rule ID', 'Description', 'Agent', 'Jumlah', 'Location']
-        ]
-        
-        # Define optimal column widths for A4 page dengan kolom jumlah
-        col_widths = [60, 30, 45, 150, 75, 40, 70]  # Total: 470
-        
-        for event in events:  # TAMPILKAN SEMUA EVENTS - HAPUS [:20]!
+        headers = ['Waktu', 'Level', 'Rule ID', 'Description', 'Agent', 'Jumlah', 'Location']
+
+        base_widths = [80, 40, 65, 210, 110, 50, 105]
+        page_width, _ = A4
+        margin_left = self.config['margins']['left']
+        margin_right = self.config['margins']['right']
+        available_width = page_width - (margin_left + margin_right)
+        scale = min(1.0, available_width / sum(base_widths))
+        col_widths = [w * scale for w in base_widths]
+
+        table_rows = [[Paragraph(header, self.styles['TableHeader']) for header in headers]]
+
+        for event in events:
             # GUNAKAN DATA DARI REPRESENTATIVE_EVENT
             rep_event = event.get('representative_event', {})
             
@@ -341,43 +496,68 @@ class PDFReportGenerator:
                     timestamp = dt.strftime('%d/%m %H:%M')
                 except:
                     timestamp = timestamp[:16]  # Fallback
+            timestamp_display = ''
+            if timestamp:
+                if 'T' in timestamp:
+                    ts = timestamp.replace('T', ' ')
+                else:
+                    ts = timestamp
+                if ' ' in ts:
+                    date_part, time_part = ts.split(' ', 1)
+                    timestamp_display = f"{date_part}<br/>{time_part}"
+                else:
+                    timestamp_display = timestamp
+            else:
+                timestamp_display = 'N/A'
                     
             # KOLOM JUMLAH TERPISAH
             count = event.get('count', 1)
-            
-            events_data.append([
-                timestamp,
-                str(event.get('rule_level', 'N/A')),
-                str(event.get('rule_id', 'N/A')),
-                self._truncate_text(self._clean_text_for_pdf(event.get('rule_description', 'N/A')), 35),
-                self._truncate_text(self._clean_text_for_pdf(rep_event.get('agent_name', 'N/A')), 15),
-                str(count),  # KOLOM JUMLAH DEDICATED
-                self._truncate_text(self._clean_text_for_pdf(rep_event.get('location', 'N/A')), 18)
+            description_text = self._clean_text_for_pdf(event.get('rule_description', 'N/A'))
+            agent_text = self._clean_text_for_pdf(rep_event.get('agent_name', 'N/A'))
+            location_text = self._clean_text_for_pdf(rep_event.get('location', 'N/A'))
+
+            description_text = description_text.replace('/', '/&#8203;')
+            agent_text = agent_text.replace('-', '-&#8203;').replace('/', '/&#8203;')
+            location_text = location_text.replace('-', '-&#8203;').replace('/', '/&#8203;')
+
+            table_rows.append([
+                Paragraph(timestamp_display or 'N/A', self.styles['TableCell']),
+                Paragraph(self._clean_text_for_pdf(event.get('rule_level', 'N/A')), self.styles['TableCell']),
+                Paragraph(self._clean_text_for_pdf(event.get('rule_id', 'N/A')), self.styles['TableCell']),
+                Paragraph(description_text.replace(' - ', '<br/>- '), self.styles['TableCell']),
+                Paragraph(agent_text, self.styles['TableCell']),
+                Paragraph(str(count), self.styles['TableCell']),
+                Paragraph(location_text, self.styles['TableCell'])
             ])
-        
-        events_table = Table(events_data, colWidths=col_widths, repeatRows=1)
+
+        events_table = Table(table_rows, colWidths=col_widths, repeatRows=1)
         events_table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.darkred),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('BACKGROUND', (0, 0), (-1, 0), self.palette['danger']),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTNAME', (0, 0), (-1, 0), self.fonts['semibold']),
+            ('FONTSIZE', (0, 0), (-1, 0), BODY_FONT_SIZE - 1),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
+            ('TOPPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
             ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 9),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
-            ('TOPPADDING', (0, 0), (-1, 0), 8),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.lightgrey),
-            ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-            ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-            ('FONTSIZE', (0, 1), (-1, -1), 7),
-            ('LEFTPADDING', (0, 0), (-1, -1), 4),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-            ('TOPPADDING', (0, 1), (-1, -1), 4),
-            ('BOTTOMPADDING', (0, 1), (-1, -1), 4),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#FEF2F2')),
+            ('TEXTCOLOR', (0, 1), (-1, -1), self.palette['text_primary']),
+            ('FONTNAME', (0, 1), (-1, -1), self.fonts['regular']),
+            ('FONTSIZE', (0, 1), (-1, -1), BODY_FONT_SIZE - 2),
+            ('LEFTPADDING', (0, 0), (-1, -1), BASE_UNIT),
+            ('RIGHTPADDING', (0, 0), (-1, -1), BASE_UNIT),
+            ('TOPPADDING', (0, 1), (-1, -1), BASE_UNIT),
+            ('BOTTOMPADDING', (0, 1), (-1, -1), BASE_UNIT),
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#FCA5A5')),
             ('WORDWRAP', (0, 0), (-1, -1), 'CJK'),
+            ('SPLITLONGWORDS', (0, 1), (-1, -1), True),
+            ('ALIGN', (1, 1), (1, -1), 'CENTER'),
+            ('ALIGN', (2, 1), (2, -1), 'CENTER'),
+            ('ALIGN', (5, 1), (5, -1), 'CENTER'),
         ]))
         
         story.append(events_table)
-        story.append(Spacer(1, 20))
+        story.append(self._spacer(3))
     
     def _add_agent_status_section(self, story: List, report_data: Dict[str, Any]):
         """Add agent status section"""
@@ -385,16 +565,19 @@ class PDFReportGenerator:
         
         agent_status = report_data.get('agent_status', {})
         agents_detail = agent_status.get('agents_detail', [])
+        total_agents = self._safe_int(agent_status.get('total_agents'))
+        active_agents = self._safe_int(agent_status.get('active_agents'))
+        inactive_agents = max(total_agents - active_agents, 0)
         
         # Summary
         summary_text = f"""
         <b>Agent Summary:</b><br/>
-        • Total Agents: {agent_status.get('total_agents', 0)}<br/>
-        • Active Agents: {agent_status.get('active_agents', 0)}<br/>
-        • Inactive Agents: {agent_status.get('total_agents', 0) - agent_status.get('active_agents', 0)}<br/>
+        • Total Agents: {total_agents}<br/>
+        • Active Agents: {active_agents}<br/>
+        • Inactive Agents: {inactive_agents}<br/>
         """
         story.append(Paragraph(summary_text, self.styles['Normal']))
-        story.append(Spacer(1, 10))
+        story.append(self._spacer(1.5))
         
         if agents_detail:
             story.append(Paragraph("Top Active Agents:", self.styles['SubsectionHeader']))
@@ -419,35 +602,36 @@ class PDFReportGenerator:
                 agents_data.append([
                     self._truncate_text(self._clean_text_for_pdf(agent.get('agent_name', 'N/A')), 15),
                     str(agent.get('agent_id', 'N/A'))[:8] + '...' if len(str(agent.get('agent_id', 'N/A'))) > 8 else str(agent.get('agent_id', 'N/A')),
-                    str(agent.get('event_count', 0)),
-                    f"{agent.get('avg_severity', 0):.1f}",
-                    str(agent.get('max_severity', 0)),
+                    str(self._safe_int(agent.get('event_count'))),
+                    f"{self._safe_float(agent.get('avg_severity')):.1f}",
+                    str(self._safe_int(agent.get('max_severity'))),
                     self._truncate_text(last_event, 15)
                 ])
             
             agents_table = Table(agents_data, colWidths=col_widths, repeatRows=1)
             agents_table.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.darkgreen),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('BACKGROUND', (0, 0), (-1, 0), self.palette['success']),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, 0), 9),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
-                ('TOPPADDING', (0, 0), (-1, 0), 8),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.lightgreen),
-                ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-                ('FONTSIZE', (0, 1), (-1, -1), 8),
-                ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 4),
-                ('TOPPADDING', (0, 1), (-1, -1), 4),
-                ('BOTTOMPADDING', (0, 1), (-1, -1), 4),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('FONTNAME', (0, 0), (-1, 0), self.fonts['semibold']),
+                ('FONTSIZE', (0, 0), (-1, 0), BODY_FONT_SIZE - 1),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
+                ('TOPPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#ECFDF5')),
+                ('TEXTCOLOR', (0, 1), (-1, -1), self.palette['text_primary']),
+                ('FONTNAME', (0, 1), (-1, -1), self.fonts['regular']),
+                ('FONTSIZE', (0, 1), (-1, -1), BODY_FONT_SIZE - 2),
+                ('LEFTPADDING', (0, 0), (-1, -1), BASE_UNIT),
+                ('RIGHTPADDING', (0, 0), (-1, -1), BASE_UNIT),
+                ('TOPPADDING', (0, 1), (-1, -1), BASE_UNIT),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), BASE_UNIT),
+                ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#A7F3D0')),
             ]))
             
             story.append(agents_table)
         
-        story.append(Spacer(1, 20))
+        story.append(self._spacer(3))
     
     def _add_ai_analysis_section(self, story: List, report_data: Dict[str, Any]):
         """Add AI analysis section"""
@@ -468,54 +652,46 @@ class PDFReportGenerator:
         """
         story.append(Paragraph(risk_info, self.styles['SummaryBox']))
         
-        # AI Analysis content - Remove thinking tags and format markdown
+        # AI Analysis content - Remove thinking tags and render structured segments
         story.append(Paragraph("Analisis AI:", self.styles['SubsectionHeader']))
         ai_text = ai_analysis.get('ai_analysis', '')
-        
-        # Remove thinking tags completely
         ai_text = self._remove_thinking_tags(ai_text)
-        
-        # Safely format for PDF with fallback to plain text
-        try:
-            # Try to format markdown first
-            formatted_analysis = self._format_markdown_for_pdf(ai_text)
-            
-            # Test if the formatted text can be parsed safely
-            # Create a test paragraph to validate HTML
-            test_para = Paragraph(f"<para>{formatted_analysis}</para>", self.styles['Normal'])
-            
-            # If we get here, the HTML is valid
-            story.append(Paragraph(f"<para>{formatted_analysis}</para>", self.styles['Normal']))
-            
-        except Exception as format_error:
-            logger.warning(f"Markdown formatting failed, using plain text: {format_error}")
-            
-            # Fallback: use plain text with basic formatting
-            plain_text = self._clean_text_for_pdf(ai_text, preserve_html=False)
-            
-            # Add basic structure to plain text
-            plain_text = plain_text.replace('\n\n', '<br/><br/>')
-            plain_text = plain_text.replace('\n', '<br/>')
-            
-            # Ensure it's wrapped in para tags
-            story.append(Paragraph(f"<para>{plain_text}</para>", self.styles['Normal']))
-        
-        story.append(Spacer(1, 15))
+
+        segments = self._split_markdown_tables(ai_text)
+
+        for segment in segments:
+            if segment['type'] == 'text':
+                formatted_chunk = self._format_markdown_for_pdf(segment['content'])
+                if formatted_chunk.strip():
+                    try:
+                        story.append(Paragraph(f"<para>{formatted_chunk}</para>", self.styles['Normal']))
+                    except Exception:
+                        logger.error("Markdown formatting failed; aborting PDF generation", exc_info=True)
+                        raise
+            elif segment['type'] == 'table':
+                table = self._build_markdown_table(segment['data'])
+                if table is not None:
+                    story.append(table)
+                    story.append(self._spacer(2))
+
+        story.append(self._spacer(2))
         
         # Priority actions
         priority_actions = ai_analysis.get('priority_actions', [])
         if priority_actions:
             story.append(Paragraph("🚨 Priority Actions:", self.styles['SubsectionHeader']))
+            story.append(self._spacer(0.75))
             
             actions_text = ""
             for i, action in enumerate(priority_actions, 1):
                 # Clean and format each action
                 clean_action = self._clean_text_for_pdf(action)
+                clean_action = clean_action.replace('**', '')
                 actions_text += f"{i}. {clean_action}<br/>"
             
             story.append(Paragraph(actions_text, self.styles['AlertStyle']))
         
-        story.append(Spacer(1, 20))
+        story.append(self._spacer(3))
     
     def _add_trends_analysis(self, story: List, report_data: Dict[str, Any]):
         """Add trends analysis section"""
@@ -527,17 +703,21 @@ class PDFReportGenerator:
         story.append(Paragraph("📈 Trend Analysis", self.styles['SectionHeader']))
         
         analysis = trends.get('analysis', {})
+        total_events_change = self._safe_float(analysis.get('total_events_change'))
+        critical_events_change = self._safe_int(analysis.get('critical_events_change'))
+        high_events_change = self._safe_int(analysis.get('high_events_change'))
+        trend_direction = (analysis.get('trend_direction') or 'stable').title()
         
         trend_text = f"""
         <b>Trend Comparison dengan Periode Sebelumnya:</b><br/><br/>
-        • Total Events Change: {analysis.get('total_events_change', 0):.1f}%<br/>
-        • Trend Direction: {analysis.get('trend_direction', 'stable').title()}<br/>
-        • Critical Events Change: {analysis.get('critical_events_change', 0):+d}<br/>
-        • High Events Change: {analysis.get('high_events_change', 0):+d}<br/>
+        • Total Events Change: {total_events_change:.1f}%<br/>
+        • Trend Direction: {trend_direction}<br/>
+        • Critical Events Change: {critical_events_change:+d}<br/>
+        • High Events Change: {high_events_change:+d}<br/>
         """
         
         story.append(Paragraph(trend_text, self.styles['Normal']))
-        story.append(Spacer(1, 20))
+        story.append(self._spacer(3))
     
     def _add_recommendations(self, story: List, report_data: Dict[str, Any]):
         """Add recommendations section"""
@@ -570,10 +750,11 @@ class PDFReportGenerator:
         
         rec_text = ""
         for i, rec in enumerate(recommendations, 1):
-            rec_text += f"{i}. {rec}<br/>"
+            sanitized = self._clean_text_for_pdf(rec).replace('**', '')
+            rec_text += f"{i}. {sanitized}<br/>"
         
         story.append(Paragraph(rec_text, self.styles['Normal']))
-        story.append(Spacer(1, 20))
+        story.append(self._spacer(3))
     
     def _add_appendices(self, story: List, report_data: Dict[str, Any]):
         """Add appendices section"""
@@ -592,7 +773,7 @@ class PDFReportGenerator:
         """
         
         story.append(Paragraph(metadata_text, self.styles['Normal']))
-        story.append(Spacer(1, 15))
+        story.append(self._spacer(2))
         
         # Top rule groups
         statistics = report_data.get('statistics', {})
@@ -613,37 +794,64 @@ class PDFReportGenerator:
             
             groups_table = Table(groups_data, colWidths=col_widths, repeatRows=1)
             groups_table.setStyle(TableStyle([
-                ('BACKGROUND', (0, 0), (-1, 0), colors.blue),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-                ('ALIGN', (0, 0), (0, -1), 'LEFT'),    # Left align rule group
-                ('ALIGN', (1, 0), (1, -1), 'CENTER'),  # Center align count
-                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('FONTSIZE', (0, 0), (-1, 0), 10),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 8),
-                ('TOPPADDING', (0, 0), (-1, 0), 8),
-                ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
-                ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-                ('FONTSIZE', (0, 1), (-1, -1), 9),
-                ('LEFTPADDING', (0, 0), (-1, -1), 6),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-                ('TOPPADDING', (0, 1), (-1, -1), 6),
-                ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.lightblue),
+                ('BACKGROUND', (0, 0), (-1, 0), self.palette['accent_dark']),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+                ('ALIGN', (1, 0), (1, -1), 'CENTER'),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('FONTNAME', (0, 0), (-1, 0), self.fonts['semibold']),
+                ('FONTSIZE', (0, 0), (-1, 0), BODY_FONT_SIZE - 1),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
+                ('TOPPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#EEF2FF')),
+                ('TEXTCOLOR', (0, 1), (-1, -1), self.palette['text_primary']),
+                ('FONTNAME', (0, 1), (-1, -1), self.fonts['regular']),
+                ('FONTSIZE', (0, 1), (-1, -1), BODY_FONT_SIZE - 2),
+                ('LEFTPADDING', (0, 0), (-1, -1), BASE_UNIT * 1.5),
+                ('RIGHTPADDING', (0, 0), (-1, -1), BASE_UNIT * 1.5),
+                ('TOPPADDING', (0, 1), (-1, -1), BASE_UNIT * 1.5),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), BASE_UNIT * 1.5),
+                ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#C7D2FE')),
             ]))
             
             story.append(groups_table)
     
     # Helper methods
+    def _safe_int(self, value: Any, default: int = 0) -> int:
+        """Convert value to int safely, falling back to default."""
+        try:
+            if value is None:
+                return default
+            if isinstance(value, str):
+                value = value.strip()
+                if value == '' or value.lower() in {'nan', 'none'}:
+                    return default
+            return int(float(value))
+        except (TypeError, ValueError):
+            return default
+
+    def _safe_float(self, value: Any, default: float = 0.0) -> float:
+        """Convert value to float safely, falling back to default."""
+        try:
+            if value is None:
+                return default
+            if isinstance(value, str):
+                value = value.strip()
+                if value == '' or value.lower() in {'nan', 'none'}:
+                    return default
+            return float(value)
+        except (TypeError, ValueError):
+            return default
+
     def _get_risk_color(self, risk_level: str):
-        """Get color for risk level"""
+        """Get accent color for risk level."""
         color_map = {
-            'Critical': colors.red,
-            'High': colors.orange,
-            'Medium': colors.yellow,
-            'Low': colors.green
+            'Critical': colors.HexColor('#B91C1C'),
+            'High': colors.HexColor('#D97706'),
+            'Medium': colors.HexColor('#2563EB'),
+            'Low': colors.HexColor('#047857'),
         }
-        return color_map.get(risk_level, colors.black)
+        return color_map.get(risk_level, self.palette['text_muted'])
     
     def _get_security_status_text(self, risk_level: str) -> str:
         """Get security status description"""
@@ -666,6 +874,117 @@ class PDFReportGenerator:
             7: 'Critical'
         }
         return severity_map.get(level, f'Level-{level}')
+
+    def _split_markdown_tables(self, text: str) -> List[Dict[str, Any]]:
+        """Split markdown text into narrative and table segments."""
+        if not text:
+            return [{'type': 'text', 'content': ''}]
+
+        import re
+
+        segments: List[Dict[str, Any]] = []
+        table_pattern = re.compile(r'(?:^\s*\|.*\|\s*$\n?){2,}', re.MULTILINE)
+
+        last_end = 0
+        for match in table_pattern.finditer(text):
+            before = text[last_end:match.start()]
+            if before.strip():
+                segments.append({'type': 'text', 'content': before})
+
+            block = match.group(0)
+            lines = [line for line in block.splitlines() if line.strip()]
+            table_data = self._parse_markdown_table(lines)
+
+            if table_data:
+                segments.append({'type': 'table', 'data': table_data})
+                last_end = match.end()
+            else:
+                # Treat as plain text if parsing failed
+                segments.append({'type': 'text', 'content': block})
+                last_end = match.end()
+
+        trailing = text[last_end:]
+        if trailing.strip():
+            segments.append({'type': 'text', 'content': trailing})
+
+        return segments or [{'type': 'text', 'content': text}]
+
+    def _parse_markdown_table(self, lines: List[str]) -> Optional[List[List[str]]]:
+        """Parse markdown table lines into row data."""
+        import re
+
+        cleaned = [line.strip() for line in lines if line.strip()]
+        if len(cleaned) < 2:
+            return None
+
+        header_cells = [cell.strip() for cell in cleaned[0].strip('|').split('|')]
+        if not header_cells:
+            return None
+
+        rows: List[List[str]] = []
+        for idx, raw_line in enumerate(cleaned[1:], start=1):
+            stripped = raw_line.strip('|').strip()
+            if not stripped:
+                continue
+
+            # Skip header separator rows like |-----|:----|
+            separator_candidate = stripped.replace('|', '').replace(' ', '')
+            if separator_candidate and set(separator_candidate) <= {'-', ':'}:
+                continue
+
+            cells = [cell.strip() for cell in raw_line.strip('|').split('|')]
+            if not any(cells):
+                continue
+            if len(cells) < len(header_cells):
+                cells.extend([''] * (len(header_cells) - len(cells)))
+            rows.append(cells[:len(header_cells)])
+
+        if not rows:
+            return None
+
+        return [header_cells] + rows
+
+    def _build_markdown_table(self, data: List[List[str]]) -> Optional[Table]:
+        """Build a styled ReportLab table from markdown data."""
+        if not data or len(data) < 2:
+            return None
+
+        col_count = max(len(row) for row in data)
+        page_width, _ = A4
+        available_width = page_width - (self.config['margins']['left'] + self.config['margins']['right'])
+        col_widths = [available_width / col_count] * col_count
+
+        table_rows = []
+        for row_index, row in enumerate(data):
+            style_name = 'TableHeader' if row_index == 0 else 'TableCell'
+            styled_row = []
+            for cell in row:
+                clean_cell = self._clean_text_for_pdf(cell or '-', preserve_html=True)
+                clean_cell = clean_cell.replace('<', '&lt;').replace('>', '&gt;').replace('**', '')
+                styled_row.append(Paragraph(clean_cell or '-', self.styles[style_name]))
+            table_rows.append(styled_row)
+
+        table = Table(table_rows, colWidths=col_widths, repeatRows=1, hAlign='LEFT')
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), self.palette['accent']),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#F8FAFC')),
+            ('TEXTCOLOR', (0, 1), (-1, -1), self.palette['text_primary']),
+            ('LEFTPADDING', (0, 0), (-1, -1), BASE_UNIT * 1.5),
+            ('RIGHTPADDING', (0, 0), (-1, -1), BASE_UNIT * 1.5),
+            ('TOPPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), BASE_UNIT * 1.5),
+            ('TOPPADDING', (0, 1), (-1, -1), BASE_UNIT),
+            ('BOTTOMPADDING', (0, 1), (-1, -1), BASE_UNIT),
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#CBD5F5')),
+            ('ALIGN', (0, 1), (0, -1), 'LEFT'),
+            ('WORDWRAP', (0, 0), (-1, -1), 'CJK'),
+            ('SPLITLONGWORDS', (0, 0), (-1, -1), True),
+        ]))
+
+        return table
     
     def _truncate_text(self, text: str, max_length: int) -> str:
         """Truncate text to specified length"""
@@ -693,74 +1012,76 @@ class PDFReportGenerator:
     def _format_markdown_for_pdf(self, text: str) -> str:
         """Format markdown text for PDF display"""
         import re
-        
+
         # Handle None or empty text
         if not text:
             return ""
-        
+
+        # Escape HTML special characters first so ReportLab won't misinterpret raw content
+        text = (
+            text.replace('&', '&amp;')
+                .replace('<', '&lt;')
+                .replace('>', '&gt;')
+                .replace('"', '&quot;')
+                .replace("'", '&#39;')
+        )
+
         # Convert markdown headers to HTML-like formatting (from largest to smallest)
-        text = re.sub(r'^##### (.*?)$', r'<i><u>\1</u></i>', text, flags=re.MULTILINE)  # Level 5 - Italic + Underline
-        text = re.sub(r'^#### (.*?)$', r'<b><u>\1</u></b>', text, flags=re.MULTILINE)  # Level 4 - Bold + Underline
-        text = re.sub(r'^### (.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)          # Level 3 - Bold
-        text = re.sub(r'^## (.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)           # Level 2 - Bold  
-        text = re.sub(r'^# (.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)            # Level 1 - Bold
-        
+        # Remove empty heading markers like "###" or "##"
+        text = re.sub(r'^\s*#{1,6}\s*$', '', text, flags=re.MULTILINE)
+        text = re.sub(r'^\s*#####\s+(.*?)$', r'<i><u>\1</u></i>', text, flags=re.MULTILINE)
+        text = re.sub(r'^\s*####\s+(.*?)$', r'<b><u>\1</u></b>', text, flags=re.MULTILINE)
+        text = re.sub(r'^\s*###\s+(.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)
+        text = re.sub(r'^\s*##\s+(.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)
+        text = re.sub(r'^\s*#\s+(.*?)$', r'<b>\1</b>', text, flags=re.MULTILINE)
+
+        # Handle inline code first by stashing placeholders so later formatting doesn't interfere
+        code_placeholders = {}
+
+        def _store_code(match):
+            key = f"__CODE_{len(code_placeholders)}__"
+            code_placeholders[key] = f"<font name=\"Courier\">{match.group(1)}</font>"
+            return key
+
+        text = re.sub(r'`([^`]+)`', _store_code, text)
+
         # Handle repeated characters (decorative lines)
-        # Convert long repeated I's to visual separator
-        text = re.sub(r'^I{10,}$', r'<br/>▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌<br/>', text, flags=re.MULTILINE)
-        
-        # Convert other repeated characters to decorative separators
-        text = re.sub(r'^([=\-_#\*])\1{10,}$', r'<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>', text, flags=re.MULTILINE)
-        
-        # Convert horizontal rules (---) to visual separator  
-        text = re.sub(r'^---+$', r'<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>', text, flags=re.MULTILINE)
-        
-        # Convert markdown bold (handle multiple asterisks)
-        text = re.sub(r'\*{2,}(.*?)\*{2,}', r'<b>\1</b>', text)  # Multiple asterisks
+        text = re.sub(r'^\s*I{10,}\s*$', r'<br/>▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌▌<br/>', text, flags=re.MULTILINE)
+        text = re.sub(r'^\s*([=\-_#\*])\1{10,}\s*$', r'<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>', text, flags=re.MULTILINE)
+        text = re.sub(r'^\s*---+\s*$', r'<br/>━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br/>', text, flags=re.MULTILINE)
+
+        # Convert markdown bold and italics (restrict italics to standalone markers to avoid code interference)
+        text = re.sub(r'\*{2,}(.*?)\*{2,}', r'<b>\1</b>', text)
         text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
         text = re.sub(r'__(.*?)__', r'<b>\1</b>', text)
-        
-        # Convert markdown italic  
-        text = re.sub(r'(?<!\*)\*([^\*]+)\*(?!\*)', r'<i>\1</i>', text)  # Single asterisk (not part of double)
-        text = re.sub(r'(?<!_)_([^_]+)_(?!_)', r'<i>\1</i>', text)       # Single underscore (not part of double)
-        
-        # Convert bullet points
-        text = re.sub(r'^[\-\*\+] (.*?)$', r'• \1', text, flags=re.MULTILINE)
-        
-        # Convert numbered lists
+        text = re.sub(r'(?<!\S)\*(\S.*?\S)\*(?!\S)', r'<i>\1</i>', text)
+        text = re.sub(r'(?<!\S)_(\S.*?\S)_(?!\S)', r'<i>\1</i>', text)
+
+        # Convert bullet and numbered lists
+        text = re.sub(r'^\s*[\-\*\+]\s+(.*?)$', r'• \1', text, flags=re.MULTILINE)
         text = re.sub(r'^(\d+)\. (.*?)$', r'\1. \2', text, flags=re.MULTILINE)
-        
-        # Convert code blocks (basic support)
-        text = re.sub(r'`([^`]+)`', r'<font name="Courier">\1</font>', text)
-        
-        # Handle special markdown patterns
-        # Convert standalone ** as emphasis marker
+
+        # Convert standalone emphasis markers (used as separators)
         text = re.sub(r'^\*\*\s*$', r'<b>※</b>', text, flags=re.MULTILINE)
-        
-        # Replace newlines with HTML breaks
+
+        # Restore code placeholders
+        for key, value in code_placeholders.items():
+            text = text.replace(key, value)
+
+        # Clean up repeated bold/italic tags caused by overlapping markup
+        text = re.sub(r'<b>\s*<b>', '<b>', text)
+        text = re.sub(r'</b>\s*</b>', '</b>', text)
+        text = re.sub(r'<i>\s*<i>', '<i>', text)
+        text = re.sub(r'</i>\s*</i>', '</i>', text)
+
+        # Replace newlines with HTML breaks and collapse excessive spacing
         text = text.replace('\n', '<br/>')
-        
-        # Clean up extra spaces and breaks
         text = re.sub(r'<br/>\s*<br/>', '<br/><br/>', text)
-        text = re.sub(r'(<br/>){3,}', '<br/><br/>', text)  # Max 2 consecutive breaks
-        
+        text = re.sub(r'(<br/>){3,}', '<br/><br/>', text)
+
+        text = text.replace('**', '')
+
         return text
-    
-    def _remove_thinking_tags(self, text: str) -> str:
-        """Remove thinking tags and any content within them from AI analysis"""
-        import re
-        
-        # Remove <think>...</think> blocks completely
-        clean_text = re.sub(r'<think>.*?</think>', '', text, flags=re.DOTALL | re.IGNORECASE)
-        
-        # Also remove any standalone <think> or </think> tags
-        clean_text = re.sub(r'</?think>', '', clean_text, flags=re.IGNORECASE)
-        
-        # Clean up extra whitespace and newlines
-        clean_text = re.sub(r'\n\s*\n\s*\n', '\n\n', clean_text)  # Remove excessive newlines
-        clean_text = clean_text.strip()
-        
-        return clean_text
     
     def _clean_text_for_pdf(self, text: str, preserve_html: bool = False) -> str:
         """Clean text for safe PDF rendering"""
