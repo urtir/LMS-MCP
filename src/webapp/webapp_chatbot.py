@@ -91,11 +91,16 @@ app.register_blueprint(admin_bp)
 from flask import Blueprint
 main_bp = Blueprint('main', __name__)
 
-@main_bp.route('/')
+@main_bp.route('/dashboard')
 @login_required
 def dashboard():
     """Primary security dashboard"""
-    return render_template('dashboard.html', user=current_user, current_year=datetime.utcnow().year)
+    return render_template(
+        'dashboard.html',
+        user=current_user,
+        current_year=datetime.utcnow().year,
+        active_page='dashboard'
+    )
 
 # Register main blueprint  
 app.register_blueprint(main_bp)
@@ -252,15 +257,15 @@ class Spinner:
 def login():
     """Login page"""
     if current_user.is_authenticated:
-        return redirect(url_for('chat'))
-    return render_template('login.html')
+        return redirect(url_for('landing'))
+    return render_template('login.html', active_page='login')
 
 @app.route('/register')
 def register():
     """Register page"""
     if current_user.is_authenticated:
-        return redirect(url_for('chat'))
-    return render_template('register.html')
+        return redirect(url_for('landing'))
+    return render_template('register.html', active_page='register')
 
 @app.route('/api/login', methods=['POST'])
 def api_login():
@@ -344,7 +349,13 @@ def api_logout():
 @login_required
 def chat():
     """Chat page - requires login"""
-    response = make_response(render_template('chat_with_history.html', user=current_user))
+    response = make_response(
+        render_template(
+            'chat_with_history.html',
+            user=current_user,
+            active_page='chat'
+        )
+    )
     # Add anti-cache headers to prevent browser caching of old JavaScript
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
@@ -360,12 +371,17 @@ def logout():
     return redirect(url_for('login'))
 
 # Existing routes (data endpoints, etc.)
+
+
 @app.route('/')
-def index():
-    """Redirect root requests to dashboard or login"""
-    if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
-    return redirect(url_for('login'))
+def landing():
+    """Public landing page (Beranda)."""
+    user_context = current_user if current_user.is_authenticated else None
+    return render_template(
+        'landing.html',
+        user=user_context,
+        active_page='landing'
+    )
 
 @app.route('/test-tool')
 def test_tool():

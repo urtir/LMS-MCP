@@ -1138,7 +1138,7 @@ def get_service_status():
 def index():
     """Admin configuration panel"""
     logger.info(f"Admin panel accessed by user: {current_user.username}")
-    return render_template('admin.html')
+    return render_template('admin.html', active_page='admin')
 
 @admin_bp.route('/api/config')
 @login_required

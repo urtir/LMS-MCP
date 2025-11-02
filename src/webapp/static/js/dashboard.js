@@ -4,12 +4,10 @@ class AISOCDashboard {
         this.severityChart = null;
         this.statusDot = document.getElementById('statusDot');
         this.statusText = document.getElementById('statusText');
-        this.userMenu = document.getElementById('userMenu');
         this.lastUpdated = document.getElementById('lastUpdated');
         this.modelName = document.getElementById('modelName');
         this.toolsCount = document.getElementById('toolsCount');
-        this.documentClickHandler = (event) => this.handleDocumentClick(event);
-    this.alertsCache = [];
+        this.alertsCache = [];
         this.severityPalette = [
             '#94a3b8', '#cbd5f5', '#e2e8f0', '#bfdbfe', '#93c5fd', '#60a5fa',
             '#fcd34d', '#fbbf24', '#fca5a5', '#f87171', '#ef4444', '#dc2626',
@@ -27,29 +25,9 @@ class AISOCDashboard {
     }
 
     bindEvents() {
-        document.querySelectorAll('[data-action="navigate"]').forEach((button) => {
-            button.addEventListener('click', () => this.navigate(button.dataset.route));
-        });
-
         document.querySelectorAll('[data-action="refresh-dashboard"]').forEach((button) => {
             button.addEventListener('click', () => this.refreshAll());
         });
-
-        const logoutButtons = document.querySelectorAll('[data-action="logout"]');
-        logoutButtons.forEach((button) => {
-            button.addEventListener('click', () => this.logout());
-        });
-
-        const toggleButtons = document.querySelectorAll('[data-action="toggle-user-menu"]');
-        toggleButtons.forEach((button) => {
-            button.addEventListener('click', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                this.toggleUserMenu();
-            });
-        });
-
-        document.addEventListener('click', this.documentClickHandler);
     }
 
     navigate(route) {
@@ -57,23 +35,6 @@ class AISOCDashboard {
             return;
         }
         window.location.href = route;
-    }
-
-    toggleUserMenu() {
-        if (!this.userMenu) {
-            return;
-        }
-        this.userMenu.classList.toggle('hidden');
-    }
-
-    handleDocumentClick(event) {
-        if (!this.userMenu) {
-            return;
-        }
-        const toggleButton = event.target.closest('[data-action="toggle-user-menu"]');
-        if (!toggleButton && !this.userMenu.contains(event.target)) {
-            this.userMenu.classList.add('hidden');
-        }
     }
 
     async logout() {

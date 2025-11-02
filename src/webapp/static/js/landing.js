@@ -1,14 +1,12 @@
 class AISOCLandingPage {
     constructor() {
-        this.userMenu = document.getElementById('userMenu');
         this.statusIndicator = document.getElementById('statusIndicator');
         this.refreshButton = document.querySelector('[data-action="refresh-status"]');
-        this.menuToggle = document.querySelector('[data-action="toggle-user-menu"]');
-        this.logoutButton = document.querySelector('[data-action="logout"]');
-        this.navigateButtons = document.querySelectorAll('[data-action="navigate"]');
+        this.navigateButtons = Array.from(document.querySelectorAll('[data-action="navigate"]')).filter((button) => {
+            return !button.closest('[data-component="global-navbar"]');
+        });
         this.demoButtons = document.querySelectorAll('[data-action="show-demo"]');
         this.anchorLinks = document.querySelectorAll('a[href^="#"]');
-        this.documentClickHandler = (event) => this.handleDocumentClick(event);
     }
 
     init() {
@@ -22,10 +20,6 @@ class AISOCLandingPage {
     }
 
     bindEvents() {
-        this.navigateButtons.forEach((button) => {
-            button.addEventListener('click', () => this.navigate(button.dataset.route));
-        });
-
         this.demoButtons.forEach((button) => {
             button.addEventListener('click', () => this.showDemo());
         });
@@ -38,19 +32,11 @@ class AISOCLandingPage {
             this.refreshButton.addEventListener('click', () => this.checkAllSystems());
         }
 
-        if (this.logoutButton) {
-            this.logoutButton.addEventListener('click', () => this.logout());
-        }
-
-        if (this.menuToggle) {
-            this.menuToggle.addEventListener('click', (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                this.toggleUserMenu();
-            });
-            document.addEventListener('click', this.documentClickHandler);
-        }
+        this.navigateButtons.forEach((button) => {
+            button.addEventListener('click', () => this.navigate(button.dataset.route));
+        });
     }
+
 
     navigate(route) {
         if (!route) {
@@ -72,47 +58,9 @@ class AISOCLandingPage {
         }
     }
 
-    toggleUserMenu() {
-        if (!this.userMenu) {
-            return;
-        }
-        this.userMenu.classList.toggle('hidden');
-    }
-
-    handleDocumentClick(event) {
-        if (!this.userMenu) {
-            return;
-        }
-
-        const toggleButton = event.target.closest('[data-action="toggle-user-menu"]');
-        if (!toggleButton && !this.userMenu.contains(event.target)) {
-            this.userMenu.classList.add('hidden');
-        }
-    }
-
     showDemo() {
         window.alert('Demo feature coming soon! For now, try the live chat interface.');
         this.navigate('/chat');
-    }
-
-    async logout() {
-        try {
-            const response = await fetch('/api/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                window.location.reload();
-            } else {
-                window.alert('Logout failed. Please try again.');
-            }
-        } catch (error) {
-            console.error('Logout error:', error);
-            window.alert('Logout failed. Please try again.');
-        }
     }
 
     async checkAllSystems() {

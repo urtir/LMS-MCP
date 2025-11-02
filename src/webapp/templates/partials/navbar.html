@@ -1,0 +1,112 @@
+<nav class="bg-white border-b shadow-sm" data-component="global-navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap items-center justify-between gap-4 py-4">
+            <!-- Brand -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-primary text-primary-foreground rounded-lg">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <a href="/" class="text-xl font-semibold text-foreground">AISOC</a>
+                    <p class="text-xs text-muted-foreground">AI Security Operations Center</p>
+                </div>
+            </div>
+
+            <!-- Primary navigation -->
+            <div class="flex flex-1 flex-wrap items-center justify-center gap-3 text-sm font-medium md:flex-none">
+                {% set links = [
+                    ('landing', 'Beranda', '/'),
+                    ('dashboard', 'Dashboard', '/dashboard'),
+                    ('chat', 'Chat', '/chat')
+                ] %}
+                {% for key, label, href in links %}
+                    <a
+                        href="{{ href }}"
+                        data-action="navigate"
+                        data-route="{{ href }}"
+                        class="rounded-md px-3 py-2 transition-colors {{ 'bg-black text-white shadow-sm' if active_page == key else 'text-muted-foreground hover:text-foreground' }}"
+                        {% if active_page == key %}aria-current="page"{% endif %}
+                    >
+                        {{ label }}
+                    </a>
+                {% endfor %}
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    <a
+                        href="/admin"
+                        data-action="navigate"
+                        data-route="/admin"
+                        class="rounded-md px-3 py-2 transition-colors {{ 'bg-black text-white shadow-sm' if active_page == 'admin' else 'text-muted-foreground hover:text-foreground' }}"
+                        {% if active_page == 'admin' %}aria-current="page"{% endif %}
+                    >
+                        Admin
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- User actions -->
+            <div class="flex items-center gap-3 justify-end text-sm">
+                {% if show_status_indicator is not defined or show_status_indicator %}
+                    <div id="statusIndicator" class="hidden md:flex items-center gap-2">
+                        <div class="w-2 h-2 rounded-full bg-muted animate-pulse" id="statusDot"></div>
+                        <span class="text-muted-foreground" id="statusText">Checking...</span>
+                    </div>
+                {% endif %}
+
+                {% if current_user.is_authenticated %}
+                    <div class="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span class="text-foreground truncate max-w-[160px]">{{ current_user.get_display_name() }}</span>
+                    </div>
+                    <div class="relative">
+                        <button
+                            data-action="toggle-user-menu"
+                            class="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-accent hover:text-accent-foreground"
+                        >
+                            <span class="md:hidden">Menu</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        <div id="userMenu" class="hidden absolute right-0 top-11 z-50 w-48 rounded-md border border-border bg-white shadow-lg">
+                            <div class="py-1 text-sm">
+                                <button data-action="navigate" data-route="/chat" class="flex w-full items-center gap-2 px-4 py-2 text-left {{ 'bg-black text-white' if active_page == 'chat' else 'text-muted-foreground hover:bg-accent' }}">
+                                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                                    Chat Console
+                                </button>
+                                <button data-action="navigate" data-route="/dashboard" class="flex w-full items-center gap-2 px-4 py-2 text-left {{ 'bg-black text-white' if active_page == 'dashboard' else 'text-muted-foreground hover:bg-accent' }}">
+                                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                                    Dashboard
+                                </button>
+                                {% if current_user.is_admin %}
+                                    <button data-action="navigate" data-route="/admin" class="flex w-full items-center gap-2 px-4 py-2 text-left {{ 'bg-black text-white' if active_page == 'admin' else 'text-muted-foreground hover:bg-accent' }}">
+                                        <i data-lucide="settings" class="w-4 h-4"></i>
+                                        Admin Panel
+                                    </button>
+                                {% endif %}
+                                <div class="my-1 border-t border-border"></div>
+                                <button data-action="logout" class="flex w-full items-center gap-2 px-4 py-2 text-left text-destructive hover:bg-destructive/10">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                                    Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <a
+                        href="/login"
+                        class="inline-flex items-center justify-center rounded-md border border-input px-3 py-2 text-sm font-medium transition-colors {{ 'bg-black text-white border-black shadow-sm' if active_page == 'login' else 'bg-background text-foreground hover:bg-accent hover:text-accent-foreground' }}"
+                        {% if active_page == 'login' %}aria-current="page"{% endif %}
+                    >
+                        Sign In
+                    </a>
+                    <a
+                        href="/register"
+                        class="inline-flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-colors {{ 'bg-black text-white shadow-sm' if active_page == 'register' else 'bg-primary text-primary-foreground hover:bg-primary/90' }}"
+                        {% if active_page == 'register' %}aria-current="page"{% endif %}
+                    >
+                        Get Started
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+<script src="{{ url_for('static', filename='js/navbar.js') }}" defer></script>
