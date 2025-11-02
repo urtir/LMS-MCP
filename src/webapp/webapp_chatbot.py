@@ -703,10 +703,102 @@ def security_data():
         logger.info(f"Dashboard alerts sample: {alerts_summary[:5]}")
 
         return jsonify(response_data)
-        
+
     except Exception as e:
         logger.error(f"Error fetching security data: {e}")
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/alerts/by-severity/<int:level>')
+@login_required
+def alerts_by_severity(level: int):
+    """Return alerts filtered by severity level."""
+    try:
+        import sqlite3
+
+        database_dir = config.get('database.DATABASE_DIR')
+        wazuh_db_name = config.get('database.WAZUH_DB_NAME')
+        db_path = os.path.join(project_root, database_dir, wazuh_db_name)
+
+        if not os.path.exists(db_path):
+            logger.error('Alerts-by-severity database not found at: %s', db_path)
+            return jsonify({'success': False, 'error': 'Database not found'}), 404
+
+        has_rule_groups = False
+        max_results = 200
+        alerts: List[Dict[str, Any]] = []
+        total_count = 0
+
+        with sqlite3.connect(db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute('PRAGMA table_info(wazuh_archives)')
+            table_columns = {row[1] for row in cursor.fetchall()}
+            has_rule_groups = 'rule_groups' in table_columns
+
+            params = (level,)
+            total_row = conn.execute(
+                '''
+                SELECT COUNT(*) AS count
+                FROM wazuh_archives
+                WHERE rule_level IS NOT NULL
+                  AND TRIM(rule_level) != ''
+                  AND CAST(rule_level AS INTEGER) = ?
+                ''',
+                params
+            ).fetchone()
+
+            total_count = int(total_row['count']) if total_row and total_row['count'] is not None else 0
+
+            recent_columns = 'id, timestamp, agent_name, rule_level, rule_description, location'
+            if has_rule_groups:
+                recent_columns += ', rule_groups'
+
+            rows = conn.execute(
+                f'''
+                SELECT {recent_columns}
+                FROM wazuh_archives
+                WHERE rule_level IS NOT NULL
+                  AND TRIM(rule_level) != ''
+                  AND CAST(rule_level AS INTEGER) = ?
+                ORDER BY timestamp DESC
+                LIMIT {max_results}
+                ''',
+                params
+            ).fetchall()
+
+        for row in rows:
+            raw_groups = row['rule_groups'] if has_rule_groups and 'rule_groups' in row.keys() else None
+            rule_group_values = [value.strip() for value in (raw_groups or '').split(',') if value and value.strip()]
+            raw_level = row['rule_level']
+            try:
+                normalized_level = int(raw_level) if raw_level is not None and str(raw_level).strip() != '' else None
+            except (TypeError, ValueError):
+                normalized_level = None
+            alerts.append({
+                'id': row['id'],
+                'timestamp': row['timestamp'],
+                'agent_name': row['agent_name'] or 'Unknown',
+                'rule_level': normalized_level,
+                'rule_level_raw': raw_level,
+                'rule_description': row['rule_description'] or 'No description',
+                'location': row['location'] or 'Unknown',
+                'rule_groups': rule_group_values
+            })
+
+        logger.debug('Fetched %s alerts (level %s, total %s)', len(alerts), level, total_count)
+
+        return jsonify({
+            'success': True,
+            'level': level,
+            'count': total_count,
+            'limit': max_results,
+            'alerts': alerts
+        })
+
+    except Exception as error:  # pragma: no cover - handled gracefully for runtime issues
+        logger.exception('Failed to fetch alerts for severity %s: %s', level, error)
+        return jsonify({'success': False, 'error': 'Failed to fetch alerts'}), 500
 
 @app.route('/api/chat', methods=['POST'])
 @login_required

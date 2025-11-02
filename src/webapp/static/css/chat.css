@@ -1,0 +1,196 @@
+/* AISOC Chat Interface Styles */
+
+/* Global font family */
+body, html, * {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Scrollbar styling */
+body,
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.6) rgba(226, 232, 240, 0.35);
+}
+
+body::-webkit-scrollbar,
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+body::-webkit-scrollbar-track,
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(226, 232, 240, 0.35);
+    border-radius: 9999px;
+}
+
+body::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.75);
+    border-radius: 9999px;
+    border: 2px solid rgba(248, 250, 252, 0.5);
+}
+
+body::-webkit-scrollbar-thumb:hover,
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(37, 99, 235, 0.75);
+}
+
+/* Compact message presentation */
+#messages br {
+    display: block;
+    margin: 0.1em 0 !important;
+    line-height: 0.1 !important;
+}
+
+#messages .text-sm {
+    line-height: 1.1 !important;
+}
+
+#messages div {
+    line-height: 1.1;
+}
+
+#messages p {
+    margin: 0.1em 0;
+    line-height: 1.1;
+}
+
+#messages ul,
+#messages ol {
+    margin: 0.5em 0 !important;
+}
+
+#messages li {
+    margin-bottom: 0.1em !important;
+}
+
+/* Sidebar specific styles */
+.sidebar {
+    background-color: hsl(var(--sidebar-background));
+    color: hsl(var(--sidebar-foreground));
+    transition: width 0.3s ease, opacity 0.3s ease;
+    width: 16rem;
+    min-width: 16rem;
+}
+
+.sidebar[data-state="closed"] {
+    width: 0 !important;
+    min-width: 0 !important;
+    opacity: 0;
+    pointer-events: none;
+    border-right: none;
+}
+
+.sidebar[data-state="open"] {
+    width: 16rem !important;
+    min-width: 16rem !important;
+    opacity: 1 !important;
+    pointer-events: auto;
+    border-right: 1px solid hsl(var(--border));
+}
+
+.sidebar-header {
+    border-bottom: 1px solid hsl(var(--sidebar-border));
+}
+
+.sidebar-footer {
+    border-top: 1px solid hsl(var(--sidebar-border));
+}
+
+.sidebar-menu-item {
+    background-color: transparent;
+}
+
+.sidebar-menu-item:hover {
+    background-color: hsl(var(--sidebar-accent));
+    color: hsl(var(--sidebar-accent-foreground));
+}
+
+.sidebar-menu-item[data-active="true"] {
+    background-color: hsl(var(--sidebar-accent));
+    color: hsl(var(--sidebar-accent-foreground));
+    font-weight: 500;
+}
+
+/* Tool and thinking content collapsing */
+.tool-content,
+.thinking-content {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.tool-content.collapsed,
+.thinking-content.collapsed {
+    display: none !important;
+    height: 0;
+    opacity: 0;
+}
+
+/* Toggle button animations */
+.sidebar-trigger i,
+.collapse-toggle i {
+    transition: transform 0.2s ease;
+}
+
+.collapse-toggle[aria-expanded="false"] i {
+    transform: rotate(-90deg);
+}
+
+.collapsible-content {
+    height: auto;
+}
+
+.collapsible-content[data-state="closed"] {
+    height: 0 !important;
+}
+
+.sidebar-content {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar-inset {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+}
+
+.sidebar-title {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.sidebar-provider {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+#messages,
+.message-content,
+.prose {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+pre,
+code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* Utility */
+* {
+    box-sizing: border-box;
+}
+
+.line-gap {
+    display: block;
+    height: 2px;
+    line-height: 2px;
+    font-size: 1px;
+}

@@ -9,6 +9,7 @@ class AISOCDashboard {
         this.modelName = document.getElementById('modelName');
         this.toolsCount = document.getElementById('toolsCount');
         this.documentClickHandler = (event) => this.handleDocumentClick(event);
+    this.alertsCache = [];
         this.severityPalette = [
             '#94a3b8', '#cbd5f5', '#e2e8f0', '#bfdbfe', '#93c5fd', '#60a5fa',
             '#fcd34d', '#fbbf24', '#fca5a5', '#f87171', '#ef4444', '#dc2626',
@@ -113,10 +114,11 @@ class AISOCDashboard {
             const statusData = statusResponse.ok ? await statusResponse.json() : {};
             const toolsData = toolsResponse.ok ? await toolsResponse.json() : {};
 
+            this.alertsCache = Array.isArray(securityData.alerts) ? securityData.alerts : [];
             this.renderStats(securityData.stats || {});
             this.renderCharts(securityData.timeline || [], securityData.rule_levels || []);
             this.renderAgents(securityData.agents || []);
-            this.renderAlerts(securityData.alerts || []);
+            this.renderAlerts(this.alertsCache);
             this.renderRuleGroups(securityData.rule_groups || []);
             this.renderChatStats(securityData.chat || {});
             this.renderReports(securityData.reports || []);
@@ -153,7 +155,6 @@ class AISOCDashboard {
         const totalAlerts = document.getElementById('stat-total-alerts');
         const activeAgents = document.getElementById('stat-active-agents');
         const criticalEvents = document.getElementById('stat-critical-events');
-        const securityScore = document.getElementById('stat-security-score');
         const alertVelocity = document.getElementById('stat-alert-velocity');
         const alertTrend = document.getElementById('stat-alert-trend');
 
@@ -165,22 +166,6 @@ class AISOCDashboard {
         }
         if (criticalEvents) {
             criticalEvents.textContent = this.formatNumber(stats.critical_events);
-        }
-        if (securityScore) {
-            const score = typeof stats.security_score === 'number' ? stats.security_score : null;
-            securityScore.textContent = score !== null ? String(score) : '--';
-            securityScore.classList.remove('text-green-500', 'text-amber-500', 'text-red-500', 'text-slate-900');
-            if (score !== null) {
-                if (score >= 80) {
-                    securityScore.classList.add('text-green-500');
-                } else if (score >= 60) {
-                    securityScore.classList.add('text-amber-500');
-                } else {
-                    securityScore.classList.add('text-red-500');
-                }
-            } else {
-                securityScore.classList.add('text-slate-900');
-            }
         }
         if (alertVelocity) {
             const value = typeof stats.alert_velocity === 'number' ? stats.alert_velocity : null;
@@ -400,11 +385,15 @@ class AISOCDashboard {
         if (!tableBody) {
             return;
         }
+        this.alertsCache = Array.isArray(alerts) ? alerts : [];
         tableBody.innerHTML = '';
 
-        alerts.slice(0, 20).forEach((alert) => {
+        const latestAlerts = this.alertsCache.slice(0, 10);
+
+        latestAlerts.forEach((alert) => {
             const row = document.createElement('tr');
-            row.className = 'hover:bg-slate-50';
+            row.className = 'hover:bg-slate-50 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary/40';
+            row.tabIndex = 0;
 
             const timeCell = document.createElement('td');
             timeCell.className = 'px-3 py-2 text-slate-600';
@@ -438,10 +427,18 @@ class AISOCDashboard {
             row.appendChild(agentCell);
             row.appendChild(ruleCell);
             row.appendChild(levelCell);
+
+            row.addEventListener('click', () => this.openAlertModal(alert));
+            row.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    this.openAlertModal(alert);
+                }
+            });
             tableBody.appendChild(row);
         });
 
-        if (!alerts.length) {
+        if (!latestAlerts.length) {
             const row = document.createElement('tr');
             const cell = document.createElement('td');
             cell.colSpan = 4;
@@ -678,7 +675,10 @@ class AISOCDashboard {
         nonZeroItems.forEach((item) => {
             const index = items.indexOf(item);
             const wrapper = document.createElement('div');
-            wrapper.className = 'flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-2 py-1';
+            wrapper.className = 'flex items-center gap-2 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 transition-colors hover:bg-white focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer';
+            wrapper.dataset.level = item.level;
+            wrapper.tabIndex = 0;
+            wrapper.title = `View alerts for severity level ${item.level}`;
 
             const chip = document.createElement('span');
             chip.className = 'h-2.5 w-2.5 flex-shrink-0 rounded-full';
@@ -702,8 +702,270 @@ class AISOCDashboard {
             wrapper.appendChild(chip);
             wrapper.appendChild(content);
 
+            wrapper.addEventListener('click', () => this.openAlertsBySeverity(item.level));
+            wrapper.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    this.openAlertsBySeverity(item.level);
+                }
+            });
+
             legendContainer.appendChild(wrapper);
         });
+    }
+
+    openAlertModal(alert) {
+        if (!alert) {
+            return;
+        }
+        this.openAlertsModal('Alert Details', [alert], 1);
+    }
+
+    async openAlertsBySeverity(level) {
+        const numericLevel = Number(level);
+        if (!Number.isFinite(numericLevel)) {
+            return;
+        }
+
+        const fallbackAlerts = this.alertsCache.filter((alert) => {
+            const value = typeof alert.rule_level === 'number' ? alert.rule_level : parseInt(alert.rule_level, 10);
+            return Number.isFinite(value) && value === numericLevel;
+        });
+
+        const title = `Severity Level ${numericLevel} Alerts`;
+
+        try {
+            const response = await fetch(`/api/alerts/by-severity/${numericLevel}`);
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
+
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error || 'Failed to load alerts');
+            }
+
+            const alerts = Array.isArray(data.alerts) ? data.alerts : [];
+            const totalCount = typeof data.count === 'number' ? data.count : alerts.length;
+
+            if (!alerts.length && fallbackAlerts.length) {
+                this.openAlertsModal(title, fallbackAlerts, fallbackAlerts.length);
+                return;
+            }
+
+            this.openAlertsModal(title, alerts, totalCount);
+        } catch (error) {
+            console.error(`Failed to load alerts for severity ${numericLevel}:`, error);
+            if (fallbackAlerts.length) {
+                this.openAlertsModal(title, fallbackAlerts, fallbackAlerts.length);
+            } else {
+                this.openAlertsModal(title, [], 0);
+            }
+        }
+    }
+
+    openAlertsModal(title, alerts, totalCount = Array.isArray(alerts) ? alerts.length : 0) {
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4';
+
+        const modal = document.createElement('div');
+        modal.className = 'flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl';
+        overlay.appendChild(modal);
+
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between border-b border-slate-200 px-5 py-4';
+
+        const headingWrapper = document.createElement('div');
+        headingWrapper.className = 'flex flex-col';
+
+        const heading = document.createElement('h3');
+        heading.className = 'text-lg font-semibold text-slate-900';
+        heading.textContent = title;
+
+        const subtitle = document.createElement('span');
+        subtitle.className = 'text-xs text-slate-500';
+
+        if (alerts.length && totalCount > alerts.length) {
+            subtitle.textContent = `Showing ${alerts.length} of ${totalCount} events`;
+        } else if (alerts.length) {
+            subtitle.textContent = `${alerts.length} event${alerts.length === 1 ? '' : 's'}`;
+        } else if (totalCount > 0) {
+            subtitle.textContent = `No recent events returned (expected ${totalCount}).`;
+        } else {
+            subtitle.textContent = 'No matching events';
+        }
+
+        headingWrapper.appendChild(heading);
+        headingWrapper.appendChild(subtitle);
+
+        const closeButton = document.createElement('button');
+        closeButton.className = 'inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-100';
+        closeButton.setAttribute('type', 'button');
+        closeButton.setAttribute('data-action', 'close-modal');
+        const closeIcon = document.createElement('i');
+        closeIcon.setAttribute('data-lucide', 'x');
+        closeIcon.className = 'h-4 w-4';
+        closeButton.appendChild(closeIcon);
+
+        header.appendChild(headingWrapper);
+        header.appendChild(closeButton);
+        modal.appendChild(header);
+
+        const content = document.createElement('div');
+        content.className = 'flex-1 space-y-4 overflow-y-auto bg-slate-50 px-5 py-4';
+
+        if (alerts.length) {
+            alerts.forEach((alert) => {
+                content.appendChild(this.buildAlertCard(alert));
+            });
+        } else {
+            const emptyState = document.createElement('div');
+            emptyState.className = 'rounded-lg border border-dashed border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-500';
+            emptyState.textContent = totalCount > 0
+                ? 'No recent entries returned for this level. Try adjusting the window or refresh the dashboard.'
+                : 'No alerts available for the selected criteria.';
+            content.appendChild(emptyState);
+        }
+
+        modal.appendChild(content);
+
+        const footer = document.createElement('div');
+        footer.className = 'flex justify-end gap-3 border-t border-slate-200 bg-white px-5 py-4';
+
+        const footerClose = document.createElement('button');
+        footerClose.className = 'inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100';
+        footerClose.setAttribute('type', 'button');
+        footerClose.setAttribute('data-action', 'close-modal');
+        const footerIcon = document.createElement('i');
+        footerIcon.setAttribute('data-lucide', 'x-circle');
+        footerIcon.className = 'h-4 w-4';
+        const footerLabel = document.createElement('span');
+        footerLabel.textContent = 'Close';
+        footerClose.appendChild(footerIcon);
+        footerClose.appendChild(footerLabel);
+        footer.appendChild(footerClose);
+
+        modal.appendChild(footer);
+
+        const closeModal = () => {
+            document.removeEventListener('keydown', handleEscape);
+            if (overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        };
+
+        const handleEscape = (event) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                closeModal();
+            }
+        };
+
+        overlay.addEventListener('click', (event) => {
+            if (event.target === overlay) {
+                closeModal();
+            }
+        });
+
+        overlay.querySelectorAll('[data-action="close-modal"]').forEach((button) => {
+            button.addEventListener('click', closeModal);
+        });
+
+        document.addEventListener('keydown', handleEscape);
+
+        document.body.appendChild(overlay);
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    }
+
+    buildAlertCard(alert) {
+        const card = document.createElement('article');
+        card.className = 'space-y-3 rounded-lg border border-slate-200 bg-white p-4 shadow-sm';
+
+        const header = document.createElement('div');
+        header.className = 'flex flex-wrap items-start justify-between gap-3';
+
+        const titleWrapper = document.createElement('div');
+        titleWrapper.className = 'flex-1';
+
+        const title = document.createElement('p');
+        title.className = 'text-sm font-semibold text-slate-900';
+        title.textContent = alert.rule_description || 'No description available';
+
+        const location = document.createElement('p');
+        location.className = 'text-xs text-slate-500';
+        location.textContent = alert.location ? `Location: ${alert.location}` : 'Location: Unknown';
+
+        titleWrapper.appendChild(title);
+        titleWrapper.appendChild(location);
+
+        const levelBadge = document.createElement('span');
+        levelBadge.className = 'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold';
+        const level = typeof alert.rule_level === 'number' ? alert.rule_level : parseInt(alert.rule_level, 10);
+        if (Number.isFinite(level) && level >= 8) {
+            levelBadge.classList.add('bg-red-100', 'text-red-700');
+        } else if (Number.isFinite(level) && level >= 6) {
+            levelBadge.classList.add('bg-amber-100', 'text-amber-700');
+        } else {
+            levelBadge.classList.add('bg-slate-100', 'text-slate-600');
+        }
+        levelBadge.textContent = Number.isFinite(level) ? `Level ${level}` : `Level ${alert.rule_level_raw || 'Unknown'}`;
+
+        header.appendChild(titleWrapper);
+        header.appendChild(levelBadge);
+        card.appendChild(header);
+
+        const meta = document.createElement('dl');
+        meta.className = 'grid grid-cols-1 gap-3 text-xs text-slate-600 sm:grid-cols-2';
+
+        const metaEntries = [
+            { label: 'Timestamp', value: this.formatTimestamp(alert.timestamp) },
+            { label: 'Agent', value: alert.agent_name || 'Unknown' },
+            { label: 'Alert ID', value: alert.id || 'N/A' },
+            { label: 'Rule Level (raw)', value: alert.rule_level_raw || (Number.isFinite(level) ? level : 'N/A') },
+            { label: 'Location', value: alert.location || 'Unknown' }
+        ];
+
+        metaEntries.forEach((entry) => {
+            if (!entry.value) {
+                return;
+            }
+            const wrapper = document.createElement('div');
+            const term = document.createElement('dt');
+            term.className = 'font-medium text-slate-500';
+            term.textContent = entry.label;
+            const description = document.createElement('dd');
+            description.className = 'mt-0.5 text-slate-700';
+            description.textContent = entry.value;
+            wrapper.appendChild(term);
+            wrapper.appendChild(description);
+            meta.appendChild(wrapper);
+        });
+
+        card.appendChild(meta);
+
+        if (Array.isArray(alert.rule_groups) && alert.rule_groups.length) {
+            const groupsWrapper = document.createElement('div');
+            groupsWrapper.className = 'flex flex-wrap items-center gap-2';
+
+            const label = document.createElement('span');
+            label.className = 'text-xs font-medium uppercase tracking-wide text-slate-500';
+            label.textContent = 'Rule Groups:';
+            groupsWrapper.appendChild(label);
+
+            alert.rule_groups.forEach((group) => {
+                const chip = document.createElement('span');
+                chip.className = 'inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-600';
+                chip.textContent = group;
+                groupsWrapper.appendChild(chip);
+            });
+
+            card.appendChild(groupsWrapper);
+        }
+
+        return card;
     }
 
     formatNumber(value) {
