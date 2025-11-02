@@ -7,7 +7,10 @@ class AISOCDashboard {
         this.lastUpdated = document.getElementById('lastUpdated');
         this.modelName = document.getElementById('modelName');
         this.toolsCount = document.getElementById('toolsCount');
-        this.alertsCache = [];
+    this.reportButtons = document.querySelectorAll('[data-action="download-report"]');
+    this.reportStatus = document.getElementById('reportStatus');
+    this.reportsInProgress = new Set();
+    this.alertsCache = [];
         this.severityPalette = [
             '#94a3b8', '#cbd5f5', '#e2e8f0', '#bfdbfe', '#93c5fd', '#60a5fa',
             '#fcd34d', '#fbbf24', '#fca5a5', '#f87171', '#ef4444', '#dc2626',
@@ -27,6 +30,9 @@ class AISOCDashboard {
     bindEvents() {
         document.querySelectorAll('[data-action="refresh-dashboard"]').forEach((button) => {
             button.addEventListener('click', () => this.refreshAll());
+        });
+        this.reportButtons.forEach((button) => {
+            button.addEventListener('click', () => this.handleReportDownload(button));
         });
     }
 
@@ -94,6 +100,122 @@ class AISOCDashboard {
             console.error('Failed to refresh dashboard:', error);
             this.setErrorState();
         }
+    }
+
+    async handleReportDownload(button) {
+        if (!button) {
+            return;
+        }
+
+        const reportType = button.dataset.reportType;
+        if (!reportType) {
+            return;
+        }
+
+        if (this.reportsInProgress.has(reportType)) {
+            this.updateReportStatus('Laporan sedang diproses. Mohon tunggu hingga selesai sebelum meminta ulang.', 'info');
+            return;
+        }
+
+        this.reportsInProgress.add(reportType);
+
+        this.setReportButtonState(button, true);
+        this.updateReportStatus(`Menyiapkan laporan ${button.textContent.trim()}...`, 'info');
+
+        try {
+            const response = await fetch(`/api/reports/${encodeURIComponent(reportType)}`, {
+                method: 'GET',
+                credentials: 'same-origin',
+                headers: {
+                    'Accept': 'application/pdf'
+                },
+                cache: 'no-store'
+            });
+
+            if (!response.ok) {
+                let errorMessage = 'Gagal membuat laporan.';
+                try {
+                    const errorData = await response.json();
+                    if (errorData && errorData.error) {
+                        errorMessage = errorData.error;
+                    }
+                } catch (parseError) {
+                    const fallbackText = await response.text();
+                    if (fallbackText) {
+                        errorMessage = fallbackText;
+                    }
+                }
+                throw new Error(errorMessage);
+            }
+
+            const blob = await response.blob();
+            const disposition = response.headers.get('content-disposition') || response.headers.get('Content-Disposition');
+            const filename = this.extractFilenameFromDisposition(disposition, `security_report_${reportType}_${Date.now()}.pdf`);
+
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+            }, 4000);
+
+            this.updateReportStatus(`Laporan ${filename} berhasil dibuat dan diunduh.`, 'success');
+        } catch (error) {
+            console.error('Report download failed:', error);
+            this.updateReportStatus(error.message || 'Gagal membuat laporan.', 'error');
+        } finally {
+            this.setReportButtonState(button, false);
+            this.reportsInProgress.delete(reportType);
+        }
+    }
+
+    setReportButtonState(button, isLoading) {
+        if (!button) {
+            return;
+        }
+
+        const loading = Boolean(isLoading);
+        button.disabled = loading;
+        button.classList.toggle('opacity-60', loading);
+        button.classList.toggle('cursor-not-allowed', loading);
+    }
+
+    updateReportStatus(message, variant = 'info') {
+        if (!this.reportStatus) {
+            return;
+        }
+
+        const variants = {
+            success: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            error: 'border-red-200 bg-red-50 text-red-700',
+            info: 'border-slate-200 bg-slate-50 text-slate-600'
+        };
+
+        const baseClasses = 'mt-4 rounded-md border px-4 py-3 text-sm transition-all';
+        this.reportStatus.className = `${baseClasses} ${variants[variant] || variants.info}`;
+        this.reportStatus.textContent = message;
+        this.reportStatus.classList.remove('hidden');
+    }
+
+    extractFilenameFromDisposition(disposition, fallback) {
+        if (!disposition) {
+            return fallback;
+        }
+
+        try {
+            const match = disposition.match(/filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
+            if (match) {
+                return decodeURIComponent(match[1] || match[2]).trim();
+            }
+        } catch (error) {
+            console.warn('Unable to parse filename from disposition header:', error);
+        }
+
+        return fallback;
     }
 
     setErrorState() {
@@ -980,6 +1102,51 @@ class AISOCDashboard {
         }
         const label = String(period).replace(/_/g, ' ');
         return label.charAt(0).toUpperCase() + label.slice(1);
+    }
+
+    setReportButtonState(button, isLoading) {
+        if (!button) {
+            return;
+        }
+
+        const loading = Boolean(isLoading);
+        button.disabled = loading;
+        button.classList.toggle('opacity-60', loading);
+        button.classList.toggle('cursor-not-allowed', loading);
+    }
+
+    updateReportStatus(message, variant = 'info') {
+        if (!this.reportStatus) {
+            return;
+        }
+
+        const variants = {
+            success: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+            error: 'border-red-200 bg-red-50 text-red-700',
+            info: 'border-slate-200 bg-slate-50 text-slate-600'
+        };
+
+        const baseClasses = 'mt-4 rounded-md border px-4 py-3 text-sm transition-all';
+        this.reportStatus.className = `${baseClasses} ${variants[variant] || variants.info}`;
+        this.reportStatus.textContent = message;
+        this.reportStatus.classList.remove('hidden');
+    }
+
+    extractFilenameFromDisposition(disposition, fallback) {
+        if (!disposition) {
+            return fallback;
+        }
+
+        try {
+            const match = disposition.match(/filename\*=UTF-8''([^;]+)|filename="?([^";]+)"?/i);
+            if (match) {
+                return decodeURIComponent(match[1] || match[2]).trim();
+            }
+        } catch (error) {
+            console.warn('Unable to parse filename from disposition header:', error);
+        }
+
+        return fallback;
     }
 }
 

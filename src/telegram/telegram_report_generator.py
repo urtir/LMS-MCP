@@ -36,7 +36,10 @@ class SecurityReportGenerator:
     
     def __init__(self):
         self.config = TelegramBotConfig()
-        self.wazuh_db_path = self.config.DATABASE_CONFIG['wazuh_db']
+        db_path = Path(self.config.DATABASE_CONFIG['wazuh_db'])
+        if not db_path.is_absolute():
+            db_path = (project_root / db_path).resolve()
+        self.wazuh_db_path = str(db_path)
         self.chat_db = ChatDatabase()
         self.mcp_bridge = FastMCPBridge()
         

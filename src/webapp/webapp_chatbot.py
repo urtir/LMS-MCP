@@ -18,6 +18,7 @@ from typing import Dict, List, Optional, Any
 from pathlib import Path
 import sys
 from flask import Flask, render_template, request, jsonify, Response, redirect, url_for, flash, session, make_response
+from flask import send_file
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from functools import wraps
 import itertools
@@ -37,6 +38,8 @@ config = ConfigManager()
 from src.database import ChatDatabase
 from src.api import FastMCPBridge
 from src.models.user import User
+from telegram.telegram_report_generator import get_report_generator
+from telegram.telegram_pdf_generator import PDFReportGenerator
 
 # Import admin blueprint
 from src.webapp.admin import admin_bp
@@ -102,6 +105,51 @@ def dashboard():
         active_page='dashboard'
     )
 
+
+@main_bp.route('/api/reports/<report_type>', methods=['GET'])
+@login_required
+def download_security_report(report_type: str):
+    """Generate and download security reports as PDF files."""
+    report_type = (report_type or '').lower()
+    report_methods = {
+        'daily': 'generate_daily_report',
+        '3day': 'generate_three_daily_report',
+        'weekly': 'generate_weekly_report',
+        'monthly': 'generate_monthly_report'
+    }
+
+    if report_type not in report_methods:
+        return jsonify({'error': 'Invalid report type requested.'}), 400
+
+    try:
+        generator = asyncio.run(get_report_generator())
+        report_coro = getattr(generator, report_methods[report_type])
+        report_data = asyncio.run(report_coro())
+    except Exception as exc:  # pragma: no cover - defensive logging
+        logger.error("Failed to prepare %s report data: %s", report_type, exc)
+        return jsonify({'error': 'Failed to prepare report data.'}), 500
+
+    if not report_data or report_data.get('error'):
+        error_message = report_data.get('error', 'Report data unavailable.') if isinstance(report_data, dict) else 'Report data unavailable.'
+        logger.error("Report generation error for %s: %s", report_type, error_message)
+        return jsonify({'error': error_message}), 500
+
+    try:
+        pdf_generator = get_pdf_generator()
+        pdf_buffer = asyncio.run(pdf_generator.generate_pdf_report(report_data))
+        pdf_buffer.seek(0)
+    except Exception as exc:  # pragma: no cover - defensive logging
+        logger.error("Failed to render %s report PDF: %s", report_type, exc)
+        return jsonify({'error': 'Failed to render PDF report.'}), 500
+
+    filename = f"security_report_{report_type}_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.pdf"
+    return send_file(
+        pdf_buffer,
+        mimetype='application/pdf',
+        as_attachment=True,
+        download_name=filename
+    )
+
 # Register main blueprint  
 app.register_blueprint(main_bp)
 
@@ -118,6 +166,7 @@ def load_user(user_id):
 _db_instance = None
 _mcp_bridge_instance = None
 _client_instance = None
+_pdf_generator_instance = None
 
 def get_database():
     """Get singleton database instance"""
@@ -143,6 +192,14 @@ def get_openai_client():
             timeout=None  # No timeout
         )
     return _client_instance
+
+
+def get_pdf_generator() -> PDFReportGenerator:
+    """Singleton PDF generator reused across report downloads."""
+    global _pdf_generator_instance
+    if _pdf_generator_instance is None:
+        _pdf_generator_instance = PDFReportGenerator()
+    return _pdf_generator_instance
 
 # Initialize singletons
 logger.info("=== INITIALIZING WEBAPP COMPONENTS ===")

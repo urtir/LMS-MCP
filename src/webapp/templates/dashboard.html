@@ -97,6 +97,56 @@
                     </article>
                 </section>
 
+                <article class="mt-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                            <h3 class="text-base font-semibold text-slate-900">Generate Security Reports</h3>
+                            <p class="text-sm text-slate-500">
+                                Unduh laporan PDF dengan format yang sama seperti laporan Telegram untuk analisis cepat.
+                            </p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button
+                                type="button"
+                                class="inline-flex items-center gap-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+                                data-action="download-report"
+                                data-report-type="daily"
+                            >
+                                <i data-lucide="calendar" class="h-4 w-4"></i>
+                                Daily Report
+                            </button>
+                            <button
+                                type="button"
+                                class="inline-flex items-center gap-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+                                data-action="download-report"
+                                data-report-type="3day"
+                            >
+                                <i data-lucide="calendar-range" class="h-4 w-4"></i>
+                                3-Day Report
+                            </button>
+                            <button
+                                type="button"
+                                class="inline-flex items-center gap-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+                                data-action="download-report"
+                                data-report-type="weekly"
+                            >
+                                <i data-lucide="calendar-check" class="h-4 w-4"></i>
+                                Weekly Report
+                            </button>
+                            <button
+                                type="button"
+                                class="inline-flex items-center gap-2 rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900"
+                                data-action="download-report"
+                                data-report-type="monthly"
+                            >
+                                <i data-lucide="calendar-days" class="h-4 w-4"></i>
+                                Monthly Report
+                            </button>
+                        </div>
+                    </div>
+                    <div id="reportStatus" class="mt-4 hidden rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600"></div>
+                </article>
+
                 <!-- Agents & Alerts -->
                 <section class="grid grid-cols-1 gap-6 xl:grid-cols-2">
                     <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
