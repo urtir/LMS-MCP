@@ -3,52 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - LMS MCP</title>
+    <title>Register - AISOC</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
-        
-        .bg-gradient-security {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        }
-        
-        .form-input {
-            transition: all 0.2s ease-in-out;
-        }
-        
-        .form-input:focus {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-        }
-        
-        .error-message, .success-message {
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-        
-        .error-message.show, .success-message.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body class="h-full bg-gradient-security">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -56,15 +17,15 @@
             <!-- Header -->
             <div class="text-center">
                 <div class="flex justify-center mb-6">
-                    <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center">
+                    <div class="w-16 h-16 bg-white/10 border border-white/20 rounded-2xl flex items-center justify-center">
                         <i data-lucide="user-plus" class="w-8 h-8 text-white"></i>
                     </div>
                 </div>
                 <h2 class="text-3xl font-bold text-white">
-                    Create Account
+                    Create Your AISOC Account
                 </h2>
                 <p class="mt-2 text-sm text-gray-400">
-                    Join our security operations platform
+                    Join the AI Security Operations Center platform
                 </p>
             </div>
 
@@ -72,18 +33,18 @@
             <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20">
                 <form id="registerForm" class="space-y-6">
                     <!-- Error Message -->
-                    <div id="errorMessage" class="error-message bg-red-500/20 border border-red-500/30 rounded-lg p-4">
+                    <div id="errorMessage" class="message-flag error-message bg-white/10 border border-white/20 rounded-lg p-4">
                         <div class="flex items-center">
-                            <i data-lucide="alert-circle" class="w-5 h-5 text-red-400 mr-3"></i>
-                            <span id="errorText" class="text-red-300 text-sm"></span>
+                            <i data-lucide="alert-circle" class="w-5 h-5 text-white mr-3"></i>
+                            <span id="errorText" class="text-white text-sm"></span>
                         </div>
                     </div>
 
                     <!-- Success Message -->
-                    <div id="successMessage" class="success-message bg-green-500/20 border border-green-500/30 rounded-lg p-4">
+                    <div id="successMessage" class="message-flag success-message bg-white/10 border border-white/20 rounded-lg p-4">
                         <div class="flex items-center">
-                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 mr-3"></i>
-                            <span id="successText" class="text-green-300 text-sm"></span>
+                            <i data-lucide="check-circle" class="w-5 h-5 text-white mr-3"></i>
+                            <span id="successText" class="text-white text-sm"></span>
                         </div>
                     </div>
 
@@ -100,7 +61,7 @@
                                 id="full_name" 
                                 name="full_name" 
                                 type="text" 
-                                class="form-input block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="form-input block w-full pl-10 pr-3 py-3 border border-white/20 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-white/40"
                                 placeholder="Enter your full name"
                             >
                         </div>
@@ -120,7 +81,7 @@
                                 name="username" 
                                 type="text" 
                                 required 
-                                class="form-input block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="form-input block w-full pl-10 pr-3 py-3 border border-white/20 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-white/40"
                                 placeholder="Choose a username"
                             >
                         </div>
@@ -140,7 +101,7 @@
                                 name="email" 
                                 type="email" 
                                 required 
-                                class="form-input block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="form-input block w-full pl-10 pr-3 py-3 border border-white/20 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-white/40"
                                 placeholder="Enter your email"
                             >
                         </div>
@@ -161,10 +122,10 @@
                                 type="password" 
                                 required 
                                 minlength="6"
-                                class="form-input block w-full pl-10 pr-12 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="form-input block w-full pl-10 pr-12 py-3 border border-white/20 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-white/40"
                                 placeholder="Create a password (min. 6 characters)"
                             >
-                            <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <button type="button" data-action="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                                 <i id="passwordToggle" data-lucide="eye" class="w-5 h-5 text-gray-400 hover:text-gray-300"></i>
                             </button>
                         </div>
@@ -184,7 +145,7 @@
                                 name="confirm_password" 
                                 type="password" 
                                 required 
-                                class="form-input block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-800/50 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="form-input block w-full pl-10 pr-3 py-3 border border-white/20 rounded-lg bg-white/5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/60 focus:border-white/40"
                                 placeholder="Confirm your password"
                             >
                         </div>
@@ -194,12 +155,12 @@
                     <div>
                         <button 
                             type="submit" 
-                            class="btn-primary w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                            class="auth-btn w-full flex justify-center py-3 px-4 border border-transparent rounded-lg text-sm font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/40 disabled:opacity-50 disabled:cursor-not-allowed"
                             id="submitBtn"
                         >
                             <span id="submitText">Create Account</span>
                             <div id="submitSpinner" class="hidden ml-2">
-                                <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                <div class="w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
                             </div>
                         </button>
                     </div>
@@ -208,7 +169,7 @@
                     <div class="text-center">
                         <p class="text-sm text-gray-400">
                             Already have an account? 
-                            <a href="/login" class="font-medium text-blue-400 hover:text-blue-300 transition-colors">
+                            <a href="/login" class="font-medium text-gray-100 hover:text-white transition-colors">
                                 Sign in here
                             </a>
                         </p>
@@ -220,174 +181,12 @@
             <div class="text-center">
                 <a href="/" class="inline-flex items-center text-sm text-gray-400 hover:text-gray-300 transition-colors">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
-                    Back to Landing Page
+                    Back to AISOC Home
                 </a>
             </div>
         </div>
     </div>
 
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
-
-        // Password toggle functionality
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = document.getElementById('passwordToggle');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.setAttribute('data-lucide', 'eye-off');
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.setAttribute('data-lucide', 'eye');
-            }
-            lucide.createIcons();
-        }
-
-        // Message display functions
-        function showError(message) {
-            hideSuccess();
-            const errorDiv = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            errorText.textContent = message;
-            errorDiv.classList.add('show');
-        }
-
-        function hideError() {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.classList.remove('show');
-        }
-
-        function showSuccess(message) {
-            hideError();
-            const successDiv = document.getElementById('successMessage');
-            const successText = document.getElementById('successText');
-            successText.textContent = message;
-            successDiv.classList.add('show');
-        }
-
-        function hideSuccess() {
-            const successDiv = document.getElementById('successMessage');
-            successDiv.classList.remove('show');
-        }
-
-        // Loading state
-        function setLoading(loading) {
-            const submitBtn = document.getElementById('submitBtn');
-            const submitText = document.getElementById('submitText');
-            const submitSpinner = document.getElementById('submitSpinner');
-            
-            if (loading) {
-                submitBtn.disabled = true;
-                submitText.textContent = 'Creating Account...';
-                submitSpinner.classList.remove('hidden');
-            } else {
-                submitBtn.disabled = false;
-                submitText.textContent = 'Create Account';
-                submitSpinner.classList.add('hidden');
-            }
-        }
-
-        // Form validation
-        function validateForm(data) {
-            if (!data.username.trim()) {
-                showError('Username is required');
-                return false;
-            }
-            if (!data.email.trim()) {
-                showError('Email is required');
-                return false;
-            }
-            if (!data.password) {
-                showError('Password is required');
-                return false;
-            }
-            if (data.password.length < 6) {
-                showError('Password must be at least 6 characters long');
-                return false;
-            }
-            if (data.password !== data.confirm_password) {
-                showError('Passwords do not match');
-                return false;
-            }
-            
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(data.email)) {
-                showError('Please enter a valid email address');
-                return false;
-            }
-            
-            return true;
-        }
-
-        // Form submission
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            hideError();
-            hideSuccess();
-            
-            const formData = new FormData(e.target);
-            const data = {
-                username: formData.get('username'),
-                email: formData.get('email'),
-                password: formData.get('password'),
-                confirm_password: formData.get('confirm_password'),
-                full_name: formData.get('full_name')
-            };
-            
-            if (!validateForm(data)) {
-                return;
-            }
-            
-            setLoading(true);
-            
-            try {
-                const response = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                const result = await response.json();
-                
-                if (response.ok) {
-                    showSuccess('Account created successfully! Redirecting...');
-                    setTimeout(() => {
-                        window.location.href = '/chat';
-                    }, 2000);
-                } else {
-                    showError(result.error || 'Registration failed');
-                }
-            } catch (error) {
-                showError('Network error. Please try again.');
-            } finally {
-                setLoading(false);
-            }
-        });
-
-        // Clear messages on input
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', () => {
-                hideError();
-                hideSuccess();
-            });
-        });
-
-        // Real-time password confirmation validation
-        document.getElementById('confirm_password').addEventListener('input', function() {
-            const password = document.getElementById('password').value;
-            const confirmPassword = this.value;
-            
-            if (confirmPassword && password !== confirmPassword) {
-                this.style.borderColor = '#ef4444';
-            } else {
-                this.style.borderColor = '#4b5563';
-            }
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
 </body>
 </html>

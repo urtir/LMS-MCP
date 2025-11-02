@@ -49,3 +49,5 @@ logs/telegram_bot.log
 logs/wazuh_realtime.log
 logs/wazuh_realtime.log
 data/chat_history.db
+
+paper-search-mcp/

@@ -3,112 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LMS MCP - Security Operations Intelligence Platform</title>
+    <title>AISOC - AI Security Operations Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --background: 0 0% 100%;
-            --foreground: 222.2 84% 4.9%;
-            --card: 0 0% 100%;
-            --card-foreground: 222.2 84% 4.9%;
-            --popover: 0 0% 100%;
-            --popover-foreground: 222.2 84% 4.9%;
-            --primary: 222.2 84% 4.9%;
-            --primary-foreground: 210 40% 98%;
-            --secondary: 210 40% 96%;
-            --secondary-foreground: 222.2 84% 4.9%;
-            --muted: 210 40% 96%;
-            --muted-foreground: 215.4 16.3% 46.9%;
-            --accent: 210 40% 96%;
-            --accent-foreground: 222.2 84% 4.9%;
-            --destructive: 0 84.2% 60.2%;
-            --destructive-foreground: 210 40% 98%;
-            --border: 214.3 31.8% 91.4%;
-            --input: 214.3 31.8% 91.4%;
-            --ring: 222.2 84% 4.9%;
-            --radius: 0.5rem;
-        }
-        
-        .dark {
-            --background: 222.2 84% 4.9%;
-            --foreground: 210 40% 98%;
-            --card: 222.2 84% 4.9%;
-            --card-foreground: 210 40% 98%;
-            --popover: 222.2 84% 4.9%;
-            --popover-foreground: 210 40% 98%;
-            --primary: 217.2 91.2% 59.8%;
-            --primary-foreground: 222.2 84% 4.9%;
-            --secondary: 217.2 32.6% 17.5%;
-            --secondary-foreground: 210 40% 98%;
-            --muted: 217.2 32.6% 17.5%;
-            --muted-foreground: 215 20.2% 65.1%;
-            --accent: 217.2 32.6% 17.5%;
-            --accent-foreground: 210 40% 98%;
-            --destructive: 0 62.8% 30.6%;
-            --destructive-foreground: 210 40% 98%;
-            --border: 217.2 32.6% 17.5%;
-            --input: 217.2 32.6% 17.5%;
-            --ring: 224.3 76.3% 94.1%;
-        }
-        
-        * {
-            border-color: hsl(var(--border));
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: hsl(var(--background));
-            color: hsl(var(--foreground));
-        }
-        
-        .gradient-hero {
-            background: linear-gradient(135deg, 
-                #000000 0%, 
-                #1a1a1a 25%, 
-                #2d2d2d 75%, 
-                #000000 100%);
-        }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-4px);
-            transition: all 0.3s ease;
-        }
-        
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .animate-pulse-slow {
-            animation: pulse 4s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 
 <body class="bg-background text-foreground min-h-screen">
     <!-- Navigation Header -->
-    <nav class="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+    <nav class="border-b bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <!-- Logo and Brand -->
@@ -117,8 +23,8 @@
                         <i data-lucide="shield-check" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold">LMS MCP</h1>
-                        <p class="text-xs text-muted-foreground">Security Intelligence</p>
+                        <h1 class="text-xl font-bold">AISOC</h1>
+                        <p class="text-xs text-muted-foreground">AI Security Operations Center</p>
                     </div>
                 </div>
                 
@@ -142,28 +48,28 @@
                             <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
                             <span class="text-foreground">{{ user.get_display_name() }}</span>
                         </div>
-                        <button onclick="window.location.href='/chat'" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
+                        <button data-action="navigate" data-route="/chat" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
                             <i data-lucide="message-circle" class="w-4 h-4 mr-2"></i>
                             Chat
                         </button>
-                        <button onclick="window.location.href='/admin'" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
+                        <button data-action="navigate" data-route="/admin" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
                             <i data-lucide="settings" class="w-4 h-4 mr-2"></i>
                             Admin
                         </button>
                         <div class="relative">
-                            <button onclick="toggleUserMenu()" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 w-9">
+                            <button data-action="toggle-user-menu" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 w-9">
                                 <i data-lucide="more-vertical" class="w-4 h-4"></i>
                             </button>
-                            <div id="userMenu" class="hidden absolute right-0 top-10 w-48 bg-background border border-border rounded-md shadow-lg z-50">
-                                <div class="py-1">
+                            <div id="userMenu" class="hidden absolute right-0 top-10 w-48 bg-white border border-border rounded-md shadow-lg z-50">
+                                <div class="py-1 bg-white">
                                     {% if current_user.is_admin %}
-                                    <button onclick="window.location.href='/admin'" class="w-full text-left block px-4 py-2 text-sm hover:bg-accent">
+                                    <button data-action="navigate" data-route="/admin" class="w-full text-left block px-4 py-2 text-sm hover:bg-accent">
                                         <i data-lucide="settings" class="w-4 h-4 inline mr-2"></i>
                                         Admin Panel
                                     </button>
                                     <hr class="my-1 border-border">
                                     {% endif %}
-                                    <button onclick="logout()" class="w-full text-left block px-4 py-2 text-sm text-destructive hover:bg-accent">
+                                    <button data-action="logout" class="w-full text-left block px-4 py-2 text-sm text-destructive hover:bg-accent">
                                         <i data-lucide="log-out" class="w-4 h-4 inline mr-2"></i>
                                         Logout
                                     </button>
@@ -172,10 +78,10 @@
                         </div>
                     {% else %}
                         <!-- User is not logged in -->
-                        <button onclick="window.location.href='/login'" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
+                        <button data-action="navigate" data-route="/login" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
                             Sign In
                         </button>
-                        <button onclick="window.location.href='/register'" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
+                        <button data-action="navigate" data-route="/register" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2">
                             Get Started
                         </button>
                     {% endif %}
@@ -198,41 +104,41 @@
                 </div>
                 
                 <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                    Intelligent Security
+                    AISOC
                     <span class="block text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-white">
-                        Operations Platform
+                        AI Security Operations Center
                     </span>
                 </h1>
                 
                 <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                    Harness the power of AI to monitor, analyze, and respond to security threats in real-time. 
-                    Integrated with Wazuh SIEM and powered by advanced LLM technology.
+                    AISOC unifies Wazuh SIEM telemetry, FastMCP automations, and LLM reasoning to deliver proactive, real-time security operations.
+                    Automate investigations, surface critical insights, and orchestrate response from a single AI-native command center.
                 </p>
                 
                 <!-- Hero CTA Buttons -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
                     {% if user %}
                         <!-- User is logged in -->
-                        <button onclick="window.location.href='/chat'" class="inline-flex items-center justify-center rounded-lg text-lg font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-slate-900 hover:bg-slate-100 hover:scale-105 hover:shadow-xl h-16 px-10 py-4 shadow-2xl border-2 border-white/20">
+                        <button data-action="navigate" data-route="/chat" class="inline-flex items-center justify-center rounded-lg text-lg font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-slate-900 hover:bg-slate-100 hover:scale-105 hover:shadow-xl h-16 px-10 py-4 shadow-2xl border-2 border-white/20">
                             <i data-lucide="message-circle" class="w-6 h-6 mr-3"></i>
-                            Start Security Chat
+                            Launch AISOC Chat
                         </button>
-                        <button onclick="window.location.href='/admin'" class="inline-flex items-center justify-center rounded-lg text-lg font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-white/50 text-white hover:bg-white/10 hover:border-white hover:scale-105 backdrop-blur-sm h-16 px-10 py-4">
+                        <button data-action="navigate" data-route="/admin" class="inline-flex items-center justify-center rounded-lg text-lg font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-white/50 text-white hover:bg-white/10 hover:border-white hover:scale-105 backdrop-blur-sm h-16 px-10 py-4">
                             <i data-lucide="settings" class="w-6 h-6 mr-3"></i>
                             Admin Panel
                         </button>
                     {% else %}
                         <!-- User is not logged in -->
-                        <button onclick="window.location.href='/register'" class="inline-flex items-center justify-center rounded-lg text-lg font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-slate-900 hover:bg-slate-100 hover:scale-105 hover:shadow-xl h-16 px-10 py-4 shadow-2xl border-2 border-white/20">
+                        <button data-action="navigate" data-route="/register" class="inline-flex items-center justify-center rounded-lg text-lg font-bold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-slate-900 hover:bg-slate-100 hover:scale-105 hover:shadow-xl h-16 px-10 py-4 shadow-2xl border-2 border-white/20">
                             <i data-lucide="user-plus" class="w-6 h-6 mr-3"></i>
-                            Get Started Free
+                            Join AISOC
                         </button>
-                        <button onclick="window.location.href='/login'" class="inline-flex items-center justify-center rounded-lg text-lg font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-white/50 text-white hover:bg-white/10 hover:border-white hover:scale-105 backdrop-blur-sm h-16 px-10 py-4">
+                        <button data-action="navigate" data-route="/login" class="inline-flex items-center justify-center rounded-lg text-lg font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-white/50 text-white hover:bg-white/10 hover:border-white hover:scale-105 backdrop-blur-sm h-16 px-10 py-4">
                             <i data-lucide="log-in" class="w-6 h-6 mr-3"></i>
                             Sign In
                         </button>
                     {% endif %}
-                    <button onclick="showDemo()" class="inline-flex items-center justify-center rounded-lg text-lg font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-white/50 text-white hover:bg-white/10 hover:border-white hover:scale-105 backdrop-blur-sm h-16 px-10 py-4">
+                    <button data-action="show-demo" class="inline-flex items-center justify-center rounded-lg text-lg font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border-2 border-white/50 text-white hover:bg-white/10 hover:border-white hover:scale-105 backdrop-blur-sm h-16 px-10 py-4">
                         <i data-lucide="play-circle" class="w-6 h-6 mr-3"></i>
                         Watch Demo
                     </button>
@@ -282,9 +188,9 @@
     <section id="features" class="py-20 bg-muted/30">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Powerful Security Features</h2>
+                <h2 class="text-4xl font-bold mb-4">Core AISOC Capabilities</h2>
                 <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
-                    Advanced AI capabilities meet enterprise-grade security monitoring
+                    Purpose-built for AI-driven security teams that need faster context, richer insights, and orchestrated response.
                 </p>
             </div>
             
@@ -296,7 +202,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-3">AI-Powered Analysis</h3>
                     <p class="text-muted-foreground mb-4">
-                        Leverage advanced LLM technology to analyze security events, identify patterns, and provide intelligent insights in natural language.
+                        AISOC distills millions of security events into actionable narratives with explainable LLM reasoning tuned for incident responders.
                     </p>
                     <div class="flex items-center text-primary text-sm font-medium">
                         <span>Learn more</span>
@@ -311,7 +217,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Wazuh SIEM Integration</h3>
                     <p class="text-muted-foreground mb-4">
-                        Seamlessly integrated with Wazuh for comprehensive security information and event management with real-time monitoring.
+                        AISOC synchronizes with Wazuh for full-fidelity telemetry, correlated alerts, and automated enrichment across your security estate.
                     </p>
                     <div class="flex items-center text-primary text-sm font-medium">
                         <span>Learn more</span>
@@ -326,7 +232,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Real-time Monitoring</h3>
                     <p class="text-muted-foreground mb-4">
-                        Monitor security events as they happen with real-time alerting and automated threat detection capabilities.
+                        Stay ahead of active threats with AISOC streaming dashboards, critical alerting, and prioritized playbook recommendations.
                     </p>
                     <div class="flex items-center text-primary text-sm font-medium">
                         <span>Learn more</span>
@@ -341,7 +247,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Natural Language Interface</h3>
                     <p class="text-muted-foreground mb-4">
-                        Interact with your security systems using natural language. Ask questions, get insights, and execute commands through chat.
+                        Interact with AISOC using natural language—ask for trends, pull evidence, or trigger automation without leaving the conversation.
                     </p>
                     <div class="flex items-center text-primary text-sm font-medium">
                         <span>Learn more</span>
@@ -356,7 +262,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Session Management</h3>
                     <p class="text-muted-foreground mb-4">
-                        Maintain conversation history across sessions with searchable chat logs and persistent context for ongoing investigations.
+                        Preserve investigation context with AISOC session memory, searchable timelines, and audit-ready conversation history.
                     </p>
                     <div class="flex items-center text-primary text-sm font-medium">
                         <span>Learn more</span>
@@ -371,7 +277,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-3">Extensible Tool System</h3>
                     <p class="text-muted-foreground mb-4">
-                        Powered by FastMCP architecture allowing easy integration of custom tools and third-party security services.
+                        Extend AISOC with FastMCP-compatible tooling, orchestrating hunts, ticketing, and remediation workflows from one hub.
                     </p>
                     <div class="flex items-center text-primary text-sm font-medium">
                         <span>Learn more</span>
@@ -387,9 +293,9 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-4xl font-bold mb-6">Seamless Integration</h2>
+                    <h2 class="text-4xl font-bold mb-6">Seamless AISOC Integration</h2>
                     <p class="text-xl text-muted-foreground mb-8">
-                        Built on modern architecture with LM Studio and FastMCP for scalable, reliable security operations.
+                        AISOC layers LM Studio inference, FastMCP automation, and Wazuh telemetry into a unified operating picture your analysts can trust.
                     </p>
                     
                     <!-- Integration Points -->
@@ -600,7 +506,7 @@
                     <div class="flex items-center justify-center gap-3">
                         <div id="overall-status" class="w-3 h-3 rounded-full bg-muted animate-pulse"></div>
                         <span class="font-medium" id="overall-text">Checking system status...</span>
-                        <button onclick="checkAllSystems()" class="ml-4 inline-flex items-center gap-2 text-sm text-primary hover:underline">
+                        <button data-action="refresh-status" class="ml-4 inline-flex items-center gap-2 text-sm text-primary hover:underline">
                             <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                             Refresh
                         </button>
@@ -620,10 +526,10 @@
                         <div class="w-8 h-8 bg-primary text-primary-foreground rounded-lg flex items-center justify-center">
                             <i data-lucide="shield-check" class="w-4 h-4"></i>
                         </div>
-                        <span class="text-lg font-bold">LMS MCP</span>
+                        <span class="text-lg font-bold">AISOC</span>
                     </div>
                     <p class="text-muted-foreground mb-4 max-w-md">
-                        Advanced AI-powered security operations platform integrating LM Studio, FastMCP, and Wazuh SIEM for intelligent threat detection and response.
+                        AISOC (AI Security Operations Center) fuses LM Studio models, FastMCP automations, and Wazuh SIEM signals to elevate threat detection and response.
                     </p>
                     <div class="flex gap-4">
                         <a href="#" class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center hover:bg-accent transition-colors">
@@ -663,7 +569,7 @@
             
             <div class="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <p class="text-muted-foreground text-sm">
-                    © 2024 LMS MCP. Advanced Security Operations Platform.
+                    © 2024 AISOC. AI Security Operations Center.
                 </p>
                 <div class="flex items-center gap-4 text-sm text-muted-foreground">
                     <a href="#" class="hover:text-foreground transition-colors">Privacy Policy</a>
@@ -674,206 +580,6 @@
         </div>
     </footer>
 
-    <script>
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            lucide.createIcons();
-            checkAllSystems();
-            loadStats();
-        });
-
-        // System status checking - only MCP
-        async function checkAllSystems() {
-            try {
-                const response = await fetch('/api/status');
-                const data = await response.json();
-                
-                updateSystemStatus('fastmcp', data.fastmcp);
-                updateOverallStatus(data);
-                
-                // Also load available tools count
-                loadToolsCount();
-                
-            } catch (error) {
-                console.error('Status check failed:', error);
-                updateSystemStatus('fastmcp', 'error');
-                updateOverallStatus({fastmcp: 'error'});
-            }
-        }
-
-        function updateSystemStatus(system, status) {
-            const statusDot = document.getElementById(system + '-status');
-            const statusText = document.getElementById(system + '-text');
-            
-            statusDot.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-muted', 'animate-pulse');
-            
-            switch(status) {
-                case 'connected':
-                    statusDot.classList.add('bg-green-500');
-                    statusText.textContent = 'Connected';
-                    statusText.className = 'text-green-600';
-                    break;
-                case 'partial':
-                    statusDot.classList.add('bg-yellow-500');
-                    statusText.textContent = 'Partial';
-                    statusText.className = 'text-yellow-600';
-                    break;
-                case 'error':
-                default:
-                    statusDot.classList.add('bg-red-500');
-                    statusText.textContent = 'Disconnected';
-                    statusText.className = 'text-red-600';
-                    break;
-            }
-        }
-
-        function updateOverallStatus(data) {
-            const overallDot = document.getElementById('overall-status');
-            const overallText = document.getElementById('overall-text');
-            const headerStatusDot = document.getElementById('statusDot');
-            const headerStatusText = document.getElementById('statusText');
-            
-            overallDot.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-muted', 'animate-pulse');
-            
-            const lmStudioOk = data.lm_studio === 'connected';
-            const fastmcpOk = data.fastmcp === 'connected';
-            
-            let statusMessage, statusClass, headerClass;
-            
-            if (lmStudioOk && fastmcpOk) {
-                overallDot.classList.add('bg-green-500');
-                statusMessage = 'All systems operational';
-                statusClass = 'text-green-600';
-                headerClass = 'text-green-600';
-                headerStatusDot.className = 'w-2 h-2 rounded-full bg-green-500';
-            } else if (lmStudioOk || fastmcpOk) {
-                overallDot.classList.add('bg-yellow-500');
-                statusMessage = 'Partial system availability';
-                statusClass = 'text-yellow-600';
-                headerClass = 'text-yellow-600';
-                headerStatusDot.className = 'w-2 h-2 rounded-full bg-yellow-500';
-            } else {
-                overallDot.classList.add('bg-red-500');
-                statusMessage = 'System maintenance required';
-                statusClass = 'text-red-600';
-                headerClass = 'text-red-600';
-                headerStatusDot.className = 'w-2 h-2 rounded-full bg-red-500';
-            }
-            
-            overallText.textContent = statusMessage;
-            overallText.className = statusClass;
-            headerStatusText.textContent = lmStudioOk && fastmcpOk ? 'Systems Online' : 
-                                            lmStudioOk || fastmcpOk ? 'Partial Service' : 'Maintenance Mode';
-            headerStatusText.className = headerClass;
-        }
-
-        async function loadToolsCount() {
-            try {
-                const response = await fetch('/api/tools');
-                const data = await response.json();
-                const toolsCount = data.tools ? data.tools.length : 0;
-                document.getElementById('tools-count').textContent = `${toolsCount} available`;
-            } catch (error) {
-                document.getElementById('tools-count').textContent = 'Error loading';
-            }
-        }
-
-        async function loadStats() {
-            try {
-                const response = await fetch('/api/stats');
-                const data = await response.json();
-                
-                // Update hero stats
-                const totalSessions = document.getElementById('totalSessions');
-                const totalMessages = document.getElementById('totalMessages');
-                
-                if (totalSessions) {
-                    animateNumber(totalSessions, data.total_sessions || 0);
-                }
-                if (totalMessages) {
-                    animateNumber(totalMessages, data.total_messages || 0);
-                }
-                
-            } catch (error) {
-                console.error('Error loading stats:', error);
-            }
-        }
-
-        function animateNumber(element, targetNumber) {
-            const currentNumber = parseInt(element.textContent) || 0;
-            if (currentNumber === targetNumber) return;
-            
-            const increment = targetNumber > currentNumber ? 1 : -1;
-            let current = currentNumber;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                element.textContent = current;
-                
-                if (current === targetNumber) {
-                    clearInterval(timer);
-                }
-            }, 50);
-        }
-
-        function showDemo() {
-            alert('Demo feature coming soon! For now, try the live chat interface.');
-            window.location.href = '/chat';
-        }
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // User menu functions (for logged in users)
-        function toggleUserMenu() {
-            const menu = document.getElementById('userMenu');
-            if (menu) {
-                menu.classList.toggle('hidden');
-            }
-        }
-
-        // Close user menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('userMenu');
-            const button = event.target.closest('button[onclick="toggleUserMenu()"]');
-            
-            if (menu && !button && !menu.contains(event.target)) {
-                menu.classList.add('hidden');
-            }
-        });
-
-        // Logout function
-        async function logout() {
-            try {
-                const response = await fetch('/api/logout', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                
-                if (response.ok) {
-                    window.location.reload(); // Reload to show logged out state
-                } else {
-                    console.error('Logout failed');
-                    alert('Logout failed. Please try again.');
-                }
-            } catch (error) {
-                console.error('Logout error:', error);
-                alert('Logout failed. Please try again.');
-            }
-        }
-    </script>
+    <script src="{{ url_for('static', filename='js/landing.js') }}"></script>
 </body>
 </html>

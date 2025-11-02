@@ -1,0 +1,172 @@
+FLOWCHART 1: WAZUH LOG ANALYSIS VIA WEB CHATBOT
+
++------------------------+
+|   Security Analyst     |
+|  (Web Chat User)       |
++------------------------+
+            |
+            v
++------------------------+
+| Web Chat UI (/chat)    |
+| Collects message &     |
+| session identifier     |
++------------------------+
+            |
+            v
++------------------------+
+| Flask API (/api/chat)  |
+| Validates session,     |
+| loads ChatSession      |
++------------------------+
+            |
+            v
++------------------------+
+| Chat Session Manager   |
+| Adds user message,     |
+| fetches MCP tool list  |
++------------------------+
+            |
+            v
++------------------------+
+| Chat Database          |
+| Persists message &     |
+| tool call metadata     |
++------------------------+
+            |
+            v
++------------------------+
+| LM Studio (LLM)        |
+| Generates response &   |
+| optional tool calls    |
++------------------------+
+            |
+            v
++-------------------------------+
+| FastMCP Bridge                |
+| Executes requested tools via  |
+| wazuh_fastmcp_server          |
++-------------------------------+
+            |
+            v
++------------------------+
+| Wazuh Data Sources     |
+| (API + SQLite cache)   |
++------------------------+
+            |
+            v
++------------------------+
+| Tool Results           |
+| Returned to ChatSession|
++------------------------+
+            |
+            v
++------------------------+
+| LM Studio Finalization |
+| Summarizes findings &  |
+| mitigations            |
++------------------------+
+            |
+            v
++------------------------+
+| Flask Response         |
+| Saves assistant reply  |
+| to database            |
++------------------------+
+            |
+            v
++------------------------+
+| Web Chat UI            |
+| Displays AI answer &   |
+| tool output to user    |
++------------------------+
+
+FLOWCHART 2: WAZUH REALTIME ALERTING VIA TELEGRAM BOT
+
++------------------------+
+| Wazuh Agents & Server  |
+| Generate security logs |
++------------------------+
+            |
+            v
++------------------------+
+| Wazuh SQLite Archive   |
+| (wazuh_archives.db)    |
++------------------------+
+            |
+            v
++-------------------------------+
+| Telegram Bot Scheduler        |
+| check_and_send_alerts job     |
+| runs every 10 seconds         |
++-------------------------------+
+            |
+            v
++-------------------------------+
+| Alert Monitor Logic           |
+| Pulls latest rule_level>=5,   |
+| filters duplicates            |
++-------------------------------+
+            |
+            v
++-------------------------------+
+| Alert Severity Grouper        |
+| Splits events into Critical,  |
+| High, Medium tiers            |
++-------------------------------+
+            |
+            v
++-------------------------------+
+| Message Composer              |
+| Builds Markdown summary with  |
+| full log snippets             |
++-------------------------------+
+            |
+            v
++-------------------------------+
+| Telegram Broadcast Loop       |
+| Sends alert to subscribers,   |
+| handles failures, cleans list |
++-------------------------------+
+            |
+            v
++------------------------+
+| Security Analysts       |
+| Receive realtime alert  |
+| and take action         |
++------------------------+
+
+MERMAID DIAGRAMS
+
+```mermaid
+flowchart TD
+    A[Security Analyst]
+    B[Web Chat UI (/chat)]
+    C[Flask API (/api/chat)]
+    D[Chat Session Manager]
+    E[Chat Database]
+    F[LM Studio (LLM)]
+    G[FastMCP Bridge]
+    H[Wazuh Data Sources]
+    I[Tool Results]
+    J[LM Studio Finalization]
+    K[Flask Response]
+    L[Web Chat UI]
+
+    A --> B --> C --> D --> E
+    E --> F --> G --> H
+    H --> I --> J --> K --> L
+```
+
+```mermaid
+flowchart TD
+    A[Wazuh Agents & Server]
+    B[Wazuh SQLite Archive]
+    C[Telegram Bot Scheduler]
+    D[Alert Monitor Logic]
+    E[Alert Severity Grouper]
+    F[Message Composer]
+    G[Telegram Broadcast Loop]
+    H[Security Analysts]
+
+    A --> B --> C --> D --> E --> F --> G --> H
+```

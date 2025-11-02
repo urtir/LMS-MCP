@@ -1,0 +1,1495 @@
+
+            <!DOCTYPE html>
+            <html lang="id">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>AISOC MCP - Panduan Lengkap</title>
+                
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3b82f6;
+            page-break-before: always;
+        }
+        
+        h1:first-of-type {
+            page-break-before: avoid;
+            text-align: center;
+            font-size: 32px;
+            color: #1e40af;
+            margin-top: 0;
+        }
+        
+        h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1e40af;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+        
+        h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: #4b5563;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+        
+        ul, ol {
+            margin-bottom: 16px;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin-bottom: 6px;
+        }
+        
+        code {
+            background-color: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 11px;
+            color: #dc2626;
+        }
+        
+        pre {
+            background-color: #1f2937;
+            color: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 10px;
+            line-height: 1.4;
+            margin: 16px 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            font-size: inherit;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 11px;
+        }
+        
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 10px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        
+        th {
+            background-color: #f3f4f6;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 16px;
+            margin: 16px 0;
+            color: #4b5563;
+            font-style: italic;
+        }
+        
+        .cover-page {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            page-break-after: always;
+        }
+        
+        .cover-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .cover-subtitle {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .cover-description {
+            font-size: 16px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+        
+        .cover-meta {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 60px;
+        }
+        
+        .toc {
+            background-color: #f8fafc;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #1e40af;
+            border: none;
+            padding: 0;
+        }
+        
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .toc li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3b82f6;
+            font-weight: bold;
+        }
+        
+        .alert {
+            padding: 15px;
+            margin: 16px 0;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .alert-info {
+            background-color: #e0f2fe;
+            border-left-color: #0288d1;
+            color: #01579b;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+            color: #856404;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            border-left-color: #28a745;
+            color: #155724;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        
+        @media print {
+            body {
+                font-size: 11px;
+            }
+            
+            .cover-page {
+                background: #667eea !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            pre {
+                background-color: #1f2937 !important;
+                color: #f9fafb !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            
+            th {
+                background-color: #f3f4f6 !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+        </style>
+        
+            </head>
+            <body>
+                
+        <div class="cover-page">
+            <div class="cover-title">🛡️ AISOC MCP</div>
+            <div class="cover-subtitle">AI Security Operations Center</div>
+            <div class="cover-description">
+                Panduan Lengkap Pengguna & Dokumentasi<br/>
+                Panduan komprehensif untuk instalasi, konfigurasi, dan penggunaan platform AISOC MCP.<br/>
+                Dari nol hingga mahir - semua yang Anda butuhkan untuk deploy dan operasikan AI-powered Security Operations Center Anda.
+            </div>
+            <div class="cover-meta">
+                <strong>Versi:</strong> 1.0.0<br/>
+                <strong>Dibuat:</strong> 26 September 2025<br/>
+                <strong>Repository:</strong> github.com/urtir/AISOC-MCP<br/><br/>
+                🛡️ Made with ❤️ by AISOC MCP Team
+            </div>
+        </div>
+        
+                <h1 id="aisoc-mcp-ai-security-operations-center"><span class="emoji">🛡</span><span class="emoji">️</span> AISOC MCP - AI Security Operations Center</h1>
+<h3 id="ai-powered-security-management-platform-with-model-context-protocol"><em>AI-Powered Security Management Platform with Model Context Protocol</em></h3>
+<p><strong>Python 3.8+</strong>
+<strong>FastMCP Protocol</strong>
+<strong>Wazuh SIEM</strong>
+<strong>Telegram Bot</strong>
+<strong>LM Studio AI</strong></p>
+<hr />
+<h2 id="daftar-isi">� <strong>Daftar Isi</strong></h2>
+<ul>
+<li><a href="#-pengenalan"><span class="emoji">🎯</span> Pengenalan</a></li>
+<li><a href="#-fitur-utama"><span class="emoji">⭐</span> Fitur Utama</a></li>
+<li><a href="#&lt;span class=&quot;emoji&quot;&gt;️&lt;/span&gt;-arsitektur">🏗<span class="emoji">️</span> Arsitektur</a></li>
+<li><a href="#-prerequisites"><span class="emoji">📋</span> Prerequisites</a></li>
+<li><a href="#-instalasi">🚀 Instalasi</a></li>
+<li><a href="#&lt;span class=&quot;emoji&quot;&gt;️&lt;/span&gt;-konfigurasi"><span class="emoji">⚙</span><span class="emoji">️</span> Konfigurasi</a></li>
+<li><a href="#-panduan-penggunaan">🎮 Panduan Penggunaan</a></li>
+<li><a href="#-fastmcp-tools">🔧 FastMCP Tools</a></li>
+<li><a href="#-database-schema"><span class="emoji">📊</span> Database Schema</a></li>
+<li><a href="#-ai-capabilities"><span class="emoji">🤖</span> AI Capabilities</a></li>
+<li><a href="#-telegram-bot">📱 Telegram Bot</a></li>
+<li><a href="#-web-dashboard">🌐 Web Dashboard</a></li>
+<li><a href="#-testing"><span class="emoji">🧪</span> Testing</a></li>
+<li><a href="#-dokumentasi"><span class="emoji">📚</span> Dokumentasi</a></li>
+<li><a href="#-troubleshooting"><span class="emoji">🚨</span> Troubleshooting</a></li>
+<li><a href="#-contributing"><span class="emoji">🤝</span> Contributing</a></li>
+</ul>
+<hr />
+<h2 id="pengenalan"><span class="emoji">🎯</span> <strong>Pengenalan</strong></h2>
+<p><strong>AISOC MCP</strong> (AI Security Operations Center - Model Context Protocol) adalah platform manajemen keamanan terdepan yang mengintegrasikan <strong>Wazuh SIEM</strong> dengan <strong>AI-powered analysis</strong> menggunakan <strong>FastMCP protocol</strong>. Platform ini menyediakan monitoring keamanan real-time, analisis log yang cerdas, dan deteksi ancaman otomatis.</p>
+<h3 id="mengapa-aisoc-mcp"><span class="emoji">🔥</span> <strong>Mengapa AISOC MCP?</strong></h3>
+<ul>
+<li>🚀 <strong>AI-Native</strong>: Built-in AI untuk analisis keamanan</li>
+<li>⚡ <strong>Real-time</strong>: Monitoring dan alerting langsung</li>
+<li>🧠 <strong>Smart Analysis</strong>: RAG + CAG untuk analisis kontekstual</li>
+<li>📱 <strong>Multi-Interface</strong>: Web, Telegram, dan API</li>
+<li>🔒 <strong>Privacy-First</strong>: AI lokal dengan LM Studio</li>
+<li><span class="emoji">📊</span> <strong>Comprehensive</strong>: 29 tools terintegrasi</li>
+</ul>
+<hr />
+<h2 id="fitur-utama"><span class="emoji">⭐</span> <strong>Fitur Utama</strong></h2>
+<h3 id="core-components">�<span class="emoji">️</span> <strong>Core Components</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Komponen</th>
+<th>Deskripsi</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FastMCP Server</strong></td>
+<td>AI-powered security analysis dengan 29 tools</td>
+<td>✅ Ready</td>
+</tr>
+<tr>
+<td><strong>Web Dashboard</strong></td>
+<td>Interactive interface dengan chat AI</td>
+<td>✅ Ready</td>
+</tr>
+<tr>
+<td><strong>Telegram Bot</strong></td>
+<td>Real-time alerts &amp; Q&amp;A capabilities</td>
+<td>✅ Ready</td>
+</tr>
+<tr>
+<td><strong>Database System</strong></td>
+<td>Comprehensive logging &amp; caching</td>
+<td>✅ Ready</td>
+</tr>
+<tr>
+<td><strong>Config Manager</strong></td>
+<td>Centralized configuration dengan validasi</td>
+<td>✅ Ready</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ai-capabilities"><span class="emoji">🤖</span> <strong>AI Capabilities</strong></h3>
+<ul>
+<li><strong><span class="emoji">🔍</span> RAG (Retrieval-Augmented Generation)</strong>: Analisis keamanan berbasis konteks</li>
+<li><strong>💾 CAG (Cache-Augmented Generation)</strong>: Sistem caching cerdas untuk performa optimal</li>
+<li><strong><span class="emoji">🎯</span> Semantic Search</strong>: Analisis log berbasis vector dan similarity search</li>
+<li><strong>🏠 LM Studio Integration</strong>: Deployment AI model lokal untuk privasi maksimal</li>
+</ul>
+<h3 id="security-features"><span class="emoji">🛡</span><span class="emoji">️</span> <strong>Security Features</strong></h3>
+<ul>
+<li><strong>📡 Real-time Monitoring</strong>: Analisis security event berkelanjutan</li>
+<li><strong><span class="emoji">🚨</span> Automated Alerting</strong>: Deteksi ancaman dan notifikasi cerdas</li>
+<li><strong>📝 Log Analysis</strong>: Analisis log keamanan berbasis AI</li>
+<li><strong><span class="emoji">📄</span> Report Generation</strong>: Laporan PDF otomatis dengan insight keamanan</li>
+<li><strong>👥 Agent Management</strong>: Monitoring agent Wazuh yang komprehensif</li>
+</ul>
+<hr />
+<h2 id="arsitektur">🏗<span class="emoji">️</span> <strong>Arsitektur</strong></h2>
+<div class="alert alert-info"><span class="emoji">📊</span> **Diagram Arsitektur Sistem** - Diagram interaktif tersedia di versi web</div>
+
+<h3 id="struktur-project">📂 <strong>Struktur Project</strong></h3>
+<div class="codehilite"><pre><span></span><code>AISOC<span class="w"> </span>MCP/
+├──<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>🎯<span class="nt">&lt;/span&gt;</span><span class="w"> </span>src/
+│<span class="w">   </span>├──<span class="w"> </span>api/
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>wazuh_fastmcp_server.py<span class="w">    </span>#<span class="w"> </span>🚀<span class="w"> </span>Core<span class="w"> </span>FastMCP<span class="w"> </span>server
+│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>wazuh_realtime_server.py<span class="w">   </span>#<span class="w"> </span>📡<span class="w"> </span>Real-time<span class="w"> </span>monitoring
+│<span class="w">   </span>├──<span class="w"> </span>webapp/
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>webapp_chatbot.py<span class="w">          </span>#<span class="w"> </span>🌐<span class="w"> </span>Main<span class="w"> </span>web<span class="w"> </span>app
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>admin.py<span class="w">                   </span>#<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>⚙<span class="nt">&lt;/span&gt;&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>️<span class="nt">&lt;/span&gt;</span><span class="w"> </span>Admin<span class="w"> </span>interface
+│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>templates/<span class="w">                 </span>#<span class="w"> </span>🎨<span class="w"> </span>HTML<span class="w"> </span>templates
+│<span class="w">   </span>├──<span class="w"> </span>telegram/
+│<span class="w">   </span>│<span class="w">   </span>├──<span class="w"> </span>telegram_security_bot.py<span class="w">   </span>#<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>🤖<span class="nt">&lt;/span&gt;</span><span class="w"> </span>Bot<span class="w"> </span>utama
+│<span class="w">   </span>│<span class="w">   </span>└──<span class="w"> </span>telegram_report_generator.py<span class="w"> </span>#<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>📊<span class="nt">&lt;/span&gt;</span><span class="w"> </span>Report<span class="w"> </span>generator
+│<span class="w">   </span>└──<span class="w"> </span>database/<span class="w">                      </span>#<span class="w"> </span>💾<span class="w"> </span>Database<span class="w"> </span>utilities
+├──<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>⚙<span class="nt">&lt;/span&gt;&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>️<span class="nt">&lt;/span&gt;</span><span class="w"> </span>config/
+│<span class="w">   </span>├──<span class="w"> </span>config_manager.py<span class="w">              </span>#<span class="w"> </span>🎛<span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>️<span class="nt">&lt;/span&gt;</span><span class="w"> </span>Configuration<span class="w"> </span>manager
+│<span class="w">   </span>└──<span class="w"> </span>config.json<span class="w">                    </span>#<span class="w"> </span>📝<span class="w"> </span>Main<span class="w"> </span>config
+├──<span class="w"> </span>💾<span class="w"> </span>data/
+│<span class="w">   </span>├──<span class="w"> </span>chat_history.db<span class="w">                </span>#<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>💬<span class="nt">&lt;/span&gt;</span><span class="w"> </span>Chat<span class="w"> </span>database
+│<span class="w">   </span>└──<span class="w"> </span>wazuh_archives.db<span class="w">              </span>#<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>📋<span class="nt">&lt;/span&gt;</span><span class="w"> </span>Wazuh<span class="w"> </span>logs
+├──<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>📚<span class="nt">&lt;/span&gt;</span><span class="w"> </span>docs/<span class="w">                           </span>#<span class="w"> </span>📖<span class="w"> </span>Dokumentasi<span class="w"> </span>lengkap
+├──<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>🧪<span class="nt">&lt;/span&gt;</span><span class="w"> </span>tests/<span class="w">                          </span>#<span class="w"> </span><span class="nt">&lt;span</span><span class="w"> </span><span class="na">class=</span><span class="s">&quot;emoji&quot;</span><span class="nt">&gt;</span>🔍<span class="nt">&lt;/span&gt;</span><span class="w"> </span>Testing<span class="w"> </span>suite
+└──<span class="w"> </span>🧠<span class="w"> </span>cag_cache/<span class="w">                      </span>#<span class="w"> </span>🚀<span class="w"> </span>AI<span class="w"> </span>knowledge<span class="w"> </span>cache
+</code></pre></div>
+
+<hr />
+<h2 id="prerequisites"><span class="emoji">📋</span> <strong>Prerequisites</strong></h2>
+<h3 id="system-requirements">�<span class="emoji">️</span> <strong>System Requirements</strong></h3>
+<ul>
+<li><strong>OS</strong>: Windows 10/11, Linux, macOS</li>
+<li><strong>Python</strong>: 3.8 atau lebih tinggi</li>
+<li><strong>RAM</strong>: Minimum 8GB (Recommended 16GB+)</li>
+<li><strong>Storage</strong>: 10GB free space</li>
+<li><strong>Network</strong>: Internet connection untuk setup awal</li>
+</ul>
+<h3 id="required-software">📦 <strong>Required Software</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Versi</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Python</strong></td>
+<td>3.8+</td>
+<td>Runtime environment</td>
+</tr>
+<tr>
+<td><strong>Wazuh Manager</strong></td>
+<td>4.x+</td>
+<td>SIEM platform</td>
+</tr>
+<tr>
+<td><strong>LM Studio</strong></td>
+<td>Latest</td>
+<td>Local AI inference</td>
+</tr>
+<tr>
+<td><strong>Git</strong></td>
+<td>Latest</td>
+<td>Version control</td>
+</tr>
+</tbody>
+</table>
+<h3 id="api-keys-tokens">🔑 <strong>API Keys &amp; Tokens</strong></h3>
+<ul>
+<li><strong>Telegram Bot Token</strong> (dari @BotFather)</li>
+<li><strong>Wazuh API Credentials</strong></li>
+<li><strong>LM Studio API Key</strong> (jika diperlukan)</li>
+</ul>
+<hr />
+<h2 id="instalasi">🚀 <strong>Instalasi</strong></h2>
+<h3 id="step-1-clone-repository"><strong>Step 1: Clone Repository</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Clone repository</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">urtir</span><span class="p">/</span><span class="n">AISOC-MCP</span><span class="p">.</span><span class="n">git</span>
+<span class="nb">cd </span><span class="n">AISOC-MCP</span>
+</code></pre></div>
+
+<h3 id="step-2-setup-python-environment"><strong>Step 2: Setup Python Environment</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Buat virtual environment</span>
+<span class="n">python</span> <span class="n">-m</span> <span class="n">venv</span> <span class="n">aisoc_env</span>
+
+<span class="c"># Aktivasi virtual environment</span>
+<span class="c"># Windows PowerShell:</span>
+<span class="p">.\</span><span class="n">aisoc_env</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">Activate</span><span class="p">.</span><span class="n">ps1</span>
+<span class="c"># Windows CMD:</span>
+<span class="c"># aisoc_env\Scripts\activate.bat</span>
+</code></pre></div>
+
+<h3 id="step-3-install-dependencies"><strong>Step 3: Install Dependencies</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Upgrade pip</span>
+<span class="n">python</span> <span class="n">-m</span> <span class="n">pip</span> <span class="n">install</span> <span class="p">-</span><span class="n">-upgrade</span> <span class="n">pip</span>
+
+<span class="c"># Install requirements</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">-r</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
+
+<span class="c"># Verify installation</span>
+<span class="n">pip</span> <span class="n">list</span>
+</code></pre></div>
+
+<h3 id="step-4-setup-lm-studio"><strong>Step 4: Setup LM Studio</strong></h3>
+<ol>
+<li><strong>Download &amp; Install</strong>: <a href="https://lmstudio.ai">LM Studio</a></li>
+<li><strong>Download Model</strong>: Pilih model seperti <code>qwen2.5-1.5b</code> atau <code>llama-3.2-1b</code></li>
+<li><strong>Start Server</strong>: Jalankan server di <code>http://localhost:1234</code></li>
+</ol>
+<h3 id="step-5-setup-wazuh"><strong>Step 5: Setup Wazuh</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Install Wazuh (Linux example)</span>
+curl<span class="w"> </span>-sO<span class="w"> </span>https://packages.wazuh.com/4.x/wazuh-install.sh
+sudo<span class="w"> </span>bash<span class="w"> </span>./wazuh-install.sh<span class="w"> </span>-a
+
+<span class="c1"># Verify Wazuh is running</span>
+curl<span class="w"> </span>-k<span class="w"> </span>-X<span class="w"> </span>GET<span class="w"> </span><span class="s2">&quot;https://localhost:55000/&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;Authorization: Bearer </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<h3 id="step-6-database-migration"><strong>Step 6: Database Migration</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Migrate database</span>
+<span class="n">python</span> <span class="n">migrate_database</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Verify database</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">check_db</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<hr />
+<h2 id="konfigurasi"><span class="emoji">⚙</span><span class="emoji">️</span> <strong>Konfigurasi</strong></h2>
+<h3 id="step-1-environment-variables"><strong>Step 1: Environment Variables</strong></h3>
+<p>Buat file <code>.env</code> di root directory:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># LM Studio Configuration</span>
+<span class="nv">LM_STUDIO_BASE_URL</span><span class="o">=</span>http://localhost:1234/v1
+<span class="nv">LM_STUDIO_API_KEY</span><span class="o">=</span>lm-studio
+<span class="nv">LM_STUDIO_MODEL</span><span class="o">=</span>qwen2.5-1.5b-instruct
+
+<span class="c1"># Wazuh Configuration</span>
+<span class="nv">WAZUH_API_URL</span><span class="o">=</span>https://localhost:55000
+<span class="nv">WAZUH_USERNAME</span><span class="o">=</span>wazuh-wui
+<span class="nv">WAZUH_PASSWORD</span><span class="o">=</span>YourSecurePassword123
+
+<span class="c1"># Flask Configuration</span>
+<span class="nv">FLASK_HOST</span><span class="o">=</span><span class="m">127</span>.0.0.1
+<span class="nv">FLASK_PORT</span><span class="o">=</span><span class="m">5000</span>
+<span class="nv">FLASK_SECRET_KEY</span><span class="o">=</span>your-super-secret-key-here
+
+<span class="c1"># Telegram Configuration</span>
+<span class="nv">TELEGRAM_BOT_TOKEN</span><span class="o">=</span><span class="m">1234567890</span>:ABCdefGhIjKlMnOpQrStUvWxYz
+<span class="nv">TELEGRAM_CHAT_ID</span><span class="o">=</span>your-chat-id
+</code></pre></div>
+
+<h3 id="step-2-configjson-setup"><strong>Step 2: Config.json Setup</strong></h3>
+<p>Edit <code>config/config.json</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;services&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;fastmcp_server&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8000</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;lm_studio_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://localhost:1234/v1&quot;</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;web_app&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;debug&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">    </span><span class="nt">&quot;telegram_bot&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${TELEGRAM_BOT_TOKEN}&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;admin_chat_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${TELEGRAM_CHAT_ID}&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;wazuh&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;api_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${WAZUH_API_URL}&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${WAZUH_USERNAME}&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${WAZUH_PASSWORD}&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;verify_ssl&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="step-3-telegram-bot-setup"><strong>Step 3: Telegram Bot Setup</strong></h3>
+<ol>
+<li><strong>Buat Bot</strong>:</li>
+<li>Chat dengan <a href="https://t.me/BotFather">@BotFather</a></li>
+<li>Kirim <code>/newbot</code></li>
+<li>
+<p>Ikuti instruksi dan dapatkan token</p>
+</li>
+<li>
+<p><strong>Get Chat ID</strong>:
+   <code>powershell
+   # Start bot dulu, lalu jalankan:
+   python tests/test_telegram_alerting.py</code></p>
+</li>
+<li>
+<p><strong>Test Bot</strong>:
+   <code>powershell
+   # Test telegram functionality
+   python src/telegram/telegram_security_bot.py</code></p>
+</li>
+</ol>
+<hr />
+<h2 id="panduan-penggunaan">🎮 <strong>Panduan Penggunaan</strong></h2>
+<h3 id="menjalankan-aisoc-mcp"><strong>🚀 Menjalankan AISOC MCP</strong></h3>
+<h4 id="method-1-all-in-one-recommended"><strong>Method 1: All-in-One (Recommended)</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Start all services</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">start_all_services</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<h4 id="method-2-manual-service-start"><strong>Method 2: Manual Service Start</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Terminal 1: Start FastMCP Server</span>
+<span class="n">python</span> <span class="n">src</span><span class="p">/</span><span class="n">api</span><span class="p">/</span><span class="n">wazuh_fastmcp_server</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Terminal 2: Start Web App</span>
+<span class="n">python</span> <span class="n">src</span><span class="p">/</span><span class="n">webapp</span><span class="p">/</span><span class="n">webapp_chatbot</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Terminal 3: Start Telegram Bot</span>
+<span class="n">python</span> <span class="n">src</span><span class="p">/</span><span class="n">telegram</span><span class="p">/</span><span class="n">telegram_security_bot</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Terminal 4: Start Real-time Monitor</span>
+<span class="n">python</span> <span class="n">src</span><span class="p">/</span><span class="n">api</span><span class="p">/</span><span class="n">wazuh_realtime_server</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<h3 id="verifikasi-services"><strong>✅ Verifikasi Services</strong></h3>
+<h4 id="1-check-fastmcp-server"><strong>1. Check FastMCP Server</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Test FastMCP tools</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_tool_definition</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<h4 id="2-check-web-application"><strong>2. Check Web Application</strong></h4>
+<ul>
+<li>Browse ke: <code>http://localhost:5000</code></li>
+<li>Login dengan default credentials</li>
+<li>Test chat interface</li>
+</ul>
+<h4 id="3-check-telegram-bot"><strong>3. Check Telegram Bot</strong></h4>
+<ul>
+<li>Start chat dengan bot</li>
+<li>Kirim <code>/start</code></li>
+<li>Test command <code>/help</code></li>
+</ul>
+<h4 id="4-check-database"><strong>4. Check Database</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Verify database integrity</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">check_db</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<p>Konfigurasi utama dilakukan melalui file <code>config/config.json</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;lm_studio&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;base_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://192.168.56.1:1234/v1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;api_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lm-studio&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;qwen/qwen3-1.7b&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;wazuh&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;api_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://localhost:55000&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;wazuh-wui&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-password&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;verify_ssl&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;flask&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;port&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;debug&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;secret_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-secret-key&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;telegram&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;bot_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-bot-token&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;chat_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;your-chat-id&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="detailed-configuration">Detailed Configuration</h3>
+<p>Untuk konfigurasi lengkap, lihat:</p>
+<ul>
+<li><code>docs/COMPLETE_VARIABLES_LIST.md</code> - Daftar lengkap variabel konfigurasi</li>
+<li><code>docs/HARDCODED_CONFIG_ANALYSIS.md</code> - Analisis konfigurasi hardcoded</li>
+</ul>
+<h2 id="usage">🔧 Usage</h2>
+<h3 id="web-interface">Web Interface</h3>
+<ol>
+<li><strong>Access Dashboard</strong>: <code>http://localhost:5000</code></li>
+<li><strong>Login</strong> dengan kredensial yang dikonfigurasi</li>
+<li><strong>Monitor</strong> security events di dashboard</li>
+<li><strong>Generate Reports</strong> melalui menu reporting</li>
+</ol>
+<h3 id="telegram-bot">Telegram Bot</h3>
+<ol>
+<li><strong>Start Bot</strong>: Jalankan <code>src/telegram/telegram_security_bot.py</code></li>
+<li><strong>Add Bot</strong> ke grup Telegram Anda</li>
+<li><strong>Subscribe</strong> untuk notifikasi real-time</li>
+<li><strong>Query Logs</strong> dengan perintah natural language</li>
+</ol>
+<h3 id="api-access">API Access</h3>
+<p>FastMCP server menyediakan tools untuk:</p>
+<ul>
+<li><code>check_wazuh_log</code> - Query dan analisis log keamanan</li>
+<li><code>list_agents</code> - Daftar dan kelola agents</li>
+<li><code>get_api_info</code> - Informasi API Wazuh</li>
+<li>Dan banyak tools lainnya...</li>
+</ul>
+<h2 id="documentation"><span class="emoji">📚</span> Documentation</h2>
+<h3 id="core-documentation">Core Documentation</h3>
+<ul>
+<li><code>docs/FastMCP_Documentation.md</code> - Dokumentasi FastMCP lengkap</li>
+<li><code>docs/Wazuh_API_Documentation.md</code> - Dokumentasi Wazuh API</li>
+<li><code>docs/CACHE_AUGMENTED_GENERATION_CAG.md</code> - Implementasi CAG</li>
+</ul>
+<h3 id="system-documentation">System Documentation</h3>
+<ul>
+<li><code>docs/ALERT_SYSTEM_README.md</code> - Sistem alert real-time</li>
+<li><code>docs/RAG_TO_CAG_MIGRATION.md</code> - Migrasi dari RAG ke CAG</li>
+</ul>
+<h2 id="architecture">🏗<span class="emoji">️</span> Architecture</h2>
+<h3 id="technology-stack">Technology Stack</h3>
+<ul>
+<li><strong>Backend</strong>: Python 3.10+ dengan FastAPI dan Flask</li>
+<li><strong>Database</strong>: SQLite untuk storage lokal</li>
+<li><strong>AI/ML</strong>: LM Studio dengan local LLM models</li>
+<li><strong>Protocol</strong>: FastMCP untuk AI tool integration</li>
+<li><strong>Frontend</strong>: HTML5, CSS3, JavaScript dengan modern UI components</li>
+<li><strong>Integration</strong>: Wazuh API, Telegram Bot API</li>
+</ul>
+<h3 id="system-components">System Components</h3>
+<ol>
+<li><strong><code>wazuh_fastmcp_server.py</code></strong> - Core FastMCP server dengan Wazuh integration</li>
+<li><strong><code>webapp_chatbot.py</code></strong> - Main web application</li>
+<li><strong><code>telegram_security_bot.py</code></strong> - Telegram bot untuk notifikasi</li>
+<li><strong><code>wazuh_realtime_server.py</code></strong> - Real-time data fetching service</li>
+<li><strong><code>config_manager.py</code></strong> - Centralized configuration management</li>
+</ol>
+<h3 id="database-schema">Database Schema</h3>
+<ul>
+<li><strong><code>chat_history.db</code></strong> - User chat sessions dan history</li>
+<li><strong><code>wazuh_archives.db</code></strong> - Cached Wazuh logs untuk fast querying</li>
+</ul>
+<h2 id="security-considerations">🔐 Security Considerations</h2>
+<h3 id="important-security-settings">Important Security Settings</h3>
+<ol>
+<li><strong>Change Default Passwords</strong> - Ganti semua password default</li>
+<li><strong>SSL/TLS Configuration</strong> - Aktifkan SSL untuk production</li>
+<li><strong>API Authentication</strong> - Konfigurasi autentikasi yang kuat</li>
+<li><strong>Network Security</strong> - Batasi akses network sesuai kebutuhan</li>
+</ol>
+<h3 id="security-features_1">Security Features</h3>
+<ul>
+<li><strong>Local AI Processing</strong> - Semua AI processing dilakukan secara lokal</li>
+<li><strong>Encrypted Storage</strong> - Sensitive data di-encrypt</li>
+<li><strong>Access Control</strong> - Role-based access control</li>
+<li><strong>Audit Logging</strong> - Comprehensive audit trails</li>
+</ul>
+<h2 id="testing"><span class="emoji">🧪</span> Testing</h2>
+<h3 id="run-tests">Run Tests</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Run all tests</span>
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/
+
+<span class="c1"># Run specific test</span>
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>tests/test_wazuh_api.py
+
+<span class="c1"># Run with coverage</span>
+python<span class="w"> </span>-m<span class="w"> </span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>tests/
+</code></pre></div>
+
+<h3 id="test-components">Test Components</h3>
+<ul>
+<li>Unit tests untuk core functions</li>
+<li>Integration tests untuk API endpoints</li>
+<li>End-to-end tests untuk web interface</li>
+</ul>
+<hr />
+<h2 id="contributing"><span class="emoji">🤝</span> <strong>Contributing</strong></h2>
+<h3 id="development-workflow"><strong><span class="emoji">🎯</span> Development Workflow</strong></h3>
+<ol>
+<li><strong>Fork</strong> repository ini</li>
+<li><strong>Create branch</strong> untuk feature Anda:
+   <code>bash
+   git checkout -b feature/amazing-feature</code></li>
+<li><strong>Install development dependencies</strong>:
+   <code>bash
+   pip install -r requirements.txt</code></li>
+<li><strong>Make changes</strong> dan tambahkan tests</li>
+<li><strong>Submit pull request</strong></li>
+</ol>
+<h3 id="code-quality">Code Quality</h3>
+<ul>
+<li>Follow PEP 8 style guidelines</li>
+<li>Add docstrings untuk semua public functions</li>
+<li>Include tests untuk new features</li>
+<li>Update documentation sesuai kebutuhan</li>
+</ul>
+<h2 id="performance"><span class="emoji">📊</span> Performance</h2>
+<h3 id="system-requirements_1">System Requirements</h3>
+<ul>
+<li><strong>RAM</strong>: Minimum 4GB, Recommended 8GB+</li>
+<li><strong>Storage</strong>: 10GB free space untuk logs dan cache</li>
+<li><strong>CPU</strong>: Multi-core processor recommended</li>
+<li><strong>Network</strong>: Stable connection ke Wazuh manager</li>
+</ul>
+<h3 id="optimization-features">Optimization Features</h3>
+<ul>
+<li><strong>Database Indexing</strong> - Optimized database queries</li>
+<li><strong>Caching Layer</strong> - CAG caching untuk AI responses</li>
+<li><strong>Async Processing</strong> - Asynchronous operations</li>
+<li><strong>Connection Pooling</strong> - Efficient database connections</li>
+</ul>
+<h2 id="troubleshooting">🐛 Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<ol>
+<li>
+<p><strong>LM Studio Connection Error</strong></p>
+</li>
+<li>
+<p>Pastikan LM Studio running di URL yang benar</p>
+</li>
+<li>Check model sudah di-load</li>
+<li>Verify network connectivity</li>
+<li>
+<p><strong>Wazuh API Authentication Failed</strong></p>
+</li>
+<li>
+<p>Verify username/password di <code>config/config.json</code></p>
+</li>
+<li>Check Wazuh manager accessibility</li>
+<li>Validate SSL configuration</li>
+<li>
+<p><strong>Database Connection Issues</strong></p>
+</li>
+<li>
+<p>Check database file permissions</p>
+</li>
+<li>Run migration script: <code>python migrate_database.py</code></li>
+<li>Verify SQLite installation</li>
+</ol>
+<h3 id="debug-mode">Debug Mode</h3>
+<p>Enable debug mode untuk troubleshooting:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Edit config/config.json</span>
+<span class="o">{</span>
+<span class="w">  </span><span class="s2">&quot;flask&quot;</span>:<span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="s2">&quot;debug&quot;</span>:<span class="w"> </span><span class="nb">true</span>
+<span class="w">  </span><span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1"># Start application</span>
+python<span class="w"> </span>src/webapp/webapp_chatbot.py
+</code></pre></div>
+
+<h2 id="license"><span class="emoji">📄</span> License</h2>
+<p>This project is licensed under the MIT License - see the <code>LICENSE</code> file for details.</p>
+<h2 id="acknowledgments"><span class="emoji">🙏</span> Acknowledgments</h2>
+<ul>
+<li><strong>Wazuh Team</strong> - Untuk SIEM platform yang powerful</li>
+<li><strong>FastMCP Community</strong> - Untuk Model Context Protocol</li>
+<li><strong>LM Studio</strong> - Untuk local AI inference solution</li>
+<li><strong>Python Community</strong> - Untuk ecosystem yang luar biasa</li>
+</ul>
+<h2 id="support"><span class="emoji">📞</span> Support</h2>
+<p>Untuk support dan pertanyaan:</p>
+<ul>
+<li><strong>Issues</strong>: <a href="https://github.com/urtir/LMS-MCP/issues">GitHub Issues</a></li>
+<li><strong>Discussions</strong>: <a href="https://github.com/urtir/LMS-MCP/discussions">GitHub Discussions</a></li>
+<li><strong>Documentation</strong>: Check <code>docs</code> directory</li>
+<li><strong>Repository</strong>: <a href="https://github.com/urtir/LMS-MCP">GitHub Repository</a></li>
+</ul>
+<h2 id="roadmap"><span class="emoji">📈</span> Roadmap</h2>
+<h3 id="version-20-planned">Version 2.0 (Planned)</h3>
+<ul>
+<li>[ ] Multi-tenant support</li>
+<li>[ ] Advanced AI models integration</li>
+<li>[ ] Cloud deployment options</li>
+<li>[ ] Mobile application</li>
+<li>[ ] Advanced analytics dashboard</li>
+</ul>
+<h3 id="version-15-in-progress">Version 1.5 (In Progress)</h3>
+<hr />
+<h2 id="fastmcp-tools">🔧 <strong>FastMCP Tools</strong></h2>
+<p>AISOC MCP menyediakan <strong>29 Tools</strong> yang terintegrasi:</p>
+<h3 id="core-tools"><strong><span class="emoji">📊</span> Core Tools</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Deskripsi</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>check_wazuh_log</code></td>
+<td><span class="emoji">🤖</span> AI-powered log analysis</td>
+<td>High-level security analysis</td>
+</tr>
+<tr>
+<td><code>get_agent_info</code></td>
+<td>👥 Detailed agent information</td>
+<td>Agent management</td>
+</tr>
+<tr>
+<td><code>get_agent_stats</code></td>
+<td><span class="emoji">📈</span> Agent statistics</td>
+<td>Performance monitoring</td>
+</tr>
+<tr>
+<td><code>get_security_events</code></td>
+<td><span class="emoji">🚨</span> Security event analysis</td>
+<td>Threat detection</td>
+</tr>
+<tr>
+<td><code>get_critical_alerts</code></td>
+<td>⚠<span class="emoji">️</span> Critical alert identification</td>
+<td>Priority response</td>
+</tr>
+</tbody>
+</table>
+<h3 id="analysis-tools"><strong><span class="emoji">🔍</span> Analysis Tools</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Deskripsi</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_logs_semantic</code></td>
+<td><span class="emoji">🎯</span> Vector-based log search</td>
+<td>Advanced search</td>
+</tr>
+<tr>
+<td><code>get_hybrid_search</code></td>
+<td>🔀 CAG + Semantic combined</td>
+<td>Best results</td>
+</tr>
+<tr>
+<td><code>analyze_attack_patterns</code></td>
+<td>🕵<span class="emoji">️</span> Attack pattern detection</td>
+<td>Threat hunting</td>
+</tr>
+<tr>
+<td><code>get_vulnerability_summary</code></td>
+<td><span class="emoji">🛡</span><span class="emoji">️</span> Vulnerability assessment</td>
+<td>Risk analysis</td>
+</tr>
+<tr>
+<td><code>generate_security_report</code></td>
+<td><span class="emoji">📄</span> Automated reporting</td>
+<td>Documentation</td>
+</tr>
+</tbody>
+</table>
+<h3 id="monitoring-tools"><strong><span class="emoji">📈</span> Monitoring Tools</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Deskripsi</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_system_health</code></td>
+<td>❤<span class="emoji">️</span> System health status</td>
+<td>Infrastructure monitoring</td>
+</tr>
+<tr>
+<td><code>get_agent_status</code></td>
+<td>🔄 Real-time agent status</td>
+<td>Connectivity check</td>
+</tr>
+<tr>
+<td><code>get_rule_statistics</code></td>
+<td><span class="emoji">📊</span> Rule firing statistics</td>
+<td>Performance tuning</td>
+</tr>
+<tr>
+<td><code>get_decoder_info</code></td>
+<td>🔧 Log decoder information</td>
+<td>Log parsing</td>
+</tr>
+<tr>
+<td><code>get_cdb_info</code></td>
+<td>💾 CDB list information</td>
+<td>Configuration management</td>
+</tr>
+</tbody>
+</table>
+<h3 id="advanced-tools"><strong><span class="emoji">🎯</span> Advanced Tools</strong></h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Deskripsi</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>execute_wql_query</code></td>
+<td>🗃<span class="emoji">️</span> Wazuh Query Language</td>
+<td>Custom queries</td>
+</tr>
+<tr>
+<td><code>get_rootcheck_scan</code></td>
+<td><span class="emoji">🔍</span> Rootkit detection</td>
+<td>Security scanning</td>
+</tr>
+<tr>
+<td><code>get_sca_scan</code></td>
+<td>✅ Security compliance</td>
+<td>Compliance monitoring</td>
+</tr>
+<tr>
+<td><code>get_syscollector_data</code></td>
+<td>🖥<span class="emoji">️</span> System inventory</td>
+<td>Asset management</td>
+</tr>
+<tr>
+<td><code>get_mitre_info</code></td>
+<td><span class="emoji">🎯</span> MITRE ATT&amp;CK mapping</td>
+<td>Threat classification</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="database-schema_1"><span class="emoji">📊</span> <strong>Database Schema</strong></h2>
+<h3 id="wazuh_archivesdb"><strong>🗄<span class="emoji">️</span> wazuh_archives.db</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">wazuh_logs</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTOINCREMENT</span><span class="p">,</span>
+<span class="w">    </span><span class="k">timestamp</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">agent_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">agent_name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">rule_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">    </span><span class="n">rule_level</span><span class="w"> </span><span class="nb">INTEGER</span><span class="p">,</span>
+<span class="w">    </span><span class="n">rule_description</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="k">location</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">full_log</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">search_text</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">manager</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">decoder_name</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">&#39;active&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span>
+<span class="p">);</span>
+
+<span class="c1">-- Indexes for performance</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_timestamp</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">wazuh_logs</span><span class="p">(</span><span class="k">timestamp</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_agent_id</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">wazuh_logs</span><span class="p">(</span><span class="n">agent_id</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_rule_level</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">wazuh_logs</span><span class="p">(</span><span class="n">rule_level</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_search_text</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">wazuh_logs</span><span class="p">(</span><span class="n">search_text</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="chat_historydb"><strong><span class="emoji">💬</span> chat_history.db</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">chat_history</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTOINCREMENT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">session_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_message</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">assistant_response</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">    </span><span class="k">timestamp</span><span class="w"> </span><span class="n">DATETIME</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">CURRENT_TIMESTAMP</span><span class="p">,</span>
+<span class="w">    </span><span class="n">user_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">context_data</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="n">response_time</span><span class="w"> </span><span class="nb">REAL</span><span class="p">,</span>
+<span class="w">    </span><span class="n">tokens_used</span><span class="w"> </span><span class="nb">INTEGER</span>
+<span class="p">);</span>
+
+<span class="c1">-- Indexes for chat history</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_session_id</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">chat_history</span><span class="p">(</span><span class="n">session_id</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_timestamp</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">chat_history</span><span class="p">(</span><span class="k">timestamp</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user_id</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">chat_history</span><span class="p">(</span><span class="n">user_id</span><span class="p">);</span>
+</code></pre></div>
+
+<hr />
+<h2 id="ai-capabilities_1"><span class="emoji">🤖</span> <strong>AI Capabilities</strong></h2>
+<h3 id="rag-retrieval-augmented-generation"><strong>🧠 RAG (Retrieval-Augmented Generation)</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Example: Using RAG for security analysis</span>
+<span class="kn">from</span> <span class="nn">src.core.rag_system</span> <span class="kn">import</span> <span class="n">WazuhRAG</span>
+
+<span class="n">rag</span> <span class="o">=</span> <span class="n">WazuhRAG</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">rag</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Analisis serangan XSS dalam 24 jam terakhir&quot;</span><span class="p">)</span>
+
+<span class="c1"># Output:</span>
+<span class="p">{</span>
+    <span class="s2">&quot;analysis&quot;</span><span class="p">:</span> <span class="s2">&quot;Ditemukan 15 percobaan XSS attack...&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;severity&quot;</span><span class="p">:</span> <span class="s2">&quot;HIGH&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;recommendations&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Block IP sources&quot;</span><span class="p">,</span> <span class="s2">&quot;Update WAF rules&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;related_logs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">...</span><span class="p">],</span>
+    <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="mf">0.92</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="cag-cache-augmented-generation"><strong>💾 CAG (Cache-Augmented Generation)</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Example: Using CAG for performance</span>
+<span class="kn">from</span> <span class="nn">src.core.cag_system</span> <span class="kn">import</span> <span class="n">WazuhCAG</span>
+
+<span class="n">cag</span> <span class="o">=</span> <span class="n">WazuhCAG</span><span class="p">()</span>
+<span class="c1"># First query - generated fresh</span>
+<span class="n">result1</span> <span class="o">=</span> <span class="n">cag</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Top 10 attacking IPs today&quot;</span><span class="p">)</span>
+
+<span class="c1"># Second query - retrieved from cache (faster)</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="n">cag</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;Top 10 attacking IPs today&quot;</span><span class="p">)</span>  <span class="c1"># ⚡ From cache</span>
+</code></pre></div>
+
+<h3 id="semantic-search"><strong><span class="emoji">🎯</span> Semantic Search</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Example: Semantic log search</span>
+<span class="kn">from</span> <span class="nn">src.core.semantic_search</span> <span class="kn">import</span> <span class="n">SemanticLogSearch</span>
+
+<span class="n">searcher</span> <span class="o">=</span> <span class="n">SemanticLogSearch</span><span class="p">()</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">searcher</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+    <span class="n">query</span><span class="o">=</span><span class="s2">&quot;suspicious login attempts&quot;</span><span class="p">,</span>
+    <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">similarity_threshold</span><span class="o">=</span><span class="mf">0.8</span>
+<span class="p">)</span>
+
+<span class="c1"># Results include similarity scores and relevant contexts</span>
+<span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Similarity: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">similarity</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Log: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">log_content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="telegram-bot_1">📱 <strong>Telegram Bot</strong></h2>
+<h3 id="getting-started"><strong>🚀 Getting Started</strong></h3>
+<ol>
+<li><strong>Start Bot</strong>: Kirim <code>/start</code> ke bot</li>
+<li><strong>Help Menu</strong>: Kirim <code>/help</code> untuk melihat semua commands</li>
+<li><strong>Setup Alerts</strong>: Konfigurasikan notifikasi dengan <code>/settings</code></li>
+</ol>
+<h3 id="available-commands"><strong><span class="emoji">📋</span> Available Commands</strong></h3>
+<h4 id="basic-commands"><strong><span class="emoji">🎯</span> Basic Commands</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Deskripsi</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/start</code></td>
+<td>Initialize bot</td>
+<td><code>/start</code></td>
+</tr>
+<tr>
+<td><code>/help</code></td>
+<td>Show all commands</td>
+<td><code>/help</code></td>
+</tr>
+<tr>
+<td><code>/status</code></td>
+<td>System status</td>
+<td><code>/status</code></td>
+</tr>
+<tr>
+<td><code>/settings</code></td>
+<td>Configure bot</td>
+<td><code>/settings</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="query-commands"><strong><span class="emoji">🔍</span> Query Commands</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Deskripsi</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/query</code></td>
+<td>Ask security question</td>
+<td><code>/query what are top threats today?</code></td>
+</tr>
+<tr>
+<td><code>/search</code></td>
+<td>Search logs</td>
+<td><code>/search failed login</code></td>
+</tr>
+<tr>
+<td><code>/agents</code></td>
+<td>List agents</td>
+<td><code>/agents</code></td>
+</tr>
+<tr>
+<td><code>/alerts</code></td>
+<td>Recent alerts</td>
+<td><code>/alerts high</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="report-commands"><strong><span class="emoji">📊</span> Report Commands</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Deskripsi</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/report</code></td>
+<td>Generate PDF report</td>
+<td><code>/report daily</code></td>
+</tr>
+<tr>
+<td><code>/summary</code></td>
+<td>Security summary</td>
+<td><code>/summary last 24h</code></td>
+</tr>
+<tr>
+<td><code>/stats</code></td>
+<td>System statistics</td>
+<td><code>/stats agents</code></td>
+</tr>
+<tr>
+<td><code>/export</code></td>
+<td>Export data</td>
+<td><code>/export logs csv</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="alert-configuration"><strong><span class="emoji">🚨</span> Alert Configuration</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Configure alert thresholds</span>
+<span class="o">/</span><span class="n">settings</span> <span class="n">alerts</span>
+<span class="o">-</span> <span class="n">Critical</span><span class="p">:</span> <span class="n">Rule</span> <span class="n">level</span> <span class="err">≥</span> <span class="mi">10</span>
+<span class="o">-</span> <span class="n">High</span><span class="p">:</span> <span class="n">Rule</span> <span class="n">level</span> <span class="err">≥</span> <span class="mi">7</span>
+<span class="o">-</span> <span class="n">Medium</span><span class="p">:</span> <span class="n">Rule</span> <span class="n">level</span> <span class="err">≥</span> <span class="mi">4</span>
+<span class="o">-</span> <span class="n">Custom</span><span class="p">:</span> <span class="n">regex</span> <span class="n">patterns</span>
+
+<span class="c1"># Example alert message:</span>
+<span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">🚨</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span> <span class="n">CRITICAL</span> <span class="n">ALERT</span> <span class="o">&lt;</span><span class="n">span</span> <span class="n">class</span><span class="o">=</span><span class="s2">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">🚨</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+<span class="n">Agent</span><span class="p">:</span> <span class="n">web</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="mi">01</span>
+<span class="n">Rule</span><span class="p">:</span> <span class="n">Multiple</span> <span class="n">failed</span> <span class="n">logins</span> <span class="p">(</span><span class="mi">5712</span><span class="p">)</span>
+<span class="n">Level</span><span class="p">:</span> <span class="mi">10</span>
+<span class="n">Time</span><span class="p">:</span> <span class="mi">2025</span><span class="o">-</span><span class="mi">09</span><span class="o">-</span><span class="mi">25</span> <span class="mi">14</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">15</span>
+<span class="n">Details</span><span class="p">:</span> <span class="mi">50</span><span class="o">+</span> <span class="n">failed</span> <span class="n">SSH</span> <span class="n">attempts</span> <span class="kn">from</span> <span class="mf">192.168.1.100</span>
+</code></pre></div>
+
+<hr />
+<h2 id="web-dashboard">🌐 <strong>Web Dashboard</strong></h2>
+<h3 id="main-features"><strong><span class="emoji">🎯</span> Main Features</strong></h3>
+<h4 id="1-chat-interface"><strong>1. Chat Interface</strong></h4>
+<ul>
+<li><strong>AI-Powered Q&amp;A</strong>: Natural language security queries</li>
+<li><strong>Context Awareness</strong>: Maintains conversation history</li>
+<li><strong>Multi-language</strong>: Support untuk Bahasa Indonesia</li>
+<li><strong>Real-time</strong>: Instant responses dengan streaming</li>
+</ul>
+<h4 id="2-dashboard-overview"><strong>2. Dashboard Overview</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">  </span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">🛡</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">️</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AISOC</span><span class="w"> </span><span class="n">MCP</span><span class="w"> </span><span class="n">Dashboard</span><span class="w">                            </span><span class="err">│</span>
+<span class="err">├─────────────────────────────────────────────────────┤</span>
+<span class="err">│</span><span class="w">  </span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">📊</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w"> </span><span class="k">System</span><span class="w"> </span><span class="n">Status</span><span class="w">        </span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">🚨</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Active</span><span class="w"> </span><span class="nl">Alerts</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="w">      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">✅</span><span class="w"> </span><span class="nl">Services</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="o">/</span><span class="mi">4</span><span class="w">        </span><span class="err">⚠</span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">️</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w">  </span><span class="nl">Critical</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">👥</span><span class="w"> </span><span class="nl">Agents</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="o">/</span><span class="mi">25</span><span class="w">        </span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">📈</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Events</span><span class="o">/</span><span class="k">hour</span><span class="err">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">247</span><span class="w">     </span><span class="err">│</span>
+<span class="err">├─────────────────────────────────────────────────────┤</span>
+<span class="err">│</span><span class="w">  </span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">💬</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w"> </span><span class="n">AI</span><span class="w"> </span><span class="n">Chat</span><span class="w"> </span><span class="n">Interface</span><span class="w">                              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="o">[</span><span class="n">User</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Analisis</span><span class="w"> </span><span class="n">serangan</span><span class="w"> </span><span class="n">terbaru</span><span class="w">                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="o">[</span><span class="n">AI</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Terdeteksi</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">pattern</span><span class="w"> </span><span class="n">serangan</span><span class="w"> </span><span class="n">dalam</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">jam</span><span class="w"> </span><span class="err">│</span>
+<span class="err">│</span><span class="w">       </span><span class="nl">terakhir</span><span class="p">:</span><span class="w"> </span><span class="k">SQL</span><span class="w"> </span><span class="n">Injection</span><span class="w"> </span><span class="p">(</span><span class="mi">67</span><span class="o">%</span><span class="p">),</span><span class="w"> </span><span class="n">XSS</span><span class="w"> </span><span class="p">(</span><span class="mi">23</span><span class="o">%</span><span class="p">),</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w">       </span><span class="n">Command</span><span class="w"> </span><span class="n">Injection</span><span class="w"> </span><span class="p">(</span><span class="mi">10</span><span class="o">%</span><span class="p">)...</span><span class="w">                   </span><span class="err">│</span>
+<span class="err">├─────────────────────────────────────────────────────┤</span>
+<span class="err">│</span><span class="w">  </span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">📈</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w"> </span><span class="nc">Real</span><span class="o">-</span><span class="nc">time</span><span class="w"> </span><span class="n">Charts</span><span class="w">    </span><span class="o">&lt;</span><span class="n">span</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;emoji&quot;</span><span class="o">&gt;</span><span class="err">📋</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span><span class="w"> </span><span class="n">Recent</span><span class="w"> </span><span class="n">Events</span><span class="w">           </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<h4 id="accessing-dashboard"><strong>Accessing Dashboard</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Start web application</span>
+<span class="n">python</span> <span class="n">src</span><span class="p">/</span><span class="n">webapp</span><span class="p">/</span><span class="n">webapp_chatbot</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Access via browser</span>
+<span class="n">http</span><span class="p">://</span><span class="n">localhost</span><span class="p">:</span><span class="n">5000</span>
+</code></pre></div>
+
+<hr />
+<h2 id="testing_1"><span class="emoji">🧪</span> <strong>Testing</strong></h2>
+<h3 id="test-categories"><strong><span class="emoji">🔍</span> Test Categories</strong></h3>
+<h4 id="1-unit-tests"><strong>1. Unit Tests</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Core functionality tests</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">unit</span><span class="p">/</span><span class="n">test_config_manager</span><span class="p">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">unit</span><span class="p">/</span><span class="n">test_database_operations</span><span class="p">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">unit</span><span class="p">/</span><span class="n">test_wazuh_api</span><span class="p">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">unit</span><span class="p">/</span><span class="n">test_lm_studio_client</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<h4 id="2-integration-tests"><strong>2. Integration Tests</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># End-to-end functionality</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">integration</span><span class="p">/</span><span class="n">test_full_workflow</span><span class="p">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">integration</span><span class="p">/</span><span class="n">test_fastmcp_integration</span><span class="p">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">integration</span><span class="p">/</span><span class="n">test_telegram_integration</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<h4 id="3-ai-system-tests"><strong>3. AI System Tests</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># AI capabilities testing</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_rag</span><span class="p">.</span><span class="n">py</span>              <span class="c"># RAG system</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_cag</span><span class="p">.</span><span class="n">py</span>              <span class="c"># CAG system</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_semantic_search</span><span class="p">.</span><span class="n">py</span> <span class="c"># Vector search</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_hybrid_search</span><span class="p">.</span><span class="n">py</span>   <span class="c"># Combined search</span>
+</code></pre></div>
+
+<h4 id="testing-fastmcp-tools"><strong>Testing FastMCP Tools</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Test individual tools</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_check_wazuh_log_mcp</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Test all 29 tools</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_all_tools</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Performance test for tools</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">test_tool_performance</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<hr />
+<h2 id="dokumentasi"><span class="emoji">📚</span> <strong>Dokumentasi</strong></h2>
+<h3 id="available-documentation"><strong>📖 Available Documentation</strong></h3>
+<h4 id="1-core-documentation"><strong>1. Core Documentation</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Document</th>
+<th>Description</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FastMCP Guide</strong></td>
+<td>MCP protocol implementation</td>
+<td><code>docs/FastMCP_Documentation.md</code></td>
+</tr>
+<tr>
+<td><strong>Wazuh API Guide</strong></td>
+<td>Wazuh REST API integration</td>
+<td><code>docs/Wazuh_API_Documentation.md</code></td>
+</tr>
+<tr>
+<td><strong>CAG System</strong></td>
+<td>Cache-Augmented Generation</td>
+<td><code>docs/CACHE_AUGMENTED_GENERATION_CAG.md</code></td>
+</tr>
+<tr>
+<td><strong>Alert System</strong></td>
+<td>Telegram alerting mechanism</td>
+<td><code>docs/ALERT_SYSTEM_README.md</code></td>
+</tr>
+<tr>
+<td><strong>Variables Guide</strong></td>
+<td>Complete configuration list</td>
+<td><code>docs/COMPLETE_VARIABLES_LIST.md</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="troubleshooting_1"><span class="emoji">🚨</span> <strong>Troubleshooting</strong></h2>
+<h3 id="common-issues-solutions"><strong>🔧 Common Issues &amp; Solutions</strong></h3>
+<h4 id="1-service-wont-start"><strong>1. Service Won't Start</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Problem: FastMCP server fails to start</span>
+<span class="c"># Solution: Check dependencies and ports</span>
+<span class="n">netstat</span> <span class="n">-an</span> <span class="p">|</span> <span class="n">findstr</span> <span class="p">:</span><span class="n">8000</span>
+<span class="n">python</span> <span class="n">-c</span> <span class="s2">&quot;import fastmcp; print(&#39;FastMCP installed&#39;)&quot;</span>
+
+<span class="c"># Problem: LM Studio connection failed</span>
+<span class="c"># Solution: Verify LM Studio is running</span>
+<span class="nb">curl </span><span class="n">http</span><span class="p">://</span><span class="n">localhost</span><span class="p">:</span><span class="n">1234</span><span class="p">/</span><span class="n">v1</span><span class="p">/</span><span class="n">models</span>
+
+<span class="c"># Problem: Wazuh API authentication failed</span>
+<span class="c"># Solution: Check credentials and SSL</span>
+<span class="nb">curl </span><span class="n">-k</span> <span class="n">-u</span> <span class="s2">&quot;username:password&quot;</span> <span class="n">https</span><span class="p">://</span><span class="n">localhost</span><span class="p">:</span><span class="n">55000</span>
+</code></pre></div>
+
+<h4 id="2-database-issues"><strong>2. Database Issues</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Problem: Database lock or corruption</span>
+<span class="c"># Solution: Reset and migrate database</span>
+<span class="n">python</span> <span class="n">tests</span><span class="p">/</span><span class="n">vacuum_database</span><span class="p">.</span><span class="n">py</span>
+<span class="n">python</span> <span class="n">migrate_database</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Problem: Missing tables or data</span>
+<span class="c"># Solution: Re-initialize database</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">reset_database</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<h4 id="3-aiml-issues"><strong>3. AI/ML Issues</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Problem: RAG system not working</span>
+<span class="c"># Solution: Rebuild embeddings</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">rebuild_embeddings</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Problem: CAG cache issues</span>
+<span class="c"># Solution: Clear and rebuild cache</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">clear_cag_cache</span><span class="p">.</span><span class="n">py</span>
+</code></pre></div>
+
+<h3 id="health-check-commands"><strong><span class="emoji">📊</span> Health Check Commands</strong></h3>
+<div class="codehilite"><pre><span></span><code><span class="c"># Complete system health check</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">health_check</span><span class="p">.</span><span class="n">py</span>
+
+<span class="c"># Individual service checks</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">check_fastmcp</span><span class="p">.</span><span class="n">py</span>      <span class="c"># FastMCP server</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">check_webapp</span><span class="p">.</span><span class="n">py</span>      <span class="c"># Web application</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">check_telegram</span><span class="p">.</span><span class="n">py</span>    <span class="c"># Telegram bot</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">check_database</span><span class="p">.</span><span class="n">py</span>    <span class="c"># Database integrity</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">check_wazuh</span><span class="p">.</span><span class="n">py</span>       <span class="c"># Wazuh connectivity</span>
+<span class="n">python</span> <span class="n">scripts</span><span class="p">/</span><span class="n">check_lmstudio</span><span class="p">.</span><span class="n">py</span>    <span class="c"># LM Studio connection</span>
+</code></pre></div>
+
+<hr />
+<h2 id="contributing_1"><span class="emoji">🤝</span> <strong>Contributing</strong></h2>
+<h3 id="development-workflow_1"><strong><span class="emoji">🎯</span> Development Workflow</strong></h3>
+<h4 id="1-setup-development-environment"><strong>1. Setup Development Environment</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># Fork repository</span>
+<span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">://</span><span class="n">github</span><span class="p">.</span><span class="n">com</span><span class="p">/</span><span class="n">YourUsername</span><span class="p">/</span><span class="n">AISOC-MCP</span><span class="p">.</span><span class="n">git</span>
+<span class="nb">cd </span><span class="n">AISOC-MCP</span>
+
+<span class="c"># Create development branch</span>
+<span class="n">git</span> <span class="n">checkout</span> <span class="n">-b</span> <span class="n">feature</span><span class="p">/</span><span class="n">your-feature-name</span>
+
+<span class="c"># Setup development environment</span>
+<span class="n">python</span> <span class="n">-m</span> <span class="n">venv</span> <span class="n">dev_env</span>
+<span class="p">.\</span><span class="n">dev_env</span><span class="p">\</span><span class="n">Scripts</span><span class="p">\</span><span class="n">Activate</span><span class="p">.</span><span class="n">ps1</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">-r</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">-r</span> <span class="n">requirements-dev</span><span class="p">.</span><span class="n">txt</span>  <span class="c"># Development dependencies</span>
+</code></pre></div>
+
+<h4 id="2-testing-requirements"><strong>2. Testing Requirements</strong></h4>
+<div class="codehilite"><pre><span></span><code><span class="c"># All new features must include tests</span>
+<span class="n">python</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">tests</span><span class="p">/</span> <span class="n">-v</span>                    <span class="c"># Unit tests</span>
+<span class="n">python</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="n">tests</span><span class="p">/</span><span class="n">integration</span><span class="p">/</span> <span class="n">-v</span>       <span class="c"># Integration tests</span>
+<span class="n">python</span> <span class="n">-m</span> <span class="n">pytest</span> <span class="p">-</span><span class="n">-cov</span><span class="p">=</span><span class="n">src</span> <span class="p">-</span><span class="n">-cov-report</span><span class="p">=</span><span class="n">html</span> <span class="c"># Coverage report</span>
+</code></pre></div>
+
+<hr />
+<h2 id="license_1"><span class="emoji">📄</span> <strong>License</strong></h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">MIT</span><span class="w"> </span><span class="nv">License</span>
+
+<span class="nv">Copyright</span><span class="w"> </span><span class="ss">(</span><span class="nv">c</span><span class="ss">)</span><span class="w"> </span><span class="mi">2025</span><span class="w"> </span><span class="nv">AISOC</span><span class="w"> </span><span class="nv">MCP</span><span class="w"> </span><span class="nv">Project</span>
+
+<span class="nv">Permission</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">hereby</span><span class="w"> </span><span class="nv">granted</span>,<span class="w"> </span><span class="nv">free</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">charge</span>,<span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">any</span><span class="w"> </span><span class="nv">person</span><span class="w"> </span><span class="nv">obtaining</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">copy</span>
+<span class="nv">of</span><span class="w"> </span><span class="nv">this</span><span class="w"> </span><span class="nv">software</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">associated</span><span class="w"> </span><span class="nv">documentation</span><span class="w"> </span><span class="nv">files</span><span class="w"> </span><span class="ss">(</span><span class="nv">the</span><span class="w"> </span><span class="s2">&quot;Software&quot;</span><span class="ss">)</span>,<span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">deal</span>
+<span class="nv">in</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">Software</span><span class="w"> </span><span class="nv">without</span><span class="w"> </span><span class="nv">restriction</span>,<span class="w"> </span><span class="nv">including</span><span class="w"> </span><span class="nv">without</span><span class="w"> </span><span class="nv">limitation</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">rights</span>
+<span class="nv">to</span><span class="w"> </span><span class="nv">use</span>,<span class="w"> </span><span class="nv">copy</span>,<span class="w"> </span><span class="nv">modify</span>,<span class="w"> </span><span class="nv">merge</span>,<span class="w"> </span><span class="nv">publish</span>,<span class="w"> </span><span class="nv">distribute</span>,<span class="w"> </span><span class="nv">sublicense</span>,<span class="w"> </span><span class="nv">and</span><span class="o">/</span><span class="nv">or</span><span class="w"> </span><span class="nv">sell</span>
+<span class="nv">copies</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">Software</span>,<span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">permit</span><span class="w"> </span><span class="nv">persons</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">whom</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">Software</span><span class="w"> </span><span class="nv">is</span>
+<span class="nv">furnished</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nv">so</span>,<span class="w"> </span><span class="nv">subject</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">following</span><span class="w"> </span><span class="nv">conditions</span>:
+
+<span class="nv">The</span><span class="w"> </span><span class="nv">above</span><span class="w"> </span><span class="nv">copyright</span><span class="w"> </span><span class="nv">notice</span><span class="w"> </span><span class="nv">and</span><span class="w"> </span><span class="nv">this</span><span class="w"> </span><span class="nv">permission</span><span class="w"> </span><span class="nv">notice</span><span class="w"> </span><span class="nv">shall</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">included</span><span class="w"> </span><span class="nv">in</span><span class="w"> </span><span class="nv">all</span>
+<span class="nv">copies</span><span class="w"> </span><span class="nv">or</span><span class="w"> </span><span class="nv">substantial</span><span class="w"> </span><span class="nv">portions</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">Software</span>.
+
+<span class="nv">THE</span><span class="w"> </span><span class="nv">SOFTWARE</span><span class="w"> </span><span class="nv">IS</span><span class="w"> </span><span class="nv">PROVIDED</span><span class="w"> </span><span class="s2">&quot;AS IS&quot;</span>,<span class="w"> </span><span class="nv">WITHOUT</span><span class="w"> </span><span class="nv">WARRANTY</span><span class="w"> </span><span class="nv">OF</span><span class="w"> </span><span class="nv">ANY</span><span class="w"> </span><span class="nv">KIND</span>,<span class="w"> </span><span class="nv">EXPRESS</span><span class="w"> </span><span class="nv">OR</span>
+<span class="nv">IMPLIED</span>,<span class="w"> </span><span class="nv">INCLUDING</span><span class="w"> </span><span class="nv">BUT</span><span class="w"> </span><span class="nv">NOT</span><span class="w"> </span><span class="nv">LIMITED</span><span class="w"> </span><span class="nv">TO</span><span class="w"> </span><span class="nv">THE</span><span class="w"> </span><span class="nv">WARRANTIES</span><span class="w"> </span><span class="nv">OF</span><span class="w"> </span><span class="nv">MERCHANTABILITY</span>,
+<span class="nv">FITNESS</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="nv">A</span><span class="w"> </span><span class="nv">PARTICULAR</span><span class="w"> </span><span class="nv">PURPOSE</span><span class="w"> </span><span class="nv">AND</span><span class="w"> </span><span class="nv">NONINFRINGEMENT</span>.<span class="w"> </span><span class="nv">IN</span><span class="w"> </span><span class="nv">NO</span><span class="w"> </span><span class="nv">EVENT</span><span class="w"> </span><span class="nv">SHALL</span><span class="w"> </span><span class="nv">THE</span>
+<span class="nv">AUTHORS</span><span class="w"> </span><span class="nv">OR</span><span class="w"> </span><span class="nv">COPYRIGHT</span><span class="w"> </span><span class="nv">HOLDERS</span><span class="w"> </span><span class="nv">BE</span><span class="w"> </span><span class="nv">LIABLE</span><span class="w"> </span><span class="k">FOR</span><span class="w"> </span><span class="nv">ANY</span><span class="w"> </span><span class="nv">CLAIM</span>,<span class="w"> </span><span class="nv">DAMAGES</span><span class="w"> </span><span class="nv">OR</span><span class="w"> </span><span class="nv">OTHER</span>
+<span class="nv">LIABILITY</span>,<span class="w"> </span><span class="nv">WHETHER</span><span class="w"> </span><span class="nv">IN</span><span class="w"> </span><span class="nv">AN</span><span class="w"> </span><span class="nv">ACTION</span><span class="w"> </span><span class="nv">OF</span><span class="w"> </span><span class="nv">CONTRACT</span>,<span class="w"> </span><span class="nv">TORT</span><span class="w"> </span><span class="nv">OR</span><span class="w"> </span><span class="nv">OTHERWISE</span>,<span class="w"> </span><span class="nv">ARISING</span><span class="w"> </span><span class="nv">FROM</span>,
+<span class="nv">OUT</span><span class="w"> </span><span class="nv">OF</span><span class="w"> </span><span class="nv">OR</span><span class="w"> </span><span class="nv">IN</span><span class="w"> </span><span class="nv">CONNECTION</span><span class="w"> </span><span class="nv">WITH</span><span class="w"> </span><span class="nv">THE</span><span class="w"> </span><span class="nv">SOFTWARE</span><span class="w"> </span><span class="nv">OR</span><span class="w"> </span><span class="nv">THE</span><span class="w"> </span><span class="nv">USE</span><span class="w"> </span><span class="nv">OR</span><span class="w"> </span><span class="nv">OTHER</span><span class="w"> </span><span class="nv">DEALINGS</span><span class="w"> </span><span class="nv">IN</span><span class="w"> </span><span class="nv">THE</span>
+<span class="nv">SOFTWARE</span>.
+</code></pre></div>
+
+<hr />
+<h2 id="support-community"><span class="emoji">📞</span> <strong>Support &amp; Community</strong></h2>
+<h3 id="getting-help"><strong>🆘 Getting Help</strong></h3>
+<ul>
+<li><strong>📧 Email</strong>: support@aisoc-mcp.com</li>
+<li><strong><span class="emoji">💬</span> Discord</strong>: <a href="https://discord.gg/aisoc-mcp">AISOC MCP Community</a></li>
+<li><strong>🐛 Issues</strong>: <a href="https://github.com/urtir/AISOC-MCP/issues">GitHub Issues</a></li>
+<li><strong>📖 Docs</strong>: <a href="https://docs.aisoc-mcp.com">Documentation Portal</a></li>
+</ul>
+<h3 id="community"><strong><span class="emoji">🌟</span> Community</strong></h3>
+<ul>
+<li><strong><span class="emoji">📊</span> Discussions</strong>: <a href="https://github.com/urtir/AISOC-MCP/discussions">GitHub Discussions</a></li>
+<li><strong>📱 Telegram</strong>: <a href="https://t.me/AisocMcpCommunity">@AisocMcpCommunity</a></li>
+<li><strong>🐦 Twitter</strong>: <a href="https://twitter.com/AisocMcp">@AisocMcp</a></li>
+<li><strong>📺 YouTube</strong>: <a href="https://youtube.com/AisocMcp">AISOC MCP Tutorials</a></li>
+</ul>
+<h3 id="roadmap_1"><strong><span class="emoji">📈</span> Roadmap</strong></h3>
+<ul>
+<li><strong>Q4 2025</strong>: Advanced ML models integration</li>
+<li><strong>Q1 2026</strong>: Multi-tenant support</li>
+<li><strong>Q2 2026</strong>: Cloud deployment options</li>
+<li><strong>Q3 2026</strong>: Enterprise features</li>
+<li><strong>Q4 2026</strong>: Mobile applications</li>
+</ul>
+<hr />
+<h2 id="acknowledgments_1"><span class="emoji">🙏</span> <strong>Acknowledgments</strong></h2>
+<p>Special thanks to:
+- <strong>Wazuh Team</strong> - Amazing SIEM platform
+- <strong>FastMCP Community</strong> - Model Context Protocol innovation
+- <strong>LM Studio</strong> - Local AI inference made easy
+- <strong>Python Community</strong> - Incredible ecosystem
+- <strong>Security Community</strong> - Continuous feedback and support</p>
+<hr />
+<div align="center">
+
+**<span class="emoji">🛡</span><span class="emoji">️</span> Made with ❤<span class="emoji">️</span> by AISOC MCP Team**
+
+[![GitHub stars](https://img.shields.io/github/stars/urtir/AISOC-MCP?style=social)](https://github.com/urtir/AISOC-MCP)
+[![GitHub forks](https://img.shields.io/github/forks/urtir/AISOC-MCP?style=social)](https://github.com/urtir/AISOC-MCP)
+[![GitHub watchers](https://img.shields.io/github/watchers/urtir/AISOC-MCP?style=social)](https://github.com/urtir/AISOC-MCP)
+
+</div>
+                
+                <div style="text-align: center; margin-top: 50px; padding: 20px; border-top: 2px solid #e2e8f0;">
+                    <p style="color: #6b7280; font-size: 14px;">
+                        📄 <strong>Panduan Lengkap AISOC MCP</strong><br/>
+                        Dibuat pada 26 September 2025 | Versi 1.0.0<br/>
+                        🛡️ Dibuat dengan ❤️ oleh Tim AISOC MCP
+                    </p>
+                </div>
+            </body>
+            </html>
+            

@@ -6,6 +6,35 @@
         "shadcn@latest",
         "mcp"
       ]
-    }
+    },
+    "paper_search_server": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "./paper-search-mcp",
+        "-m",
+        "paper_search_mcp.server"
+      ],
+      "env": {
+        "SEMANTIC_SCHOLAR_API_KEY": "XcYW9pI1LR8A42fq7yQsX81f3Brj1Poa6sLSsqx1" // Optional: For enhanced Semantic Scholar features
+      }
+    },
+    "Canva": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@latest",
+        "https://mcp.canva.com/mcp"
+      ]
+    },
+    "drawio":{
+         "command":"npx",
+         "args":[
+            "-y",
+            "drawio-mcp-server"
+         ]
+      }
   }
 }
