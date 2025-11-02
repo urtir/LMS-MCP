@@ -13,7 +13,8 @@ import logging
 import threading
 import time
 import os
-from typing import Dict, List, Any
+from datetime import datetime, timedelta, timezone
+from typing import Dict, List, Optional, Any
 from pathlib import Path
 import sys
 from flask import Flask, render_template, request, jsonify, Response, redirect, url_for, flash, session, make_response
@@ -91,9 +92,10 @@ from flask import Blueprint
 main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
-def landing():
-    """Landing page - accessible without login"""
-    return render_template('landing.html', user=current_user if current_user.is_authenticated else None)
+@login_required
+def dashboard():
+    """Primary security dashboard"""
+    return render_template('dashboard.html', user=current_user, current_year=datetime.utcnow().year)
 
 # Register main blueprint  
 app.register_blueprint(main_bp)
@@ -355,13 +357,15 @@ def logout():
     """Logout"""
     logout_user()
     flash('You have been logged out.', 'info')
-    return redirect(url_for('main.landing'))
+    return redirect(url_for('login'))
 
 # Existing routes (data endpoints, etc.)
 @app.route('/')
 def index():
-    """Serve landing page"""
-    return render_template('landing.html')
+    """Redirect root requests to dashboard or login"""
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
+    return redirect(url_for('login'))
 
 @app.route('/test-tool')
 def test_tool():
@@ -375,102 +379,128 @@ def security_data():
     """API endpoint for security data"""
     try:
         import sqlite3
-        from datetime import datetime, timedelta
-        
+
+        def to_int(value, default=0):
+            if value is None:
+                return default
+            try:
+                return int(value)
+            except (TypeError, ValueError):
+                try:
+                    return int(float(value))
+                except (TypeError, ValueError):
+                    return default
+
+        def to_bool(value):
+            if isinstance(value, bool):
+                return value
+            if value is None:
+                return False
+            return str(value).strip().lower() in {"true", "1", "yes", "on"}
+
+        def parse_recipients(raw):
+            if not raw:
+                return []
+            return [recipient.strip() for recipient in str(raw).split(',') if recipient.strip()]
+
         # Database path
         database_dir = config.get('database.DATABASE_DIR')
         wazuh_db_name = config.get('database.WAZUH_DB_NAME')
         db_path = os.path.join(project_root, database_dir, wazuh_db_name)
-        
+
         logger.info(f"Attempting to connect to database: {db_path}")
-        
+
         if not os.path.exists(db_path):
             logger.error(f"Database not found at: {db_path}")
             return jsonify({'error': 'Database not found'}), 404
-        
+
+        has_rule_groups = False
+        timeline_rows: List[Any] = []
         try:
-            conn = sqlite3.connect(db_path)
-            conn.row_factory = sqlite3.Row
-            logger.info("Successfully connected to database")
-        except Exception as db_error:
-            logger.error(f"Failed to connect to database: {db_error}")
-            return jsonify({'error': f'Database connection failed: {str(db_error)}'}), 500
-        
-        try:
-            # Get total alerts count
-            logger.info("Querying total alerts count...")
-            total_alerts = conn.execute('SELECT COUNT(*) as count FROM wazuh_archives').fetchone()['count']
-            logger.info(f"Total alerts: {total_alerts}")
-            
-            # Get alert distribution by rule level
-            logger.info("Querying rule levels...")
-            rule_levels = conn.execute('''
-                SELECT rule_level, COUNT(*) as count 
-                FROM wazuh_archives 
-                GROUP BY rule_level 
-                ORDER BY rule_level
-            ''').fetchall()
-            logger.info(f"Found {len(rule_levels)} rule levels")
-            
-            # Get top agents by alert count
-            logger.info("Querying top agents...")
-            top_agents = conn.execute('''
-                SELECT agent_name, COUNT(*) as count
-                FROM wazuh_archives 
-                WHERE agent_name IS NOT NULL 
-                GROUP BY agent_name 
-                ORDER BY count DESC 
-                LIMIT 10
-            ''').fetchall()
-            logger.info(f"Found {len(top_agents)} agents")
-            
-            # Get recent alerts
-            logger.info("Querying recent alerts...")
-            recent_alerts = conn.execute('''
-                SELECT id, timestamp, agent_name, rule_level, rule_description, location, rule_groups
-                FROM wazuh_archives 
-                ORDER BY id DESC 
-                LIMIT 50
-            ''').fetchall()
-            logger.info(f"Found {len(recent_alerts)} recent alerts")
-            
-            # Get alerts by date for timeline chart
-            logger.info("Querying alerts by date...")
-            alerts_by_date = conn.execute('''
-                SELECT DATE(timestamp) as date, COUNT(*) as count
-                FROM wazuh_archives 
-                WHERE timestamp >= date('now', '-7 days')
-                GROUP BY DATE(timestamp)
-                ORDER BY date
-            ''').fetchall()
-            logger.info(f"Found {len(alerts_by_date)} date entries")
-            
-            # Get rule group distribution
-            logger.info("Querying rule groups...")
-            rule_groups = conn.execute('''
-                SELECT rule_groups, COUNT(*) as count
-                FROM wazuh_archives 
-                WHERE rule_groups IS NOT NULL AND rule_groups != ''
-                GROUP BY rule_groups 
-                ORDER BY count DESC 
-                LIMIT 10
-            ''').fetchall()
-            logger.info(f"Found {len(rule_groups)} rule groups")
-            
+            with sqlite3.connect(db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                logger.info("Successfully connected to database")
+
+                cursor = conn.cursor()
+                cursor.execute("PRAGMA table_info(wazuh_archives)")
+                table_columns = {row[1] for row in cursor.fetchall()}
+                has_rule_groups = 'rule_groups' in table_columns
+
+                # Get total alerts count
+                total_alerts = conn.execute('SELECT COUNT(*) as count FROM wazuh_archives').fetchone()['count']
+
+                # Get alert distribution by rule level
+                rule_levels = conn.execute('''
+                    SELECT CAST(rule_level AS INTEGER) AS level, COUNT(*) as count
+                    FROM wazuh_archives 
+                    WHERE rule_level IS NOT NULL AND TRIM(rule_level) != ''
+                    GROUP BY CAST(rule_level AS INTEGER)
+                    ORDER BY CAST(rule_level AS INTEGER)
+                ''').fetchall()
+
+                # Get top agents with additional metrics
+                top_agents = conn.execute('''
+                    SELECT agent_id,
+                           agent_name,
+                           COUNT(*) as count,
+                           MAX(rule_level) as max_rule_level,
+                           MAX(timestamp) as last_seen
+                    FROM wazuh_archives 
+                    WHERE agent_name IS NOT NULL AND agent_name != ''
+                    GROUP BY agent_id, agent_name 
+                    ORDER BY count DESC 
+                    LIMIT 10
+                ''').fetchall()
+
+                # Get recent alerts
+                recent_columns = "id, timestamp, agent_name, rule_level, rule_description, location"
+                if has_rule_groups:
+                    recent_columns += ", rule_groups"
+                recent_alerts = conn.execute(f'''
+                    SELECT {recent_columns}
+                    FROM wazuh_archives 
+                    ORDER BY id DESC 
+                    LIMIT 50
+                ''').fetchall()
+
+                # Fetch raw timestamps for timeline chart aggregation
+                timeline_rows = conn.execute('''
+                    SELECT timestamp
+                    FROM wazuh_archives 
+                    WHERE timestamp IS NOT NULL AND TRIM(timestamp) != ''
+                    ORDER BY timestamp DESC
+                    LIMIT 20000
+                ''').fetchall()
+
+                # Get rule group distribution
+                rule_groups = []
+                if has_rule_groups:
+                    rule_groups = conn.execute('''
+                        SELECT rule_groups, COUNT(*) as count
+                        FROM wazuh_archives 
+                        WHERE rule_groups IS NOT NULL AND rule_groups != ''
+                        GROUP BY rule_groups 
+                        ORDER BY count DESC 
+                        LIMIT 10
+                    ''').fetchall()
+
         except Exception as query_error:
             logger.error(f"Database query error: {query_error}")
-            conn.close()
             return jsonify({'error': f'Database query failed: {str(query_error)}'}), 500
-        
-        conn.close()
-        logger.info("Database connection closed successfully")
-        
-        # Helper function for level descriptions
+
+        logger.info("Database queries completed successfully")
+
+        # Thresholds & configuration values
+        agent_threshold = to_int(config.get('security_thresholds.AGENT_ACTIVE_THRESHOLD'), 100)
+        high_level_threshold = to_int(config.get('security_thresholds.HIGH_RULE_LEVEL'), 7)
+        critical_level_threshold = to_int(config.get('security_thresholds.CRITICAL_RULE_LEVEL'), 10)
+
+        # Build severity summary and derived counts
         def get_level_description(level):
             descriptions = {
                 0: 'Informational events',
                 1: 'Low priority alerts',
-                2: 'Low priority alerts', 
+                2: 'Low priority alerts',
                 3: 'Medium priority alerts',
                 4: 'Medium priority alerts',
                 5: 'Medium priority alerts',
@@ -481,54 +511,197 @@ def security_data():
                 10: 'Emergency alerts'
             }
             return descriptions.get(level, f'Level {level} alerts')
-        
-        # Format data for response
+
+        severity_counts = {}
+        critical_events = 0
+        high_events = 0
+        for rule in rule_levels:
+            level = to_int(rule['level'])
+            count = to_int(rule['count'])
+            severity_counts[level] = severity_counts.get(level, 0) + count
+            if level >= critical_level_threshold:
+                critical_events += count
+            if level >= high_level_threshold:
+                high_events += count
+
+        severity_breakdown = []
+        for level in range(0, 18):
+            count = severity_counts.get(level, 0)
+            severity_breakdown.append({
+                'level': level,
+                'count': count,
+                'description': get_level_description(level)
+            })
+
+        # Prepare timeline data and compute velocity
+        def parse_timestamp(raw_ts: str) -> Optional[datetime]:
+            if not raw_ts:
+                return None
+            value = raw_ts.strip()
+            formats = (
+                "%Y-%m-%dT%H:%M:%S.%f%z",
+                "%Y-%m-%dT%H:%M:%S%z",
+                "%Y-%m-%d %H:%M:%S%z",
+                "%Y-%m-%d %H:%M:%S.%f%z"
+            )
+            for fmt in formats:
+                try:
+                    return datetime.strptime(value, fmt)
+                except ValueError:
+                    continue
+            if value.endswith('+0000'):
+                try:
+                    return datetime.fromisoformat(value[:-5] + '+00:00')
+                except ValueError:
+                    pass
+            return None
+
+        now_utc = datetime.now(timezone.utc)
+        cutoff = now_utc - timedelta(days=14)
+        timeline_counter: Dict[str, int] = {}
+
+        for row in timeline_rows:
+            if isinstance(row, sqlite3.Row):
+                raw_ts = row['timestamp']
+            elif isinstance(row, (tuple, list)):
+                raw_ts = row[0]
+            else:
+                raw_ts = row
+            parsed = parse_timestamp(raw_ts)
+            if not parsed:
+                continue
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            if parsed < cutoff:
+                continue
+            date_key = parsed.astimezone(timezone.utc).date().isoformat()
+            timeline_counter[date_key] = timeline_counter.get(date_key, 0) + 1
+
+        timeline_sorted = []
+        for offset in range(13, -1, -1):
+            current_date = (now_utc - timedelta(days=offset)).date().isoformat()
+            timeline_sorted.append({
+                'date': current_date,
+                'count': timeline_counter.get(current_date, 0)
+            })
+        alert_velocity = 0
+        alert_trend_percent = 0.0
+        if len(timeline_sorted) >= 2:
+            latest = timeline_sorted[-1]['count']
+            previous = timeline_sorted[-2]['count']
+            alert_velocity = latest - previous
+            if previous > 0:
+                alert_trend_percent = round(((latest - previous) / previous) * 100, 1)
+
+        # Calculate security score with weighted factors
+        total_alerts_value = to_int(total_alerts)
+        denominator = total_alerts_value if total_alerts_value > 0 else 1
+        critical_ratio = critical_events / denominator
+        high_ratio = high_events / denominator
+        score = 100.0
+        score -= min(55.0, critical_ratio * 120.0)
+        score -= min(30.0, high_ratio * 80.0)
+        score -= min(15.0, max(alert_velocity, 0))
+        security_score = max(0, min(100, round(score)))
+
+        # Build agent summary
+        agents_summary = []
+        active_agents = 0
+        for agent in top_agents:
+            count = to_int(agent['count'])
+            is_active = count >= agent_threshold
+            if is_active:
+                active_agents += 1
+            agents_summary.append({
+                'id': agent['agent_id'],
+                'name': agent['agent_name'],
+                'count': count,
+                'status': 'active' if is_active else 'monitoring',
+                'max_rule_level': to_int(agent['max_rule_level']),
+                'last_seen': agent['last_seen']
+            })
+
+        # Recent alerts listing
+        alerts_summary = []
+        for alert in recent_alerts:
+            raw_groups = alert['rule_groups'] if has_rule_groups and 'rule_groups' in alert.keys() else None
+            rule_group_values = [value.strip() for value in (raw_groups or '').split(',') if value and value.strip()]
+            alerts_summary.append({
+                'id': alert['id'],
+                'timestamp': alert['timestamp'],
+                'agent_name': alert['agent_name'] or 'Unknown',
+                'rule_level': to_int(alert['rule_level'], default=None),
+                'rule_level_raw': alert['rule_level'],
+                'rule_description': alert['rule_description'] or 'No description',
+                'location': alert['location'] or 'Unknown',
+                'rule_groups': rule_group_values
+            })
+
+        # Rule groups summary
+        rule_group_summary = []
+        if has_rule_groups:
+            for group in rule_groups:
+                names = [value.strip() for value in str(group['rule_groups']).split(',') if value.strip()]
+                rule_group_summary.append({
+                    'raw': group['rule_groups'],
+                    'labels': names,
+                    'count': to_int(group['count'])
+                })
+
+        # Additional supporting data
+        chat_stats = db.get_stats()
+        services_config = config.get_category('services') or {}
+        reports_config = config.get_category('telegram_reports') or {}
+        from src.webapp.admin import SERVICE_STATUS
+        running_status = SERVICE_STATUS.copy()
+
+        services_status = {
+            'fastmcp_connected': bool(mcp_bridge.client),
+            'lm_studio_connected': client is not None,
+            'telegram_bot_enabled': to_bool(services_config.get('TELEGRAM_BOT_ENABLED')),
+            'telegram_alert_interval': to_int(services_config.get('ALERT_CHECK_INTERVAL'), 0),
+            'wazuh_realtime_enabled': to_bool(services_config.get('WAZUH_REALTIME_ENABLED')),
+            'wazuh_realtime_interval': to_int(services_config.get('REALTIME_FETCH_INTERVAL'), 0),
+            'telegram_bot_running': bool(running_status.get('telegram_bot')),
+            'wazuh_realtime_running': bool(running_status.get('wazuh_realtime'))
+        }
+
+        report_schedule = []
+        for key in ['DAILY', 'THREE_DAILY', 'WEEKLY', 'MONTHLY']:
+            prefix = f'{key}_REPORT'
+            enabled_key = f'{prefix}_ENABLED'
+            time_key = f'{prefix}_TIME'
+            recipients_key = f'{prefix}_RECIPIENTS'
+            report_schedule.append({
+                'period': key.lower(),
+                'enabled': to_bool(reports_config.get(enabled_key)),
+                'time': reports_config.get(time_key),
+                'recipients': parse_recipients(reports_config.get(recipients_key))
+            })
+
         response_data = {
             'stats': {
-                'total_alerts': total_alerts,
-                'active_agents': len([agent for agent in top_agents if agent['count'] > 0]),
-                'critical_events': sum([rule['count'] for rule in rule_levels if rule['rule_level'] >= 8]),
-                'security_score': 92  # Mock security score
+                'total_alerts': total_alerts_value,
+                'active_agents': active_agents,
+                'critical_events': critical_events,
+                'security_score': security_score,
+                'alert_velocity': alert_velocity,
+                'alert_trend_percent': alert_trend_percent
             },
-            'rule_levels': [
-                {
-                    'level': rule['rule_level'],
-                    'count': rule['count'],
-                    'description': get_level_description(rule['rule_level'])
-                } for rule in rule_levels
-            ],
-            'agents': [
-                {
-                    'name': agent['agent_name'],
-                    'count': agent['count'],
-                    'status': 'active' if agent['count'] > 100 else 'inactive'
-                } for agent in top_agents
-            ],
-            'alerts': [
-                {
-                    'id': alert['id'],
-                    'timestamp': alert['timestamp'],
-                    'agent_name': alert['agent_name'] or 'Unknown',
-                    'rule_level': alert['rule_level'],
-                    'rule_description': alert['rule_description'] or 'No description',
-                    'location': alert['location'] or 'Unknown',
-                    'rule_groups': alert['rule_groups'] or ''
-                } for alert in recent_alerts
-            ],
-            'timeline': [
-                {
-                    'date': row['date'],
-                    'count': row['count']
-                } for row in alerts_by_date
-            ],
-            'rule_groups': [
-                {
-                    'name': group['rule_groups'],
-                    'count': group['count']
-                } for group in rule_groups
-            ]
+            'rule_levels': severity_breakdown,
+            'agents': agents_summary,
+            'alerts': alerts_summary,
+            'timeline': timeline_sorted,
+            'rule_groups': rule_group_summary,
+            'chat': chat_stats,
+            'services': services_status,
+            'reports': report_schedule
         }
-        
+
+        logger.info(f"Dashboard severity payload: {severity_breakdown}")
+        logger.info(f"Dashboard timeline payload (len={len(timeline_sorted)}): {timeline_sorted[:10]}")
+        logger.info(f"Dashboard alerts sample: {alerts_summary[:5]}")
+
         return jsonify(response_data)
         
     except Exception as e:
@@ -831,9 +1004,11 @@ def get_status():
     try:
         # Check FastMCP connection only
         mcp_status = "connected" if mcp_bridge.client else "disconnected"
-        
+        lm_status = "connected" if client is not None else "disconnected"
+
         return jsonify({
             "fastmcp": mcp_status,
+            "lm_studio": lm_status,
             "model": MODEL
         })
         
