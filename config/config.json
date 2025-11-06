@@ -2,7 +2,7 @@
   "meta": {
     "created": "2025-09-21T15:35:17.066149",
     "description": "LMS MCP Centralized Configuration",
-    "last_updated": "2025-11-02T14:27:34.598946",
+    "last_updated": "2025-11-06T22:41:13.532499",
     "version": "1.0"
   },
   "security": {
@@ -13,7 +13,7 @@
   "network": {
     "DOCKER_CONTAINER_NAME": "single-node-wazuh.manager-1",
     "LM_STUDIO_BASE_URL": "http://192.168.56.1:1234/v1",
-    "WAZUH_API_URL": "https://localhost:55000",
+    "WAZUH_API_URL": "https://localhost:55001",
     "WAZUH_ARCHIVES_PATH": "/var/ossec/logs/archives/archives.json"
   },
   "flask": {

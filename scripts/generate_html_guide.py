@@ -525,7 +525,7 @@ class SimplePDFGenerator:
             LM_STUDIO_MODEL=qwen2.5-1.5b-instruct
             
             # Wazuh Configuration
-            WAZUH_API_URL=https://localhost:55000
+            WAZUH_API_URL=https://localhost:55001
             WAZUH_USERNAME=wazuh-wui
             WAZUH_PASSWORD=your-secure-password
             
@@ -617,7 +617,7 @@ class SimplePDFGenerator:
             curl http://localhost:1234/v1/models
             
             # Check Wazuh API connection
-            curl -k -u "username:password" https://localhost:55000
+            curl -k -u "username:password" https://localhost:55001
             
             # Verify Python dependencies
             pip list | grep -E "(fastmcp|flask|requests)"
@@ -667,7 +667,7 @@ class SimplePDFGenerator:
             | **Web Dashboard** | http://localhost:5000 | Main web interface |
             | **Admin Panel** | http://localhost:5000/admin | Admin interface |
             | **LM Studio** | http://localhost:1234 | AI model server |
-            | **Wazuh Manager** | https://localhost:55000 | Wazuh API |
+            | **Wazuh Manager** | https://localhost:55001 | Wazuh API |
             | **FastMCP API** | http://localhost:8000 | MCP server endpoint |
             
             ## <span class="emoji">💾</span> **Database Queries**

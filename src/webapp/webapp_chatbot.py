@@ -38,8 +38,8 @@ config = ConfigManager()
 from src.database import ChatDatabase
 from src.api import FastMCPBridge
 from src.models.user import User
-from telegram.telegram_report_generator import get_report_generator
-from telegram.telegram_pdf_generator import PDFReportGenerator
+from src.telegram.telegram_report_generator import get_report_generator
+from src.telegram.telegram_pdf_generator import PDFReportGenerator
 
 # Import admin blueprint
 from src.webapp.admin import admin_bp

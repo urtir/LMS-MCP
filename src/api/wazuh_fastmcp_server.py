@@ -394,41 +394,47 @@ async def wazuh_archives_rag(query: str, days_range: int = 7) -> List[Dict[str, 
         
         # Step 4: Create embeddings for all log texts with optimized batching
         logger.info(f"🔢 Creating embeddings for {len(log_texts)} logs...")
-        
-        # Use larger batch size for GPU optimization
-        batch_size = int(config.get('ai_model.LARGE_BATCH_SIZE', '64'))  # Bigger batches for GPU
+
+        batch_size = int(config.get('ai_model.LARGE_BATCH_SIZE', '64'))
         logger.info(f"⚡ Using batch size: {batch_size} for GPU acceleration")
-        
+
         log_embeddings = model.encode(
-            log_texts, 
+            log_texts,
             batch_size=batch_size,
             show_progress_bar=True,
             convert_to_numpy=True
-        )
-        
-        # Step 5: Create query embedding
+        ).astype('float32')
+
+        # Step 5: Create FAISS index for cosine similarity search
+        logger.info("🗄️ Building FAISS index for similarity search...")
+        faiss.normalize_L2(log_embeddings)
+        embedding_dim = log_embeddings.shape[1]
+        faiss_index = faiss.IndexFlatIP(embedding_dim)
+        faiss_index.add(log_embeddings)
+
+        # Step 6: Encode and normalize query embedding
         logger.info(f"🎯 Creating query embedding for: '{query}'")
-        query_embedding = model.encode([query])
-        
-        # Step 6: Calculate similarity scores
-        logger.info("📊 Calculating similarity scores...")
-        
-        # Normalize embeddings for cosine similarity
-        log_embeddings_norm = log_embeddings / np.linalg.norm(log_embeddings, axis=1, keepdims=True)
-        query_embedding_norm = query_embedding / np.linalg.norm(query_embedding, axis=1, keepdims=True)
-        
-        # Calculate cosine similarity
-        similarities = np.dot(log_embeddings_norm, query_embedding_norm.T).flatten()
-        
-        # Step 7: Get top 15 most relevant logs
-        top_15_indices = np.argsort(similarities)[-15:][::-1]  # Top 15, descending order
-        
+        query_embedding = model.encode([query], convert_to_numpy=True).astype('float32')
+        faiss.normalize_L2(query_embedding)
+
+        # Step 7: Execute similarity search using FAISS
+        logger.info("📊 Searching top matches with FAISS...")
+        top_k = min(15, log_embeddings.shape[0])
+        if top_k == 0:
+            error_msg = "No embeddings available for similarity search"
+            logger.error(error_msg)
+            raise ValueError(error_msg)
+
+        similarities, indices = faiss_index.search(query_embedding, top_k)
+        top_scores = similarities[0]
+        top_indices = indices[0]
+
         # Step 8: Prepare results with similarity scores
         results = []
-        for idx in top_15_indices:
+        for idx, score in zip(top_indices, top_scores):
             log_index = log_mappings[idx]
-            log_entry = all_logs[log_index].copy()  # Copy to avoid modifying original
-            log_entry['similarity_score'] = float(similarities[idx])
+            log_entry = all_logs[log_index].copy()
+            log_entry['similarity_score'] = float(score)
             log_entry['search_text'] = log_texts[idx][:200] + "..." if len(log_texts[idx]) > 200 else log_texts[idx]
             results.append(log_entry)
         
@@ -1771,23 +1777,24 @@ if __name__ == "__main__":
         except:
             pass
     
-    # Display startup information
-    try:
-        print("Wazuh FastMCP Server v1.0.0")
-        print("==========================================")
-        print(f"Base URL: {wazuh_config.base_url}")
-        print(f"Username: {wazuh_config.username}")
-        print(f"SSL Verify: {wazuh_config.verify_ssl}")
-        print(f"Timeout: {wazuh_config.timeout}s")
-        print("")
-        print("Available tools: 70+ Wazuh API endpoints")
-        print("Available resources: 2 information resources")
-        print("Available prompts: 2 analysis prompts")
-        print("")
-        print("Starting server...")
-    except UnicodeEncodeError:
-        # Fallback for encoding issues
-        print("Wazuh FastMCP Server v1.0.0 - Starting...")
+    # Display startup information via logger (stdout must remain clean for MCP handshake)
+    banner_lines = [
+        "Wazuh FastMCP Server v1.0.0",
+        "==========================================",
+        f"Base URL: {wazuh_config.base_url}",
+        f"Username: {wazuh_config.username}",
+        f"SSL Verify: {wazuh_config.verify_ssl}",
+        f"Timeout: {wazuh_config.timeout}s",
+        "",
+        "Available tools: 70+ Wazuh API endpoints",
+        "Available resources: 2 information resources",
+        "Available prompts: 2 analysis prompts",
+        "",
+        "Starting server..."
+    ]
+
+    for line in banner_lines:
+        logger.info(line)
     
     # Run the MCP server
     mcp.run()

@@ -26,80 +26,76 @@
                             AI-Powered Security Operations
                         </span>
                         <h1 class="text-4xl font-semibold leading-tight md:text-5xl">
-                            Satu pusat komando untuk deteksi, investigasi, dan respon keamanan real-time.
+                            One command center for proactive security recommendations and real-time SIEM insight.
                         </h1>
                         <p class="text-lg text-slate-200 max-w-2xl mx-auto lg:mx-0">
-                            AISOC menggabungkan telemetri Wazuh, automasi FastMCP, dan penalaran LLM sehingga tim SOC dapat memprioritaskan ancaman, menjawab pertanyaan, dan mengeksekusi tindakan hanya dari satu jendela kerja.
+                            AISOC combines Wazuh telemetry, FastMCP automation, and LLM reasoning so your SOC can prioritize risks, receive guided recommendations, and execute actions from a single workspace.
                         </p>
                         <div class="flex flex-col items-center gap-3 sm:flex-row sm:justify-start">
                             {% if user %}
                                 <button data-action="navigate" data-route="/chat" class="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-base font-semibold text-slate-900 shadow hover:bg-slate-100">
                                     <i data-lucide="message-circle" class="mr-2 h-5 w-5"></i>
-                                    Buka Konsol Chat
+                                    Open Chatbot
                                 </button>
                                 <button data-action="navigate" data-route="/dashboard" class="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-base font-semibold text-white hover:bg-white/10">
                                     <i data-lucide="layout-dashboard" class="mr-2 h-5 w-5"></i>
-                                    Lihat Dashboard
+                                    View Dashboard
                                 </button>
                             {% else %}
                                 <button data-action="navigate" data-route="/register" class="inline-flex items-center justify-center rounded-md bg-white px-6 py-3 text-base font-semibold text-slate-900 shadow hover:bg-slate-100">
                                     <i data-lucide="user-plus" class="mr-2 h-5 w-5"></i>
-                                    Mulai Sekarang
+                                    Get Started
                                 </button>
                                 <button data-action="navigate" data-route="/login" class="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-base font-semibold text-white hover:bg-white/10">
                                     <i data-lucide="log-in" class="mr-2 h-5 w-5"></i>
-                                    Masuk
+                                    Sign In
                                 </button>
                             {% endif %}
-                            <button data-action="show-demo" class="inline-flex items-center justify-center rounded-md border border-white/30 px-6 py-3 text-base font-semibold text-white hover:bg-white/10">
-                                <i data-lucide="play-circle" class="mr-2 h-5 w-5"></i>
-                                Lihat Demo Singkat
-                            </button>
                         </div>
                         <div class="grid grid-cols-2 gap-6 pt-8 sm:grid-cols-4">
                             <div>
                                 <p class="text-2xl font-semibold" id="totalSessions">0</p>
-                                <p class="text-sm text-slate-300">Sesi aktif</p>
+                                <p class="text-sm text-slate-300">Active sessions</p>
                             </div>
                             <div>
                                 <p class="text-2xl font-semibold" id="totalMessages">0</p>
-                                <p class="text-sm text-slate-300">Pesan diproses</p>
+                                <p class="text-sm text-slate-300">Messages processed</p>
                             </div>
                             <div>
                                 <p class="text-2xl font-semibold">24/7</p>
-                                <p class="text-sm text-slate-300">Monitoring otomatis</p>
+                                <p class="text-sm text-slate-300">Automated monitoring</p>
                             </div>
                             <div>
                                 <p class="text-2xl font-semibold">99.9%</p>
-                                <p class="text-sm text-slate-300">Uptime komponen</p>
+                                <p class="text-sm text-slate-300">Component uptime</p>
                             </div>
                         </div>
                     </div>
                     <div class="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur">
                         <div class="space-y-6">
                             <div>
-                                <h3 class="text-lg font-semibold">Kenapa AISOC?</h3>
+                                <h3 class="text-lg font-semibold">Why AISOC?</h3>
                                 <p class="mt-2 text-sm text-slate-200">
-                                    Kombinasi SIEM, orchestrator, dan copilot keamanan yang mendukung investigasi otomatis maupun tanya-jawab ad-hoc.
+                                    A unified SIEM, orchestrator, and security copilot that powers automated investigations and ad-hoc advisory workflows.
                                 </p>
                             </div>
                             <ul class="space-y-3 text-sm text-slate-200">
                                 <li class="flex items-start gap-2">
                                     <i data-lucide="sparkles" class="mt-0.5 h-4 w-4 text-blue-200"></i>
-                                    Anotasi cepat terhadap alert dan log untuk memberi konteks risiko.
+                                    Rapid annotation of alerts and logs to surface contextual risk scores.
                                 </li>
                                 <li class="flex items-start gap-2">
                                     <i data-lucide="cpu" class="mt-0.5 h-4 w-4 text-blue-200"></i>
-                                    Automasi respon berbasis FastMCP dan workflow terstandardisasi.
+                                    FastMCP-driven investigations with standardized, advisor-ready workflows.
                                 </li>
                                 <li class="flex items-start gap-2">
                                     <i data-lucide="workflow" class="mt-0.5 h-4 w-4 text-blue-200"></i>
-                                    Integrasi langsung dengan agen Wazuh untuk korelasi multi-sumber.
+                                    Direct integration with Wazuh agents for multi-source correlation.
                                 </li>
                             </ul>
                             <div class="rounded-lg border border-white/20 bg-white/10 p-4 text-sm text-slate-100">
-                                <p class="font-medium text-white">Coba tanya:</p>
-                                <p class="mt-1 italic">“Tunjukkan alert level 7 paling kritis minggu ini dan rekomendasikan tindakannya.”</p>
+                                <p class="font-medium text-white">Try asking:</p>
+                                <p class="mt-1 italic">“Show the most critical level-7 alerts this week and recommend the containment steps.”</p>
                             </div>
                         </div>
                     </div>
@@ -127,10 +123,6 @@
                     <p class="text-muted-foreground mb-4">
                         AISOC distills millions of security events into actionable narratives with explainable LLM reasoning tuned for incident responders.
                     </p>
-                    <div class="flex items-center text-primary text-sm font-medium">
-                        <span>Learn more</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </div>
                 </div>
                 
                 <!-- Feature 2: Wazuh Integration -->
@@ -142,10 +134,6 @@
                     <p class="text-muted-foreground mb-4">
                         AISOC synchronizes with Wazuh for full-fidelity telemetry, correlated alerts, and automated enrichment across your security estate.
                     </p>
-                    <div class="flex items-center text-primary text-sm font-medium">
-                        <span>Learn more</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </div>
                 </div>
                 
                 <!-- Feature 3: Real-time Monitoring -->
@@ -157,10 +145,6 @@
                     <p class="text-muted-foreground mb-4">
                         Stay ahead of active threats with AISOC streaming dashboards, critical alerting, and prioritized playbook recommendations.
                     </p>
-                    <div class="flex items-center text-primary text-sm font-medium">
-                        <span>Learn more</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </div>
                 </div>
                 
                 <!-- Feature 4: Natural Language Interface -->
@@ -172,10 +156,6 @@
                     <p class="text-muted-foreground mb-4">
                         Interact with AISOC using natural language—ask for trends, pull evidence, or trigger automation without leaving the conversation.
                     </p>
-                    <div class="flex items-center text-primary text-sm font-medium">
-                        <span>Learn more</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </div>
                 </div>
                 
                 <!-- Feature 5: Session Management -->
@@ -187,10 +167,6 @@
                     <p class="text-muted-foreground mb-4">
                         Preserve investigation context with AISOC session memory, searchable timelines, and audit-ready conversation history.
                     </p>
-                    <div class="flex items-center text-primary text-sm font-medium">
-                        <span>Learn more</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </div>
                 </div>
                 
                 <!-- Feature 6: Tool Integration -->
@@ -202,10 +178,6 @@
                     <p class="text-muted-foreground mb-4">
                         Extend AISOC with FastMCP-compatible tooling, orchestrating hunts, ticketing, and remediation workflows from one hub.
                     </p>
-                    <div class="flex items-center text-primary text-sm font-medium">
-                        <span>Learn more</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                    </div>
                 </div>
             </div>
         </div>
@@ -454,7 +426,7 @@
                         <span class="text-lg font-bold">AISOC</span>
                     </div>
                     <p class="text-muted-foreground mb-4 max-w-md">
-                        AISOC (AI Security Operations Center) fuses LM Studio models, FastMCP automations, and Wazuh SIEM signals to elevate threat detection and response.
+                        AISOC (AI Security Operations Center) fuses LM Studio models, FastMCP automations, and Wazuh SIEM signals to elevate threat detection and investigation.
                     </p>
                     <div class="flex gap-4">
                         <a href="#" class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center hover:bg-accent transition-colors">

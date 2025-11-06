@@ -5,6 +5,21 @@ let currentSessionId = null;
 let isLoading = false;
 let sidebarVisible = true;
 
+function refreshIcons(root) {
+    if (typeof lucide === 'undefined') {
+        return;
+    }
+    try {
+        if (root) {
+            lucide.createIcons({ root });
+        } else {
+            lucide.createIcons();
+        }
+    } catch (error) {
+        console.warn('Unable to refresh icons:', error);
+    }
+}
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     checkStatus();
@@ -33,9 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+    refreshIcons();
 });
 
 // Session Management
@@ -84,6 +97,7 @@ async function loadSessions() {
         } else {
             sessionsList.innerHTML = '<div class="text-center text-muted-foreground py-8">No chat sessions yet. Start a new conversation!</div>';
         }
+        refreshIcons(sessionsList);
     } catch (error) {
         console.error('Error loading sessions:', error);
     }
@@ -232,6 +246,7 @@ async function searchSessions() {
         } else {
             sessionsList.innerHTML = '<div class="text-center text-muted-foreground py-8">No sessions found matching your search.</div>';
         }
+        refreshIcons(sessionsList);
     } catch (error) {
         console.error('Error searching sessions:', error);
     }
@@ -434,9 +449,7 @@ function displayMessage(role, content, toolCalls = [], thinking = null, messageI
     }
 
     messagesDiv.appendChild(messageDiv);
-    if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-    }
+    refreshIcons(messageDiv);
 }
 
 function createThinkingSection(thinking) {

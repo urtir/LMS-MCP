@@ -191,50 +191,7 @@
                 </section>
 
                 <!-- Supporting Widgets -->
-                <section class="grid grid-cols-1 gap-6 2xl:grid-cols-3">
-                    <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-base font-semibold text-slate-900">Rule Groups</h3>
-                            <span class="text-xs text-slate-500">Top correlated groups</span>
-                        </div>
-                        <ul id="rule-groups-list" class="mt-4 space-y-3 text-sm"></ul>
-                    </article>
-                    <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-base font-semibold text-slate-900">Service Health</h3>
-                            <span class="text-xs text-slate-500">Configuration & connectivity</span>
-                        </div>
-                        <div class="mt-4 space-y-4 text-sm">
-                            <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2" id="service-fastmcp">
-                                <div class="flex items-center gap-2">
-                                    <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                                    <span class="font-medium">FastMCP Bridge</span>
-                                </div>
-                                <span class="text-xs text-slate-500">Checking...</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2" id="service-lmstudio">
-                                <div class="flex items-center gap-2">
-                                    <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                                    <span class="font-medium">LM Studio</span>
-                                </div>
-                                <span class="text-xs text-slate-500">Checking...</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2" id="service-telegram">
-                                <div class="flex items-center gap-2">
-                                    <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                                    <span class="font-medium">Telegram Bot</span>
-                                </div>
-                                <span class="text-xs text-slate-500">Reading config...</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2" id="service-wazuh">
-                                <div class="flex items-center gap-2">
-                                    <span class="h-2.5 w-2.5 rounded-full bg-slate-300"></span>
-                                    <span class="font-medium">Wazuh Realtime</span>
-                                </div>
-                                <span class="text-xs text-slate-500">Reading config...</span>
-                            </div>
-                        </div>
-                    </article>
+                <section class="grid grid-cols-1 gap-6">
                     <article class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-semibold text-slate-900">Chat Activity</h3>
@@ -255,27 +212,6 @@
                             </div>
                         </dl>
                     </article>
-                </section>
-
-                <!-- Report Schedule -->
-                <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-base font-semibold text-slate-900">Telegram Report Schedule</h3>
-                        <span class="text-xs text-slate-500">Config-driven notifications</span>
-                    </div>
-                    <div class="mt-4 overflow-x-auto">
-                        <table class="min-w-full divide-y divide-slate-200 text-sm">
-                            <thead class="bg-slate-50 text-xs font-medium uppercase text-slate-500">
-                                <tr>
-                                    <th class="px-3 py-2 text-left">Period</th>
-                                    <th class="px-3 py-2 text-left">Status</th>
-                                    <th class="px-3 py-2 text-left">Dispatch Time</th>
-                                    <th class="px-3 py-2 text-left">Recipients</th>
-                                </tr>
-                            </thead>
-                            <tbody id="report-schedule-body" class="divide-y divide-slate-100"></tbody>
-                        </table>
-                    </div>
                 </section>
             </div>
         </main>
