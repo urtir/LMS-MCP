@@ -4,6 +4,7 @@
 *.tmp
 
 # Database files that shouldn't be tracked
+*.db
 *.db-shm
 *.db-wal
 
@@ -41,13 +42,9 @@ node_modules/
 htmlcov/
 .coverage
 .pytest_cache/
+# Explicit generated artifacts
 data/chat_history.db
 logs/telegram_bot.log
 logs/wazuh_realtime.log
-data/chat_history.db
-logs/telegram_bot.log
-logs/wazuh_realtime.log
-logs/wazuh_realtime.log
-data/chat_history.db
 
 paper-search-mcp/
